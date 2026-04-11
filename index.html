@@ -589,8 +589,6 @@ Limpiar
 </div>
 </div>
 </div>
-</div>
-</div>
 <!-- Mobile Navigation -->
 <nav id="mobile-nav" class="fixed bottom-0 left-0 right-0 bg-black/90 border-t border-cyan-500/20 p-2 md:hidden z-20 backdrop-blur-xl no-print">
 <div class="flex justify-around items-center">
@@ -828,6 +826,18 @@ VTV_ITEMS.push({...item, category: cat.id, icon: cat.icon, emoji: cat.emoji});
 });
 });
 let vtvState = {};
+
+// === FUNCIÓN NÚCLEO: CALCULO DE VARIABLES SINTÉTICAS (DATA SCIENCE) ===
+function getSyntheticMetrics(row) {
+    if (!row) return { desgaste: 0, termovib: 0, eficiencia: 0, estres: 0 };
+    return {
+        desgaste: row.uptime > 0 ? (row.km / row.uptime) : 0,
+        termovib: row.rpm > 0 ? ((row.ta * row.vibracion) / row.rpm * 1000) : 0,
+        eficiencia: row.ta > 0 ? (row.rpm / row.ta) : 0,
+        estres: (row.vibracion * row.rpm) / 1000
+    };
+}
+
 // === CONFIGURACIÓN DE MÉTRICAS AVANZADAS ===
 const METRIC_CONFIG = {
 desgaste: { min: 20, optMin: 40, optMax: 80, max: 100, unit: '', tooltip: (v) => { if(v < 20) return '⚠️ Muy bajo'; if(v < 40) return '🟡 Bajo'; if(v <= 80) return '✅ ÓPTIMO'; return '🔴 CRÍTICO'; } },
@@ -839,17 +849,6 @@ balance: { min: 0, optMin: 0, optMax: 1, max: 2, unit: '', tooltip: (v) => { if(
 estres: { min: 20, optMin: 30, optMax: 70, max: 100, unit: '', tooltip: (v) => { if(v < 30) return '🟡 Moderado'; if(v <= 70) return '✅ ÓPTIMO'; return '🔴 CRÍTICO'; } },
 'disp-op': { min: 70, optMin: 85, optMax: 95, max: 100, unit: '%', isPercent: true, tooltip: (v) => { if(v < 85) return '🟡 Aceptable'; if(v <= 95) return '✅ ÓPTIMO'; return '✅ EXCELENTE'; } }
 };
-
-// === NUEVO: CALCULADOR DE VARIABLES SINTÉTICAS (REUTILIZABLE) ===
-function getSyntheticMetrics(row) {
-    if (!row) return { desgaste: 0, termovib: 0, eficiencia: 0, estres: 0 };
-    return {
-        desgaste: row.uptime > 0 ? (row.km / row.uptime) : 0,
-        termovib: row.rpm > 0 ? ((row.ta * row.vibracion) / row.rpm * 1000) : 0,
-        eficiencia: row.ta > 0 ? (row.rpm / row.ta) : 0,
-        estres: (row.vibracion * row.rpm) / 1000
-    };
-}
 
 // === FUNCIONES DE ESTADO DE MÉTRICAS ===
 function getMetricStatus(metricKey, value) {
@@ -919,7 +918,7 @@ db = [
 ];
 saveToStorage();
 }
-} catch(e) { console.error('Error loading ', e); db = []; }
+} catch(e) { console.error('Error loading data:', e); db = []; }
 updateMemoryCounter();
 }
 function saveToStorage() {
@@ -1013,8 +1012,7 @@ content.innerHTML = unitHistory.map((r, i) => {
 const fecha = new Date(r.timestamp).toLocaleDateString('es-ES', {weekday:'long', year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit'});
 return `<div class="history-item" style="animation-delay:${i*0.05}s">
 <div class="history-date"><i class="fas fa-calendar-alt"></i>${fecha}</div>
-<div class="history-text">${r.trabajo ? r.trabajo.replace(/
-/g, '<br>') : '<span class="work-notes-empty">Sin detalles registrados</span>'}</div>
+<div class="history-text">${r.trabajo ? r.trabajo.replace(/\n/g, '<br>') : '<span class="work-notes-empty">Sin detalles registrados</span>'}</div>
 </div>`;
 }).join('');
 }
@@ -1069,8 +1067,7 @@ workHistoryContainer.innerHTML = unitHistory.map(r => {
 const fecha = new Date(r.timestamp).toLocaleDateString('es-ES', {day:'2-digit', month:'short', year:'numeric', hour:'2-digit'});
 return `<div class="border border-slate-200 rounded-lg p-3 mb-3 bg-slate-50">
 <p class="text-[9px] font-bold text-slate-600 mb-2">${fecha}</p>
-<p class="text-[10px] text-slate-700 leading-relaxed">${(r.trabajo || 'Sin detalles').replace(/
-/g, '<br>')}</p>
+<p class="text-[10px] text-slate-700 leading-relaxed">${(r.trabajo || 'Sin detalles').replace(/\n/g, '<br>')}</p>
 </div>`;
 }).join('') || '<p class="text-slate-400 text-center">Sin historial</p>';
 template.classList.remove('hidden');
@@ -1079,7 +1076,7 @@ html2pdf().set({
 margin:[10,10,10,10],
 filename:`NEXO-ART_Historial_${currentModalUnit}_${new Date().toISOString().slice(0,10)}.pdf`,
 image:{type:'jpeg',quality:0.95},
-html2canvas:{scale:2,useCORS:true,windowWidth:794,scrollX:0,scrollY:0,logging:false,backgroundColor:'#ffffff'},
+html2canvas:{scale:2,useCORS:true,windowWidth:794,logging:false,backgroundColor:'#ffffff',scrollX:0,scrollY:0},
 jsPDF:{unit:'mm',format:'a4',orientation:'portrait',compress:true}
 }).from(template).save().then(() => {
 template.classList.add('hidden');
@@ -1274,18 +1271,20 @@ updateMetricCard(k, k==='inactividad'||k==='disp-op'?'0%':'0')
 return;
 }
 const last = db[db.length-1];
-const desgasteKm = last.uptime>0 ? (last.km/last.uptime).toFixed(2) : 0;
-const cicloTermovib = last.rpm>0 ? ((last.ta*last.vibracion)/last.rpm*1000).toFixed(2) : 0;
+const syn = getSyntheticMetrics(last);
+const desgasteKm = syn.desgaste.toFixed(2);
+const cicloTermovib = syn.termovib.toFixed(2);
 const totalHoras = last.uptime+last.downtime;
 const inactividad = totalHoras>0 ? ((last.downtime/totalHoras)*100).toFixed(1) : 0;
-const eficienciaTermica = last.ta>0 ? (last.rpm/last.ta).toFixed(1) : 0;
+const eficienciaTermica = syn.eficiencia.toFixed(2);
 const presionProm = ((last.psiDi+last.psiDd+last.psiTi+last.psiTd)/4).toFixed(1);
 const presiones = [last.psiDi,last.psiDd,last.psiTi,last.psiTd];
 const mediaPresion = presiones.reduce((a,b)=>a+b,0)/4;
 const variance = presiones.reduce((acc,val)=>acc+Math.pow(val-mediaPresion,2),0)/4;
 const balancePresion = Math.sqrt(variance).toFixed(2);
-const estresMecanico = ((last.vibracion*last.rpm)/1000).toFixed(2);
+const estresMecanico = syn.estres.toFixed(2);
 const dispOp = totalHoras>0 ? ((last.uptime/totalHoras)*100).toFixed(1) : 0;
+
 updateMetricCard('desgaste', desgasteKm);
 updateMetricCard('termovib', cicloTermovib);
 updateMetricCard('inactividad', inactividad+'%');
@@ -1435,7 +1434,7 @@ selectAll.indeterminate = selectedRows.size > 0 && selectedRows.size < db.length
 }
 updateFilterBadges();
 }
-// === ESTADÍSTICAS DESCRIBE ===
+// === ESTADÍSTICAS DESCRIBE (INCLUYE VARIABLES SINTÉTICAS) ===
 function calculateDescribeStats(data = null) {
 const source = data || db;
 if(source.length===0) return null;
@@ -1545,70 +1544,32 @@ const uptimeData=source.map(d=>d.uptime);
 const downtimeData=source.map(d=>d.downtime);
 const dispData=source.map(d=>(d.uptime+d.downtime)>0?((d.uptime/(d.uptime+d.downtime))*100).toFixed(1):0);
 if(timelineChartIns) timelineChartIns.destroy();
-// ✅ CORREGIDO: Agregada la clave '' que faltaba
 timelineChartIns=new Chart(ctx, {
 type:'line',
- {
+data: {
 labels: labels,
 datasets: [
-{
-label:'Disponibilidad %',
- dispData,
-borderColor:'#06b6d4',
-backgroundColor:'rgba(6,182,212,0.1)',
-borderWidth:2,
-tension:0.4,
-yAxisID:'y1',
-fill:true,
-pointRadius:2,
-pointHoverRadius:4
-},
-{
-label:'Uptime (h)',
- uptimeData,
-borderColor:'#14b8a6',
-borderDash:[5,5],
-borderWidth:2,
-tension:0.2,
-yAxisID:'y',
-pointRadius:0
-},
-{
-label:'Downtime (h)',
- downtimeData,
-borderColor:'#f97316',
-borderWidth:2,
-tension:0.2,
-yAxisID:'y',
-pointRadius:0
-}
+{label:'Disponibilidad %',data:dispData,borderColor:'#06b6d4',backgroundColor:'rgba(6,182,212,0.1)',borderWidth:2,tension:0.4,yAxisID:'y1',fill:true,pointRadius:2,pointHoverRadius:4},
+{label:'Uptime (h)',uptimeData,borderColor:'#14b8a6',borderDash:[5,5],borderWidth:2,tension:0.2,yAxisID:'y',pointRadius:0},
+{label:'Downtime (h)',downtimeData,borderColor:'#f97316',borderWidth:2,tension:0.2,yAxisID:'y',pointRadius:0}
 ]
 },
 options: {
 responsive:true,
 maintainAspectRatio:false,
 interaction:{mode:'index',intersect:false},
-plugins: {
-legend: { labels: { color:'#cbd5e1', font:{size:9} }, position:'bottom' },
-tooltip: { bodyFont: { size:9 }, titleFont: { size:10 }, backgroundColor: 'rgba(15,23,42,0.95)', padding: 10, displayColors: true }
-},
-scales: {
-x: { ticks: { color:'#64748b', font:{size:8} }, grid: { color:'rgba(6,182,212,0.1)' } },
-y: { type:'linear', display:true, position:'left', title: { display:true, text:'Horas', color:'#94a3b8' }, ticks: { color:'#94a3b8', font:{size:8} }, grid: { color:'rgba(6,182,212,0.1)' } },
-y1: { type:'linear', display:true, position:'right', title: { display:true, text:'%', color:'#06b6d4' }, ticks: { color:'#06b6d4', font:{size:8} }, grid: { drawOnChartArea:false } }
-}
+plugins: {legend:{labels:{color:'#cbd5e1',font:{size:9}},position:'bottom'},tooltip:{bodyFont:{size:9},titleFont:{size:10},backgroundColor:'rgba(15,23,42,0.95)',padding:10,displayColors:true}},
+scales: {x:{ticks:{color:'#64748b',font:{size:8}},grid:{color:'rgba(6,182,212,0.1)'}},y:{type:'linear',display:true,position:'left',title:{display:true,text:'Horas',color:'#94a3b8'},ticks:{color:'#94a3b8',font:{size:8}},grid:{color:'rgba(6,182,212,0.1)'}},y1:{type:'linear',display:true,position:'right',title:{display:true,text:'%',color:'#06b6d4'},ticks:{color:'#06b6d4',font:{size:8}},grid:{drawOnChartArea:false}}}
 }
 });
 }
 window.addEventListener('resize', () => {
 clearTimeout(window._resizeTimer);
 window._resizeTimer=setTimeout(()=>{
-if(timelineChartIns && (db.length>0 || selectedRows.size>0)) {
-timelineChartIns.update();
-}
+if(timelineChartIns && (db.length>0 || selectedRows.size>0)) timelineChartIns.update();
 }, 250);
 });
-// === MATRIZ DE CORRELACIÓN ===
+// === MATRIZ DE CORRELACIÓN (INCLUYE VARIABLES SINTÉTICAS) ===
 function pearsonCorrelation(x,y) {
 if(x.length===0||y.length===0) return 0;
 const n=x.length;
@@ -1659,11 +1620,9 @@ container.innerHTML=html;
 function exportCSV() {
 if(db.length===0) { showToast("📭 Sin datos para exportar","info"); return; }
 const headers=["Unidad","ID","Motor","KM","Uptime","Downtime","Vibración","Temp°C","RPM","PSI-DI","PSI-DD","PSI-TI","PSI-TD","Trabajo","Timestamp"];
-let csv=headers.join(";")+"
-";
+let csv=headers.join(";")+"\n";
 db.forEach(row => {
-csv+=[row.unidad,row.id,row.motor,row.km,row.uptime,row.downtime,row.vibracion,row.ta,row.rpm,row.psiDi,row.psiDd,row.psiTi,row.psiTd,row.trabajo||'',new Date(row.timestamp).toLocaleString('es-ES')].join(";")+"
-";
+csv+=[row.unidad,row.id,row.motor,row.km,row.uptime,row.downtime,row.vibracion,row.ta,row.rpm,row.psiDi,row.psiDd,row.psiTi,row.psiTd,row.trabajo||'',new Date(row.timestamp).toLocaleString('es-ES')].join(";")+"\n";
 });
 const blob=new Blob(["\uFEFF"+csv],{type:'text/csv;charset=utf-8;'});
 const link=document.createElement("a");
@@ -1676,11 +1635,9 @@ function exportSelectedCSV() {
 const selected = getSelectedData();
 if(selected.length === 0) { showToast("📭 Selecciona filas para exportar","info"); return; }
 const headers=["Unidad","ID","Motor","KM","Uptime","Downtime","Vibración","Temp°C","RPM","PSI-DI","PSI-DD","PSI-TI","PSI-TD","Trabajo","Timestamp"];
-let csv=headers.join(";")+"
-";
+let csv=headers.join(";")+"\n";
 selected.forEach(row => {
-csv+=[row.unidad,row.id,row.motor,row.km,row.uptime,row.downtime,row.vibracion,row.ta,row.rpm,row.psiDi,row.psiDd,row.psiTi,row.psiTd,row.trabajo||'',new Date(row.timestamp).toLocaleString('es-ES')].join(";")+"
-";
+csv+=[row.unidad,row.id,row.motor,row.km,row.uptime,row.downtime,row.vibracion,row.ta,row.rpm,row.psiDi,row.psiDd,row.psiTi,row.psiTd,row.trabajo||'',new Date(row.timestamp).toLocaleString('es-ES')].join(";")+"\n";
 });
 const blob=new Blob(["\uFEFF"+csv],{type:'text/csv;charset=utf-8;'});
 const link=document.createElement("a");
@@ -1689,7 +1646,7 @@ link.download=`NEXO-ART_Filtrado_${selected.length}unidades_${new Date().toISOSt
 link.click();
 showToast(`📥 CSV de ${selected.length} unidades descargado`,"success");
 }
-// === PDFS ===
+// === PDFS (CENTRADOS Y OPTIMIZADOS) ===
 function exportSingleUnitPDF(index) {
 const unit = db[index];
 if(!unit) return;
@@ -1737,7 +1694,7 @@ html2pdf().set({
 margin:[10,10,10,10],
 filename:`NEXO-ART_${unit.unidad}_${new Date().toISOString().slice(0,10)}.pdf`,
 image:{type:'jpeg',quality:0.95},
-html2canvas:{scale:2,useCORS:true,windowWidth:794,scrollX:0,scrollY:0,logging:false,backgroundColor:'#ffffff'},
+html2canvas:{scale:2,useCORS:true,windowWidth:794,logging:false,backgroundColor:'#ffffff',scrollX:0,scrollY:0},
 jsPDF:{unit:'mm',format:'a4',orientation:'portrait',compress:true}
 }).from(template).save().then(() => {
 template.classList.add('hidden');
@@ -1794,8 +1751,7 @@ workHistoryContainer.innerHTML = recentWork.map(r => {
 const fecha = new Date(r.timestamp).toLocaleDateString('es-ES', {day:'2-digit', month:'short', year:'numeric'});
 return `<div class="border border-slate-200 rounded-lg p-2 mb-2 bg-slate-50">
 <p class="text-[8px] font-bold text-slate-600 mb-1">${r.unidad} - ${fecha}</p>
-<p class="text-[9px] text-slate-700">${(r.trabajo || 'Sin detalles').replace(/
-/g, '<br>')}</p>
+<p class="text-[9px] text-slate-700">${(r.trabajo || 'Sin detalles').replace(/\n/g, '<br>')}</p>
 </div>`;
 }).join('') || '<p class="text-slate-400 text-center">Sin historial reciente</p>';
 const template = document.getElementById('pdf-report-template-enhanced');
@@ -1805,7 +1761,7 @@ const opt = {
 margin:[8,8,8,8],
 filename:`NEXO-ART_Reporte_Completo_${last.unidad}_${now.toISOString().slice(0,10)}.pdf`,
 image:{type:'jpeg',quality:0.98},
-html2canvas:{scale:2,useCORS:true,windowWidth:794,scrollX:0,scrollY:0,logging:false,backgroundColor:'#ffffff'},
+html2canvas:{scale:2,useCORS:true,windowWidth:794,logging:false,backgroundColor:'#ffffff',scrollX:0,scrollY:0},
 jsPDF:{unit:'mm',format:'a4',orientation:'portrait',compress:true}
 };
 await html2pdf().set(opt).from(template).save();
@@ -1869,8 +1825,7 @@ workHistoryContainer.innerHTML = selected.map(r => {
 const fecha = new Date(r.timestamp).toLocaleDateString('es-ES', {day:'2-digit', month:'short', year:'numeric'});
 return `<div class="border border-slate-200 rounded-lg p-2 mb-2 bg-slate-50">
 <p class="text-[8px] font-bold text-slate-600 mb-1">${r.unidad} - ${fecha}</p>
-<p class="text-[9px] text-slate-700">${(r.trabajo || 'Sin detalles').replace(/
-/g, '<br>')}</p>
+<p class="text-[9px] text-slate-700">${(r.trabajo || 'Sin detalles').replace(/\n/g, '<br>')}</p>
 </div>`;
 }).join('') || '<p class="text-slate-400 text-center">Sin detalles de trabajo</p>';
 template.classList.remove('hidden');
@@ -1879,7 +1834,7 @@ const opt = {
 margin:[8,8,8,8],
 filename:`NEXO-ART_Filtrado_${selected.length}unidades_${now.toISOString().slice(0,10)}.pdf`,
 image:{type:'jpeg',quality:0.98},
-html2canvas:{scale:2,useCORS:true,windowWidth:794,scrollX:0,scrollY:0,logging:false,backgroundColor:'#ffffff'},
+html2canvas:{scale:2,useCORS:true,windowWidth:794,logging:false,backgroundColor:'#ffffff',scrollX:0,scrollY:0},
 jsPDF:{unit:'mm',format:'a4',orientation:'portrait',compress:true}
 };
 await html2pdf().set(opt).from(template).save();
@@ -1907,27 +1862,20 @@ const uptimeData = source.map(d => d.uptime);
 const downtimeData = source.map(d => d.downtime);
 const dispData = source.map(d => (d.uptime+d.downtime)>0?((d.uptime/(d.uptime+d.downtime))*100).toFixed(1):0);
 if(window._pdfChart) window._pdfChart.destroy();
-// ✅ CORREGIDO: Agregada la clave '' que faltaba
 window._pdfChart = new Chart(ctx, {
 type:'line',
-data: {
+ {
 labels: labels,
 datasets: [
-{label:'Disponibilidad %',data:dispData,borderColor:'#06b6d4',backgroundColor:'rgba(6,182,212,0.15)',borderWidth:2.5,tension:0.4,yAxisID:'y1',fill:true,pointRadius:3},
+{label:'Disponibilidad %',dispData,borderColor:'#06b6d4',backgroundColor:'rgba(6,182,212,0.15)',borderWidth:2.5,tension:0.4,yAxisID:'y1',fill:true,pointRadius:3},
 {label:'Uptime (h)',uptimeData,borderColor:'#14b8a6',borderDash:[5,5],borderWidth:2,tension:0.3,yAxisID:'y',pointRadius:0},
-{label:'Downtime (h)',downtimeData,borderColor:'#f97316',borderWidth:2,tension:0.3,yAxisID:'y',pointRadius:0}
+{label:'Downtime (h)',data:downtimeData,borderColor:'#f97316',borderWidth:2,tension:0.3,yAxisID:'y',pointRadius:0}
 ]
 },
 options:{
-responsive:false,
-maintainAspectRatio:false,
-interaction:{mode:'index',intersect:false},
+responsive:false,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
 plugins:{legend:{labels:{color:'#334155',font:{size:9,weight:'bold'}},position:'bottom'},tooltip:{backgroundColor:'rgba(15,23,42,0.9)'}},
-scales:{
-x:{ticks:{color:'#64748b',font:{size:8}},grid:{color:'#e2e8f0'}},
-y:{type:'linear',display:true,position:'left',title:{display:true,text:'Horas',color:'#475569'},ticks:{color:'#475569',font:{size:8}},grid:{color:'#e2e8f0'}},
-y1:{type:'linear',display:true,position:'right',title:{display:true,text:'%',color:'#0891b2'},ticks:{color:'#0891b2',font:{size:8}},grid:{drawOnChartArea:false}}
-}
+scales:{x:{ticks:{color:'#64748b',font:{size:8}},grid:{color:'#e2e8f0'}},y:{type:'linear',display:true,position:'left',title:{display:true,text:'Horas',color:'#475569'},ticks:{color:'#475569',font:{size:8}},grid:{color:'#e2e8f0'}},y1:{type:'linear',display:true,position:'right',title:{display:true,text:'%',color:'#0891b2'},ticks:{color:'#0891b2',font:{size:8}},grid:{drawOnChartArea:false}}}
 }
 });
 await new Promise(resolve => setTimeout(resolve, 200));
@@ -1937,7 +1885,6 @@ const container = document.getElementById('pdf-correlation-matrix');
 if(!container) return;
 const source = data || db;
 if(source.length < 2) { container.innerHTML = '<p class="text-center py-3 text-slate-400 text-[8px]">Sin datos suficientes</p>'; return; }
-// Extender dataset con variables sintéticas para PDF
 const extSource = source.map(row => ({...row, ...getSyntheticMetrics(row)}));
 const variables = ['km','uptime','downtime','vibracion','ta','rpm','psiDi','desgaste','termovib','eficiencia','estres'];
 const labels = ['KM','UP','DOWN','VIB','TEMP','RPM','PSI','Desg/km','TermoVib','Ef.Térm','Est.Mec'];
