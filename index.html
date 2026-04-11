@@ -589,6 +589,7 @@ Limpiar
 </div>
 </div>
 </div>
+</div>
 <!-- Mobile Navigation -->
 <nav id="mobile-nav" class="fixed bottom-0 left-0 right-0 bg-black/90 border-t border-cyan-500/20 p-2 md:hidden z-20 backdrop-blur-xl no-print">
 <div class="flex justify-around items-center">
@@ -614,7 +615,7 @@ Limpiar
 <span><kbd>Esc</kbd> Cerrar modal</span>
 <span><kbd>?</kbd> Mostrar ayuda</span>
 </div>
-<!-- PDF TEMPLATE -->
+<!-- PDF TEMPLATE (Centered & Fixed) -->
 <div id="pdf-report-template-enhanced" class="hidden w-[794px] bg-white text-slate-800 p-6 font-sans no-print" style="min-height:1123px;box-sizing:border-box;font-size:10px;margin:0 auto;position:relative;left:auto;transform:none;">
 <div class="flex justify-between items-center border-b-4 border-slate-900 pb-3 mb-4">
 <div class="flex items-center gap-2">
@@ -826,8 +827,7 @@ VTV_ITEMS.push({...item, category: cat.id, icon: cat.icon, emoji: cat.emoji});
 });
 });
 let vtvState = {};
-
-// === FUNCIÓN NÚCLEO: CALCULO DE VARIABLES SINTÉTICAS (DATA SCIENCE) ===
+// === FUNCIÓN NÚCLEO: CALCULO DE VARIABLES SINTÉTICAS ===
 function getSyntheticMetrics(row) {
     if (!row) return { desgaste: 0, termovib: 0, eficiencia: 0, estres: 0 };
     return {
@@ -837,7 +837,6 @@ function getSyntheticMetrics(row) {
         estres: (row.vibracion * row.rpm) / 1000
     };
 }
-
 // === CONFIGURACIÓN DE MÉTRICAS AVANZADAS ===
 const METRIC_CONFIG = {
 desgaste: { min: 20, optMin: 40, optMax: 80, max: 100, unit: '', tooltip: (v) => { if(v < 20) return '⚠️ Muy bajo'; if(v < 40) return '🟡 Bajo'; if(v <= 80) return '✅ ÓPTIMO'; return '🔴 CRÍTICO'; } },
@@ -849,7 +848,6 @@ balance: { min: 0, optMin: 0, optMax: 1, max: 2, unit: '', tooltip: (v) => { if(
 estres: { min: 20, optMin: 30, optMax: 70, max: 100, unit: '', tooltip: (v) => { if(v < 30) return '🟡 Moderado'; if(v <= 70) return '✅ ÓPTIMO'; return '🔴 CRÍTICO'; } },
 'disp-op': { min: 70, optMin: 85, optMax: 95, max: 100, unit: '%', isPercent: true, tooltip: (v) => { if(v < 85) return '🟡 Aceptable'; if(v <= 95) return '✅ ÓPTIMO'; return '✅ EXCELENTE'; } }
 };
-
 // === FUNCIONES DE ESTADO DE MÉTRICAS ===
 function getMetricStatus(metricKey, value) {
 const cfg = METRIC_CONFIG[metricKey];
@@ -900,7 +898,7 @@ const cfg = METRIC_CONFIG[metricKey];
 tooltipEl.innerHTML = `<strong>${info.label}</strong><br>${cfg.tooltip(parseFloat(value))}`;
 }
 }
-// === PERSISTENCIA ===
+// === PERSISTENCIA (MEMORIA ACTIVA) ===
 function loadFromStorage() {
 try {
 const stored = localStorage.getItem(STORAGE_KEY);
@@ -1284,7 +1282,6 @@ const variance = presiones.reduce((acc,val)=>acc+Math.pow(val-mediaPresion,2),0)
 const balancePresion = Math.sqrt(variance).toFixed(2);
 const estresMecanico = syn.estres.toFixed(2);
 const dispOp = totalHoras>0 ? ((last.uptime/totalHoras)*100).toFixed(1) : 0;
-
 updateMetricCard('desgaste', desgasteKm);
 updateMetricCard('termovib', cicloTermovib);
 updateMetricCard('inactividad', inactividad+'%');
@@ -1434,7 +1431,7 @@ selectAll.indeterminate = selectedRows.size > 0 && selectedRows.size < db.length
 }
 updateFilterBadges();
 }
-// === ESTADÍSTICAS DESCRIBE (INCLUYE VARIABLES SINTÉTICAS) ===
+// === ESTADÍSTICAS DESCRIBE (INCLUYE SINTÉTICAS) ===
 function calculateDescribeStats(data = null) {
 const source = data || db;
 if(source.length===0) return null;
@@ -1550,8 +1547,8 @@ data: {
 labels: labels,
 datasets: [
 {label:'Disponibilidad %',data:dispData,borderColor:'#06b6d4',backgroundColor:'rgba(6,182,212,0.1)',borderWidth:2,tension:0.4,yAxisID:'y1',fill:true,pointRadius:2,pointHoverRadius:4},
-{label:'Uptime (h)',uptimeData,borderColor:'#14b8a6',borderDash:[5,5],borderWidth:2,tension:0.2,yAxisID:'y',pointRadius:0},
-{label:'Downtime (h)',downtimeData,borderColor:'#f97316',borderWidth:2,tension:0.2,yAxisID:'y',pointRadius:0}
+{label:'Uptime (h)',data:uptimeData,borderColor:'#14b8a6',borderDash:[5,5],borderWidth:2,tension:0.2,yAxisID:'y',pointRadius:0},
+{label:'Downtime (h)',data:downtimeData,borderColor:'#f97316',borderWidth:2,tension:0.2,yAxisID:'y',pointRadius:0}
 ]
 },
 options: {
@@ -1569,7 +1566,7 @@ window._resizeTimer=setTimeout(()=>{
 if(timelineChartIns && (db.length>0 || selectedRows.size>0)) timelineChartIns.update();
 }, 250);
 });
-// === MATRIZ DE CORRELACIÓN (INCLUYE VARIABLES SINTÉTICAS) ===
+// === MATRIZ DE CORRELACIÓN (INCLUYE SINTÉTICAS) ===
 function pearsonCorrelation(x,y) {
 if(x.length===0||y.length===0) return 0;
 const n=x.length;
@@ -1590,7 +1587,6 @@ if(source.length<2) {
 container.innerHTML='<p class="text-slate-500 text-center py-3 text-[8px]">📊 Mínimo 2 registros requeridos</p>';
 return;
 }
-// Extender dataset con variables sintéticas
 const extSource = source.map(row => ({...row, ...getSyntheticMetrics(row)}));
 const variables=['km','uptime','downtime','vibracion','ta','rpm','psiDi','desgaste','termovib','eficiencia','estres'];
 const labels=['KM','UP','DOWN','VIB','TEMP','RPM','PSI','Desg/km','TermoVib','Ef.Térm','Est.Mec'];
@@ -1864,11 +1860,11 @@ const dispData = source.map(d => (d.uptime+d.downtime)>0?((d.uptime/(d.uptime+d.
 if(window._pdfChart) window._pdfChart.destroy();
 window._pdfChart = new Chart(ctx, {
 type:'line',
- {
+data: {
 labels: labels,
 datasets: [
-{label:'Disponibilidad %',dispData,borderColor:'#06b6d4',backgroundColor:'rgba(6,182,212,0.15)',borderWidth:2.5,tension:0.4,yAxisID:'y1',fill:true,pointRadius:3},
-{label:'Uptime (h)',uptimeData,borderColor:'#14b8a6',borderDash:[5,5],borderWidth:2,tension:0.3,yAxisID:'y',pointRadius:0},
+{label:'Disponibilidad %',data:dispData,borderColor:'#06b6d4',backgroundColor:'rgba(6,182,212,0.15)',borderWidth:2.5,tension:0.4,yAxisID:'y1',fill:true,pointRadius:3},
+{label:'Uptime (h)',data:uptimeData,borderColor:'#14b8a6',borderDash:[5,5],borderWidth:2,tension:0.3,yAxisID:'y',pointRadius:0},
 {label:'Downtime (h)',data:downtimeData,borderColor:'#f97316',borderWidth:2,tension:0.3,yAxisID:'y',pointRadius:0}
 ]
 },
