@@ -26,6 +26,7 @@ body{font-family:'Inter',sans-serif;-webkit-tap-highlight-color:transparent;back
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0.5}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes highlight-pulse{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,0.4)}50%{box-shadow:0 0 0 4px rgba(245,158,11,0)}}
 .animate-shake:hover{animation:shake 0.3s ease-in-out}
 .float-anim{animation:float 4s ease-in-out infinite}
 .glass-card{background:rgba(5,15,30,0.75);backdrop-filter:blur(16px);border:1px solid rgba(6,182,212,0.2);box-shadow:0 8px 32px rgba(0,0,0,0.4),inset 0 1px 0 rgba(6,182,212,0.1);transition:all 0.3s ease}
@@ -146,6 +147,93 @@ input,select,textarea{font-size:16px!important}
 body{background:white;color:black}
 .no-print{display:none!important}
 }
+/* === BOTÓN FLOTANTE WHATSAPP === */
+.whatsapp-fab{position:fixed;bottom:160px;right:20px;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#25D366,#128C7E);border:2px solid rgba(37,211,102,0.5);box-shadow:0 0 20px rgba(37,211,102,0.4),0 0 40px rgba(37,211,102,0.2);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:1000;transition:all 0.3s ease;animation:pulse-glow 3s infinite}
+.whatsapp-fab:hover{transform:scale(1.1);box-shadow:0 0 35px rgba(37,211,102,0.6),0 0 70px rgba(37,211,102,0.4)}
+.whatsapp-fab i{font-size:28px;color:white;text-shadow:0 0 8px rgba(255,255,255,0.6)}
+.whatsapp-tooltip{position:absolute;right:65px;top:50%;transform:translateY(-50%);background:rgba(15,23,42,0.92);color:#e0f2fe;padding:6px 12px;border-radius:8px;font-size:10px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity 0.25s;border:1px solid rgba(37,211,102,0.3)}
+.whatsapp-fab:hover .whatsapp-tooltip{opacity:1}
+@media(max-width:768px){.whatsapp-fab{bottom:150px;right:15px}.whatsapp-tooltip{display:none}}
+
+/* === ASISTENTE VIRTUAL NEXO-ART === */
+.assistant-fab{position:fixed;bottom:90px;right:20px;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#8b5cf6,#06b6d4);border:2px solid rgba(6,182,212,0.5);box-shadow:0 0 25px rgba(99,102,241,0.5),0 0 50px rgba(6,182,212,0.3);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:1000;transition:all 0.3s ease;animation:pulse-glow 3s infinite}
+.assistant-fab:hover{transform:scale(1.1);box-shadow:0 0 35px rgba(99,102,241,0.7),0 0 70px rgba(6,182,212,0.5)}
+.assistant-fab i{font-size:24px;color:white;text-shadow:0 0 10px rgba(255,255,255,0.5)}
+.assistant-badge{position:absolute;top:-4px;right:-4px;width:20px;height:20px;background:#ef4444;border-radius:50%;border:2px solid #0f172a;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:bold;color:white;animation:blink 2s infinite}
+.assistant-modal{position:fixed;inset:0;background:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center;z-index:2000;padding:10px;backdrop-filter:blur(20px);animation:fadeIn 0.3s ease}
+.assistant-content{background:linear-gradient(145deg,rgba(15,23,42,0.98),rgba(30,41,59,0.95));border:1px solid rgba(99,102,241,0.4);border-radius:24px;width:100%;max-width:900px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 25px 80px rgba(99,102,241,0.3)}
+.assistant-header{padding:16px 20px;border-bottom:1px solid rgba(99,102,241,0.2);display:flex;align-items:center;justify-content:space-between;background:rgba(30,41,59,0.5)}
+.assistant-title{display:flex;align-items:center;gap:10px;font-family:'Orbitron',monospace;font-size:14px;font-weight:700;color:#a78bfa}
+.assistant-title i{font-size:18px;animation:float 3s ease-in-out infinite}
+.assistant-close{background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);color:#f87171;width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;font-size:14px}
+.assistant-close:hover{background:rgba(239,68,68,0.3);color:white;transform:scale(1.05)}
+.assistant-body{flex:1;display:flex;overflow:hidden}
+.assistant-context{width:35%;border-right:1px solid rgba(99,102,241,0.2);padding:16px;overflow-y:auto;background:rgba(15,23,42,0.3);font-size:10px}
+.assistant-context h4{font-family:'Orbitron',monospace;font-size:11px;color:#6366f1;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.assistant-context-section{margin-bottom:16px;padding:10px;background:rgba(30,41,59,0.4);border-radius:10px;border:1px solid rgba(99,102,241,0.1)}
+.assistant-context-section h5{font-size:9px;color:#94a3b8;margin-bottom:8px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px}
+.assistant-context-item{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px dashed rgba(99,102,241,0.1);font-size:9px}
+.assistant-context-item:last-child{border-bottom:none}
+.assistant-context-item .label{color:#64748b}
+.assistant-context-item .value{color:#e0f2fe;font-weight:600;font-family:'Orbitron',monospace}
+.assistant-context-item .value.critical{color:#ef4444}
+.assistant-context-item .value.warning{color:#f59e0b}
+.assistant-context-item .value.optimal{color:#10b981}
+.assistant-chat{flex:1;display:flex;flex-direction:column;padding:16px;overflow:hidden}
+.assistant-messages{flex:1;overflow-y:auto;margin-bottom:12px;padding-right:4px}
+.assistant-message{padding:10px 14px;margin-bottom:10px;border-radius:14px;font-size:11px;line-height:1.5;max-width:85%;animation:slideUp 0.2s ease}
+.assistant-message.ai{background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.3);border-left:3px solid #8b5cf6;color:#e0f2fe;margin-right:auto}
+.assistant-message.user{background:rgba(6,182,212,0.15);border:1px solid rgba(6,182,212,0.3);border-right:3px solid #06b6d4;color:#e0f2fe;margin-left:auto}
+.assistant-message .timestamp{font-size:8px;color:#64748b;margin-top:4px;display:block}
+.assistant-typing{display:flex;align-items:center;gap:4px;padding:10px 14px;color:#94a3b8;font-size:10px}
+.assistant-typing .dot{width:6px;height:6px;border-radius:50%;background:#6366f1;animation:blink 1.5s infinite}
+.assistant-typing .dot:nth-child(2){animation-delay:0.2s}
+.assistant-typing .dot:nth-child(3){animation-delay:0.4s}
+.assistant-input-area{display:flex;gap:8px;padding-top:12px;border-top:1px solid rgba(99,102,241,0.2)}
+.assistant-input{flex:1;background:rgba(15,23,42,0.6);border:1px solid rgba(99,102,241,0.3);border-radius:12px;color:#e0f2fe;padding:10px 14px;font-size:11px;resize:none;min-height:40px;max-height:100px;transition:all 0.2s}
+.assistant-input:focus{outline:none;border-color:#8b5cf6;box-shadow:0 0 15px rgba(99,102,241,0.2)}
+.assistant-input::placeholder{color:#64748b}
+.assistant-send{background:linear-gradient(135deg,#6366f1,#8b5cf6);border:none;color:white;width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;font-size:14px;flex-shrink:0}
+.assistant-send:hover{transform:scale(1.05);box-shadow:0 0 20px rgba(99,102,241,0.5)}
+.assistant-send:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+.assistant-actions{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.assistant-action-btn{background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.3);color:#a78bfa;padding:6px 12px;border-radius:8px;font-size:9px;font-weight:500;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:4px}
+.assistant-action-btn:hover{background:rgba(99,102,241,0.2);color:white;transform:translateY(-1px)}
+.assistant-action-btn.primary{background:linear-gradient(135deg,#6366f1,#8b5cf6);border-color:transparent;color:white;font-weight:600}
+.assistant-action-btn.primary:hover{box-shadow:0 0 20px rgba(99,102,241,0.4)}
+.assistant-notebook-link{display:flex;align-items:center;gap:6px;padding:8px 12px;background:rgba(66,133,244,0.1);border:1px solid rgba(66,133,244,0.3);border-radius:10px;color:#93c5fd;font-size:10px;text-decoration:none;transition:all 0.2s;margin-top:8px}
+.assistant-notebook-link:hover{background:rgba(66,133,244,0.2);color:white}
+.assistant-notebook-link i{font-size:12px}
+.assistant-context-toggle{position:absolute;top:16px;right:16px;background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.3);color:#a78bfa;padding:4px 10px;border-radius:8px;font-size:9px;cursor:pointer;display:flex;align-items:center;gap:4px;transition:all 0.2s;z-index:10}
+.assistant-context-toggle:hover{background:rgba(99,102,241,0.25)}
+.assistant-context.collapsed{display:none}
+.assistant-body.context-hidden .assistant-context{display:none}
+.assistant-body.context-hidden .assistant-chat{width:100%}
+@media(max-width:768px){
+.assistant-content{max-width:100%;max-height:100%;border-radius:0}
+.assistant-body{flex-direction:column}
+.assistant-context{width:100%;max-height:200px;border-right:none;border-bottom:1px solid rgba(99,102,241,0.2)}
+.assistant-context-toggle{position:static;margin-bottom:8px}
+}
+/* NUEVOS ESTILOS MATRIZ DIAGNÓSTICO */
+.diag-row{display:flex;align-items:center;padding:8px;margin-bottom:4px;background:rgba(0,20,40,0.4);border:1px solid rgba(6,182,212,0.15);border-radius:8px;transition:all 0.2s;cursor:pointer}
+.diag-row:hover{background:rgba(6,182,212,0.1);border-color:rgba(6,182,212,0.3)}
+.diag-row.selected{background:rgba(6,182,212,0.15);border-color:#06b6d4;box-shadow:0 0 10px rgba(6,182,212,0.2)}
+.diag-row.auto-highlight{animation:highlight-pulse 2s infinite;border-color:#f59e0b!important;background:rgba(245,158,11,0.1)}
+.diag-checkbox{appearance:none;width:18px;height:18px;border:2px solid rgba(6,182,212,0.4);border-radius:4px;background:rgba(0,20,40,0.8);margin-right:10px;flex-shrink:0;cursor:pointer;display:grid;place-content:center;transition:all 0.2s}
+.diag-checkbox:checked{background:#06b6d4;border-color:#06b6d4}
+.diag-checkbox::before{content:'';width:8px;height:8px;transform:scale(0);transition:0.2s transform ease-in-out;box-shadow:inset 1em 1em #0f172a;clip-path:polygon(14% 44%,0 65%,50% 100%,100% 16%,80% 0%,43% 62%)}
+.diag-checkbox:checked::before{transform:scale(1)}
+.diag-info{flex:1;min-width:0}
+.diag-sensor{font-weight:700;font-size:10px;color:#e0f2fe;display:flex;align-items:center;gap:6px}
+.diag-details{font-size:9px;color:#94a3b8;margin-top:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.diag-tags{display:flex;gap:4px;margin-left:auto;flex-shrink:0}
+.source-tag{padding:2px 6px;border-radius:4px;font-size:8px;font-weight:bold;border:1px solid transparent}
+.source-1{background:rgba(16,185,129,0.15);color:#10b981;border-color:rgba(16,185,129,0.3)}
+.source-2{background:rgba(245,158,11,0.15);color:#f59e0b;border-color:rgba(245,158,11,0.3)}
+.source-3{background:rgba(239,68,68,0.15);color:#ef4444;border-color:rgba(239,68,68,0.3)}
+.btn-filter-source{transition:all 0.2s}
+.btn-filter-source.active-filter{transform:scale(1.05);box-shadow:0 0 15px currentColor;filter:brightness(1.2)}
 </style>
 </head>
 <body class="text-slate-200 overflow-x-hidden">
@@ -178,7 +266,7 @@ body{background:white;color:black}
 <!-- Footer -->
 <div class="p-3 border-t border-cyan-500/20 text-slate-500 text-[9px] flex items-center justify-between bg-black/60">
 <span class="truncate flex items-center gap-1"><span class="status-dot inline-block"></span> <span>Online</span></span>
-<span class="text-cyan-400 font-bold font-tech">V 2.1</span>
+<span class="text-cyan-400 font-bold font-tech">V 2.2</span>
 </div>
 </aside>
 <!-- Sidebar Overlay for Mobile -->
@@ -484,6 +572,28 @@ Memoria: <span id="mem-count" class="text-cyan-400 font-bold px-1.5 py-0.5 bg-cy
 <div id="describe-table-container" class="overflow-x-auto custom-scrollbar"></div>
 </div>
 </div>
+<!-- 🔍 MATRIZ DE DIAGNÓSTICO INTERACTIVO (NUEVO) -->
+<div>
+<div class="glass-card rounded-xl p-3 shadow-lg">
+<h2 class="section-title"><i class="fas fa-network-wired text-amber-400"></i> <span class="hidden xs:inline">Matriz Diagnóstico de Sensores</span><span class="xs:hidden">Diagnóstico</span></h2>
+<p class="text-[8px] text-slate-400 mb-2"><i class="fas fa-robot mr-1"></i>Tildar anomalías detectadas para cruzar con dataset y generar reporte.</p>
+<div class="flex gap-1 mb-3 flex-wrap">
+<button onclick="filterSensorMatrix(0)" class="btn-filter-source active-filter px-2 py-1 rounded text-[8px] font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 hover:bg-cyan-500/30">🌐 Todos</button>
+<button onclick="filterSensorMatrix(1)" class="btn-filter-source px-2 py-1 rounded text-[8px] font-bold bg-green-500/20 text-green-300 border border-green-500/30 hover:bg-green-500/30">[1] Motor Siente 💯✅</button>
+<button onclick="filterSensorMatrix(2)" class="btn-filter-source px-2 py-1 rounded text-[8px] font-bold bg-orange-500/20 text-orange-300 border border-orange-500/30 hover:bg-orange-500/30">[2] Check Engine 😱🔥</button>
+<button onclick="filterSensorMatrix(3)" class="btn-filter-source px-2 py-1 rounded text-[8px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30 hover:bg-rose-500/30">[3] Falla Tablero 🚓</button>
+</div>
+<div id="sensor-matrix-container" class="space-y-1 max-h-[250px] overflow-y-auto custom-scrollbar pr-1"></div>
+<div id="diag-summary-panel" class="mt-3 bg-black/50 rounded-lg p-2 border border-cyan-500/10">
+<div class="flex justify-between items-center mb-1">
+<span class="text-[8px] font-bold text-cyan-400 font-tech">📝 REPORTE ACTIVO:</span>
+<span id="diag-count" class="text-[7px] text-slate-400">0 ítems</span>
+</div>
+<ul id="active-diag-list" class="space-y-0.5 text-[8px] text-slate-300 min-h-[20px]"></ul>
+<button onclick="generateSensorReport()" class="mt-2 w-full btn-neon py-1.5 rounded text-[8px] font-bold">📄 Guardar y Generar Reporte</button>
+</div>
+</div>
+</div>
 <!-- Predictive AI -->
 <div>
 <h2 class="section-title"><i class="fas fa-brain text-indigo-400"></i> <span class="hidden xs:inline">Recomendaciones IA</span><span class="xs:hidden">IA</span></h2>
@@ -590,6 +700,8 @@ Limpiar
 </div>
 </div>
 </div>
+</div>
+</div>
 <!-- Mobile Navigation -->
 <nav id="mobile-nav" class="fixed bottom-0 left-0 right-0 bg-black/90 border-t border-cyan-500/20 p-2 md:hidden z-20 backdrop-blur-xl no-print">
 <div class="flex justify-around items-center">
@@ -614,6 +726,109 @@ Limpiar
 <span><kbd>Ctrl+S</kbd> Guardar datos</span>
 <span><kbd>Esc</kbd> Cerrar modal</span>
 <span><kbd>?</kbd> Mostrar ayuda</span>
+</div>
+<!-- === ASISTENTE VIRTUAL NEXO-ART === -->
+<button id="assistant-fab" class="assistant-fab no-print" title="Asistente de Diagnóstico IA" onclick="openAssistant()">
+<i class="fas fa-robot"></i>
+<span class="assistant-badge">IA</span>
+</button>
+<!-- === BOTÓN FLOTANTE WHATSAPP === -->
+<button id="whatsapp-fab" class="whatsapp-fab no-print" title="Enviar Reporte por WhatsApp" onclick="sendWhatsAppReport()">
+<i class="fab fa-whatsapp"></i>
+<span class="whatsapp-tooltip">📤 Enviar Reporte Profesional</span>
+</button>
+<div id="assistant-modal" class="assistant-modal hidden no-print">
+<div class="assistant-content">
+<div class="assistant-header">
+<div class="assistant-title">
+<i class="fas fa-brain"></i>
+<span>NEXO-ART AI Assistant</span>
+<span class="text-[8px] px-2 py-0.5 bg-purple-500/20 text-purple-300 rounded-full border border-purple-500/30">v2.2</span>
+</div>
+<button class="assistant-close" onclick="closeAssistant()"><i class="fas fa-times"></i></button>
+</div>
+<button class="assistant-context-toggle" onclick="toggleAssistantContext()">
+<i class="fas fa-database"></i> <span id="context-toggle-text">Ocultar Contexto</span>
+</button>
+<div class="assistant-body" id="assistant-body">
+<!-- Panel de Contexto -->
+<div class="assistant-context" id="assistant-context">
+<h4><i class="fas fa-info-circle"></i> Contexto Actual</h4>
+<div class="assistant-context-section">
+<h5><i class="fas fa-car"></i> Unidad Seleccionada</h5>
+<div class="assistant-context-item"><span class="label">Unidad:</span><span class="value" id="ctx-unidad">--</span></div>
+<div class="assistant-context-item"><span class="label">Motor:</span><span class="value" id="ctx-motor">--</span></div>
+<div class="assistant-context-item"><span class="label">KM:</span><span class="value" id="ctx-km">--</span></div>
+<div class="assistant-context-item"><span class="label">RPM:</span><span class="value" id="ctx-rpm">--</span></div>
+</div>
+<div class="assistant-context-section">
+<h5><i class="fas fa-gauge-high"></i> KPIs Principales</h5>
+<div class="assistant-context-item"><span class="label">Disponibilidad:</span><span class="value" id="ctx-disp">--</span></div>
+<div class="assistant-context-item"><span class="label">MTBF:</span><span class="value" id="ctx-mtbf">--</span></div>
+<div class="assistant-context-item"><span class="label">MTTR:</span><span class="value" id="ctx-mttr">--</span></div>
+</div>
+<div class="assistant-context-section">
+<h5><i class="fas fa-brain"></i> Métricas Sintéticas</h5>
+<div class="assistant-context-item"><span class="label">Estrés Mecánico:</span><span class="value" id="ctx-estres">--</span></div>
+<div class="assistant-context-item"><span class="label">Eficiencia Térmica:</span><span class="value" id="ctx-eficiencia">--</span></div>
+<div class="assistant-context-item"><span class="label">Ciclo Termovib:</span><span class="value" id="ctx-termovib">--</span></div>
+<div class="assistant-context-item"><span class="label">Desgaste/km:</span><span class="value" id="ctx-desgaste">--</span></div>
+</div>
+<div class="assistant-context-section">
+<h5><i class="fas fa-triangle-exclamation"></i> Alertas Activas</h5>
+<div id="ctx-alertas" class="space-y-1"></div>
+</div>
+<div class="assistant-context-section">
+<h5><i class="fas fa-microchip"></i> Diagnóstico Sensores</h5>
+<div id="ctx-sensores" class="space-y-1"></div>
+</div>
+<div class="assistant-context-section">
+<h5><i class="fas fa-clipboard-check"></i> VTV Score</h5>
+<div class="assistant-context-item"><span class="label">Score:</span><span class="value" id="ctx-vtv">--</span></div>
+<div class="assistant-context-item"><span class="label">Pendientes:</span><span class="value" id="ctx-vtv-pending">--</span></div>
+</div>
+<a href="https://notebooklm.google.com/notebook/7b37e8d0-167f-4afc-967d-c2182cdce532?authuser=1"
+target="_blank"
+class="assistant-notebook-link"
+onclick="exportContextToNotebook()">
+<i class="fas fa-external-link-alt"></i>
+Abrir en NotebookLM
+</a>
+</div>
+<!-- Panel de Chat -->
+<div class="assistant-chat">
+<div class="assistant-actions">
+<button class="assistant-action-btn primary" onclick="askAssistant('diagnostic')">
+<i class="fas fa-stethoscope"></i> Diagnóstico Rápido
+</button>
+<button class="assistant-action-btn" onclick="askAssistant('maintenance')">
+<i class="fas fa-wrench"></i> Plan Mantenimiento
+</button>
+<button class="assistant-action-btn" onclick="askAssistant('vtv')">
+<i class="fas fa-file-contract"></i> Preparar VTV
+</button>
+<button class="assistant-action-btn" onclick="askAssistant('anomaly')">
+<i class="fas fa-search"></i> Detectar Anomalías
+</button>
+</div>
+<div class="assistant-messages" id="assistant-messages">
+<div class="assistant-message ai">
+👋 Hola, soy tu Asistente de Diagnóstico NEXO-ART.
+Tengo acceso a todos los datos del dashboard: KPIs, métricas sintéticas, sensores, VTV e historial.
+<br><br>
+<strong>¿En qué puedo ayudarte hoy?</strong>
+<span class="timestamp">Ahora</span>
+</div>
+</div>
+<div class="assistant-input-area">
+<textarea id="assistant-input" class="assistant-input" placeholder="Describe el problema o pregunta... Ej: '¿Por qué la temperatura está alta?' o 'Recomendaciones para VTV'" onkeydown="handleAssistantKeydown(event)"></textarea>
+<button class="assistant-send" id="assistant-send" onclick="sendAssistantMessage()">
+<i class="fas fa-paper-plane"></i>
+</button>
+</div>
+</div>
+</div>
+</div>
 </div>
 <!-- PDF TEMPLATE (Centered & Fixed) -->
 <div id="pdf-report-template-enhanced" class="hidden w-[794px] bg-white text-slate-800 p-6 font-sans no-print" style="min-height:1123px;box-sizing:border-box;font-size:10px;margin:0 auto;position:relative;left:auto;transform:none;">
@@ -747,9 +962,16 @@ Limpiar
 </h2>
 <div id="pdf-work-history" class="space-y-2"></div>
 </div>
+<!-- 10. Sensor Diagnostics -->
+<div class="mb-4">
+<h2 class="text-[9px] font-black text-slate-700 uppercase tracking-wider mb-2 pb-1 border-b-2 border-slate-900 flex items-center gap-2 font-tech">
+<span>🔍</span> 10. Diagnóstico de Sensores
+</h2>
+<div id="pdf-sensor-diag" class="space-y-2"></div>
+</div>
 <!-- Footer -->
 <div class="mt-auto pt-3 border-t-2 border-slate-900 flex justify-between items-center text-[7px] text-slate-400 uppercase tracking-wider font-bold">
-<p><i class="fas fa-shield-alt mr-1"></i> NEXO-ART Motor Intelligence v2.1</p>
+<p><i class="fas fa-shield-alt mr-1"></i> NEXO-ART Motor Intelligence v2.2</p>
 <p>Generado automáticamente</p>
 </div>
 </div>
@@ -794,6 +1016,7 @@ Cancelar
 // === CONFIGURACIÓN GLOBAL ===
 const STORAGE_KEY = 'nexoart_data_v2';
 const VTV_KEY = 'nexoart_vtv_checklist';
+const SENSOR_DIAG_KEY = 'nexoart_sensor_diag';
 const MAX_RECORDS = 1000;
 let db = [];
 let timelineChartIns = null;
@@ -801,6 +1024,32 @@ let isSidebarOpen = false;
 let selectedRows = new Set();
 let currentModalUnit = null;
 let isGeneratingPDF = false;
+let activeDiagnostics = [];
+// === ASISTENTE VIRTUAL - VARIABLES ===
+let assistantContextVisible = true;
+let assistantMessages = [];
+// === DATASET SENSORES Y FALLAS ===
+const SENSOR_FAULT_MATRIX = [
+{ id: 's_o2', sensor: 'O2 (Oxígeno)', sistema: 'Motor/Inyección', falla: 'Mezcla rica o pobre', sintoma: 'Check Engine', consecuencia: 'Alto consumo', fuentes: [1, 2] },
+{ id: 's_map', sensor: 'MAP', sistema: 'Motor/Admisión', falla: 'Presión fuera de rango', sintoma: 'Alteración inyección', consecuencia: 'Pérdida de potencia', fuentes: [1, 2] },
+{ id: 's_ect', sensor: 'ECT/ST', sistema: 'Motor/Enfriamiento', falla: 'Lecturas incorrectas', sintoma: 'Datos erróneos ECU', consecuencia: 'Arranque/Alto consumo', fuentes: [1, 2] },
+{ id: 's_knock', sensor: 'Detonación (Knock)', sistema: 'Motor/Combustión', falla: 'Cascabeleo/Golpeteo', sintoma: 'Check Engine', consecuencia: 'Retraso encendido', fuentes: [1, 2] },
+{ id: 's_tps', sensor: 'TPS (Mariposa)', sistema: 'Motor/Aceleración', falla: 'Apertura errática', sintoma: 'Tirones en marcha', consecuencia: 'Alteración aceleración', fuentes: [1, 2] },
+{ id: 's_ck', sensor: 'Check Engine', sistema: 'Motor/Sensores', falla: 'Problema ECU', sintoma: 'Luz tablero', consecuencia: 'Diagnóstico inmediato', fuentes: [3] },
+{ id: 's_epc', sensor: 'EPC', sistema: 'Acelerador Electrónico', falla: 'Falla control acelerador', sintoma: 'Luz tablero', consecuencia: 'Pérdida control', fuentes: [3] },
+{ id: 's_ckp', sensor: 'CKP (Cigüeñal)', sistema: 'Motor/Encendido', falla: 'Señal arranque falla', sintoma: 'No especificado', consecuencia: 'Motor no enciende', fuentes: [1] },
+{ id: 's_maf', sensor: 'MAF (Aire)', sistema: 'Motor/Admisión', falla: 'Flujo incorrecto', sintoma: 'Ralentí irregular', consecuencia: 'Inestabilidad baja', fuentes: [1] },
+{ id: 's_oil', sensor: 'Presión Aceite', sistema: 'Motor/Lubricación', falla: 'Fuera de rango', sintoma: 'Alerta tablero', consecuencia: 'Daño interno', fuentes: [1] },
+{ id: 's_cmp', sensor: 'CMP (Levas)', sistema: 'Motor/Sincronización', falla: 'Señal incorrecta', sintoma: 'Check Engine', consecuencia: 'Desajustes ciclo', fuentes: [2] },
+{ id: 's_fuel', sensor: 'Presión Combustible', sistema: 'Motor/Combustible', falla: 'Riel fuera de rango', sintoma: 'Check Engine', consecuencia: 'Fallas inyección', fuentes: [2] },
+{ id: 's_turbo', sensor: 'Presión Turbo', sistema: 'Motor/Inducción', falla: 'Sobrealimentación', sintoma: 'No especificado', consecuencia: 'Pérdida fuerza', fuentes: [1] },
+{ id: 's_abs', sensor: 'ABS', sistema: 'Frenos', falla: 'Avería ABS', sintoma: 'Luz tablero', consecuencia: 'Inoperatividad frenado', fuentes: [3] },
+{ id: 's_traction', sensor: 'Control Tracción', sistema: 'Seguridad Dinámica', falla: 'Sistema fallando', sintoma: 'Luz tablero', consecuencia: 'Pérdida estabilidad', fuentes: [3] },
+{ id: 's_airbag', sensor: 'Airbag', sistema: 'Seguridad Pasiva', falla: 'Sistema seguridad', sintoma: 'Luz tablero', consecuencia: 'No despliegue colisión', fuentes: [3] },
+{ id: 's_steering', sensor: 'Dirección Asistida', sistema: 'Dirección', falla: 'Asistencia hidráulica/eléctrica', sintoma: 'Volante duro', consecuencia: 'Dificultad maniobrabilidad', fuentes: [3] },
+{ id: 's_tire', sensor: 'Presión Neumáticos', sistema: 'Seguridad/Ruedas', falla: 'Baja presión/pérdida', sintoma: 'Alerta tablero', consecuencia: 'Inestabilidad/Pinchadura', fuentes: [3] },
+{ id: 's_speed', sensor: 'Velocidad', sistema: 'Instrumentación', falla: 'Lectura velocidad', sintoma: 'Velocímetro errático', consecuencia: 'Lectura incorrecta', fuentes: [1] }
+];
 // === CATEGORÍAS VTV ===
 const VTV_CATEGORIES = [
 {id:'luces',icon:'fa-lightbulb',color:'text-amber-400',emoji:'💡',title:'ILUMINACIÓN'},
@@ -829,13 +1078,13 @@ VTV_ITEMS.push({...item, category: cat.id, icon: cat.icon, emoji: cat.emoji});
 let vtvState = {};
 // === FUNCIÓN NÚCLEO: CALCULO DE VARIABLES SINTÉTICAS ===
 function getSyntheticMetrics(row) {
-    if (!row) return { desgaste: 0, termovib: 0, eficiencia: 0, estres: 0 };
-    return {
-        desgaste: row.uptime > 0 ? (row.km / row.uptime) : 0,
-        termovib: row.rpm > 0 ? ((row.ta * row.vibracion) / row.rpm * 1000) : 0,
-        eficiencia: row.ta > 0 ? (row.rpm / row.ta) : 0,
-        estres: (row.vibracion * row.rpm) / 1000
-    };
+if (!row) return { desgaste: 0, termovib: 0, eficiencia: 0, estres: 0 };
+return {
+desgaste: row.uptime > 0 ? (row.km / row.uptime) : 0,
+termovib: row.rpm > 0 ? ((row.ta * row.vibracion) / row.rpm * 1000) : 0,
+eficiencia: row.ta > 0 ? (row.rpm / row.ta) : 0,
+estres: (row.vibracion * row.rpm) / 1000
+};
 }
 // === CONFIGURACIÓN DE MÉTRICAS AVANZADAS ===
 const METRIC_CONFIG = {
@@ -916,15 +1165,23 @@ db = [
 ];
 saveToStorage();
 }
-} catch(e) { console.error('Error loading data:', e); db = []; }
+} catch(e) { console.error('Error loading ', e); db = []; }
 updateMemoryCounter();
 }
 function saveToStorage() {
 try {
+if(db.length > MAX_RECORDS) { db = db.slice(-MAX_RECORDS); }
 localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
 updateMemoryCounter();
 } catch(e) {
-showToast('⚠️ Error al guardar: almacenamiento lleno', 'error');
+if(e.name === 'QuotaExceededError') {
+db = db.slice(-500);
+localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+updateMemoryCounter();
+showToast('⚠️ Memoria llena: registros antiguos eliminados', 'warning');
+} else {
+showToast('⚠️ Error al guardar: ' + e.message, 'error');
+}
 }
 }
 function updateMemoryCounter() {
@@ -943,6 +1200,104 @@ else { VTV_ITEMS.forEach(i => { vtvState[i.id] = false; }); }
 function saveVTVState() {
 try { localStorage.setItem(VTV_KEY, JSON.stringify(vtvState)); }
 catch(e) { showToast('⚠️ Error al guardar VTV', 'warning'); }
+}
+// === LÓGICA MATRIZ DIAGNÓSTICO ===
+function loadSensorDiagnostics() {
+try {
+const saved = localStorage.getItem(SENSOR_DIAG_KEY);
+activeDiagnostics = saved ? JSON.parse(saved) : [];
+} catch(e) { activeDiagnostics = []; }
+}
+function saveSensorDiagnostics() {
+localStorage.setItem(SENSOR_DIAG_KEY, JSON.stringify(activeDiagnostics));
+}
+function toggleSensorDiag(sensorId) {
+const idx = activeDiagnostics.indexOf(sensorId);
+if(idx > -1) { activeDiagnostics.splice(idx, 1); }
+else { activeDiagnostics.push(sensorId); }
+renderSensorMatrix();
+updateDiagnosticLog();
+saveSensorDiagnostics();
+}
+function filterSensorMatrix(source) {
+document.querySelectorAll('.btn-filter-source').forEach(btn => btn.classList.remove('active-filter'));
+event.currentTarget.classList.add('active-filter');
+renderSensorMatrix(source);
+}
+function autoHighlightDiagnostics() {
+if(db.length === 0) return;
+const last = db[db.length-1];
+if(last.ta > 95) {
+const ect = SENSOR_FAULT_MATRIX.find(s => s.id === 's_ect');
+if(ect && !activeDiagnostics.includes('s_ect')) showToast(`⚠️ Posible falla: ${ect.sensor}`, 'warning');
+}
+if(last.vibracion > 4) {
+const knock = SENSOR_FAULT_MATRIX.find(s => s.id === 's_knock');
+if(knock && !activeDiagnostics.includes('s_knock')) showToast(`⚠️ Vibración alta: revisar ${knock.sensor}`, 'warning');
+}
+}
+function renderSensorMatrix(sourceFilter = 0) {
+const container = document.getElementById('sensor-matrix-container');
+if(!container) return;
+let html = '';
+SENSOR_FAULT_MATRIX.forEach(item => {
+if(sourceFilter > 0 && !item.fuentes.includes(sourceFilter)) return;
+const isSelected = activeDiagnostics.includes(item.id);
+let highlightClass = '';
+const last = db.length > 0 ? db[db.length-1] : null;
+if(last) {
+if(last.ta > 100 && (item.id === 's_ect' || item.id === 's_oil')) highlightClass = 'auto-highlight';
+if(last.vibracion > 4.0 && (item.id === 's_knock' || item.id === 's_map' || item.id === 's_maf')) highlightClass = 'auto-highlight';
+}
+const tagsHtml = item.fuentes.map(f => `<span class="source-tag source-${f}">[${f}]</span>`).join('');
+html += `
+<div class="diag-row ${isSelected?'selected':''} ${highlightClass}" onclick="event.target.classList.contains('diag-checkbox') ? toggleSensorDiag('${item.id}') : toggleSensorDiag('${item.id}')">
+<input type="checkbox" class="diag-checkbox" ${isSelected?'checked':''} onchange="toggleSensorDiag('${item.id}')">
+<div class="diag-info">
+<div class="diag-sensor"><i class="fas fa-microchip text-cyan-400"></i> ${item.sensor} <span class="text-[8px] text-slate-500 ml-auto">${item.sistema}</span></div>
+<div class="diag-details">⚠️ ${item.falla} | 👁️ ${item.sintoma} | 📉 ${item.consecuencia}</div>
+</div>
+<div class="diag-tags">${tagsHtml}</div>
+</div>`;
+});
+container.innerHTML = html || '<p class="text-slate-500 text-center py-4 text-[8px]">Sin resultados para este filtro</p>';
+updateDiagnosticLog();
+}
+function updateDiagnosticLog() {
+const list = document.getElementById('active-diag-list');
+const count = document.getElementById('diag-count');
+if(!list) return;
+count.innerText = `${activeDiagnostics.length} ítems`;
+if(activeDiagnostics.length === 0) {
+list.innerHTML = '<li class="text-slate-500 italic">Tildá sensores en la matriz para agregar al reporte...</li>';
+return;
+}
+list.innerHTML = activeDiagnostics.map(id => {
+const item = SENSOR_FAULT_MATRIX.find(i => i.id === id);
+return `<li class="flex items-start gap-2 p-1 bg-black/30 rounded border border-cyan-500/20">
+<span class="text-cyan-400 font-bold font-tech">🔍</span>
+<span><b>${item.sensor}</b> (${item.sistema}) - ${item.falla}</span>
+</li>`;
+}).join('');
+}
+function generateSensorReport() {
+if(activeDiagnostics.length === 0) {
+showToast('⚠️ No has seleccionado ningún sensor', 'warning');
+return;
+}
+let report = `<h4 class="text-white font-bold mb-2 flex items-center gap-2 border-b border-cyan-500/20 pb-2 text-xs uppercase font-tech"><i class="fas fa-file-medical-alt text-amber-400"></i> Reporte Diagnóstico Mecánico</h4>`;
+report += `<p class="mb-2 text-slate-300 text-[10px]">Se detectaron <b>${activeDiagnostics.length}</b> anomalías posibles según la matriz de datos:</p><ul class="space-y-1">`;
+activeDiagnostics.forEach(id => {
+const item = SENSOR_FAULT_MATRIX.find(i => i.id === id);
+report += `<li class="flex items-center gap-2 text-slate-300 text-[9px] p-1 bg-amber-500/10 rounded"><span class="source-tag source-${item.fuentes[0]}">[${item.fuentes[0]}]</span> <b>${item.sensor}</b>: ${item.consecuencia}</li>`;
+});
+report += `</ul>`;
+const aiContainer = document.getElementById('ai-report-container');
+if(aiContainer) {
+aiContainer.innerHTML = report;
+aiContainer.classList.remove('hidden');
+}
+showToast('✅ Reporte de falla generado y guardado', 'success');
 }
 // === SELECCIÓN DE FILAS ===
 function toggleRowSelection(index) {
@@ -972,10 +1327,7 @@ return db.filter((_, i) => selectedRows.has(i));
 function updateFilterBadges() {
 const container = document.getElementById('filter-badge-container');
 if(!container) return;
-if(selectedRows.size === 0) {
-container.innerHTML = '';
-return;
-}
+if(selectedRows.size === 0) { container.innerHTML = ''; return; }
 const units = {};
 selectedRows.forEach(idx => {
 const unidad = db[idx]?.unidad;
@@ -989,9 +1341,7 @@ container.innerHTML += `<span class="filter-badge">+${Object.keys(units).length 
 }
 }
 function removeUnitFilter(unidad) {
-db.forEach((row, idx) => {
-if(row.unidad === unidad) selectedRows.delete(idx);
-});
+db.forEach((row, idx) => { if(row.unidad === unidad) selectedRows.delete(idx); });
 renderDatasetTable();
 updateFilterBadges();
 }
@@ -1010,7 +1360,8 @@ content.innerHTML = unitHistory.map((r, i) => {
 const fecha = new Date(r.timestamp).toLocaleDateString('es-ES', {weekday:'long', year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit'});
 return `<div class="history-item" style="animation-delay:${i*0.05}s">
 <div class="history-date"><i class="fas fa-calendar-alt"></i>${fecha}</div>
-<div class="history-text">${r.trabajo ? r.trabajo.replace(/\n/g, '<br>') : '<span class="work-notes-empty">Sin detalles registrados</span>'}</div>
+<div class="history-text">${r.trabajo ? r.trabajo.replace(/
+/g, '<br>') : '<span class="work-notes-empty">Sin detalles registrados</span>'}</div>
 </div>`;
 }).join('');
 }
@@ -1065,7 +1416,8 @@ workHistoryContainer.innerHTML = unitHistory.map(r => {
 const fecha = new Date(r.timestamp).toLocaleDateString('es-ES', {day:'2-digit', month:'short', year:'numeric', hour:'2-digit'});
 return `<div class="border border-slate-200 rounded-lg p-3 mb-3 bg-slate-50">
 <p class="text-[9px] font-bold text-slate-600 mb-2">${fecha}</p>
-<p class="text-[10px] text-slate-700 leading-relaxed">${(r.trabajo || 'Sin detalles').replace(/\n/g, '<br>')}</p>
+<p class="text-[10px] text-slate-700 leading-relaxed">${(r.trabajo || 'Sin detalles').replace(/
+/g, '<br>')}</p>
 </div>`;
 }).join('') || '<p class="text-slate-400 text-center">Sin historial</p>';
 template.classList.remove('hidden');
@@ -1174,19 +1526,23 @@ updateCorrelationMatrix();
 renderDatasetTable();
 renderDescribeTable();
 calculateAdvancedMetrics();
+autoHighlightDiagnostics();
+renderSensorMatrix();
 showToast(`✅ ${unidad} procesado (${db.length}/${MAX_RECORDS})`, "success");
 }
 // === RESET COMPLETO ===
 function resetAllData() {
-if(db.length === 0 && Object.values(vtvState).every(v => !v)) {
+if(db.length === 0 && Object.values(vtvState).every(v => !v) && activeDiagnostics.length === 0) {
 showToast("ℹ️ Todo está vacío", "info");
 return;
 }
-if(confirm("⚠️ ¿BORRAR TODOS los datos y el checklist VTV? Esta acción no se puede deshacer.")) {
+if(confirm("⚠️ ¿BORRAR TODOS los datos, VTV y Diagnóstico? Esta acción no se puede deshacer.")) {
 db = [];
 localStorage.removeItem(STORAGE_KEY);
 VTV_ITEMS.forEach(i => { vtvState[i.id] = false; });
 localStorage.removeItem(VTV_KEY);
+activeDiagnostics = [];
+localStorage.removeItem(SENSOR_DIAG_KEY);
 selectedRows.clear();
 updateMemoryCounter();
 ['card-unidad','card-rpm','kpi-mtbf','kpi-mttr','kpi-disp'].forEach(id => {
@@ -1208,6 +1564,7 @@ const msl=document.getElementById("ml-status-list"); if(msl) msl.innerHTML='';
 renderDatasetTable();
 renderDescribeTable();
 renderVTVChecklist();
+renderSensorMatrix();
 const canvas=document.getElementById('timelineChart');
 if(canvas) {
 const ctx=canvas.getContext('2d');
@@ -1431,7 +1788,7 @@ selectAll.indeterminate = selectedRows.size > 0 && selectedRows.size < db.length
 }
 updateFilterBadges();
 }
-// === ESTADÍSTICAS DESCRIBE (INCLUYE SINTÉTICAS) ===
+// === ESTADÍSTICAS DESCRIBE ===
 function calculateDescribeStats(data = null) {
 const source = data || db;
 if(source.length===0) return null;
@@ -1521,8 +1878,45 @@ return;
 updateTimelineChart(selected);
 updateCorrelationMatrix(selected);
 renderDescribeTable(selected);
+generateAutoInsights(selected);
 showToast(`📊 Analizando ${selected.length} unidad(es) seleccionada(s)`, 'success');
 updateFilterBadges();
+}
+function generateAutoInsights(data) {
+const panel = document.getElementById('ai-report-container');
+if(!panel) return;
+const last = data[data.length-1];
+const syn = getSyntheticMetrics(last);
+const avgTemp = data.reduce((a,b)=>a+b.ta,0)/data.length;
+const avgVib = data.reduce((a,b)=>a+b.vibracion,0)/data.length;
+let insights = `<h4 class="text-white font-bold mb-2 flex items-center gap-2 border-b border-cyan-500/20 pb-2 text-xs uppercase font-tech">
+<i class="fas fa-lightbulb text-amber-400"></i> Insights Automáticos</h4>`;
+if(avgTemp > 95) {
+insights += `<div class="p-2 bg-amber-500/10 border border-amber-500/30 rounded-lg mb-2">
+<p class="text-[8px] text-amber-300"><strong>⚠️ Temperatura Promedio Alta:</strong> ${avgTemp.toFixed(1)}°C</p>
+<p class="text-[7px] text-slate-400 mt-1">Recomendación: Verificar sistema de refrigeración en próximas 48hs.</p>
+</div>`;
+}
+if(avgVib > 3.5) {
+insights += `<div class="p-2 bg-orange-500/10 border border-orange-500/30 rounded-lg mb-2">
+<p class="text-[8px] text-orange-300"><strong>〰️ Vibración Elevada:</strong> ${avgVib.toFixed(2)} mm/s</p>
+<p class="text-[7px] text-slate-400 mt-1">Recomendación: Programar balanceo y alineación preventiva.</p>
+</div>`;
+}
+if(syn.estres > 70) {
+insights += `<div class="p-2 bg-rose-500/10 border border-rose-500/30 rounded-lg mb-2">
+<p class="text-[8px] text-rose-300"><strong>🔧 Estrés Mecánico Crítico:</strong> ${syn.estres.toFixed(2)}</p>
+<p class="text-[7px] text-slate-400 mt-1">Recomendación: Reducir carga operativa y revisar suspensión.</p>
+</div>`;
+}
+if(avgTemp <= 95 && avgVib <= 3.5 && syn.estres <= 70) {
+insights += `<div class="p-2 bg-emerald-500/10 border border-emerald-500/30 rounded-lg">
+<p class="text-[8px] text-emerald-300"><strong>✅ Parámetros Óptimos</strong></p>
+<p class="text-[7px] text-slate-400 mt-1">Todos los indicadores dentro de rangos aceptables. Continuar monitoreo estándar.</p>
+</div>`;
+}
+panel.innerHTML = insights;
+panel.classList.remove('hidden');
 }
 // === GRÁFICO DE LÍNEA TEMPORAL ===
 function updateTimelineChart(data = null) {
@@ -1543,12 +1937,12 @@ const dispData=source.map(d=>(d.uptime+d.downtime)>0?((d.uptime/(d.uptime+d.down
 if(timelineChartIns) timelineChartIns.destroy();
 timelineChartIns=new Chart(ctx, {
 type:'line',
-data: {
+ {
 labels: labels,
 datasets: [
-{label:'Disponibilidad %',data:dispData,borderColor:'#06b6d4',backgroundColor:'rgba(6,182,212,0.1)',borderWidth:2,tension:0.4,yAxisID:'y1',fill:true,pointRadius:2,pointHoverRadius:4},
-{label:'Uptime (h)',data:uptimeData,borderColor:'#14b8a6',borderDash:[5,5],borderWidth:2,tension:0.2,yAxisID:'y',pointRadius:0},
-{label:'Downtime (h)',data:downtimeData,borderColor:'#f97316',borderWidth:2,tension:0.2,yAxisID:'y',pointRadius:0}
+{label:'Disponibilidad %',dispData,borderColor:'#06b6d4',backgroundColor:'rgba(6,182,212,0.1)',borderWidth:2,tension:0.4,yAxisID:'y1',fill:true,pointRadius:2,pointHoverRadius:4},
+{label:'Uptime (h)',uptimeData,borderColor:'#14b8a6',borderDash:[5,5],borderWidth:2,tension:0.2,yAxisID:'y',pointRadius:0},
+{label:'Downtime (h)',downtimeData,borderColor:'#f97316',borderWidth:2,tension:0.2,yAxisID:'y',pointRadius:0}
 ]
 },
 options: {
@@ -1560,13 +1954,7 @@ scales: {x:{ticks:{color:'#64748b',font:{size:8}},grid:{color:'rgba(6,182,212,0.
 }
 });
 }
-window.addEventListener('resize', () => {
-clearTimeout(window._resizeTimer);
-window._resizeTimer=setTimeout(()=>{
-if(timelineChartIns && (db.length>0 || selectedRows.size>0)) timelineChartIns.update();
-}, 250);
-});
-// === MATRIZ DE CORRELACIÓN (INCLUYE SINTÉTICAS) ===
+// === MATRIZ DE CORRELACIÓN ===
 function pearsonCorrelation(x,y) {
 if(x.length===0||y.length===0) return 0;
 const n=x.length;
@@ -1616,9 +2004,11 @@ container.innerHTML=html;
 function exportCSV() {
 if(db.length===0) { showToast("📭 Sin datos para exportar","info"); return; }
 const headers=["Unidad","ID","Motor","KM","Uptime","Downtime","Vibración","Temp°C","RPM","PSI-DI","PSI-DD","PSI-TI","PSI-TD","Trabajo","Timestamp"];
-let csv=headers.join(";")+"\n";
+let csv=headers.join(";")+"
+";
 db.forEach(row => {
-csv+=[row.unidad,row.id,row.motor,row.km,row.uptime,row.downtime,row.vibracion,row.ta,row.rpm,row.psiDi,row.psiDd,row.psiTi,row.psiTd,row.trabajo||'',new Date(row.timestamp).toLocaleString('es-ES')].join(";")+"\n";
+csv+=[row.unidad,row.id,row.motor,row.km,row.uptime,row.downtime,row.vibracion,row.ta,row.rpm,row.psiDi,row.psiDd,row.psiTi,row.psiTd,row.trabajo||'',new Date(row.timestamp).toLocaleString('es-ES')].join(";")+"
+";
 });
 const blob=new Blob(["\uFEFF"+csv],{type:'text/csv;charset=utf-8;'});
 const link=document.createElement("a");
@@ -1631,9 +2021,11 @@ function exportSelectedCSV() {
 const selected = getSelectedData();
 if(selected.length === 0) { showToast("📭 Selecciona filas para exportar","info"); return; }
 const headers=["Unidad","ID","Motor","KM","Uptime","Downtime","Vibración","Temp°C","RPM","PSI-DI","PSI-DD","PSI-TI","PSI-TD","Trabajo","Timestamp"];
-let csv=headers.join(";")+"\n";
+let csv=headers.join(";")+"
+";
 selected.forEach(row => {
-csv+=[row.unidad,row.id,row.motor,row.km,row.uptime,row.downtime,row.vibracion,row.ta,row.rpm,row.psiDi,row.psiDd,row.psiTi,row.psiTd,row.trabajo||'',new Date(row.timestamp).toLocaleString('es-ES')].join(";")+"\n";
+csv+=[row.unidad,row.id,row.motor,row.km,row.uptime,row.downtime,row.vibracion,row.ta,row.rpm,row.psiDi,row.psiDd,row.psiTi,row.psiTd,row.trabajo||'',new Date(row.timestamp).toLocaleString('es-ES')].join(";")+"
+";
 });
 const blob=new Blob(["\uFEFF"+csv],{type:'text/csv;charset=utf-8;'});
 const link=document.createElement("a");
@@ -1642,7 +2034,7 @@ link.download=`NEXO-ART_Filtrado_${selected.length}unidades_${new Date().toISOSt
 link.click();
 showToast(`📥 CSV de ${selected.length} unidades descargado`,"success");
 }
-// === PDFS (CENTRADOS Y OPTIMIZADOS) ===
+// === PDFS ===
 function exportSingleUnitPDF(index) {
 const unit = db[index];
 if(!unit) return;
@@ -1679,6 +2071,7 @@ document.getElementById('pdf-vtv-score').innerText = document.getElementById('vt
 document.getElementById('pdf-vtv-status').innerText = document.getElementById('vtv-score-label')?.innerText || '';
 document.getElementById('pdf-vtv-progress').innerText = document.getElementById('vtv-progress-text')?.innerText || '0/24';
 document.getElementById('pdf-vtv-checklist-full').innerHTML = generateVTVChecklistFullPDF();
+document.getElementById('pdf-sensor-diag').innerHTML = generateSensorDiagPDF();
 const workHistoryContainer = document.getElementById('pdf-work-history');
 workHistoryContainer.innerHTML = `<div class="border border-slate-200 rounded-lg p-3 bg-slate-50">
 <p class="text-[9px] font-bold text-slate-600 mb-2">${new Date(unit.timestamp).toLocaleDateString('es-ES')}</p>
@@ -1701,6 +2094,16 @@ template.classList.add('hidden');
 showToast('❌ Error al generar PDF','error');
 });
 }, 400);
+}
+function generateSensorDiagPDF() {
+if(activeDiagnostics.length === 0) return '<p class="text-slate-400 text-[8px] text-center">Sin diagnóstico activo</p>';
+return `<table class="w-full text-[8px] border-collapse border border-slate-200">
+<thead><tr class="bg-slate-100"><th class="border border-slate-200 p-1 text-left">Sensor</th><th class="border border-slate-200 p-1 text-left">Falla Detectada</th><th class="border border-slate-200 p-1 text-left">Consecuencia</th></tr></thead>
+<tbody>${activeDiagnostics.map(id => {
+const s = SENSOR_FAULT_MATRIX.find(i => i.id === id);
+return `<tr><td class="border border-slate-200 p-1"><b>${s.sensor}</b></td><td class="border border-slate-200 p-1">${s.falla}</td><td class="border border-slate-200 p-1">${s.consecuencia}</td></tr>`;
+}).join('')}</tbody>
+</table>`;
 }
 async function generateEnhancedPDF() {
 if(db.length===0) { showToast("⚠️ Sin datos para generar reporte","warning"); return; }
@@ -1741,13 +2144,15 @@ setPdfText('pdf-vtv-score', document.getElementById("vtv-score-value")?.innerTex
 setPdfText('pdf-vtv-status', document.getElementById("vtv-score-label")?.innerText || "");
 setPdfText('pdf-vtv-progress', document.getElementById("vtv-progress-text")?.innerText || "0/24");
 document.getElementById('pdf-vtv-checklist-full').innerHTML = generateVTVChecklistFullPDF();
+document.getElementById('pdf-sensor-diag').innerHTML = generateSensorDiagPDF();
 const workHistoryContainer = document.getElementById('pdf-work-history');
 const recentWork = [...db].reverse().slice(0, 10);
 workHistoryContainer.innerHTML = recentWork.map(r => {
 const fecha = new Date(r.timestamp).toLocaleDateString('es-ES', {day:'2-digit', month:'short', year:'numeric'});
 return `<div class="border border-slate-200 rounded-lg p-2 mb-2 bg-slate-50">
 <p class="text-[8px] font-bold text-slate-600 mb-1">${r.unidad} - ${fecha}</p>
-<p class="text-[9px] text-slate-700">${(r.trabajo || 'Sin detalles').replace(/\n/g, '<br>')}</p>
+<p class="text-[9px] text-slate-700">${(r.trabajo || 'Sin detalles').replace(/
+/g, '<br>')}</p>
 </div>`;
 }).join('') || '<p class="text-slate-400 text-center">Sin historial reciente</p>';
 const template = document.getElementById('pdf-report-template-enhanced');
@@ -1812,16 +2217,18 @@ document.getElementById('pdf-dataset-total').innerText = selected.length.toStrin
 document.getElementById('pdf-dataset-table').innerHTML = generateDatasetTableForPDF(selected);
 renderDescribeForPDF(selected);
 renderIAForPDF(selected);
-document.getElementById('pdf-vtv-score').innerText = document.getElementById('vtv-score-value')?.innerText || '0%';
-document.getElementById('pdf-vtv-status').innerText = document.getElementById('vtv-score-label')?.innerText || '';
-document.getElementById('pdf-vtv-progress').innerText = document.getElementById('vtv-progress-text')?.innerText || '0/24';
+document.getElementById('pdf-vtv-score').innerText = document.getElementById("vtv-score-value")?.innerText || '0%';
+document.getElementById('pdf-vtv-status').innerText = document.getElementById("vtv-score-label")?.innerText || '';
+document.getElementById('pdf-vtv-progress').innerText = document.getElementById("vtv-progress-text")?.innerText || '0/24';
 document.getElementById('pdf-vtv-checklist-full').innerHTML = generateVTVChecklistFullPDF();
+document.getElementById('pdf-sensor-diag').innerHTML = generateSensorDiagPDF();
 const workHistoryContainer = document.getElementById('pdf-work-history');
 workHistoryContainer.innerHTML = selected.map(r => {
 const fecha = new Date(r.timestamp).toLocaleDateString('es-ES', {day:'2-digit', month:'short', year:'numeric'});
 return `<div class="border border-slate-200 rounded-lg p-2 mb-2 bg-slate-50">
 <p class="text-[8px] font-bold text-slate-600 mb-1">${r.unidad} - ${fecha}</p>
-<p class="text-[9px] text-slate-700">${(r.trabajo || 'Sin detalles').replace(/\n/g, '<br>')}</p>
+<p class="text-[9px] text-slate-700">${(r.trabajo || 'Sin detalles').replace(/
+/g, '<br>')}</p>
 </div>`;
 }).join('') || '<p class="text-slate-400 text-center">Sin detalles de trabajo</p>';
 template.classList.remove('hidden');
@@ -1844,7 +2251,6 @@ template.classList.add('hidden');
 isGeneratingPDF = false;
 }
 }
-// === FUNCIONES AUXILIARES PARA PDF ===
 async function renderChartForPDF(data = null) {
 const pdfCanvas = document.getElementById('pdf-timeline-chart');
 if(!pdfCanvas) return;
@@ -1860,12 +2266,12 @@ const dispData = source.map(d => (d.uptime+d.downtime)>0?((d.uptime/(d.uptime+d.
 if(window._pdfChart) window._pdfChart.destroy();
 window._pdfChart = new Chart(ctx, {
 type:'line',
-data: {
+ {
 labels: labels,
 datasets: [
-{label:'Disponibilidad %',data:dispData,borderColor:'#06b6d4',backgroundColor:'rgba(6,182,212,0.15)',borderWidth:2.5,tension:0.4,yAxisID:'y1',fill:true,pointRadius:3},
+{label:'Disponibilidad %',dispData,borderColor:'#06b6d4',backgroundColor:'rgba(6,182,212,0.15)',borderWidth:2.5,tension:0.4,yAxisID:'y1',fill:true,pointRadius:3},
 {label:'Uptime (h)',data:uptimeData,borderColor:'#14b8a6',borderDash:[5,5],borderWidth:2,tension:0.3,yAxisID:'y',pointRadius:0},
-{label:'Downtime (h)',data:downtimeData,borderColor:'#f97316',borderWidth:2,tension:0.3,yAxisID:'y',pointRadius:0}
+{label:'Downtime (h)',downtimeData,borderColor:'#f97316',borderWidth:2,tension:0.3,yAxisID:'y',pointRadius:0}
 ]
 },
 options:{
@@ -2080,30 +2486,446 @@ e.preventDefault();
 if(document.getElementById('input-unidad').value) submitData();
 else { saveToStorage(); showToast('💾 Datos guardados', 'success'); }
 }
-if(e.key === 'Escape') { closeWorkHistoryModal(); closeWorkNotesModal(); if(isSidebarOpen) toggleSidebar(); }
+if(e.key === 'Escape') { closeWorkHistoryModal(); closeWorkNotesModal(); if(isSidebarOpen) toggleSidebar(); closeAssistant(); }
 if(e.key === '?' || (e.shiftKey && e.key === '/')) { e.preventDefault(); showToast('📋 Atajos: Ctrl+P=PDF | Ctrl+S=Guardar | Esc=Cerrar', 'info'); }
 });
+// === ASISTENTE VIRTUAL - FUNCIONES ===
+function openAssistant() {
+updateAssistantContext();
+document.getElementById('assistant-modal').classList.remove('hidden');
+document.body.style.overflow = 'hidden';
+scrollToBottom('assistant-messages');
+document.getElementById('assistant-input').focus();
+}
+function closeAssistant() {
+document.getElementById('assistant-modal').classList.add('hidden');
+document.body.style.overflow = '';
+}
+function toggleAssistantContext() {
+assistantContextVisible = !assistantContextVisible;
+document.getElementById('assistant-context').classList.toggle('collapsed', !assistantContextVisible);
+document.getElementById('assistant-body').classList.toggle('context-hidden', !assistantContextVisible);
+document.getElementById('context-toggle-text').innerText = assistantContextVisible ? 'Ocultar Contexto' : 'Mostrar Contexto';
+}
+function updateAssistantContext() {
+document.getElementById('ctx-unidad').innerText = document.getElementById('card-unidad')?.innerText || '--';
+document.getElementById('ctx-motor').innerText = document.getElementById('card-motor')?.innerText.replace('Motor ','') || '--';
+document.getElementById('ctx-km').innerText = document.getElementById('card-km')?.innerText.replace(/[^\d,]/g,'') || '--';
+document.getElementById('ctx-rpm').innerText = document.getElementById('card-rpm')?.innerText || '--';
+const disp = document.getElementById('kpi-disp')?.innerText || '0%';
+document.getElementById('ctx-disp').innerText = disp;
+document.getElementById('ctx-disp').className = `value ${parseInt(disp)>=95?'optimal':parseInt(disp)>=85?'warning':'critical'}`;
+document.getElementById('ctx-mtbf').innerText = (document.getElementById('kpi-mtbf')?.innerText || '0') + 'h';
+document.getElementById('ctx-mttr').innerText = (document.getElementById('kpi-mttr')?.innerText || '0') + 'h';
+const getMetricValue = (id) => document.getElementById(`adv-${id}`)?.innerText || '0';
+document.getElementById('ctx-estres').innerText = getMetricValue('estres');
+document.getElementById('ctx-eficiencia').innerText = getMetricValue('eficiencia');
+document.getElementById('ctx-termovib').innerText = getMetricValue('termovib');
+document.getElementById('ctx-desgaste').innerText = getMetricValue('desgaste');
+const alertasContainer = document.getElementById('ctx-alertas');
+const alertas = [];
+const last = db[db.length-1];
+if(last) {
+if(last.ta > 105) alertas.push({text:`🔥 Temp crítica: ${last.ta}°C`, class:'critical'});
+else if(last.ta > 95) alertas.push({text:`⚠️ Temp elevada: ${last.ta}°C`, class:'warning'});
+if(last.vibracion >= 5.0) alertas.push({text:`〰️ Vibración: ${last.vibracion}`, class:'critical'});
+else if(last.vibracion >= 3.5) alertas.push({text:`⚠️ Vibración moderada`, class:'warning'});
+if(last.km >= 60000) alertas.push({text:`🔧 KM crítico: ${last.km.toLocaleString()}`, class:'warning'});
+}
+if(alertas.length === 0) alertasContainer.innerHTML = '<span class="text-emerald-400 text-[9px]">✅ Sin alertas</span>';
+else alertasContainer.innerHTML = alertas.map(a => `<span class="text-[9px] ${a.class==='critical'?'text-rose-400':a.class==='warning'?'text-amber-400':''}">${a.text}</span>`).join('');
+const sensoresContainer = document.getElementById('ctx-sensores');
+if(activeDiagnostics.length === 0) {
+sensoresContainer.innerHTML = '<span class="text-slate-400 text-[9px]">Sin anomalías seleccionadas</span>';
+} else {
+sensoresContainer.innerHTML = activeDiagnostics.slice(0,3).map(id => {
+const s = SENSOR_FAULT_MATRIX.find(i => i.id === id);
+return `<span class="text-[9px] text-cyan-300">🔍 ${s?.sensor}</span>`;
+}).join('') + (activeDiagnostics.length > 3 ? `<span class="text-[9px] text-slate-500">+${activeDiagnostics.length-3} más</span>` : '');
+}
+const vtvScore = document.getElementById('vtv-score-value')?.innerText || '0%';
+document.getElementById('ctx-vtv').innerText = vtvScore;
+document.getElementById('ctx-vtv').className = `value ${parseInt(vtvScore)>=80?'optimal':parseInt(vtvScore)>=50?'warning':'critical'}`;
+const pending = VTV_ITEMS.filter(i => !vtvState[i.id]).length;
+document.getElementById('ctx-vtv-pending').innerText = pending;
+document.getElementById('ctx-vtv-pending').className = `value ${pending===0?'optimal':pending<=5?'warning':'critical'}`;
+}
+function getFullAssistantContext() {
+const last = db[db.length-1] || {};
+const syn = getSyntheticMetrics(last);
+const totalHoras = (last.uptime||0) + (last.downtime||0);
+return {
+unidad: { id: last.unidad || '--', motor: last.motor || '--', km: last.km || 0, rpm: last.rpm || 0, timestamp: last.timestamp || new Date().toISOString() },
+kpis: { disponibilidad: document.getElementById('kpi-disp')?.innerText || '0%', mtbf: document.getElementById('kpi-mtbf')?.innerText || '0', mttr: document.getElementById('kpi-mttr')?.innerText || '0' },
+metricas_sinteticas: { desgaste_km: parseFloat(syn.desgaste.toFixed(2)), ciclo_termovib: parseFloat(syn.termovib.toFixed(2)), inactividad: totalHoras>0 ? ((last.downtime/totalHoras)*100).toFixed(1)+'%' : '0%', eficiencia_termica: parseFloat(syn.eficiencia.toFixed(2)), presion_promedio: ((last.psiDi+last.psiDd+last.psiTi+last.psiTd)/4).toFixed(1), balance_presion: '0.00', estres_mecanico: parseFloat(syn.estres.toFixed(2)), disponibilidad_operativa: totalHoras>0 ? ((last.uptime/totalHoras)*100).toFixed(1)+'%' : '0%' },
+sensores: { temperatura: last.ta || 0, vibracion: last.vibracion || 0, psi_di: last.psiDi || 0, psi_dd: last.psiDd || 0, psi_ti: last.psiTi || 0, psi_td: last.psiTd || 0 },
+alertas: generateAlertList(),
+diagnostico_sensores: activeDiagnostics.map(id => { const s = SENSOR_FAULT_MATRIX.find(i => i.id === id); return s ? {sensor: s.sensor, falla: s.falla, consecuencia: s.consecuencia} : null; }).filter(Boolean),
+vtv: { score: parseInt(document.getElementById('vtv-score-value')?.innerText || '0'), pendientes: VTV_ITEMS.filter(i => !vtvState[i.id]).map(i => i.label) },
+historial_reciente: db.slice(-5).map(r => ({ fecha: new Date(r.timestamp).toLocaleDateString('es-ES'), trabajo: r.trabajo || 'Sin detalles' }))
+};
+}
+function generateAlertList() {
+const alerts = [];
+const last = db[db.length-1];
+if(!last) return alerts;
+if(last.ta > 105) alerts.push({tipo:'critical', mensaje:`Temperatura crítica: ${last.ta}°C`});
+else if(last.ta > 95) alerts.push({tipo:'warning', mensaje:`Temperatura elevada: ${last.ta}°C`});
+if(last.vibracion >= 5.0) alerts.push({tipo:'critical', mensaje:`Vibración crítica: ${last.vibracion} mm/s`});
+else if(last.vibracion >= 3.5) alerts.push({tipo:'warning', mensaje:`Vibración moderada: ${last.vibracion} mm/s`});
+if(last.km >= 60000) alerts.push({tipo:'warning', mensaje:`Kilometraje alto: ${last.km.toLocaleString()} km`});
+const failedVTV = VTV_ITEMS.filter(i => !vtvState[i.id]);
+if(failedVTV.length > 0) alerts.push({tipo:'info', mensaje:`${failedVTV.length} ítems VTV pendientes`});
+return alerts;
+}
+function askAssistant(type) {
+const prompts = {
+diagnostic: 'Analiza los datos actuales de la unidad y proporciona un diagnóstico técnico de su estado. Incluye: 1) Evaluación de parámetros críticos, 2) Posibles causas de anomalías, 3) Recomendaciones inmediatas.',
+maintenance: 'Basado en el kilometraje, horas de uso y métricas sintéticas, genera un plan de mantenimiento preventivo priorizado. Incluye plazos estimados y componentes a revisar.',
+vtv: 'Evalúa la preparación para VTV de esta unidad. Identifica ítems pendientes del checklist, prioriza acciones y estima probabilidad de aprobación.',
+anomaly: 'Detecta patrones anómalos en los datos históricos y actuales. Compara con rangos óptimos y señala desviaciones significativas con posible impacto operacional.'
+};
+const input = document.getElementById('assistant-input');
+input.value = prompts[type] || '';
+input.focus();
+sendAssistantMessage();
+}
+function sendAssistantMessage() {
+const input = document.getElementById('assistant-input');
+const message = input.value.trim();
+const sendBtn = document.getElementById('assistant-send');
+if(!message) return;
+addAssistantMessage(message, 'user');
+input.value = '';
+sendBtn.disabled = true;
+showAssistantTyping();
+setTimeout(() => {
+hideAssistantTyping();
+const response = generateAssistantResponse(message);
+addAssistantMessage(response, 'ai');
+sendBtn.disabled = false;
+scrollToBottom('assistant-messages');
+}, 1500 + Math.random() * 1000);
+}
+function handleAssistantKeydown(e) {
+if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendAssistantMessage(); }
+}
+function addAssistantMessage(text, type) {
+const container = document.getElementById('assistant-messages');
+const msg = document.createElement('div');
+msg.className = `assistant-message ${type}`;
+msg.innerHTML = `${text}<span class="timestamp">${new Date().toLocaleTimeString('es-ES', {hour:'2-digit', minute:'2-digit'})}</span>`;
+container.appendChild(msg);
+assistantMessages.push({text, type, timestamp: new Date()});
+scrollToBottom('assistant-messages');
+}
+function showAssistantTyping() {
+const container = document.getElementById('assistant-messages');
+const typing = document.createElement('div');
+typing.className = 'assistant-typing';
+typing.id = 'assistant-typing-indicator';
+typing.innerHTML = '<span class="dot"></span><span class="dot"></span><span class="dot"></span> Analizando datos...';
+container.appendChild(typing);
+scrollToBottom('assistant-messages');
+}
+function hideAssistantTyping() {
+const typing = document.getElementById('assistant-typing-indicator');
+if(typing) typing.remove();
+}
+function scrollToBottom(elementId) {
+const el = document.getElementById(elementId);
+if(el) el.scrollTop = el.scrollHeight;
+}
+function generateAssistantResponse(userMessage) {
+const ctx = getFullAssistantContext();
+const msgLower = userMessage.toLowerCase();
+if(msgLower.includes('temperatura') || msgLower.includes('temp') || msgLower.includes('calient')) {
+const temp = ctx.sensores.temperatura;
+if(temp > 105) {
+return `🔥 <strong>ALERTA DE TEMPERATURA CRÍTICA</strong><br><br>
+• Lectura actual: <strong>${temp}°C</strong> (Límite seguro: 95°C)<br>
+• <strong>Causas probables:</strong><br>
+- Nivel bajo de refrigerante<br>
+- Termostato bloqueado<br>
+- Ventilador de radiador inoperativo<br>
+- Bomba de agua con falla<br><br>
+• <strong>Acción inmediata:</strong> Detener operación y verificar sistema de refrigeración. No continuar hasta resolver.`;
+} else if(temp > 95) {
+return `⚠️ <strong>Temperatura elevada detectada</strong><br><br>
+• Lectura: ${temp}°C - Monitorear tendencia<br>
+• Verificar: Nivel de refrigerante, estado de mangueras, funcionamiento de ventilador<br>
+• Programar revisión preventiva en próximas 48hs`;
+}
+return `✅ Temperatura dentro de rango normal (${temp}°C). Continuar monitoreo periódico.`;
+}
+if(msgLower.includes('vibracion') || msgLower.includes('vibración') || msgLower.includes('vib')) {
+const vib = ctx.sensores.vibracion;
+if(vib >= 5.0) {
+return `〰️ <strong>VIBRACIÓN CRÍTICA DETECTADA</strong><br><br>
+• Nivel: <strong>${vib} mm/s</strong> (Límite ISO: 4.5 mm/s)<br>
+• <strong>Posibles causas:</strong><br>
+- Desbalanceo de ruedas/ejes<br>
+- Rodamientos desgastados<br>
+- Alineación incorrecta<br>
+- Problemas en transmisión<br><br>
+• <strong>Recomendación:</strong> Programar balanceo y alineación. Inspeccionar rodamientos antes de próxima operación.`;
+} else if(vib >= 3.5) {
+return `⚠️ Vibración moderada: ${vib} mm/s<br>
+• Monitorear evolución en próximas lecturas<br>
+• Considerar balanceo preventivo si la tendencia es ascendente`;
+}
+return `✅ Vibración dentro de parámetros aceptables (${vib} mm/s).`;
+}
+if(msgLower.includes('vtv') || msgLower.includes('verificación') || msgLower.includes('inspección')) {
+const score = ctx.vtv.score;
+const pendientes = ctx.vtv.pendientes;
+if(score === 100) {
+return `✅ <strong>Unidad APTA para VTV</strong><br><br>
+• Score: 100% - Todos los ítems verificados<br>
+• Documentación: Verificar vigencia de seguro y cédula<br>
+• Recomendación: Realizar prueba de frenos y luces antes de presentar`;
+} else if(score >= 80) {
+return `🟡 <strong>Casi listo para VTV</strong><br><br>
+• Score: ${score}% - ${pendientes.length} ítems pendientes<br>
+• <strong>Prioridad:</strong> ${pendientes.slice(0,3).join(', ')}<br>
+• Estimación: 1-2 días para completar preparación`;
+}
+return `🔴 <strong>Preparación VTV incompleta</strong><br><br>
+• Score: ${score}% - ${pendientes.length} ítems críticos pendientes<br>
+• <strong>Acciones urgentes:</strong><br>${pendientes.map(p=>`  - ${p}`).join('<br>')}<br><br>
+• Planificar 3-5 días para preparación completa`;
+}
+if(msgLower.includes('mantenimiento') || msgLower.includes('manten') || msgLower.includes('servicio')) {
+const km = ctx.unidad.km;
+const motor = ctx.unidad.motor;
+let recomendaciones = [];
+if(km % 10000 < 2000 && km >= 10000) recomendaciones.push('• Cambio de aceite y filtros (cada 10.000 km)');
+if(km % 15000 < 3000 && km >= 15000 && motor.toLowerCase().includes('nafta')) recomendaciones.push('• Verificar/Reemplazar bujas (cada 15.000 km)');
+if(km % 30000 < 5000 && km >= 30000 && motor.toLowerCase().includes('diesel')) recomendaciones.push('• Cambio filtro combustible diésel (cada 30.000 km)');
+if(km >= 60000) recomendaciones.push('⚠️ Inspección correa de distribución (60.000 km)');
+if(ctx.metricas_sinteticas.estres_mecanico > 70) recomendaciones.push('• Revisión de suspensión y dirección por alto estrés mecánico');
+if(recomendaciones.length === 0) {
+recomendaciones.push('✅ Sin mantenimientos programados en el rango actual');
+recomendaciones.push('• Continuar con chequeos periódicos cada 5.000 km');
+}
+return `🔧 <strong>Plan de Mantenimiento - ${ctx.unidad.id}</strong><br><br>
+• Kilometraje actual: ${km.toLocaleString()} km<br>
+• Motor: ${motor}<br><br>
+<strong>Recomendaciones:</strong><br>
+${recomendaciones.join('<br>')}<br><br>
+<em>Nota: Los intervalos pueden variar según condiciones de operación.</em>`;
+}
+if(msgLower.includes('anomal') || msgLower.includes('raro') || msgLower.includes('problema') || msgLower.includes('falla')) {
+const alerts = ctx.alertas;
+const diag = ctx.diagnostico_sensores;
+if(alerts.length === 0 && diag.length === 0) {
+return `✅ <strong>Análisis de Anomalías</strong><br><br>
+• No se detectaron desviaciones significativas en los parámetros monitoreados<br>
+• Todas las métricas sintéticas dentro de rangos óptimos<br>
+• Continuar con monitoreo preventivo estándar`;
+}
+let analysis = `<strong>🔍 Reporte de Anomalías Detectadas</strong><br><br>`;
+if(alerts.length > 0) {
+analysis += `<strong>Alertas del Sistema:</strong><br>`;
+alerts.forEach(a => {
+const icon = a.tipo === 'critical' ? '🔴' : a.tipo === 'warning' ? '🟡' : '🔵';
+analysis += `${icon} ${a.mensaje}<br>`;
+});
+analysis += `<br>`;
+}
+if(diag.length > 0) {
+analysis += `<strong>Sensores con Anomalías Reportadas:</strong><br>`;
+diag.forEach(d => {
+analysis += `• <strong>${d.sensor}</strong>: ${d.falla}<br>  → Impacto: ${d.consecuencia}<br>`;
+});
+}
+analysis += `<br><strong>Próximos pasos:</strong><br>1. Priorizar resolución de alertas críticas<br>2. Documentar intervenciones en el sistema<br>3. Re-evaluar métricas post-corrección`;
+return analysis;
+}
+return `🤖 <strong>Análisis NEXO-ART para ${ctx.unidad.id}</strong><br><br>
+<strong>Resumen del Estado:</strong><br>
+• Disponibilidad: ${ctx.kpis.disponibilidad}<br>
+• Estrés Mecánico: ${ctx.metricas_sinteticas.estres_mecanico}<br>
+• Eficiencia Térmica: ${ctx.metricas_sinteticas.eficiencia_termica}<br>
+• VTV Score: ${ctx.vtv.score}%<br><br>
+<strong>Recomendación General:</strong><br>
+${ctx.alertas.length > 0 ? '⚠️ Se detectaron alertas que requieren atención. Revisar panel de diagnóstico.' : '✅ Parámetros operativos dentro de rangos aceptables. Continuar monitoreo preventivo.'}<br><br>
+<em>💡 Tip: Sé más específico en tu pregunta para obtener análisis detallados. Ej: "¿Está lista para VTV?", "¿Por qué vibra tanto?", "¿Cuándo cambiar aceite?"</em>`;
+}
+function exportContextToNotebook() {
+const ctx = getFullAssistantContext();
+const contextText = `
+# NEXO-ART - Contexto de Diagnóstico
+## Generado: ${new Date().toLocaleString('es-ES')}
+## UNIDAD
+- ID: ${ctx.unidad.id}
+- Motor: ${ctx.unidad.motor}
+- Kilometraje: ${ctx.unidad.km.toLocaleString()} km
+- RPM: ${ctx.unidad.rpm}
+## KPIs DE FLOTA
+- Disponibilidad: ${ctx.kpis.disponibilidad}
+- MTBF: ${ctx.kpis.mtbf}h
+- MTTR: ${ctx.kpis.mttr}h
+## MÉTRICAS SINTÉTICAS (IA)
+- Desgaste/km: ${ctx.metricas_sinteticas.desgaste_km}
+- Ciclo Termovibracional: ${ctx.metricas_sinteticas.ciclo_termovib}
+- Inactividad: ${ctx.metricas_sinteticas.inactividad}
+- Eficiencia Térmica: ${ctx.metricas_sinteticas.eficiencia_termica}
+- Presión Promedio: ${ctx.metricas_sinteticas.presion_promedio} PSI
+- Balance de Presión: ${ctx.metricas_sinteticas.balance_presion}
+- Estrés Mecánico: ${ctx.metricas_sinteticas.estres_mecanico}
+- Disponibilidad Operativa: ${ctx.metricas_sinteticas.disponibilidad_operativa}
+## SENSORES EN TIEMPO REAL
+- Temperatura: ${ctx.sensores.temperatura}°C
+- Vibración: ${ctx.sensores.vibracion} mm/s
+- PSI DI: ${ctx.sensores.psi_di} | DD: ${ctx.sensores.psi_dd} | TI: ${ctx.sensores.psi_ti} | TD: ${ctx.sensores.psi_td}
+## ALERTAS ACTIVAS
+${ctx.alertas.length > 0 ? ctx.alertas.map(a => `- [${a.tipo.toUpperCase()}] ${a.mensaje}`).join('
+') : '- ✅ Sin alertas'}
+## DIAGNÓSTICO DE SENSORES SELECCIONADOS
+${ctx.diagnostico_sensores.length > 0 ? ctx.diagnostico_sensores.map(d => `- ${d.sensor}: ${d.falla} → ${d.consecuencia}`).join('
+') : '- Sin anomalías reportadas'}
+## VTV - VERIFICACIÓN TÉCNICA VEHICULAR
+- Score: ${ctx.vtv.score}%
+- Ítems Pendientes: ${ctx.vtv.pendientes.length > 0 ? ctx.vtv.pendientes.join(', ') : 'Ninguno'}
+## HISTORIAL RECIENTE DE TRABAJOS
+${ctx.historial_reciente.map(h => `- ${h.fecha}: ${h.trabajo}`).join('
+')}
+---
+*Este contexto fue generado automáticamente por NEXO-ART Motor Intelligence v2.2*
+*Para análisis avanzado, importar este contenido en NotebookLM y solicitar:*
+*1. "Identifica patrones de falla recurrentes"*
+*2. "Predice próximos mantenimientos necesarios"*
+*3. "Genera informe técnico para taller"*
+`.trim();
+navigator.clipboard.writeText(contextText).then(() => {
+showToast('📋 Contexto copiado al portapapeles. ¡Pégalo en NotebookLM!', 'success');
+}).catch(() => {
+showToast('⚠️ No se pudo copiar. Selecciona y copia manualmente el texto del contexto.', 'warning');
+});
+console.log('📦 NEXO-ART Context Export:
+', contextText);
+return true;
+}
+// Cerrar modal con Escape y click fuera
+document.addEventListener('keydown', (e) => {
+if(e.key === 'Escape') {
+const modal = document.getElementById('assistant-modal');
+if(modal && !modal.classList.contains('hidden')) { closeAssistant(); }
+}
+});
+document.getElementById('assistant-modal')?.addEventListener('click', (e) => {
+if(e.target === document.getElementById('assistant-modal')) { closeAssistant(); }
+});
+
+// === 📤 ENVIAR REPORTE POR WHATSAPP ===
+function sendWhatsAppReport() {
+if (db.length === 0) {
+showToast('⚠️ No hay datos para generar el reporte', 'warning');
+return;
+}
+const last = db[db.length - 1];
+const now = new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour:'2-digit', minute:'2-digit' });
+const unidad = document.getElementById('card-unidad')?.innerText || last.unidad || '--';
+const motor = document.getElementById('card-motor')?.innerText.replace('Motor ', '') || last.motor || '--';
+const km = document.getElementById('card-km')?.innerText.replace(/[^\d,]/g, '') || last.km?.toLocaleString() || '--';
+const rpm = document.getElementById('card-rpm')?.innerText || last.rpm || '--';
+const disp = document.getElementById('kpi-disp')?.innerText || '0%';
+const mtbf = document.getElementById('kpi-mtbf')?.innerText || '0';
+const mttr = document.getElementById('kpi-mttr')?.innerText || '0';
+
+const getAdv = id => document.getElementById(`adv-${id}`)?.innerText || '0';
+const desgaste = getAdv('desgaste');
+const termovib = getAdv('termovib');
+const inactividad = getAdv('inactividad');
+const eficiencia = getAdv('eficiencia');
+const presion = getAdv('presion');
+const balance = getAdv('balance');
+const estres = getAdv('estres');
+const dispOp = getAdv('disp-op');
+
+const vtvScore = document.getElementById('vtv-score-value')?.innerText || '0%';
+const vtvPending = VTV_ITEMS.filter(i => !vtvState[i.id]).length;
+const pendingList = VTV_ITEMS.filter(i => !vtvState[i.id]).slice(0, 5).map(i => `• ${i.label}`).join('\n');
+
+let diagText = '✅ Sin anomalías reportadas';
+if (activeDiagnostics.length > 0) {
+diagText = activeDiagnostics.map(id => {
+const s = SENSOR_FAULT_MATRIX.find(i => i.id === id);
+return s ? `🔍 ${s.sensor}: ${s.falla}` : '';
+}).filter(Boolean).join('\n') || '✅ Sin anomalías';
+}
+
+const alerts = [];
+if (last.ta > 105) alerts.push('🔥 Temp crítica');
+else if (last.ta > 95) alerts.push('⚠️ Temp elevada');
+if (last.vibracion >= 5.0) alerts.push('〰️ Vib. crítica');
+else if (last.vibracion >= 3.5) alerts.push('⚠️ Vib. moderada');
+const recText = alerts.length > 0 ? alerts.join('\n') : '✅ Todos los parámetros óptimos';
+
+const lastWork = last.trabajo || 'Sin detalles registrados';
+
+let msg = `📊 *REPORTE NEXO-ART MOTOR INTELLIGENCE* 🚗\n`;
+msg += `📅 Fecha: ${now}\n`;
+msg += `🆔 Unidad: ${unidad} | 🔧 Motor: ${motor}\n`;
+msg += `🛣️ KM: ${km} | 🔄 RPM: ${rpm}\n\n`;
+msg += `📈 *INDICADORES CLAVE (KPIs)*\n`;
+msg += `✅ Disponibilidad: ${disp}\n`;
+msg += `⏱️ MTBF: ${mtbf}h | 🔧 MTTR: ${mttr}h\n\n`;
+msg += `🧠 *MÉTRICAS SINTÉTICAS (IA)*\n`;
+msg += `📉 Desgaste/km: ${desgaste}\n`;
+msg += `🌡️ Ciclo Termovib: ${termovib}\n`;
+msg += `⏸️ Inactividad: ${inactividad}\n`;
+msg += `🔥 Eficiencia Térmica: ${eficiencia}\n`;
+msg += `🛞 Presión Prom: ${presion} PSI\n`;
+msg += `⚖️ Balance Presión: ${balance}\n`;
+msg += `⚙️ Estrés Mecánico: ${estres}\n`;
+msg += `🟢 Disp. Operativa: ${dispOp}\n\n`;
+msg += `🔍 *DIAGNÓSTICO SENSORES*\n${diagText}\n\n`;
+msg += `✅ *CHECKLIST VTV*\n📊 Score: ${vtvScore} | ⏳ Pendientes: ${vtvPending}\n${pendingList || '• Todos los ítems verificados'}\n\n`;
+msg += `🤖 *RECOMENDACIONES IA*\n${recText}\n\n`;
+msg += `📝 *ÚLTIMO TRABAJO REGISTRADO*\n${lastWork}\n\n`;
+msg += `📲 *Generado automáticamente por NEXO-ART v2.2*`;
+
+const encodedMsg = encodeURIComponent(msg);
+// Prefijo 549 para Argentina móvil + número proporcionado
+const waUrl = `https://wa.me/5493489686939?text=${encodedMsg}`;
+window.open(waUrl, '_blank');
+showToast('📤 Abriendo WhatsApp con el reporte profesional...', 'success');
+}
+
 // === INICIALIZACIÓN ===
 window.onload = () => {
+console.log('🚀 NEXO-ART v2.2 - Inicializando...');
 loadFromStorage();
 loadVTVState();
+loadSensorDiagnostics();
 calculateKPIs();
 if(db.length > 0) {
 updateUnidadCard(db[db.length - 1]);
 runPredictiveAI(db[db.length - 1]);
 calculateAdvancedMetrics();
+autoHighlightDiagnostics();
 }
 updateTimelineChart();
 updateCorrelationMatrix();
 renderDatasetTable();
 renderDescribeTable();
 renderVTVChecklist();
+renderSensorMatrix();
 document.querySelectorAll('.modal-overlay').forEach(overlay => {
 overlay.addEventListener('click', (e) => { if(e.target === overlay) { closeWorkHistoryModal(); closeWorkNotesModal(); } });
 });
 window.addEventListener('orientationchange', () => { if(window.innerWidth < 768 && isSidebarOpen) toggleSidebar(); });
 setTimeout(() => { const hint = document.querySelector('.shortcut-hint'); if(hint) hint.style.opacity = '0'; }, 10000);
-console.log('✅ NEXO-ART v2.1 inicializado correctamente');
+window.addEventListener('resize', () => {
+clearTimeout(window._resizeTimer);
+window._resizeTimer = setTimeout(() => {
+if(timelineChartIns && (db.length > 0 || selectedRows.size > 0)) timelineChartIns.update();
+}, 250);
+});
+console.log('✅ NEXO-ART v2.2 inicializado correctamente');
+showToast('🎯 Sistema listo para operar', 'success');
 };
 </script>
 </body>
