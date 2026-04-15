@@ -226,6 +226,15 @@ body{background:white;color:black}
 .source-3{background:rgba(239,68,68,0.15);color:#ef4444;border-color:rgba(239,68,68,0.3)}
 .btn-filter-source{transition:all 0.2s}
 .btn-filter-source.active-filter{transform:scale(1.05);box-shadow:0 0 15px currentColor;filter:brightness(1.2)}
+
+/* === BOTÓN FLOTANTE WHATSAPP === */
+.whatsapp-fab{position:fixed;bottom:160px;right:20px;width:auto;height:52px;border-radius:26px;background:linear-gradient(135deg,#25D366,#128C7E);border:2px solid rgba(37,211,102,0.6);box-shadow:0 0 20px rgba(37,211,102,0.4),0 0 40px rgba(37,211,102,0.2);display:flex;align-items:center;justify-content:center;gap:8px;padding:0 14px;cursor:pointer;z-index:1000;transition:all 0.3s ease;color:white;font-weight:700;font-size:13px;text-shadow:0 1px 2px rgba(0,0,0,0.3)}
+.whatsapp-fab:hover{transform:scale(1.05) translateY(-2px);box-shadow:0 0 30px rgba(37,211,102,0.6)}
+.whatsapp-fab i{font-size:20px;animation:float 3s ease-in-out infinite}
+@media(max-width:768px){
+.whatsapp-fab{bottom:130px;right:10px;height:48px;padding:0 10px;font-size:12px}
+.whatsapp-fab span{display:none}
+}
 </style>
 </head>
 <body class="text-slate-200 overflow-x-hidden">
@@ -693,18 +702,6 @@ Limpiar
 </div>
 </div>
 </div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
 <!-- Mobile Navigation -->
 <nav id="mobile-nav" class="fixed bottom-0 left-0 right-0 bg-black/90 border-t border-cyan-500/20 p-2 md:hidden z-20 backdrop-blur-xl no-print">
 <div class="flex justify-around items-center">
@@ -734,10 +731,6 @@ Limpiar
 <button id="assistant-fab" class="assistant-fab no-print" title="Asistente de Diagnóstico IA" onclick="openAssistant()">
 <i class="fas fa-robot"></i>
 <span class="assistant-badge">IA</span>
-</button>
-<!-- === BOTÓN WHATSAPP REPORTES === -->
-<button id="whatsapp-fab" class="whatsapp-fab no-print" title="Enviar Reporte Completo a WhatsApp" onclick="sendReportToWhatsApp()">
-<i class="fab fa-whatsapp"></i>
 </button>
 <div id="assistant-modal" class="assistant-modal hidden no-print">
 <div class="assistant-content">
@@ -1014,6 +1007,12 @@ Cancelar
 </div>
 </div>
 </div>
+
+<!-- === BOTÓN FLOTANTE WHATSAPP === -->
+<button id="whatsapp-fab" class="whatsapp-fab no-print" title="Enviar Reporte a WhatsApp" onclick="sendToWhatsApp()">
+  <i class="fab fa-whatsapp"></i> <span>📊 Reporte</span>
+</button>
+
 <script>
 // === CONFIGURACIÓN GLOBAL ===
 const STORAGE_KEY = 'nexoart_data_v2';
@@ -2264,7 +2263,7 @@ type:'line',
 labels: labels,
 datasets: [
 {label:'Disponibilidad %',dispData,borderColor:'#06b6d4',backgroundColor:'rgba(6,182,212,0.15)',borderWidth:2.5,tension:0.4,yAxisID:'y1',fill:true,pointRadius:3},
-{label:'Uptime (h)',data:uptimeData,borderColor:'#14b8a6',borderDash:[5,5],borderWidth:2,tension:0.3,yAxisID:'y',pointRadius:0},
+{label:'Uptime (h)',uptimeData,borderColor:'#14b8a6',borderDash:[5,5],borderWidth:2,tension:0.3,yAxisID:'y',pointRadius:0},
 {label:'Downtime (h)',data:downtimeData,borderColor:'#f97316',borderWidth:2,tension:0.3,yAxisID:'y',pointRadius:0}
 ]
 },
@@ -2797,63 +2796,6 @@ showToast('⚠️ No se pudo copiar. Selecciona y copia manualmente el texto del
 console.log('📦 NEXO-ART Context Export:\n', contextText);
 return true;
 }
-// === ENVIAR REPORTE A WHATSAPP ===
-function sendReportToWhatsApp() {
-if (db.length === 0) {
-showToast("⚠️ No hay datos registrados para enviar", "warning");
-return;
-}
-const last = db[db.length - 1];
-const syn = getSyntheticMetrics(last);
-const totalHoras = last.uptime + last.downtime;
-const inactividad = totalHoras > 0 ? ((last.downtime / totalHoras) * 100).toFixed(1) : 0;
-const dispOp = totalHoras > 0 ? ((last.uptime / totalHoras) * 100).toFixed(1) : 0;
-const presionProm = ((last.psiDi + last.psiDd + last.psiTi + last.psiTd) / 4).toFixed(1);
-const vtvScore = document.getElementById('vtv-score-value')?.innerText || '0%';
-const pendingVTV = VTV_ITEMS.filter(i => !vtvState[i.id]).length;
-const alerts = generateAlertList();
-const diagCount = activeDiagnostics.length;
-
-let msg = `🚀 *REPORTE TÉCNICO NEXO-ART v2.2*\n`;
-msg += `📅 Generado: ${new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}\n\n`;
-msg += `🚗 *UNIDAD ACTIVA*\n`;
-msg += `🆔 Unidad: ${last.unidad} | ID: ${last.id}\n`;
-msg += `⚙️ Motor: ${last.motor} | 🛣️ KM: ${last.km.toLocaleString()}\n`;
-msg += `🔄 RPM: ${last.rpm} | 🌡️ Temp: ${last.ta}°C | 〰️ Vib: ${last.vibracion} mm/s\n\n`;
-msg += `📊 *KPIs DE FLOTA*\n`;
-msg += `✅ Disponibilidad: ${document.getElementById('kpi-disp')?.innerText || '0%'}\n`;
-msg += `⏱️ MTBF: ${document.getElementById('kpi-mtbf')?.innerText || '0'}h\n`;
-msg += `🔧 MTTR: ${document.getElementById('kpi-mttr')?.innerText || '0'}h\n\n`;
-msg += `🧠 *MÉTRICAS SINTÉTICAS (IA)*\n`;
-msg += `📉 Desgaste/km: ${syn.desgaste.toFixed(2)}\n`;
-msg += `🌡️ Ciclo Termovib: ${syn.termovib.toFixed(2)}\n`;
-msg += `⏸️ Inactividad: ${inactividad}%\n`;
-msg += `🔥 Eficiencia Térmica: ${syn.eficiencia.toFixed(2)}\n`;
-msg += `🎈 Presión Prom.: ${presionProm} PSI\n`;
-msg += `⚖️ Estrés Mecánico: ${syn.estres.toFixed(2)}\n`;
-msg += `🟢 Disp. Operativa: ${dispOp}%\n\n`;
-msg += `⚠️ *ALERTAS & DIAGNÓSTICO*\n`;
-if (alerts.length > 0) {
-alerts.forEach(a => {
-const icon = a.tipo === 'critical' ? '🔴' : a.tipo === 'warning' ? '🟡' : '🔵';
-msg += `${icon} ${a.mensaje}\n`;
-});
-} else { msg += `✅ Sin alertas críticas activas\n`; }
-if (diagCount > 0) { msg += `🔍 Sensores reportados: ${diagCount} anomalías detectadas\n`; }
-msg += `\n✅ *VTV PREPARACIÓN*\n`;
-msg += `📋 Score: ${vtvScore} | ❌ Pendientes: ${pendingVTV}\n\n`;
-msg += `📝 *ÚLTIMO TRABAJO*\n`;
-msg += `🔹 ${last.trabajo || 'Sin detalles registrados'}\n\n`;
-msg += `━━━━━━━━━━━━━━━━━━━━\n`;
-msg += `🤖 _Generado por NEXO-ART Motor Intelligence_\n`;
-msg += `💡 _Para revisión técnica inmediata._`;
-
-const encodedMsg = encodeURIComponent(msg);
-const waUrl = `https://wa.me/3489686939?text=${encodedMsg}`;
-window.open(waUrl, '_blank');
-showToast("📱 Abriendo WhatsApp con reporte profesional...", "success");
-}
-
 // Cerrar modal con Escape y click fuera
 document.addEventListener('keydown', (e) => {
 if(e.key === 'Escape') {
@@ -2864,6 +2806,64 @@ if(modal && !modal.classList.contains('hidden')) { closeAssistant(); }
 document.getElementById('assistant-modal')?.addEventListener('click', (e) => {
 if(e.target === document.getElementById('assistant-modal')) { closeAssistant(); }
 });
+
+// === FUNCIÓN WHATSAPP: ENVÍO DE REPORTE PROFESIONAL ===
+function sendToWhatsApp() {
+  if(db.length === 0) { showToast("⚠️ No hay datos cargados para generar el reporte", "warning"); return; }
+  const report = buildWhatsAppReport();
+  if(!report) return;
+  const url = `https://wa.me/3489686939?text=${encodeURIComponent(report)}`;
+  window.open(url, '_blank');
+  showToast("📤 Abriendo WhatsApp con el reporte profesional...", "success");
+}
+
+function buildWhatsAppReport() {
+  const last = db[db.length-1];
+  const disp = document.getElementById("kpi-disp")?.innerText || "0%";
+  const mtbf = document.getElementById("kpi-mtbf")?.innerText || "0";
+  const mttr = document.getElementById("kpi-mttr")?.innerText || "0";
+  const vtvScore = document.getElementById("vtv-score-value")?.innerText || "0%";
+  const vtvLabel = document.getElementById("vtv-score-label")?.innerText || "Sin evaluar";
+  const pendingVTV = VTV_ITEMS.filter(i => !vtvState[i.id]).length;
+  const syn = getSyntheticMetrics(last);
+  const totalHoras = (last.uptime||0) + (last.downtime||0);
+  const alerts = generateAlertList();
+
+  let msg = `🚗 *NEXO-ART - REPORTE TÉCNICO PROFESIONAL*\n`;
+  msg += `📅 ${new Date().toLocaleString('es-AR')}\n\n`;
+  msg += `📊 *RENDIMIENTO DE FLOTA*\n`;
+  msg += `• Disponibilidad: ${disp}\n`;
+  msg += `• MTBF: ${mtbf}h | MTTR: ${mttr}h\n\n`;
+  msg += `🧠 *MÉTRICAS AVANZADAS (ÚLTIMA LECTURA)*\n`;
+  msg += `• Unidad: ${last.unidad} | Motor: ${last.motor}\n`;
+  msg += `• KM: ${last.km.toLocaleString()} | RPM: ${last.rpm}\n`;
+  msg += `• Temp: ${last.ta}°C | Vib: ${last.vibracion} mm/s\n`;
+  msg += `• Estrés Mec: ${document.getElementById('adv-estres')?.innerText || '0'} | Ef. Térm: ${document.getElementById('adv-eficiencia')?.innerText || '0'}\n`;
+  msg += `• Inactividad: ${totalHoras>0?((last.downtime/totalHoras)*100).toFixed(1)+'%':'0%'}\n\n`;
+  msg += `✅ *ESTADO VTV*\n`;
+  msg += `• Score: ${vtvScore} | Estado: ${vtvLabel}\n`;
+  msg += `• Pendientes: ${pendingVTV}\n\n`;
+  if(activeDiagnostics.length > 0) {
+    msg += `⚠️ *DIAGNÓSTICO ACTIVO*\n`;
+    activeDiagnostics.forEach(id => {
+      const s = SENSOR_FAULT_MATRIX.find(i => i.id === id);
+      if(s) msg += `• ${s.sensor}: ${s.falla}\n`;
+    });
+    msg += `\n`;
+  }
+  if(alerts.length > 0) {
+    msg += `🔥 *ALERTAS IA*\n`;
+    alerts.forEach(a => msg += `• [${a.tipo.toUpperCase()}] ${a.mensaje}\n`);
+    msg += `\n`;
+  }
+  msg += `🛠️ *RECOMENDACIÓN FINAL*: `;
+  if(alerts.some(a => a.tipo === 'critical')) msg += `Acción inmediata requerida. Detener operación hasta revisión.`;
+  else if(alerts.some(a => a.tipo === 'warning')) msg += `Monitoreo intensivo. Programar mantenimiento preventivo.`;
+  else msg += `Continuar operación normal con chequeos estándar.`;
+  msg += `\n\n📲 *Generado automáticamente por NEXO-ART Motor Intelligence v2.2*`;
+  return msg;
+}
+
 // === INICIALIZACIÓN ===
 window.onload = () => {
 console.log('🚀 NEXO-ART v2.2 - Inicializando...');
