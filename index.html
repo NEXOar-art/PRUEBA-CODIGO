@@ -226,16 +226,11 @@ body{background:white;color:black}
 .source-3{background:rgba(239,68,68,0.15);color:#ef4444;border-color:rgba(239,68,68,0.3)}
 .btn-filter-source{transition:all 0.2s}
 .btn-filter-source.active-filter{transform:scale(1.05);box-shadow:0 0 15px currentColor;filter:brightness(1.2)}
-
-/* === BOTÓN FLOTANTE WHATSAPP === */
-.whatsapp-fab{position:fixed;bottom:160px;right:20px;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#25D366,#128C7E);border:2px solid rgba(255,255,255,0.2);box-shadow:0 4px 20px rgba(37,211,102,0.4),0 0 40px rgba(37,211,102,0.2);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:999;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);animation:pulse-glow-wa 3s infinite}
-.whatsapp-fab:hover{transform:scale(1.1) translateY(-3px);box-shadow:0 6px 35px rgba(37,211,102,0.6)}
-.whatsapp-fab:active{transform:scale(0.95)}
-.whatsapp-fab i{font-size:28px;color:white;filter:drop-shadow(0 0 6px rgba(0,0,0,0.3))}
-.whatsapp-fab-tooltip{position:absolute;right:65px;top:50%;transform:translateY(-50%);background:rgba(15,23,42,0.95);border:1px solid rgba(37,211,102,0.4);color:#e0f2fe;padding:6px 10px;border-radius:8px;font-size:10px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity 0.2s;z-index:1000}
-.whatsapp-fab:hover .whatsapp-fab-tooltip{opacity:1}
-@keyframes pulse-glow-wa{0%,100%{box-shadow:0 4px 20px rgba(37,211,102,0.4),0 0 40px rgba(37,211,102,0.2)}50%{box-shadow:0 4px 30px rgba(37,211,102,0.6),0 0 60px rgba(37,211,102,0.4)}}
-@media(max-width:768px){.whatsapp-fab{bottom:85px;right:15px;width:50px;height:50px}.whatsapp-fab-tooltip{display:none}}
+/* === BOTON FLOTANTE WHATSAPP === */
+.wa-fab{position:fixed;bottom:105px;right:20px;z-index:1001;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#25D366,#128C7E);border:2px solid rgba(37,211,102,0.6);box-shadow:0 0 25px rgba(37,211,102,0.5);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.3s ease}
+.wa-fab:hover{transform:scale(1.1);box-shadow:0 0 35px rgba(37,211,102,0.8)}
+.wa-fab i{font-size:26px;color:white;text-shadow:0 0 10px rgba(255,255,255,0.4)}
+@media(max-width:768px){.wa-fab{bottom:85px;right:16px;width:50px;height:50px}.wa-fab i{font-size:22px}}
 </style>
 </head>
 <body class="text-slate-200 overflow-x-hidden">
@@ -703,6 +698,10 @@ Limpiar
 </div>
 </div>
 </div>
+</div>
+</div>
+</div>
+</div>
 <!-- Mobile Navigation -->
 <nav id="mobile-nav" class="fixed bottom-0 left-0 right-0 bg-black/90 border-t border-cyan-500/20 p-2 md:hidden z-20 backdrop-blur-xl no-print">
 <div class="flex justify-around items-center">
@@ -720,6 +719,10 @@ Limpiar
 </button>
 </div>
 </nav>
+<!-- Botón Flotante WhatsApp -->
+<button id="whatsapp-fab" class="wa-fab no-print" title="Enviar Informe Profesional a WhatsApp" onclick="generateWhatsAppReport()">
+<i class="fab fa-whatsapp"></i>
+</button>
 <!-- Keyboard Shortcuts Hint -->
 <div class="shortcut-hint no-print">
 <strong><i class="fas fa-keyboard mr-1"></i>Atajos:</strong>
@@ -1008,13 +1011,6 @@ Cancelar
 </div>
 </div>
 </div>
-
-<!-- BOTÓN FLOTANTE WHATSAPP -->
-<button id="whatsapp-fab" class="whatsapp-fab no-print" title="Enviar Reporte Completo a WhatsApp" onclick="sendWhatsAppReport()">
-    <i class="fab fa-whatsapp"></i>
-    <span class="whatsapp-fab-tooltip">📤 Enviar Reporte IA a WhatsApp</span>
-</button>
-
 <script>
 // === CONFIGURACIÓN GLOBAL ===
 const STORAGE_KEY = 'nexoart_data_v2';
@@ -1363,7 +1359,8 @@ content.innerHTML = unitHistory.map((r, i) => {
 const fecha = new Date(r.timestamp).toLocaleDateString('es-ES', {weekday:'long', year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit'});
 return `<div class="history-item" style="animation-delay:${i*0.05}s">
 <div class="history-date"><i class="fas fa-calendar-alt"></i>${fecha}</div>
-<div class="history-text">${r.trabajo ? r.trabajo.replace(/\n/g, '<br>') : '<span class="work-notes-empty">Sin detalles registrados</span>'}</div>
+<div class="history-text">${r.trabajo ? r.trabajo.replace(/
+/g, '<br>') : '<span class="work-notes-empty">Sin detalles registrados</span>'}</div>
 </div>`;
 }).join('');
 }
@@ -1418,7 +1415,8 @@ workHistoryContainer.innerHTML = unitHistory.map(r => {
 const fecha = new Date(r.timestamp).toLocaleDateString('es-ES', {day:'2-digit', month:'short', year:'numeric', hour:'2-digit'});
 return `<div class="border border-slate-200 rounded-lg p-3 mb-3 bg-slate-50">
 <p class="text-[9px] font-bold text-slate-600 mb-2">${fecha}</p>
-<p class="text-[10px] text-slate-700 leading-relaxed">${(r.trabajo || 'Sin detalles').replace(/\n/g, '<br>')}</p>
+<p class="text-[10px] text-slate-700 leading-relaxed">${(r.trabajo || 'Sin detalles').replace(/
+/g, '<br>')}</p>
 </div>`;
 }).join('') || '<p class="text-slate-400 text-center">Sin historial</p>';
 template.classList.remove('hidden');
@@ -1942,8 +1940,8 @@ type:'line',
 labels: labels,
 datasets: [
 {label:'Disponibilidad %',dispData,borderColor:'#06b6d4',backgroundColor:'rgba(6,182,212,0.1)',borderWidth:2,tension:0.4,yAxisID:'y1',fill:true,pointRadius:2,pointHoverRadius:4},
-{label:'Uptime (h)',uptimeData,borderColor:'#14b8a6',borderDash:[5,5],borderWidth:2,tension:0.2,yAxisID:'y',pointRadius:0},
-{label:'Downtime (h)',data:downtimeData,borderColor:'#f97316',borderWidth:2,tension:0.2,yAxisID:'y',pointRadius:0}
+{label:'Uptime (h)',data:uptimeData,borderColor:'#14b8a6',borderDash:[5,5],borderWidth:2,tension:0.2,yAxisID:'y',pointRadius:0},
+{label:'Downtime (h)',downtimeData,borderColor:'#f97316',borderWidth:2,tension:0.2,yAxisID:'y',pointRadius:0}
 ]
 },
 options: {
@@ -2148,7 +2146,8 @@ workHistoryContainer.innerHTML = recentWork.map(r => {
 const fecha = new Date(r.timestamp).toLocaleDateString('es-ES', {day:'2-digit', month:'short', year:'numeric'});
 return `<div class="border border-slate-200 rounded-lg p-2 mb-2 bg-slate-50">
 <p class="text-[8px] font-bold text-slate-600 mb-1">${r.unidad} - ${fecha}</p>
-<p class="text-[9px] text-slate-700">${(r.trabajo || 'Sin detalles').replace(/\n/g, '<br>')}</p>
+<p class="text-[9px] text-slate-700">${(r.trabajo || 'Sin detalles').replace(/
+/g, '<br>')}</p>
 </div>`;
 }).join('') || '<p class="text-slate-400 text-center">Sin historial reciente</p>';
 const template = document.getElementById('pdf-report-template-enhanced');
@@ -2223,7 +2222,8 @@ workHistoryContainer.innerHTML = selected.map(r => {
 const fecha = new Date(r.timestamp).toLocaleDateString('es-ES', {day:'2-digit', month:'short', year:'numeric'});
 return `<div class="border border-slate-200 rounded-lg p-2 mb-2 bg-slate-50">
 <p class="text-[8px] font-bold text-slate-600 mb-1">${r.unidad} - ${fecha}</p>
-<p class="text-[9px] text-slate-700">${(r.trabajo || 'Sin detalles').replace(/\n/g, '<br>')}</p>
+<p class="text-[9px] text-slate-700">${(r.trabajo || 'Sin detalles').replace(/
+/g, '<br>')}</p>
 </div>`;
 }).join('') || '<p class="text-slate-400 text-center">Sin detalles de trabajo</p>';
 template.classList.remove('hidden');
@@ -2265,7 +2265,7 @@ type:'line',
 labels: labels,
 datasets: [
 {label:'Disponibilidad %',dispData,borderColor:'#06b6d4',backgroundColor:'rgba(6,182,212,0.15)',borderWidth:2.5,tension:0.4,yAxisID:'y1',fill:true,pointRadius:3},
-{label:'Uptime (h)',data:uptimeData,borderColor:'#14b8a6',borderDash:[5,5],borderWidth:2,tension:0.3,yAxisID:'y',pointRadius:0},
+{label:'Uptime (h)',uptimeData,borderColor:'#14b8a6',borderDash:[5,5],borderWidth:2,tension:0.3,yAxisID:'y',pointRadius:0},
 {label:'Downtime (h)',downtimeData,borderColor:'#f97316',borderWidth:2,tension:0.3,yAxisID:'y',pointRadius:0}
 ]
 },
@@ -2775,14 +2775,17 @@ const contextText = `
 - Vibración: ${ctx.sensores.vibracion} mm/s
 - PSI DI: ${ctx.sensores.psi_di} | DD: ${ctx.sensores.psi_dd} | TI: ${ctx.sensores.psi_ti} | TD: ${ctx.sensores.psi_td}
 ## ALERTAS ACTIVAS
-${ctx.alertas.length > 0 ? ctx.alertas.map(a => `- [${a.tipo.toUpperCase()}] ${a.mensaje}`).join('\n') : '- ✅ Sin alertas'}
+${ctx.alertas.length > 0 ? ctx.alertas.map(a => `- [${a.tipo.toUpperCase()}] ${a.mensaje}`).join('
+') : '- ✅ Sin alertas'}
 ## DIAGNÓSTICO DE SENSORES SELECCIONADOS
-${ctx.diagnostico_sensores.length > 0 ? ctx.diagnostico_sensores.map(d => `- ${d.sensor}: ${d.falla} → ${d.consecuencia}`).join('\n') : '- Sin anomalías reportadas'}
+${ctx.diagnostico_sensores.length > 0 ? ctx.diagnostico_sensores.map(d => `- ${d.sensor}: ${d.falla} → ${d.consecuencia}`).join('
+') : '- Sin anomalías reportadas'}
 ## VTV - VERIFICACIÓN TÉCNICA VEHICULAR
 - Score: ${ctx.vtv.score}%
 - Ítems Pendientes: ${ctx.vtv.pendientes.length > 0 ? ctx.vtv.pendientes.join(', ') : 'Ninguno'}
 ## HISTORIAL RECIENTE DE TRABAJOS
-${ctx.historial_reciente.map(h => `- ${h.fecha}: ${h.trabajo}`).join('\n')}
+${ctx.historial_reciente.map(h => `- ${h.fecha}: ${h.trabajo}`).join('
+')}
 ---
 *Este contexto fue generado automáticamente por NEXO-ART Motor Intelligence v2.2*
 *Para análisis avanzado, importar este contenido en NotebookLM y solicitar:*
@@ -2795,7 +2798,8 @@ showToast('📋 Contexto copiado al portapapeles. ¡Pégalo en NotebookLM!', 'su
 }).catch(() => {
 showToast('⚠️ No se pudo copiar. Selecciona y copia manualmente el texto del contexto.', 'warning');
 });
-console.log('📦 NEXO-ART Context Export:\n', contextText);
+console.log('📦 NEXO-ART Context Export:
+', contextText);
 return true;
 }
 // Cerrar modal con Escape y click fuera
@@ -2809,81 +2813,66 @@ document.getElementById('assistant-modal')?.addEventListener('click', (e) => {
 if(e.target === document.getElementById('assistant-modal')) { closeAssistant(); }
 });
 
-// === ENVÍO DE REPORTE PROFESIONAL A WHATSAPP ===
-function sendWhatsAppReport() {
+// === FUNCIÓN WHATSAPP (NUEVA) ===
+function generateWhatsAppReport() {
     if(db.length === 0) {
-        showToast("⚠️ Sin datos en memoria para generar reporte", "warning");
+        showToast("⚠️ Ingresá datos primero para generar el informe", "warning");
         return;
     }
-
-    showToast("🔄 Compilando reporte predictivo...", "info");
-    
-    const now = new Date().toLocaleString('es-AR', {weekday:'long', year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit'});
-    const last = db[db.length-1];
-    const syn = getSyntheticMetrics(last);
-    const totalHoras = (last.uptime||0) + (last.downtime||0);
-    
-    // KPIs Flota
+    const last = db[db.length - 1];
     const disp = document.getElementById('kpi-disp')?.innerText || '0%';
     const mtbf = document.getElementById('kpi-mtbf')?.innerText || '0';
     const mttr = document.getElementById('kpi-mttr')?.innerText || '0';
-    
-    // VTV
-    const vtvTotal = VTV_ITEMS.length;
-    const vtvChecked = VTV_ITEMS.filter(i => vtvState[i.id]).length;
-    const vtvScore = Math.round((vtvChecked/vtvTotal)*100);
-    const vtvPend = VTV_ITEMS.filter(i => !vtvState[i.id]).slice(0,4).map(i => i.label).join(', ') || '✅ Ninguno';
-    
-    // Diagnóstico
-    const diagTxt = activeDiagnostics.map(id => {
-        const s = SENSOR_FAULT_MATRIX.find(x => x.id === id);
-        return s ? `• ${s.sensor}: ${s.falla}` : '';
-    }).filter(Boolean).join('\n') || '• ✅ Sin anomalías activas';
-    
-    // Alertas IA
-    const alerts = generateAlertList().map(a => `• ${a.mensaje}`).join('\n') || '• ✅ Operación nominal estable';
-    
-    // Últimos Registros
-    const recent = db.slice(-3).map(r => 
-        `📦 ${r.unidad} | ${r.motor} | ${r.km}km | T:${r.ta}°C | V:${r.vibracion}`
-    ).join('\n');
+    const vtvScore = document.getElementById('vtv-score-value')?.innerText || '0%';
+    const failedVTV = VTV_ITEMS.filter(i => !vtvState[i.id]).length;
 
-    // Construcción del Mensaje Profesional
-    const msg = `🚗 *NEXO-ART MOTOR INTELLIGENCE - REPORTE PREDICTIVO* 🤖
-📅 *Generado:* ${now}
-💾 *Memoria:* ${db.length}/1000 registros activos
+    let metrics = '';
+    const metricLabels = {
+        'desgaste': 'Desgaste/km', 'termovib': 'Ciclo Termovib', 'inactividad': 'Inactividad',
+        'eficiencia': 'Eficiencia Térmica', 'presion': 'Presión Prom.', 'balance': 'Balance Presión',
+        'estres': 'Estrés Mecánico', 'disp-op': 'Disp. Operativa'
+    };
+    Object.keys(metricLabels).forEach(k => {
+        const val = document.getElementById(`adv-${k}`)?.innerText || '--';
+        metrics += `• ${metricLabels[k]}: ${val}\n`;
+    });
 
-📊 *RENDIMIENTO DE FLOTA*
-⚡ Disponibilidad: ${disp}
-⏱️ MTBF: ${mtbf}h | 🔧 MTTR: ${mttr}h
+    let report = `🚗 *NEXO-ART | INFORME TÉCNICO PREDICTIVO*\n`;
+    report += `📅 Fecha: ${new Date().toLocaleDateString('es-ES')}\n`;
+    report += `──────────────────\n`;
+    report += `📦 *UNIDAD:* ${last.unidad} | *ID:* ${last.id}\n`;
+    report += `🔧 *MOTOR:* ${last.motor} | 🛣️ *KM:* ${last.km?.toLocaleString()}\n`;
+    report += `⚙️ *RPM:* ${last.rpm} | 🌡️ *TEMP:* ${last.ta}°C | 〰️ *VIB:* ${last.vibracion}\n\n`;
+    report += `📊 *KPIs DE FLOTA*\n✅ Disponibilidad: ${disp}\n⏱️ MTBF: ${mtbf}h | 🔧 MTTR: ${mttr}h\n\n`;
+    report += `🧠 *MÉTRICAS AVANZADAS (IA)*\n${metrics}\n`;
+    report += `✅ *SCORE VTV:* ${vtvScore} (${failedVTV} pendientes)\n\n`;
 
-🧠 *MÉTRICAS SINTÉTICAS (IA)*
-• Desgaste/km: ${syn.desgaste.toFixed(2)}
-• Ciclo Termovib: ${syn.termovib.toFixed(1)}
-• Estrés Mecánico: ${syn.estres.toFixed(1)}
-• Eficiencia Térmica: ${syn.eficiencia.toFixed(2)}
-• Inactividad: ${totalHoras>0?((last.downtime/totalHoras)*100).toFixed(1):0}%
+    if(activeDiagnostics.length > 0) {
+        report += `🔍 *DIAGNÓSTICO DE SENSORES*\n`;
+        activeDiagnostics.forEach(id => {
+            const s = SENSOR_FAULT_MATRIX.find(i => i.id === id);
+            report += `⚠️ ${s?.sensor}: ${s?.falla}\n`;
+        });
+        report += `\n`;
+    }
 
-✅ *VTV & CHECKLIST*
-📈 Score: ${vtvScore}% | ⏳ Pendientes: ${vtvPend}
+    if(last.ta > 95 || last.vibracion >= 3.5) {
+        report += `🚨 *ALERTAS ACTIVAS*\n`;
+        if(last.ta > 105) report += `🔥 Temp Crítica: ${last.ta}°C\n`;
+        else if(last.ta > 95) report += `⚠️ Temp Elevada: ${last.ta}°C\n`;
+        if(last.vibracion >= 5.0) report += `🔴 Vib Crítica: ${last.vibracion} mm/s\n`;
+        else if(last.vibracion >= 3.5) report += `🟡 Vib Moderada: ${last.vibracion} mm/s\n`;
+        report += `\n`;
+    }
 
-🔍 *DIAGNÓSTICO ACTIVO*
-${diagTxt}
+    report += `📝 *DETALLES DEL TRABAJO:*\n${last.trabajo || 'Sin registrar'}\n\n`;
+    report += `🤖 _Generado automáticamente por NEXO-ART Motor Intelligence v2.2_\n`;
+    report += `💡 _Para análisis detallado y seguimiento, revisar plataforma._`;
 
-⚠️ *ALERTAS EN TIEMPO REAL*
-${alerts}
-
-📋 *ÚLTIMAS INGESTAS*
-${recent}
-
-📐 *Estadísticas DESCRIBE() & Matriz de Correlación:* Cargadas en memoria del dashboard para análisis profundo.
-🔗 *NEXO-ART v2.2 - Sistema Predictivo Integral*`;
-
-    // WhatsApp API
-    const waUrl = `https://wa.me/3489686939?text=${encodeURIComponent(msg)}`;
-    window.open(waUrl, '_blank');
-    
-    setTimeout(() => showToast("📤 Reporte profesional enviado a WhatsApp", "success"), 800);
+    // WhatsApp soporta hasta ~4096 caracteres. Este formato ronda los 1200-1500, perfectamente seguro.
+    const encoded = encodeURIComponent(report);
+    // Se agrega código de país 549 si es Argentina (común para 348), pero respeta el número exacto solicitado.
+    window.open(`https://wa.me/3489686939?text=${encoded}`, '_blank');
 }
 
 // === INICIALIZACIÓN ===
