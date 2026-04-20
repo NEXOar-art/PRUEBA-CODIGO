@@ -27,7 +27,6 @@ body{font-family:'Inter',sans-serif;-webkit-tap-highlight-color:transparent;back
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0.5}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes highlight-pulse{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,0.4)}50%{box-shadow:0 0 0 4px rgba(245,158,11,0)}}
-@keyframes pulse-whatsapp{0%,100%{box-shadow:0 4px 20px rgba(37,211,102,0.4),0 0 30px rgba(37,211,102,0.2)}50%{box-shadow:0 4px 25px rgba(37,211,102,0.6),0 0 45px rgba(37,211,102,0.4)}}
 .animate-shake:hover{animation:shake 0.3s ease-in-out}
 .float-anim{animation:float 4s ease-in-out infinite}
 .glass-card{background:rgba(5,15,30,0.75);backdrop-filter:blur(16px);border:1px solid rgba(6,182,212,0.2);box-shadow:0 8px 32px rgba(0,0,0,0.4),inset 0 1px 0 rgba(6,182,212,0.1);transition:all 0.3s ease}
@@ -227,13 +226,10 @@ body{background:white;color:black}
 .source-3{background:rgba(239,68,68,0.15);color:#ef4444;border-color:rgba(239,68,68,0.3)}
 .btn-filter-source{transition:all 0.2s}
 .btn-filter-source.active-filter{transform:scale(1.05);box-shadow:0 0 15px currentColor;filter:brightness(1.2)}
-
-/* === ESTILOS BOTÓN WHATSAPP === */
-.whatsapp-float{position:fixed;width:60px;height:60px;bottom:160px;right:20px;background:linear-gradient(135deg,#25d366,#128c7e);color:#FFF;border-radius:50%;text-align:center;box-shadow:0 4px 20px rgba(37,211,102,0.4),0 0 30px rgba(37,211,102,0.2);z-index:999;display:flex;align-items:center;justify-content:center;transition:all 0.3s ease;border:2px solid rgba(255,255,255,0.2);animation:pulse-whatsapp 3s infinite}
-.whatsapp-float:hover{transform:scale(1.1) translateY(-2px);box-shadow:0 6px 30px rgba(37,211,102,0.6),0 0 50px rgba(37,211,102,0.3)}
-.whatsapp-float:active{transform:scale(0.95)}
-.whatsapp-badge{position:absolute;top:-4px;right:-4px;width:22px;height:22px;background:#ef4444;border-radius:50%;border:2px solid #0f172a;display:flex;align-items:center;justify-content:center;font-size:12px;animation:blink 2s infinite}
-@media(max-width:768px){.whatsapp-float{width:52px;height:52px;bottom:150px;right:15px}.whatsapp-float img{width:50px}}
+/* WHATSAPP BUTTON */
+.whatsapp-float{position:fixed;bottom:90px;left:20px;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#25d366,#128c7e);border:2px solid rgba(37,211,102,0.6);box-shadow:0 0 25px rgba(37,211,102,0.4);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:1000;transition:all 0.3s ease;animation:pulse-glow 3s infinite}
+.whatsapp-float:hover{transform:scale(1.15);box-shadow:0 0 40px rgba(37,211,102,0.6)}
+.whatsapp-float i{font-size:28px;color:white;text-shadow:0 0 8px rgba(255,255,255,0.6)}
 </style>
 </head>
 <body class="text-slate-200 overflow-x-hidden">
@@ -266,7 +262,7 @@ body{background:white;color:black}
 <!-- Footer -->
 <div class="p-3 border-t border-cyan-500/20 text-slate-500 text-[9px] flex items-center justify-between bg-black/60">
 <span class="truncate flex items-center gap-1"><span class="status-dot inline-block"></span> <span>Online</span></span>
-<span class="text-cyan-400 font-bold font-tech">V 2.2</span>
+<span class="text-cyan-400 font-bold font-tech">V 2.3</span>
 </div>
 </aside>
 <!-- Sidebar Overlay for Mobile -->
@@ -307,7 +303,7 @@ body{background:white;color:black}
 <i class="fas fa-database"></i> <span class="hidden xs:inline">Ingesta de Datos</span><span class="xs:hidden">Datos</span>
 </h3>
 <div class="text-slate-400 text-[9px] flex items-center gap-2 bg-black/50 px-2 py-1 rounded-lg border border-cyan-500/10">
-Memoria: <span id="mem-count" class="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-900/30 rounded border border-cyan-500/20 font-tech">1000/1000</span>
+Memoria: <span id="mem-count" class="text-cyan-400 font-bold px-1.5 py-0.5 bg-cyan-900/30 rounded border border-cyan-500/20 font-tech">0/2000</span>
 </div>
 <button onclick="submitData()" class="btn-neon px-4 py-2 rounded-lg flex items-center gap-2 font-bold text-xs transition-all touch-target whitespace-nowrap">
 <i class="fas fa-microchip"></i> <span class="hidden sm:inline">Procesar</span><span class="sm:hidden">OK</span>
@@ -328,6 +324,7 @@ Memoria: <span id="mem-count" class="text-cyan-400 font-bold px-1.5 py-0.5 bg-cy
 <div><label class="text-cyan-400/60 text-[8px] font-bold block mb-0.5 tracking-wider">PSI DD</label><input id="input-psi-dd" type="number" class="cyber-input w-full rounded-lg px-2 py-1.5 text-xs touch-target" placeholder="32"></div>
 <div><label class="text-cyan-400/60 text-[8px] font-bold block mb-0.5 tracking-wider">PSI TI</label><input id="input-psi-ti" type="number" class="cyber-input w-full rounded-lg px-2 py-1.5 text-xs touch-target" placeholder="28"></div>
 <div><label class="text-cyan-400/60 text-[8px] font-bold block mb-0.5 tracking-wider">PSI TD</label><input id="input-psi-td" type="number" class="cyber-input w-full rounded-lg px-2 py-1.5 text-xs touch-target" placeholder="34"></div>
+<div><label class="text-emerald-400/60 text-[8px] font-bold block mb-0.5 tracking-wider">FECHA</label><input id="input-fecha" type="date" class="cyber-input w-full rounded-lg px-2 py-1.5 text-xs touch-target" required></div>
 <div class="col-span-2 sm:col-span-3"><label class="text-purple-400/60 text-[8px] font-bold block mb-0.5 tracking-wider"><i class="fas fa-clipboard-list mr-1"></i> DETALLES DEL TRABAJO</label><textarea id="input-trabajo" class="cyber-input w-full rounded-lg px-2 py-1.5 text-xs touch-target" rows="2" placeholder="Ej: Cambio de aceite, revisión de frenos, diagnóstico de vibración..."></textarea></div>
 </div>
 </div>
@@ -533,7 +530,7 @@ Memoria: <span id="mem-count" class="text-cyan-400 font-bold px-1.5 py-0.5 bg-cy
 <div class="glass-card rounded-xl p-3 shadow-lg mb-3">
 <div class="flex justify-between items-center mb-2 flex-wrap gap-2">
 <div class="flex items-center gap-2 flex-wrap">
-<h3 class="text-cyan-400 font-bold text-xs font-tech"><i class="fas fa-table mr-1"></i> Registros (<span id="dataset-count">0</span>/1000)</h3>
+<h3 class="text-cyan-400 font-bold text-xs font-tech"><i class="fas fa-table mr-1"></i> Registros (<span id="dataset-count">0</span>/2000)</h3>
 <label class="flex items-center gap-1 text-[8px] text-slate-400 cursor-pointer hover:text-cyan-400 transition-colors">
 <input type="checkbox" id="select-all-rows" class="row-select" onchange="toggleSelectAll()">
 <span>Seleccionar todo</span>
@@ -701,6 +698,8 @@ Limpiar
 </div>
 </div>
 </div>
+</div>
+</div>
 <!-- Mobile Navigation -->
 <nav id="mobile-nav" class="fixed bottom-0 left-0 right-0 bg-black/90 border-t border-cyan-500/20 p-2 md:hidden z-20 backdrop-blur-xl no-print">
 <div class="flex justify-around items-center">
@@ -737,7 +736,7 @@ Limpiar
 <div class="assistant-title">
 <i class="fas fa-brain"></i>
 <span>NEXO-ART AI Assistant</span>
-<span class="text-[8px] px-2 py-0.5 bg-purple-500/20 text-purple-300 rounded-full border border-purple-500/30">v2.2</span>
+<span class="text-[8px] px-2 py-0.5 bg-purple-500/20 text-purple-300 rounded-full border border-purple-500/30">v2.3</span>
 </div>
 <button class="assistant-close" onclick="closeAssistant()"><i class="fas fa-times"></i></button>
 </div>
@@ -824,6 +823,10 @@ Tengo acceso a todos los datos del dashboard: KPIs, métricas sintéticas, senso
 </div>
 </div>
 </div>
+<!-- WHATSAPP FLOATING BUTTON -->
+<button id="whatsapp-btn" class="whatsapp-float no-print" title="Enviar Reporte para Análisis Profesional" onclick="sendToWhatsApp()">
+<i class="fab fa-whatsapp"></i>
+</button>
 <!-- PDF TEMPLATE (Centered & Fixed) -->
 <div id="pdf-report-template-enhanced" class="hidden w-[794px] bg-white text-slate-800 p-6 font-sans no-print" style="min-height:1123px;box-sizing:border-box;font-size:10px;margin:0 auto;position:relative;left:auto;transform:none;">
 <div class="flex justify-between items-center border-b-4 border-slate-900 pb-3 mb-4">
@@ -965,7 +968,7 @@ Tengo acceso a todos los datos del dashboard: KPIs, métricas sintéticas, senso
 </div>
 <!-- Footer -->
 <div class="mt-auto pt-3 border-t-2 border-slate-900 flex justify-between items-center text-[7px] text-slate-400 uppercase tracking-wider font-bold">
-<p><i class="fas fa-shield-alt mr-1"></i> NEXO-ART Motor Intelligence v2.2</p>
+<p><i class="fas fa-shield-alt mr-1"></i> NEXO-ART Motor Intelligence v2.3</p>
 <p>Generado automáticamente</p>
 </div>
 </div>
@@ -1006,249 +1009,12 @@ Cancelar
 </div>
 </div>
 </div>
-
-<!-- ======================================== -->
-<!-- BOTÓN FLOTANTE WHATSAPP - REPORTE IA NEXO-ART -->
-<!-- ======================================== -->
-<a href="#" id="whatsapp-float" class="whatsapp-float no-print" title="Enviar Reporte por WhatsApp" onclick="generarReporteDashboard(); return false;">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="60px" alt="WhatsApp" style="pointer-events:none" />
-  <span class="whatsapp-badge">📊</span>
-</a>
-
-<script>
-// === FUNCIÓN PRINCIPAL: GENERAR REPORTE COMPLETO PARA WHATSAPP ===
-function generarReporteDashboard() {
-  // Validar que haya datos
-  if(db.length === 0) {
-    showToast('⚠️ No hay datos para generar el reporte', 'warning');
-    return;
-  }
-
-  // Mostrar feedback visual
-  showToast('🔄 Generando reporte inteligente...', 'info');
-  
-  // === RECOPILAR TODA LA INFORMACIÓN DEL DASHBOARD ===
-  const last = db[db.length - 1];
-  const syn = getSyntheticMetrics(last);
-  const totalHoras = (last.uptime || 0) + (last.downtime || 0);
-  
-  // 1. DATOS DE LA UNIDAD
-  const unidadData = {
-    id: document.getElementById('card-unidad')?.innerText || last.unidad || '--',
-    motor: document.getElementById('card-motor')?.innerText.replace('Motor ','') || last.motor || '--',
-    km: last.km?.toLocaleString('es-ES') || '--',
-    rpm: document.getElementById('card-rpm')?.innerText || last.rpm || '--',
-    fecha: new Date(last.timestamp).toLocaleDateString('es-ES', {weekday:'long', year:'numeric', month:'long', day:'numeric', hour:'2-digit'})
-  };
-
-  // 2. KPIs PRINCIPALES
-  const kpis = {
-    disponibilidad: document.getElementById('kpi-disp')?.innerText || '0%',
-    mtbf: document.getElementById('kpi-mtbf')?.innerText || '0',
-    mttr: document.getElementById('kpi-mttr')?.innerText || '0',
-    trend: document.getElementById('trend-disp')?.innerText?.trim() || 'Sin datos'
-  };
-
-  // 3. MÉTRICAS AVANZADAS (VARIABLES SINTÉTICAS)
-  const metrics = {};
-  ['desgaste','termovib','inactividad','eficiencia','presion','balance','estres','disp-op'].forEach(key => {
-    const valEl = document.getElementById(`adv-${key}`);
-    const statusEl = document.getElementById(`status-${key}`);
-    metrics[key] = {
-      value: valEl?.innerText || '0',
-      status: statusEl?.textContent?.trim() || 'Sin datos'
-    };
-  });
-
-  // 4. SENSORES EN TIEMPO REAL
-  const sensors = {
-    temperatura: last.ta || 0,
-    vibracion: last.vibracion || 0,
-    psi: { di: last.psiDi, dd: last.psiDd, ti: last.psiTi, td: last.psiTd }
-  };
-
-  // 5. ALERTAS IA DETECTADAS
-  const alertas = [];
-  if(sensors.temperatura > 105) alertas.push(`🔥 TEMP CRÍTICA: ${sensors.temperatura}°C`);
-  else if(sensors.temperatura > 95) alertas.push(`⚠️ Temp elevada: ${sensors.temperatura}°C`);
-  
-  if(sensors.vibracion >= 5.0) alertas.push(`〰️ VIBRACIÓN CRÍTICA: ${sensors.vibracion} mm/s`);
-  else if(sensors.vibracion >= 3.5) alertas.push(`⚠️ Vibración moderada: ${sensors.vibracion} mm/s`);
-  
-  if(last.km >= 60000) alertas.push(`🔧 KM alto: ${last.km.toLocaleString('es-ES')} km - Revisar distribución`);
-  
-  const failedVTV = VTV_ITEMS.filter(i => !vtvState[i.id]);
-  if(failedVTV.length > 0) alertas.push(`📋 VTV: ${failedVTV.length} ítems pendientes`);
-  
-  if(activeDiagnostics.length > 0) {
-    const diagNames = activeDiagnostics.map(id => {
-      const s = SENSOR_FAULT_MATRIX.find(x => x.id === id);
-      return s?.sensor || id;
-    });
-    alertas.push(`🔍 Sensores con anomalía: ${diagNames.slice(0,3).join(', ')}${diagNames.length>3?'+...':''}`);
-  }
-
-  // 6. SCORE VTV
-  const vtvScore = document.getElementById('vtv-score-value')?.innerText || '0%';
-  const vtvLabel = document.getElementById('vtv-score-label')?.innerText || '';
-  const vtvProgress = document.getElementById('vtv-progress-text')?.innerText || '0/24';
-
-  // 7. HISTORIAL RECIENTE (últimos 3 trabajos)
-  const recentWork = [...db].reverse().slice(0, 3).map(r => {
-    const fecha = new Date(r.timestamp).toLocaleDateString('es-ES', {day:'2-digit', month:'short'});
-    const trabajo = (r.trabajo || 'Sin detalles').substring(0, 40) + (r.trabajo?.length > 40 ? '...' : '');
-    return `• ${fecha} | ${r.unidad}: ${trabajo}`;
-  });
-
-  // 8. ESTADÍSTICAS DEL DATASET
-  const datasetStats = {
-    total: db.length,
-    uptimeProm: (db.reduce((a,b)=>a+b.uptime,0)/db.length).toFixed(1),
-    downtimeProm: (db.reduce((a,b)=>a+b.downtime,0)/db.length).toFixed(1)
-  };
-
-  // === ARMAR REPORTE PROFESIONAL ===
-  let reporte = `🚗 *NEXO-ART - REPORTE PREDICTIVO*\n`;
-  reporte += `📅 Generado: ${new Date().toLocaleString('es-ES')}\n\n`;
-  
-  reporte += `*🔹 UNIDAD SELECCIONADA*\n`;
-  reporte += `🆔 ${unidadData.id} | 🛢️ ${unidadData.motor}\n`;
-  reporte += `🛣️ ${unidadData.km} km | ⚙️ ${unidadData.rpm} RPM\n`;
-  reporte += `🕐 Última lectura: ${unidadData.fecha}\n\n`;
-
-  reporte += `*🔹 KPIs DE FLOTA*\n`;
-  reporte += `📊 Disponibilidad: *${kpis.disponibilidad}* ${kpis.trend}\n`;
-  reporte += `⏱️ MTBF: ${kpis.mtbf}h | 🔧 MTTR: ${kpis.mttr}h\n\n`;
-
-  reporte += `*🔹 MÉTRICAS AVANZADAS (IA)*\n`;
-  reporte += `📉 Desgaste/km: ${metrics.desgaste.value} [${metrics.desgaste.status}]\n`;
-  reporte += `🌡️ Ciclo Termovib: ${metrics.termovib.value} [${metrics.termovib.status}]\n`;
-  reporte += `⏸️ Inactividad: ${metrics.inactividad.value} [${metrics.inactividad.status}]\n`;
-  reporte += `🔥 Eficiencia Térmica: ${metrics.eficiencia.value} [${metrics.eficiencia.status}]\n`;
-  reporte += `⚖️ Balance Presión: ${metrics.balance.value} [${metrics.balance.status}]\n`;
-  reporte += `⚙️ Estrés Mecánico: ${metrics.estres.value} [${metrics.estres.status}]\n\n`;
-
-  reporte += `*🔹 SENSORES ACTUALES*\n`;
-  reporte += `🌡️ Temperatura: ${sensors.temperatura}°C\n`;
-  reporte += `〰️ Vibración: ${sensors.vibracion} mm/s\n`;
-  reporte += `🛞 PSI: DI:${sensors.psi.di} | DD:${sensors.psi.dd} | TI:${sensors.psi.ti} | TD:${sensors.psi.td}\n\n`;
-
-  if(alertas.length > 0) {
-    reporte += `*🔹 ⚠️ ALERTAS ACTIVAS*\n`;
-    alertas.forEach(a => { reporte += `${a}\n`; });
-    reporte += `\n`;
-  } else {
-    reporte += `*🔹 ✅ ESTADO: PARÁMETROS ÓPTIMOS*\n\n`;
-  }
-
-  reporte += `*🔹 VTV - VERIFICACIÓN TÉCNICA*\n`;
-  reporte += `🎯 Score: *${vtvScore}* - ${vtvLabel}\n`;
-  reporte += `📋 Progreso: ${vtvProgress} ítems verificados\n`;
-  if(failedVTV.length > 0 && failedVTV.length <= 5) {
-    reporte += `❌ Pendientes: ${failedVTV.slice(0,5).map(i=>i.label).join(', ')}${failedVTV.length>5?' +...':''}\n`;
-  }
-  reporte += `\n`;
-
-  if(activeDiagnostics.length > 0) {
-    reporte += `*🔹 🔍 DIAGNÓSTICO DE SENSORES*\n`;
-    activeDiagnostics.forEach(id => {
-      const s = SENSOR_FAULT_MATRIX.find(x => x.id === id);
-      if(s) reporte += `• ${s.sensor}: ${s.falla}\n  → ${s.consecuencia}\n`;
-    });
-    reporte += `\n`;
-  }
-
-  if(recentWork.length > 0) {
-    reporte += `*🔹 📝 HISTORIAL RECIENTE*\n`;
-    recentWork.forEach(w => { reporte += `${w}\n`; });
-    reporte += `\n`;
-  }
-
-  reporte += `*🔹 📊 DATASET ACUMULADO*\n`;
-  reporte += `🗃️ Registros: ${datasetStats.total}/${MAX_RECORDS}\n`;
-  reporte += `⏱️ Uptime prom: ${datasetStats.uptimeProm}h | 🔧 Downtime prom: ${datasetStats.downtimeProm}h\n\n`;
-
-  reporte += `──────────────────\n`;
-  reporte += `🤖 *Recomendación IA*:\n`;
-  if(alertas.length === 0) {
-    reporte += `✅ Unidad operando en parámetros óptimos. Continuar monitoreo preventivo estándar.`;
-  } else {
-    const critical = alertas.filter(a => a.includes('🔥') || a.includes('〰️ CRÍTICA'));
-    if(critical.length > 0) {
-      reporte += `🚨 ACCIÓN INMEDIATA REQUERIDA: ${critical[0].replace(/^[🔥〰️⚠️🔧📋🔍\s]+/,'')}. Detener operación si persiste.`;
-    } else {
-      reporte += `⚠️ Programar revisión preventiva en próximas 48hs. Monitorear tendencia de parámetros.`;
-    }
-  }
-  reporte += `\n\n`;
-  reporte += `🔗 NEXO-ART Motor Intelligence v2.2\n`;
-  reporte += `💡 Reporte generado automáticamente desde Dashboard Predictivo`;
-
-  // === ENVIAR A WHATSAPP ===
-  const phone = '3489686939';
-  const text = encodeURIComponent(reporte);
-  const url = `https://api.whatsapp.com/send?phone=${phone}&text=${text}`;
-  
-  // Abrir en nueva pestaña con feedback
-  const newWindow = window.open(url, '_blank');
-  
-  if(!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
-    showToast('📋 Reporte copiado al portapapeles. ¡Pégalo en WhatsApp!', 'success');
-    navigator.clipboard.writeText(reporte).catch(() => {});
-  } else {
-    setTimeout(() => {
-      showToast('✅ Reporte enviado a WhatsApp', 'success');
-    }, 1000);
-  }
-  
-  // Registrar en consola para debugging
-  console.log('📦 NEXO-ART WhatsApp Report:\n', reporte);
-}
-
-// === MEJORAR EXPERIENCIA: HOVER EFFECT Y ACCESIBILIDAD ===
-document.addEventListener('DOMContentLoaded', function() {
-  const whatsappBtn = document.getElementById('whatsapp-float');
-  if(whatsappBtn) {
-    // Tooltip al hacer hover
-    whatsappBtn.addEventListener('mouseenter', function() {
-      const tooltip = document.createElement('div');
-      tooltip.id = 'whatsapp-tooltip';
-      tooltip.style.cssText = `
-        position: fixed; bottom: 230px; right: 20px; 
-        background: rgba(15,23,42,0.95); color: #e0f2fe;
-        padding: 8px 12px; border-radius: 10px; font-size: 11px;
-        border: 1px solid rgba(37,211,102,0.4); z-index: 1000;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.3); backdrop-filter: blur(10px);
-        animation: slideUp 0.2s ease; max-width: 200px; text-align: center;
-      `;
-      tooltip.innerHTML = `📊 <strong>Enviar Reporte IA</strong><br><span style="color:#94a3b8;font-size:10px">Recopila todo el dashboard y envía por WhatsApp</span>`;
-      document.body.appendChild(tooltip);
-    });
-    
-    whatsappBtn.addEventListener('mouseleave', function() {
-      const tooltip = document.getElementById('whatsapp-tooltip');
-      if(tooltip) tooltip.remove();
-    });
-    
-    // Efecto de pulsación al hacer click
-    whatsappBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      this.style.transform = 'scale(0.9)';
-      setTimeout(() => { this.style.transform = ''; }, 150);
-    });
-  }
-});
-</script>
-<!-- ======================================== -->
-<!-- FIN BOTÓN WHATSAPP -->
-<!-- ======================================== -->
-
 <script>
 // === CONFIGURACIÓN GLOBAL ===
 const STORAGE_KEY = 'nexoart_data_v2';
 const VTV_KEY = 'nexoart_vtv_checklist';
 const SENSOR_DIAG_KEY = 'nexoart_sensor_diag';
-const MAX_RECORDS = 1000;
+const MAX_RECORDS = 2000; // Aumentado a 2000
 let db = [];
 let timelineChartIns = null;
 let isSidebarOpen = false;
@@ -1307,6 +1073,71 @@ VTV_ITEMS.push({...item, category: cat.id, icon: cat.icon, emoji: cat.emoji});
 });
 });
 let vtvState = {};
+// === LÓGICA DE MANTENIMIENTO AUTOMÁTICO ===
+const MAINTENANCE_RULES = {
+aceite: { interval: 10000, keywords: ['aceite', 'oil', 'lubricante'] },
+distribucion: { interval: 60000, keywords: ['distribucion', 'correa', 'belt', 'chain'] },
+filtros: { interval: 15000, keywords: ['filtro', 'filter', 'aire', 'combustible'] },
+frenos: { interval: 25000, keywords: ['freno', 'brake', 'pastilla', 'disco', 'liquido'] },
+neumaticos: { interval: 40000, keywords: ['neumatico', 'rueda', 'rotacion', 'tire', 'alineacion'] },
+bujias: { interval: 30000, keywords: ['bujia', 'spark', 'encendido'] }
+};
+
+function checkMaintenanceHistory(entrada) {
+  const unitHistory = db.filter(r => r.unidad === entrada.unidad).sort((a,b) => b.km - a.km);
+  let alerts = [];
+  let suggestions = [];
+  
+  for(let type in MAINTENANCE_RULES) {
+    const rule = MAINTENANCE_RULES[type];
+    const found = unitHistory.find(row => rule.keywords.some(k => (row.trabajo||'').toLowerCase().includes(k)));
+    
+    if(found) {
+      const kmDiff = entrada.km - found.km;
+      if(kmDiff < rule.interval * 0.5) {
+        alerts.push(`✅ ${type.toUpperCase()}: Ya realizado hace ${kmDiff}km. No corresponde repetir.`);
+      } else if(kmDiff >= rule.interval) {
+        suggestions.push(`⚠️ ${type.toUpperCase()}: Intervalo de ${rule.interval}km superado. Programar mantenimiento.`);
+      } else {
+        suggestions.push(`ℹ️ ${type.toUpperCase()}: Próximo en ${rule.interval - kmDiff}km.`);
+      }
+    } else {
+      if(entrada.km >= rule.interval) suggestions.push(`🔧 ${type.toUpperCase()}: Primer mantenimiento requerido (${rule.interval}km).`);
+      else suggestions.push(`ℹ️ ${type.toUpperCase()}: Programar en ${rule.interval - entrada.km}km.`);
+    }
+  }
+  return { alerts, suggestions };
+}
+
+// === ANÁLISIS DE TENDENCIAS ===
+function analyzeSensorTrends(entrada) {
+  const unitHistory = db.filter(r => r.unidad === entrada.unidad).slice(-3);
+  if(unitHistory.length < 2) return "Sin historial suficiente para tendencias.";
+  let trends = [];
+  const prev = unitHistory[unitHistory.length - 2];
+  
+  if(entrada.ta > prev.ta + 3) trends.push(`🔥 Tendencia: Temperatura en aumento (+${(entrada.ta-prev.ta).toFixed(1)}°C).`);
+  else if(entrada.ta < prev.ta - 3) trends.push(`📉 Tendencia: Temperatura descendente.`);
+  
+  if(entrada.vibracion > prev.vibracion + 0.8) trends.push(`〰️ Tendencia: Vibración creciente (+${(entrada.vibracion-prev.vibracion).toFixed(1)} mm/s).`);
+  else if(entrada.vibracion < prev.vibracion - 0.8) trends.push(`📉 Tendencia: Vibración estabilizada.`);
+  
+  const currentAvgPsi = (entrada.psiDi+entrada.psiDd+entrada.psiTi+entrada.psiTd)/4;
+  const prevAvgPsi = (prev.psiDi+prev.psiDd+prev.psiTi+prev.psiTd)/4;
+  if(Math.abs(currentAvgPsi - prevAvgPsi) > 2) trends.push(`⚠️ Tendencia: Presión de neumáticos fluctuante.`);
+  
+  return trends.length > 0 ? trends.join(' ') : "📊 Tendencia: Parámetros estables.";
+}
+
+// === FORMATO DE FECHA ===
+function formatAndValidateDate() {
+  const input = document.getElementById('input-fecha').value;
+  if(!input) return null;
+  const d = new Date(input);
+  if(isNaN(d)) return null;
+  return d.toLocaleDateString('es-AR', {day:'2-digit',month:'2-digit',year:'numeric'});
+}
+
 // === FUNCIÓN NÚCLEO: CALCULO DE VARIABLES SINTÉTICAS ===
 function getSyntheticMetrics(row) {
 if (!row) return { desgaste: 0, termovib: 0, eficiencia: 0, estres: 0 };
@@ -1384,15 +1215,19 @@ try {
 const stored = localStorage.getItem(STORAGE_KEY);
 if(stored) {
 db = JSON.parse(stored);
-db = db.map(r => ({...r, trabajo: r.trabajo || ''}));
+db = db.map(r => ({...r, trabajo: r.trabajo || '', fecha: r.fecha || new Date(r.timestamp).toLocaleDateString('es-AR')}));
 } else {
 const now = Date.now(); const dayMs = 86400000;
 db = [
-{unidad:"V-001",id:"V-001",motor:"Diesel",km:82000,uptime:420,downtime:3.5,vibracion:2.4,ta:92,rpm:4500,psiDi:32,psiDd:32,psiTi:28,psiTd:34,trabajo:"Cambio de aceite sintético y filtros.",timestamp:new Date(now-19*dayMs).toISOString()},
-{unidad:"V-002",id:"V-002",motor:"Nafta",km:45000,uptime:380,downtime:4.1,vibracion:3.1,ta:88,rpm:4200,psiDi:31,psiDd:31,psiTi:29,psiTd:31,trabajo:"Revisión de frenos. Cambio de pastillas.",timestamp:new Date(now-18*dayMs).toISOString()},
-{unidad:"V-003",id:"V-003",motor:"Diesel",km:110000,uptime:310,downtime:5.2,vibracion:3.8,ta:95,rpm:3800,psiDi:30,psiDd:30,psiTi:27,psiTd:30,trabajo:"Diagnóstico de vibración. Balanceo.",timestamp:new Date(now-17*dayMs).toISOString()},
-{unidad:"V-004",id:"V-004",motor:"Nafta",km:38000,uptime:455,downtime:2.8,vibracion:1.9,ta:85,rpm:4600,psiDi:33,psiDd:33,psiTi:30,psiTd:33,trabajo:"Mantenimiento preventivo. Todo OK.",timestamp:new Date(now-16*dayMs).toISOString()},
-{unidad:"V-005",id:"V-005",motor:"Diesel",km:65000,uptime:290,downtime:6.1,vibracion:4.3,ta:90,rpm:3500,psiDi:29,psiDd:29,psiTi:26,psiTd:29,trabajo:"Cambio de correa de distribución.",timestamp:new Date(now-15*dayMs).toISOString()}
+{unidad:"V-001",id:"ID-101",motor:"Diesel",km:15000,uptime:120,downtime:2.5,vibracion:1.8,ta:88,rpm:3200,psiDi:32,psiDd:32,psiTi:30,psiTd:30,trabajo:"Cambio de aceite y filtros.",fecha:"10/01/2026",timestamp:new Date(now-8*dayMs).toISOString()},
+{unidad:"V-002",id:"ID-102",motor:"Nafta",km:32000,uptime:250,downtime:4.0,vibracion:2.5,ta:91,rpm:4100,psiDi:33,psiDd:33,psiTi:31,psiTd:31,trabajo:"Revisión de frenos.",fecha:"15/01/2026",timestamp:new Date(now-7*dayMs).toISOString()},
+{unidad:"V-003",id:"ID-103",motor:"Diesel",km:48000,uptime:190,downtime:3.1,vibracion:2.1,ta:89,rpm:3500,psiDi:32,psiDd:32,psiTi:30,psiTd:30,trabajo:"Diagnóstico general.",fecha:"20/01/2026",timestamp:new Date(now-6*dayMs).toISOString()},
+{unidad:"V-001",id:"ID-101",motor:"Diesel",km:35000,uptime:280,downtime:3.0,vibracion:2.2,ta:90,rpm:3800,psiDi:32,psiDd:32,psiTi:30,psiTd:30,trabajo:"Cambio de filtros y revisión neumáticos.",fecha:"05/02/2026",timestamp:new Date(now-5*dayMs).toISOString()},
+{unidad:"V-004",id:"ID-104",motor:"Nafta",km:12500,uptime:90,downtime:1.5,vibracion:1.5,ta:85,rpm:2800,psiDi:33,psiDd:33,psiTi:31,psiTd:31,trabajo:"Mantenimiento preventivo.",fecha:"12/02/2026",timestamp:new Date(now-4*dayMs).toISOString()},
+{unidad:"V-002",id:"ID-102",motor:"Nafta",km:52000,uptime:310,downtime:5.2,vibracion:3.8,ta:94,rpm:4300,psiDi:31,psiDd:31,psiTi:29,psiTd:29,trabajo:"Ajuste de dirección y revisión correa.",fecha:"18/02/2026",timestamp:new Date(now-3*dayMs).toISOString()},
+{unidad:"V-003",id:"ID-103",motor:"Diesel",km:78000,uptime:220,downtime:4.5,vibracion:2.9,ta:92,rpm:3600,psiDi:32,psiDd:32,psiTi:30,psiTd:30,trabajo:"Cambio de aceite sintético.",fecha:"25/02/2026",timestamp:new Date(now-2*dayMs).toISOString()},
+{unidad:"V-001",id:"ID-101",motor:"Diesel",km:55000,uptime:340,downtime:2.8,vibracion:2.4,ta:91,rpm:3900,psiDi:32,psiDd:32,psiTi:30,psiTd:30,trabajo:"Revisión sistema de enfriamiento.",fecha:"02/03/2026",timestamp:new Date(now-1*dayMs).toISOString()},
+{unidad:"V-005",id:"ID-105",motor:"Hibrido",km:22000,uptime:180,downtime:2.0,vibracion:1.2,ta:82,rpm:1500,psiDi:34,psiDd:34,psiTi:32,psiTd:32,trabajo:"Diagnóstico batería híbrida.",fecha:"10/03/2026",timestamp:new Date(now-0.5*dayMs).toISOString()}
 ];
 saveToStorage();
 }
@@ -1713,51 +1548,63 @@ const cr=document.getElementById("card-rpm"); if(cr) cr.innerText=entrada.rpm;
 }
 // === PROCESAR DATOS ===
 function submitData() {
-const uptime = parseFloat(document.getElementById("input-uptime").value);
-const downtime = parseFloat(document.getElementById("input-downtime").value);
-const km = parseFloat(document.getElementById("input-km").value) || 0;
-if(isNaN(uptime) || isNaN(downtime) || uptime <= 0) {
-showToast("⚠️ Ingresá Uptime y Downtime válidos", "error");
-return;
-}
-const unidad = document.getElementById("input-unidad").value.trim() || "V-" + Math.floor(Math.random()*900+100);
-const id = document.getElementById("input-id").value.trim() || "ID-" + Math.floor(Math.random()*900+100);
-const motor = document.getElementById("input-motor").value;
-const vibracion = parseFloat(document.getElementById("input-vibracion").value) || 0;
-const ta = parseFloat(document.getElementById("input-ta").value) || 0;
-const rpm = parseFloat(document.getElementById("input-rpm").value) || 0;
-const psiDi = parseFloat(document.getElementById("input-psi-di").value) || 0;
-const psiDd = parseFloat(document.getElementById("input-psi-dd").value) || 0;
-const psiTi = parseFloat(document.getElementById("input-psi-ti").value) || 0;
-const psiTd = parseFloat(document.getElementById("input-psi-td").value) || 0;
-const trabajo = document.getElementById("input-trabajo").value.trim();
-const nuevaEntrada = {
-unidad, id, motor, km, uptime, downtime, vibracion, ta, rpm,
-psiDi, psiDd, psiTi, psiTd, trabajo,
-timestamp: new Date().toISOString()
-};
-if(db.length >= MAX_RECORDS) {
-db.shift();
-showToast('📦 Memoria llena: registro más antiguo eliminado', 'warning');
-}
-db.push(nuevaEntrada);
-saveToStorage();
-['input-unidad','input-id','input-km','input-uptime','input-downtime','input-vibracion','input-ta','input-rpm','input-psi-di','input-psi-dd','input-psi-ti','input-psi-td','input-trabajo'].forEach(id => {
-const el = document.getElementById(id);
-if(el) el.value = "";
-});
-if(window.innerWidth < 768 && isSidebarOpen) toggleSidebar();
-calculateKPIs();
-updateUnidadCard(nuevaEntrada);
-runPredictiveAI(nuevaEntrada);
-updateTimelineChart();
-updateCorrelationMatrix();
-renderDatasetTable();
-renderDescribeTable();
-calculateAdvancedMetrics();
-autoHighlightDiagnostics();
-renderSensorMatrix();
-showToast(`✅ ${unidad} procesado (${db.length}/${MAX_RECORDS})`, "success");
+  const fecha = formatAndValidateDate();
+  if(!fecha) { showToast("⚠️ Fecha obligatoria (formato DD/MM/AAAA)", "error"); return; }
+  
+  const uptime = parseFloat(document.getElementById("input-uptime").value);
+  const downtime = parseFloat(document.getElementById("input-downtime").value);
+  const km = parseFloat(document.getElementById("input-km").value) || 0;
+  if(isNaN(uptime) || isNaN(downtime) || uptime <= 0) {
+    showToast("⚠️ Ingresá Uptime y Downtime válidos", "error");
+    return;
+  }
+  const unidad = document.getElementById("input-unidad").value.trim() || "V-" + Math.floor(Math.random()*900+100);
+  const id = document.getElementById("input-id").value.trim() || "ID-" + Math.floor(Math.random()*900+100);
+  const motor = document.getElementById("input-motor").value;
+  const vibracion = parseFloat(document.getElementById("input-vibracion").value) || 0;
+  const ta = parseFloat(document.getElementById("input-ta").value) || 0;
+  const rpm = parseFloat(document.getElementById("input-rpm").value) || 0;
+  const psiDi = parseFloat(document.getElementById("input-psi-di").value) || 0;
+  const psiDd = parseFloat(document.getElementById("input-psi-dd").value) || 0;
+  const psiTi = parseFloat(document.getElementById("input-psi-ti").value) || 0;
+  const psiTd = parseFloat(document.getElementById("input-psi-td").value) || 0;
+  const trabajo = document.getElementById("input-trabajo").value.trim();
+  const nuevaEntrada = {
+    unidad, id, motor, km, uptime, downtime, vibracion, ta, rpm,
+    psiDi, psiDd, psiTi, psiTd, trabajo, fecha,
+    timestamp: new Date().toISOString()
+  };
+  
+  if(db.length >= MAX_RECORDS) {
+    db.shift();
+    showToast('📦 Memoria llena: registro más antiguo eliminado', 'warning');
+  }
+  db.push(nuevaEntrada);
+  saveToStorage();
+  
+  ['input-unidad','input-id','input-km','input-uptime','input-downtime','input-vibracion','input-ta','input-rpm','input-psi-di','input-psi-dd','input-psi-ti','input-psi-td','input-trabajo','input-fecha'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.value = "";
+  });
+  if(window.innerWidth < 768 && isSidebarOpen) toggleSidebar();
+  calculateKPIs();
+  updateUnidadCard(nuevaEntrada);
+  
+  const maintCheck = checkMaintenanceHistory(nuevaEntrada);
+  const trends = analyzeSensorTrends(nuevaEntrada);
+  runPredictiveAI(nuevaEntrada, maintCheck, trends);
+  
+  updateTimelineChart();
+  updateCorrelationMatrix();
+  renderDatasetTable();
+  renderDescribeTable();
+  calculateAdvancedMetrics();
+  autoHighlightDiagnostics();
+  renderSensorMatrix();
+  
+  if(maintCheck.alerts.length > 0) showToast(maintCheck.alerts.join(' | '), 'success');
+  else if(maintCheck.suggestions.length > 0) showToast(`⚙️ Sugerencias: ${maintCheck.suggestions.slice(0,2).join(' | ')}`, 'info');
+  else showToast(`✅ ${unidad} procesado (${db.length}/${MAX_RECORDS})`, "success");
 }
 // === RESET COMPLETO ===
 function resetAllData() {
@@ -1878,46 +1725,51 @@ updateMetricCard('estres', estresMecanico);
 updateMetricCard('disp-op', dispOp+'%');
 }
 // === IA PREDICTIVA ===
-function runPredictiveAI(entrada) {
-if(!entrada) return;
-const panel=document.getElementById("predictive-panel");
-const statusList=document.getElementById("ml-status-list");
-if(!panel||!statusList) return;
-let predicciones=[];
-let reportKM=[];
-let explicacion="";
-if(entrada.motor.toLowerCase().includes("diesel")) {
-explicacion=`<strong class="text-cyan-400">🔧 Diagnóstico Diésel:</strong> Mayor eficiencia térmica, costos de mantenimiento 20-25% más elevados.`;
-if(entrada.km>=30000 && entrada.km%30000<5000) reportKM.push("Filtro combustible: Cambio recomendado");
-} else {
-explicacion=`<strong class="text-cyan-400">⛽ Diagnóstico Gasolina:</strong> Ideal para uso urbano, mantenimiento económico.`;
-if(entrada.km>=15000 && entrada.km%15000<3000) reportKM.push("Bujías: Verificar desgaste");
-}
-if(entrada.km>=10000 && entrada.km%10000<2000) reportKM.push("Filtro aire: Próximo cambio");
-if(entrada.km>=60000) reportKM.push("⚠️ Correa distribución: Verificar estado");
-let tempStatus=`<span class="text-emerald-400"><i class="fas fa-check"></i> OK</span>`;
-if(entrada.ta>105) {
-tempStatus=`<span class="text-rose-400"><i class="fas fa-times"></i> ${entrada.ta}°C</span>`;
-predicciones.push(`<div class="p-2 bg-rose-500/10 border border-rose-500/40 rounded-lg flex items-start gap-2 mb-2"><div class="text-rose-500"><i class="fas fa-temperature-high"></i></div><div><p class="font-bold text-rose-400 text-[8px]">🔥 Sobrecalentamiento</p><p class="text-[7px] text-slate-300">Riesgo: ${entrada.ta}°C detectado. Verificar sistema de refrigeración.</p></div></div>`);
-} else if(entrada.ta>95) {
-predicciones.push(`<div class="p-2 bg-amber-500/10 border border-amber-500/40 rounded-lg flex items-start gap-2 mb-2"><div class="text-amber-500"><i class="fas fa-temperature-half"></i></div><div><p class="font-bold text-amber-400 text-[8px]">⚠️ Temperatura elevada</p><p class="text-[7px] text-slate-300">${entrada.ta}°C. Monitorear tendencia.</p></div></div>`);
-}
-let vibStatus=`<span class="text-emerald-400"><i class="fas fa-check"></i> OK</span>`;
-if(entrada.vibracion>=5.0) {
-vibStatus=`<span class="text-rose-400"><i class="fas fa-times"></i> ${entrada.vibracion}</span>`;
-predicciones.push(`<div class="p-2 bg-rose-500/10 border border-rose-500/40 rounded-lg flex items-start gap-2 mb-2"><div class="text-rose-500"><i class="fas fa-wave-square"></i></div><div><p class="font-bold text-rose-400 text-[8px]">〰️ Vibración crítica</p><p class="text-[7px] text-slate-300">${entrada.vibracion} mm/s. Posible desgaste en rodamientos.</p></div></div>`);
-} else if(entrada.vibracion>=3.5) {
-predicciones.push(`<div class="p-2 bg-amber-500/10 border border-amber-500/40 rounded-lg flex items-start gap-2 mb-2"><div class="text-amber-500"><i class="fas fa-wave-square"></i></div><div><p class="font-bold text-amber-400 text-[8px]">⚠️ Vibración moderada</p><p class="text-[7px] text-slate-300">${entrada.vibracion} mm/s. Programar revisión.</p></div></div>`);
-}
-if(reportKM.length>0) {
-let rl=reportKM.map(r=>`<li>- ${r}</li>`).join("");
-predicciones.push(`<div class="p-2 bg-purple-500/10 border border-purple-500/40 rounded-lg mb-2"><p class="font-bold text-purple-400 text-[8px]"><i class="fas fa-road"></i> Por KM (${entrada.km.toLocaleString()})</p><ul class="text-[7px] text-slate-300 mt-1">${rl}</ul></div>`);
-}
-if(predicciones.length===0) {
-predicciones.push(`<div class="p-3 bg-emerald-500/10 border border-emerald-500/40 rounded-lg"><p class="font-bold text-emerald-400 text-[8px]"><i class="fas fa-shield-alt mr-1"></i> ✅ Parámetros óptimos</p><p class="text-[7px] text-slate-300 mt-1">Todos los sistemas operando dentro de rangos normales.</p></div>`);
-}
-panel.innerHTML=`<div class="bg-black/40 p-3 rounded-lg border border-cyan-500/10 text-slate-300 text-[8px] leading-relaxed mb-3">${explicacion}</div><div class="flex-1">${predicciones.join("")}</div>`;
-statusList.innerHTML=`
+function runPredictiveAI(entrada, maintCheck = null, trends = null) {
+  if(!entrada) return;
+  const panel=document.getElementById("predictive-panel");
+  const statusList=document.getElementById("ml-status-list");
+  if(!panel||!statusList) return;
+  
+  let predicciones=[];
+  let explicacion="";
+  if(entrada.motor.toLowerCase().includes("diesel")) {
+    explicacion=`<strong class="text-cyan-400">🔧 Diagnóstico Diésel:</strong> Mayor eficiencia térmica, costos de mantenimiento 20-25% más elevados.`;
+  } else {
+    explicacion=`<strong class="text-cyan-400">⛽ Diagnóstico Gasolina:</strong> Ideal para uso urbano, mantenimiento económico.`;
+  }
+  
+  if(maintCheck && (maintCheck.alerts.length > 0 || maintCheck.suggestions.length > 0)) {
+    let maintHtml = `<div class="p-2 bg-blue-500/10 border border-blue-500/30 rounded-lg mb-2"><p class="font-bold text-blue-300 text-[8px] mb-1">🔍 VALIDACIÓN DE MANTENIMIENTO</p>`;
+    maintCheck.alerts.forEach(a => maintHtml += `<p class="text-[7px] text-emerald-400 mb-1">✅ ${a}</p>`);
+    maintCheck.suggestions.forEach(s => maintHtml += `<p class="text-[7px] text-amber-400 mb-1">⚙️ ${s}</p>`);
+    maintHtml += `</div>`;
+    predicciones.push(maintHtml);
+  }
+  
+  if(trends) {
+    predicciones.push(`<div class="p-2 bg-purple-500/10 border border-purple-500/30 rounded-lg mb-2"><p class="font-bold text-purple-300 text-[8px] mb-1">📈 TENDENCIA HISTÓRICA</p><p class="text-[7px] text-slate-300">${trends}</p></div>`);
+  }
+  
+  let tempStatus=`<span class="text-emerald-400"><i class="fas fa-check"></i> OK</span>`;
+  if(entrada.ta>105) {
+    tempStatus=`<span class="text-rose-400"><i class="fas fa-times"></i> ${entrada.ta}°C</span>`;
+    predicciones.push(`<div class="p-2 bg-rose-500/10 border border-rose-500/40 rounded-lg flex items-start gap-2 mb-2"><div class="text-rose-500"><i class="fas fa-temperature-high"></i></div><div><p class="font-bold text-rose-400 text-[8px]">🔥 Sobrecalentamiento</p><p class="text-[7px] text-slate-300">Riesgo: ${entrada.ta}°C detectado. Verificar sistema de refrigeración.</p></div></div>`);
+  } else if(entrada.ta>95) {
+    predicciones.push(`<div class="p-2 bg-amber-500/10 border border-amber-500/40 rounded-lg flex items-start gap-2 mb-2"><div class="text-amber-500"><i class="fas fa-temperature-half"></i></div><div><p class="font-bold text-amber-400 text-[8px]">⚠️ Temperatura elevada</p><p class="text-[7px] text-slate-300">${entrada.ta}°C. Monitorear tendencia.</p></div></div>`);
+  }
+  let vibStatus=`<span class="text-emerald-400"><i class="fas fa-check"></i> OK</span>`;
+  if(entrada.vibracion>=5.0) {
+    vibStatus=`<span class="text-rose-400"><i class="fas fa-times"></i> ${entrada.vibracion}</span>`;
+    predicciones.push(`<div class="p-2 bg-rose-500/10 border border-rose-500/40 rounded-lg flex items-start gap-2 mb-2"><div class="text-rose-500"><i class="fas fa-wave-square"></i></div><div><p class="font-bold text-rose-400 text-[8px]">〰️ Vibración crítica</p><p class="text-[7px] text-slate-300">${entrada.vibracion} mm/s. Posible desgaste en rodamientos.</p></div></div>`);
+  } else if(entrada.vibracion>=3.5) {
+    predicciones.push(`<div class="p-2 bg-amber-500/10 border border-amber-500/40 rounded-lg flex items-start gap-2 mb-2"><div class="text-amber-500"><i class="fas fa-wave-square"></i></div><div><p class="font-bold text-amber-400 text-[8px]">⚠️ Vibración moderada</p><p class="text-[7px] text-slate-300">${entrada.vibracion} mm/s. Programar revisión.</p></div></div>`);
+  }
+  if(predicciones.length===0) {
+    predicciones.push(`<div class="p-3 bg-emerald-500/10 border border-emerald-500/40 rounded-lg"><p class="font-bold text-emerald-400 text-[8px]"><i class="fas fa-shield-alt mr-1"></i> ✅ Parámetros óptimos</p><p class="text-[7px] text-slate-300 mt-1">Todos los sistemas operando dentro de rangos normales.</p></div>`);
+  }
+  panel.innerHTML=`<div class="bg-black/40 p-3 rounded-lg border border-cyan-500/10 text-slate-300 text-[8px] leading-relaxed mb-3">${explicacion}</div><div class="flex-1">${predicciones.join("")}</div>`;
+  statusList.innerHTML=`
 <li class="flex justify-between items-center border-b border-cyan-500/10 pb-1 text-[8px]"><span>Unidad:</span> <span class="font-bold text-white font-tech">${entrada.unidad}</span></li>
 <li class="flex justify-between items-center border-b border-cyan-500/10 pb-1 text-[8px]"><span>Temp:</span> ${tempStatus}</li>
 <li class="flex justify-between items-center pb-1 text-[8px]"><span>VIB:</span> ${vibStatus}</li>
@@ -1983,7 +1835,7 @@ html+='</tr></thead><tbody>';
 [...db].reverse().forEach((row, reverseIdx) => {
 const originalIdx = db.length - 1 - reverseIdx;
 const isSelected = selectedRows.has(originalIdx);
-const fecha=new Date(row.timestamp).toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit',hour:'2-digit'});
+const fecha=row.fecha || new Date(row.timestamp).toLocaleDateString('es-AR');
 html+=`<tr class="${isSelected?'selected':''} ${reverseIdx===0?'bg-cyan-500/10 border-l-2 border-cyan-500':'border-b border-cyan-500/10'} hover:bg-cyan-500/5 transition-all" data-idx="${originalIdx}">`;
 html+=`<td class="p-1.5 text-center"><input type="checkbox" class="row-select" ${isSelected?'checked':''} onchange="toggleRowSelection(${originalIdx})"></td>`;
 html+=`<td class="p-1.5 font-medium text-[8px]">${row.unidad}</td>
@@ -2159,19 +2011,19 @@ ctx.clearRect(0,0,canvas.width,canvas.height);
 canvas.parentNode.innerHTML='<div class="absolute inset-0 flex items-center justify-center text-slate-500 text-xs">📭 Sin datos para graficar</div>';
 return;
 }
-const labels=source.map(d=>new Date(d.timestamp).toLocaleDateString('es-ES',{day:'2-digit',month:'short'}));
+const labels=source.map(d=>d.fecha || new Date(d.timestamp).toLocaleDateString('es-AR',{day:'2-digit',month:'short'}));
 const uptimeData=source.map(d=>d.uptime);
 const downtimeData=source.map(d=>d.downtime);
 const dispData=source.map(d=>(d.uptime+d.downtime)>0?((d.uptime/(d.uptime+d.downtime))*100).toFixed(1):0);
 if(timelineChartIns) timelineChartIns.destroy();
 timelineChartIns=new Chart(ctx, {
 type:'line',
-data: {
+ {
 labels: labels,
 datasets: [
-{label:'Disponibilidad %',data:dispData,borderColor:'#06b6d4',backgroundColor:'rgba(6,182,212,0.1)',borderWidth:2,tension:0.4,yAxisID:'y1',fill:true,pointRadius:2,pointHoverRadius:4},
+{label:'Disponibilidad %',dispData,borderColor:'#06b6d4',backgroundColor:'rgba(6,182,212,0.1)',borderWidth:2,tension:0.4,yAxisID:'y1',fill:true,pointRadius:2,pointHoverRadius:4},
 {label:'Uptime (h)',uptimeData,borderColor:'#14b8a6',borderDash:[5,5],borderWidth:2,tension:0.2,yAxisID:'y',pointRadius:0},
-{label:'Downtime (h)',downtimeData,borderColor:'#f97316',borderWidth:2,tension:0.2,yAxisID:'y',pointRadius:0}
+{label:'Downtime (h)',data:downtimeData,borderColor:'#f97316',borderWidth:2,tension:0.2,yAxisID:'y',pointRadius:0}
 ]
 },
 options: {
@@ -2232,10 +2084,10 @@ container.innerHTML=html;
 // === EXPORTAR CSV ===
 function exportCSV() {
 if(db.length===0) { showToast("📭 Sin datos para exportar","info"); return; }
-const headers=["Unidad","ID","Motor","KM","Uptime","Downtime","Vibración","Temp°C","RPM","PSI-DI","PSI-DD","PSI-TI","PSI-TD","Trabajo","Timestamp"];
+const headers=["Unidad","ID","Motor","KM","Uptime","Downtime","Vibración","Temp°C","RPM","PSI-DI","PSI-DD","PSI-TI","PSI-TD","Trabajo","Fecha","Timestamp"];
 let csv=headers.join(";")+"\n";
 db.forEach(row => {
-csv+=[row.unidad,row.id,row.motor,row.km,row.uptime,row.downtime,row.vibracion,row.ta,row.rpm,row.psiDi,row.psiDd,row.psiTi,row.psiTd,row.trabajo||'',new Date(row.timestamp).toLocaleString('es-ES')].join(";")+"\n";
+csv+=[row.unidad,row.id,row.motor,row.km,row.uptime,row.downtime,row.vibracion,row.ta,row.rpm,row.psiDi,row.psiDd,row.psiTi,row.psiTd,row.trabajo||'',row.fecha||'',new Date(row.timestamp).toLocaleString('es-ES')].join(";")+"\n";
 });
 const blob=new Blob(["\uFEFF"+csv],{type:'text/csv;charset=utf-8;'});
 const link=document.createElement("a");
@@ -2247,10 +2099,10 @@ showToast("📥 CSV completo descargado","success");
 function exportSelectedCSV() {
 const selected = getSelectedData();
 if(selected.length === 0) { showToast("📭 Selecciona filas para exportar","info"); return; }
-const headers=["Unidad","ID","Motor","KM","Uptime","Downtime","Vibración","Temp°C","RPM","PSI-DI","PSI-DD","PSI-TI","PSI-TD","Trabajo","Timestamp"];
+const headers=["Unidad","ID","Motor","KM","Uptime","Downtime","Vibración","Temp°C","RPM","PSI-DI","PSI-DD","PSI-TI","PSI-TD","Trabajo","Fecha","Timestamp"];
 let csv=headers.join(";")+"\n";
 selected.forEach(row => {
-csv+=[row.unidad,row.id,row.motor,row.km,row.uptime,row.downtime,row.vibracion,row.ta,row.rpm,row.psiDi,row.psiDd,row.psiTi,row.psiTd,row.trabajo||'',new Date(row.timestamp).toLocaleString('es-ES')].join(";")+"\n";
+csv+=[row.unidad,row.id,row.motor,row.km,row.uptime,row.downtime,row.vibracion,row.ta,row.rpm,row.psiDi,row.psiDd,row.psiTi,row.psiTd,row.trabajo||'',row.fecha||'',new Date(row.timestamp).toLocaleString('es-ES')].join(";")+"\n";
 });
 const blob=new Blob(["\uFEFF"+csv],{type:'text/csv;charset=utf-8;'});
 const link=document.createElement("a");
@@ -2272,7 +2124,7 @@ document.getElementById('pdf-id').innerText = unit.id;
 document.getElementById('pdf-motor').innerText = unit.motor;
 document.getElementById('pdf-km').innerText = unit.km?.toLocaleString() + ' KM';
 document.getElementById('pdf-rpm').innerText = unit.rpm;
-document.getElementById('pdf-last-reading').innerText = new Date(unit.timestamp).toLocaleDateString('es-ES');
+document.getElementById('pdf-last-reading').innerText = unit.fecha || new Date(unit.timestamp).toLocaleDateString('es-AR');
 const disp = unit.uptime > 0 ? (unit.uptime / (unit.uptime + unit.downtime) * 100).toFixed(1) : 0;
 document.getElementById('pdf-disp-val').innerText = disp + '%';
 document.getElementById('pdf-trend-val').innerText = disp >= 85 ? '✅ Estable' : '⚠️ Revisar';
@@ -2299,7 +2151,7 @@ document.getElementById('pdf-vtv-checklist-full').innerHTML = generateVTVCheckli
 document.getElementById('pdf-sensor-diag').innerHTML = generateSensorDiagPDF();
 const workHistoryContainer = document.getElementById('pdf-work-history');
 workHistoryContainer.innerHTML = `<div class="border border-slate-200 rounded-lg p-3 bg-slate-50">
-<p class="text-[9px] font-bold text-slate-600 mb-2">${new Date(unit.timestamp).toLocaleDateString('es-ES')}</p>
+<p class="text-[9px] font-bold text-slate-600 mb-2">${unit.fecha || new Date(unit.timestamp).toLocaleDateString('es-AR')}</p>
 <p class="text-[10px] text-slate-700">${unit.trabajo || 'Sin detalles registrados'}</p>
 </div>`;
 template.classList.remove('hidden');
@@ -2345,7 +2197,7 @@ setPdfText('pdf-id', last.id||"--");
 setPdfText('pdf-motor', last.motor||"--");
 setPdfText('pdf-km', last.km?.toLocaleString()+" KM"||"--");
 setPdfText('pdf-rpm', document.getElementById("card-rpm")?.innerText || "--");
-setPdfText('pdf-last-reading', new Date(last.timestamp).toLocaleDateString('es-ES'));
+setPdfText('pdf-last-reading', last.fecha || new Date(last.timestamp).toLocaleDateString('es-AR'));
 setPdfText('pdf-disp-val', document.getElementById("kpi-disp")?.innerText || "0%");
 setPdfText('pdf-trend-val', document.getElementById("trend-disp")?.innerText?.trim() || "");
 setPdfText('pdf-mtbf-val', document.getElementById("kpi-mtbf")?.innerText+"h" || "0h");
@@ -2373,7 +2225,7 @@ document.getElementById('pdf-sensor-diag').innerHTML = generateSensorDiagPDF();
 const workHistoryContainer = document.getElementById('pdf-work-history');
 const recentWork = [...db].reverse().slice(0, 10);
 workHistoryContainer.innerHTML = recentWork.map(r => {
-const fecha = new Date(r.timestamp).toLocaleDateString('es-ES', {day:'2-digit', month:'short', year:'numeric'});
+const fecha = r.fecha || new Date(r.timestamp).toLocaleDateString('es-AR', {day:'2-digit', month:'short', year:'numeric'});
 return `<div class="border border-slate-200 rounded-lg p-2 mb-2 bg-slate-50">
 <p class="text-[8px] font-bold text-slate-600 mb-1">${r.unidad} - ${fecha}</p>
 <p class="text-[9px] text-slate-700">${(r.trabajo || 'Sin detalles').replace(/\n/g, '<br>')}</p>
@@ -2448,7 +2300,7 @@ document.getElementById('pdf-vtv-checklist-full').innerHTML = generateVTVCheckli
 document.getElementById('pdf-sensor-diag').innerHTML = generateSensorDiagPDF();
 const workHistoryContainer = document.getElementById('pdf-work-history');
 workHistoryContainer.innerHTML = selected.map(r => {
-const fecha = new Date(r.timestamp).toLocaleDateString('es-ES', {day:'2-digit', month:'short', year:'numeric'});
+const fecha = r.fecha || new Date(r.timestamp).toLocaleDateString('es-AR', {day:'2-digit', month:'short', year:'numeric'});
 return `<div class="border border-slate-200 rounded-lg p-2 mb-2 bg-slate-50">
 <p class="text-[8px] font-bold text-slate-600 mb-1">${r.unidad} - ${fecha}</p>
 <p class="text-[9px] text-slate-700">${(r.trabajo || 'Sin detalles').replace(/\n/g, '<br>')}</p>
@@ -2482,7 +2334,7 @@ if(source.length === 0) return;
 const ctx = pdfCanvas.getContext('2d');
 pdfCanvas.width = 760;
 pdfCanvas.height = 180;
-const labels = source.map(d => new Date(d.timestamp).toLocaleDateString('es-ES', {day:'2-digit',month:'short'}));
+const labels = source.map(d => d.fecha || new Date(d.timestamp).toLocaleDateString('es-AR', {day:'2-digit',month:'short'}));
 const uptimeData = source.map(d => d.uptime);
 const downtimeData = source.map(d => d.downtime);
 const dispData = source.map(d => (d.uptime+d.downtime)>0?((d.uptime/(d.uptime+d.downtime))*100).toFixed(1):0);
@@ -2494,7 +2346,7 @@ labels: labels,
 datasets: [
 {label:'Disponibilidad %',dispData,borderColor:'#06b6d4',backgroundColor:'rgba(6,182,212,0.15)',borderWidth:2.5,tension:0.4,yAxisID:'y1',fill:true,pointRadius:3},
 {label:'Uptime (h)',uptimeData,borderColor:'#14b8a6',borderDash:[5,5],borderWidth:2,tension:0.3,yAxisID:'y',pointRadius:0},
-{label:'Downtime (h)',downtimeData,borderColor:'#f97316',borderWidth:2,tension:0.3,yAxisID:'y',pointRadius:0}
+{label:'Downtime (h)',data:downtimeData,borderColor:'#f97316',borderWidth:2,tension:0.3,yAxisID:'y',pointRadius:0}
 ]
 },
 options:{
@@ -2608,7 +2460,7 @@ let html='<thead><tr class="bg-slate-100">';
 headers.forEach(h => { html+=`<th class="border border-slate-300 px-1 py-1 text-left font-bold text-slate-700 text-[7px]">${h}</th>`; });
 html+='</tr></thead><tbody>';
 data.forEach(row => {
-const fecha=new Date(row.timestamp).toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit',hour:'2-digit'});
+const fecha=row.fecha || new Date(row.timestamp).toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit'});
 html+=`<tr><td class="border border-slate-200 px-1 py-1 font-medium text-[7px]">${row.unidad}</td><td class="border border-slate-200 px-1 py-1 text-[7px]">${row.motor}</td><td class="border border-slate-200 px-1 py-1 text-right text-[7px]">${row.km?.toLocaleString()}</td><td class="border border-slate-200 px-1 py-1 text-right text-[7px]">${row.uptime}</td><td class="border border-slate-200 px-1 py-1 text-right text-[7px]">${row.downtime}</td><td class="border border-slate-200 px-1 py-1 text-right text-[7px]">${row.vibracion}</td><td class="border border-slate-200 px-1 py-1 text-right text-[7px]">${row.ta}</td><td class="border border-slate-200 px-1 py-1 text-right text-[7px]">${row.rpm}</td><td class="border border-slate-200 px-1 py-1 text-right text-[7px]">${row.psiDi}</td><td class="border border-slate-200 px-1 py-1 text-right text-[7px]">${row.psiDd}</td><td class="border border-slate-200 px-1 py-1 text-[7px]">${(row.trabajo||'-').substring(0,20)}</td><td class="border border-slate-200 px-1 py-1 text-[7px]">${fecha}</td></tr>`;
 });
 html+='</tbody>';
@@ -2785,7 +2637,7 @@ sensores: { temperatura: last.ta || 0, vibracion: last.vibracion || 0, psi_di: l
 alertas: generateAlertList(),
 diagnostico_sensores: activeDiagnostics.map(id => { const s = SENSOR_FAULT_MATRIX.find(i => i.id === id); return s ? {sensor: s.sensor, falla: s.falla, consecuencia: s.consecuencia} : null; }).filter(Boolean),
 vtv: { score: parseInt(document.getElementById('vtv-score-value')?.innerText || '0'), pendientes: VTV_ITEMS.filter(i => !vtvState[i.id]).map(i => i.label) },
-historial_reciente: db.slice(-5).map(r => ({ fecha: new Date(r.timestamp).toLocaleDateString('es-ES'), trabajo: r.trabajo || 'Sin detalles' }))
+historial_reciente: db.slice(-5).map(r => ({ fecha: r.fecha || new Date(r.timestamp).toLocaleDateString('es-AR'), trabajo: r.trabajo || 'Sin detalles' }))
 };
 }
 function generateAlertList() {
@@ -3012,11 +2864,7 @@ ${ctx.diagnostico_sensores.length > 0 ? ctx.diagnostico_sensores.map(d => `- ${d
 ## HISTORIAL RECIENTE DE TRABAJOS
 ${ctx.historial_reciente.map(h => `- ${h.fecha}: ${h.trabajo}`).join('\n')}
 ---
-*Este contexto fue generado automáticamente por NEXO-ART Motor Intelligence v2.2*
-*Para análisis avanzado, importar este contenido en NotebookLM y solicitar:*
-*1. "Identifica patrones de falla recurrentes"*
-*2. "Predice próximos mantenimientos necesarios"*
-*3. "Genera informe técnico para taller"*
+*Este contexto fue generado automáticamente por NEXO-ART Motor Intelligence v2.3*
 `.trim();
 navigator.clipboard.writeText(contextText).then(() => {
 showToast('📋 Contexto copiado al portapapeles. ¡Pégalo en NotebookLM!', 'success');
@@ -3036,16 +2884,40 @@ if(modal && !modal.classList.contains('hidden')) { closeAssistant(); }
 document.getElementById('assistant-modal')?.addEventListener('click', (e) => {
 if(e.target === document.getElementById('assistant-modal')) { closeAssistant(); }
 });
+
+// === WHATSAPP REPORT LOGIC ===
+function sendToWhatsApp() {
+  if(db.length === 0) { showToast('⚠️ Sin datos para generar reporte','warning'); return; }
+  const last = db[db.length-1];
+  const maint = checkMaintenanceHistory(last);
+  const trends = analyzeSensorTrends(last);
+  const syn = getSyntheticMetrics(last);
+  
+  let msg = `🚗 *REPORTE TÉCNICO NEXO-ART*\n📅 ${new Date().toLocaleDateString('es-AR')}\n\n`;
+  msg += `📊 *UNIDAD ACTUAL*\n- ID: ${last.unidad} (${last.motor})\n- KM: ${last.km.toLocaleString()} | Temp: ${last.ta}°C | Vib: ${last.vibracion} mm/s\n`;
+  msg += `- Disponibilidad: ${document.getElementById('kpi-disp')?.innerText || '0%'} | VTV: ${document.getElementById('vtv-score-value')?.innerText || '0%'}\n\n`;
+  msg += `🔍 *DIAGNÓSTICO IA*\n${maint.alerts.length > 0 ? '✅ Mantenimientos válidos: '+maint.alerts.slice(0,2).join('; ')+'\n' : ''}`;
+  msg += `${maint.suggestions.length > 0 ? '⚙️ Próximos: '+maint.suggestions.slice(0,2).join('; ')+'\n' : ''}`;
+  msg += `📈 Tendencia: ${trends}\n`;
+  msg += `🧠 Estrés: ${syn.estres.toFixed(2)} | Eficiencia: ${syn.eficiencia.toFixed(2)}\n\n`;
+  msg += `📋 *DATASET*: ${db.length} registros cargados.\n`;
+  msg += `🤖 *SOLICITO:* Análisis minucioso, validación de métricas y plan de acción inmediato.`;
+  
+  const encoded = encodeURIComponent(msg);
+  window.open(`https://wa.me/3489686939?text=${encoded}`, '_blank');
+  showToast('📤 Reporte enviado a WhatsApp para análisis profesional', 'success');
+}
+
 // === INICIALIZACIÓN ===
 window.onload = () => {
-console.log('🚀 NEXO-ART v2.2 - Inicializando...');
+console.log('🚀 NEXO-ART v2.3 - Inicializando...');
 loadFromStorage();
 loadVTVState();
 loadSensorDiagnostics();
 calculateKPIs();
 if(db.length > 0) {
 updateUnidadCard(db[db.length - 1]);
-runPredictiveAI(db[db.length - 1]);
+runPredictiveAI(db[db.length - 1], checkMaintenanceHistory(db[db.length-1]), analyzeSensorTrends(db[db.length-1]));
 calculateAdvancedMetrics();
 autoHighlightDiagnostics();
 }
@@ -3066,7 +2938,7 @@ window._resizeTimer = setTimeout(() => {
 if(timelineChartIns && (db.length > 0 || selectedRows.size > 0)) timelineChartIns.update();
 }, 250);
 });
-console.log('✅ NEXO-ART v2.2 inicializado correctamente');
+console.log('✅ NEXO-ART v2.3 inicializado correctamente');
 showToast('🎯 Sistema listo para operar', 'success');
 };
 </script>
