@@ -1,1095 +1,1546 @@
 <!DOCTYPE html>
-<html lang="es" class="scroll-smooth">
+<html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="description" content="Landings 100% estáticas que facturan solas • Básico $85k • Avanzado $160k • Premium $240k"/>
-  <title>NEXOar-Art | Landing que Convierte Sola</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NEXO-ART Motor Intelligence - HUB Dashboard</title>
+    
+    <!-- Librerías -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Fuentes -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
-          colors: { 
-            primary: '#00F0FF', 
-            secondary: '#FF00FF', 
-            accent: '#39FF14',
-            dark: '#0a0a1a'
-          },
-          animation: { 
-            slideDown: 'slideDown 0.6s ease-out', 
-            pulseBtn: 'pulse 2s infinite',
-            float: 'float 3s ease-in-out infinite'
-          },
-          keyframes: { 
-            slideDown: { 
-              '0%': { opacity:0, transform:'translateY(-50px)' }, 
-              '100%': { opacity:1, transform:'translateY(0)' } 
-            },
-            float: {
-              '0%, 100%': { transform: 'translateY(0)' },
-              '50%': { transform: 'translateY(-10px)' }
+    <!-- Configuración Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        tech: ['Orbitron', 'sans-serif'],
+                    },
+                    colors: {
+                        cyber: {
+                            dark: '#0a0e1a',
+                            card: 'rgba(15, 23, 42, 0.85)',
+                            border: 'rgba(6, 182, 212, 0.25)',
+                            glow: 'rgba(6, 182, 212, 0.5)',
+                            accent: '#06b6d4'
+                        }
+                    }
+                }
             }
-          }
         }
-      }
-    }
-  </script>
+    </script>
 
-  <style>
-    /* === ESTILOS BASE === */
-    body { 
-      background:#050511; 
-      color:white; 
-      overflow-x:hidden; 
-      font-feature-settings: "ss01", "ss02", "cv01", "cv02";
-    }
-    
-    /* === GLASSMORPHISM === */
-    .glass { 
-      background:rgba(255,255,255,0.06); 
-      backdrop-filter:blur(20px); 
-      border:1px solid rgba(255,255,255,0.12); 
-      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-    }
-    
-    /* === TEXTO GRADIENTE ANIMADO === */
-    .gradient-text { 
-      background:linear-gradient(90deg,#00F0FF,#FF00FF,#39FF14,#00F0FF); 
-      background-size:400%; 
-      -webkit-background-clip:text; 
-      -webkit-text-fill-color:transparent; 
-      background-clip:text;
-      animation:gradient 6s ease infinite; 
-    }
-    @keyframes gradient { 
-      0%{background-position:0% 50%}
-      50%{background-position:100% 50%}
-      100%{background-position:0% 50%}
-    }
-    
-    /* === PARTÍCULAS DE FONDO === */
-    #particles-js { 
-      position:fixed; 
-      inset:0; 
-      z-index:1; 
-      pointer-events:none; 
-    }
-    
-    /* === SELECTOR DE PAÍSES === */
-    .country-select {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(0,240,255,0.4);
-      color: white;
-      padding: 8px 16px;
-      border-radius: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      appearance: none;
-      background-image: url("image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2300F0FF'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 12px center;
-      background-size: 16px;
-      padding-right: 36px;
-      font-size: 0.875rem;
-    }
-    .country-select:hover, .country-select:focus {
-      border-color: #00F0FF;
-      box-shadow: 0 0 20px rgba(0,240,255,0.3);
-      outline: none;
-      background-color: rgba(0,240,255,0.1);
-    }
-    .country-select option {
-      background: #050511;
-      color: white;
-      padding: 8px;
-    }
-    
-    /* === ANIMACIÓN DE CAMBIO DE PRECIO === */
-    .price-badge {
-      transition: all 0.3s ease;
-    }
-    .price-change {
-      animation: pricePulse 0.4s ease;
-    }
-    @keyframes pricePulse {
-      0% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.15); opacity: 0.9; color: #00F0FF; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-    
-    /* === HOVER EFFECTS PARA TARJETAS === */
-    .plan-card {
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    .plan-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 60px rgba(0,240,255,0.2);
-    }
-    
-    /* === BOTONES CON EFECTO GLOW === */
-    .btn-glow {
-      position: relative;
-      overflow: hidden;
-    }
-    .btn-glow::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-      transition: left 0.5s;
-    }
-    .btn-glow:hover::before {
-      left: 100%;
-    }
-    
-    /* === SCROLLBAR PERSONALIZADO === */
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #050511;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: linear-gradient(180deg, #00F0FF, #FF00FF);
-      border-radius: 4px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: linear-gradient(180deg, #FF00FF, #00F0FF);
-    }
-    
-    /* === UTILIDADES === */
-    .text-shadow {
-      text-shadow: 0 0 20px rgba(0,240,255,0.5);
-    }
-    .border-glow {
-      box-shadow: 0 0 20px rgba(0,240,255,0.3);
-    }
-    
-    /* === ANIMACIÓN DEL BADGE DE DESCUENTO === */
-    .badge-descount {
-      transition: all 0.3s ease;
-    }
+    <!-- Estilos Personalizados (Cyber/Tech) -->
+    <style>
+        body {
+            background-color: #0a0e1a;
+            color: #e2e8f0;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(6, 182, 212, 0.05), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.05), transparent 25%);
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
 
-    /* === HOVER TEXT PARA TARJETAS DE PAGO === */
-    .payment-card {
-      position: relative;
-    }
-    .payment-card .hover-text {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0.8);
-      opacity: 0;
-      transition: all 0.3s ease;
-      font-weight: 700;
-      font-size: 0.875rem;
-      color: #374151;
-      white-space: nowrap;
-      pointer-events: none;
-    }
-    .payment-card:hover .hover-text {
-      opacity: 1;
-      transform: translate(-50%, -50%) scale(1);
-    }
-    .payment-card:hover img {
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-  </style>
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: rgba(6, 182, 212, 0.4); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
+        
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(6, 182, 212, 0.5); }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(6, 182, 212, 0.1);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            border-color: rgba(6, 182, 212, 0.4);
+            box-shadow: 0 8px 30px rgba(6, 182, 212, 0.15);
+        }
+
+        .btn-neon {
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(8, 145, 178, 0.2));
+            border: 1px solid #06b6d4;
+            color: #06b6d4;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+        }
+        .btn-neon:hover {
+            background: #06b6d4;
+            color: #0a0e1a;
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.6);
+        }
+
+        .cyber-input {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            color: #06b6d4;
+            font-family: 'Orbitron', sans-serif;
+            transition: all 0.3s;
+        }
+        .cyber-input:focus {
+            outline: none;
+            border-color: #06b6d4;
+            box-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
+        }
+
+        /* Prevent zoom on mobile inputs */
+        @media screen and (max-width: 768px) {
+            input, select, textarea { font-size: 16px !important; }
+        }
+
+        .stat-value { font-family: 'Orbitron', sans-serif; }
+
+        /* Progress Bar Base */
+        .prog-bar-bg { background: rgba(148, 163, 184, 0.15); border-radius: 4px; height: 6px; overflow: hidden; margin-top: 5px; }
+        .prog-bar-fill { height: 100%; transition: width 0.5s, background 0.5s; }
+        
+        /* Cyber Tables */
+        .cyber-table th {
+            background: rgba(6, 182, 212, 0.1);
+            color: #06b6d4;
+            font-family: 'Orbitron', sans-serif;
+            border-bottom: 2px solid rgba(6, 182, 212, 0.3);
+        }
+        .cyber-table td { border-bottom: 1px solid rgba(6, 182, 212, 0.1); }
+        .cyber-table tr:hover td { background: rgba(6, 182, 212, 0.05); }
+
+        @media print {
+            body { background: white !important; color: black !important; }
+            .no-print { display: none !important; }
+            .glass-card { border: 1px solid #ccc; box-shadow: none; background: white; break-inside: avoid; }
+            .text-cyan-400 { color: #0284c7 !important; }
+        }
+
+        /* LLM Formatting */
+        .llm-response strong { color: #818cf8; }
+        .llm-response ul { padding-left: 1rem; margin-top: 0.5rem; }
+        .llm-response li { margin-bottom: 0.25rem; list-style-type: disc; }
+    </style>
 </head>
-<body class="antialiased selection:bg-primary selection:text-black">
+<body class="p-4 md:p-6" id="dashboard-body">
 
-  <!-- ✨ BARRA DE MARCA NEXO-ART - INTELIGENCIA QUE CONVIERTE ✨ -->
-  <header class="fixed top-0 left-0 right-0 z-40 py-3 px-4 text-center glass border-b border-white/10">
-    <div class="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4">
-      <span class="text-primary font-mono font-black text-lg tracking-wider">NEXO-ART</span>
-      <span class="text-gray-500 text-xs sm:text-sm hidden sm:inline">•</span>
-      <span class="text-gray-300 text-xs sm:text-sm font-medium">Inteligencia que convierte visitantes en clientes</span>
-      
-      <!-- 🌍 SELECTOR DE PAÍSES -->
-      <div class="flex items-center gap-2 mt-2 sm:mt-0 sm:ml-4">
-        <span class="text-gray-400 text-xs">🌎</span>
-        <select id="countrySelector" class="country-select text-sm" onchange="cambiarPais()" aria-label="Seleccionar país">
-          <option value="argentina">🇦🇷 Argentina</option>
-          <option value="bolivia">🇧🇴 Bolivia</option>
-          <option value="brasil">🇧 Brasil</option>
-          <option value="chile">🇨🇱 Chile</option>
-          <option value="colombia">🇨🇴 Colombia</option>
-          <option value="costarica">🇨🇷 Costa Rica</option>
-          <option value="cuba">🇨🇺 Cuba</option>
-          <option value="ecuador">🇪🇨 Ecuador</option>
-          <option value="elsalvador">🇸🇻 El Salvador</option>
-          <option value="guatemala">🇬🇹 Guatemala</option>
-          <option value="honduras">🇭🇳 Honduras</option>
-          <option value="mexico">🇲🇽 México</option>
-          <option value="nicaragua">🇳 Nicaragua</option>
-          <option value="panama">🇵🇦 Panamá</option>
-          <option value="paraguay">🇵🇾 Paraguay</option>
-          <option value="peru">🇵🇪 Perú</option>
-          <option value="rd">🇩🇴 República Dominicana</option>
-          <option value="uruguay">🇺🇾 Uruguay</option>
-          <option value="venezuela">🇻 Venezuela</option>
-        </select>
-      </div>
+    <!-- Header / Acciones Globales -->
+    <header class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 no-print glass-card p-4">
+        <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-full border-2 border-cyan-400 flex items-center justify-center bg-cyan-900/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.5)]">
+                <i class="fas fa-microchip text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-2xl font-tech font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">NEXO-ART</h1>
+                <p class="text-xs tracking-[0.2em] text-cyan-500/80 uppercase font-tech">Motor Intelligence</p>
+            </div>
+        </div>
+        <div class="flex flex-wrap items-center justify-center gap-2">
+            <button onclick="limpiarFiltros()" class="btn-neon px-3 py-1.5 rounded text-xs" title="Borrar toda la base de datos"><i class="fas fa-trash-alt mr-1"></i>Reset DB</button>
+            <button onclick="exportarCSV()" class="btn-neon px-3 py-1.5 rounded text-xs"><i class="fas fa-file-csv mr-1"></i>CSV</button>
+            <button onclick="exportarPDF()" class="btn-neon px-3 py-1.5 rounded text-xs"><i class="fas fa-file-pdf mr-1"></i>PDF</button>
+            <button onclick="location.reload()" class="btn-neon px-3 py-1.5 rounded text-xs"><i class="fas fa-sync-alt mr-1"></i>Actualizar</button>
+        </div>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- PANEL IZQUIERDO: INGESTA Y KPIS -->
+        <div class="lg:col-span-4 space-y-6">
+            
+            <!-- Ingesta de Datos -->
+            <div class="glass-card p-5 no-print">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="font-tech text-sm text-cyan-400 font-bold"><i class="fas fa-database mr-2"></i>Ingesta de Datos</h2>
+                </div>
+                <form id="ingesta-form" class="space-y-3" onsubmit="procesarDatos(event)">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-[10px] text-cyan-500 uppercase font-bold tracking-wider">Unidad</label>
+                            <input type="text" id="in_unidad" required class="cyber-input w-full rounded p-1.5 text-xs uppercase" placeholder="Ej: V-01">
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-cyan-500 uppercase font-bold tracking-wider">ID</label>
+                            <input type="text" id="in_id" required class="cyber-input w-full rounded p-1.5 text-xs uppercase" placeholder="Ej: XYZ-123">
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-3">
+                        <div>
+                            <label class="text-[10px] text-cyan-500 uppercase font-bold tracking-wider">Motor</label>
+                            <select id="in_motor" class="cyber-input w-full rounded p-1.5 text-xs">
+                                <option value="Gasolina">Gasolina</option>
+                                <option value="Diésel">Diésel</option>
+                                <option value="Híbrido">Híbrido</option>
+                                <option value="Eléctrico">Eléctrico</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-cyan-500 uppercase font-bold tracking-wider">Año</label>
+                            <input type="number" id="in_anio" required class="cyber-input w-full rounded p-1.5 text-xs" placeholder="Ej: 2024" min="1950" max="2050">
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-cyan-500 uppercase font-bold tracking-wider">Fecha</label>
+                            <input type="date" id="in_fecha" required class="cyber-input w-full rounded p-1.5 text-xs">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-2">
+                        <div><label class="text-[9px] text-cyan-500">KM</label><input type="number" id="in_km" required class="cyber-input w-full rounded p-1 text-xs"></div>
+                        <div><label class="text-[9px] text-cyan-500">UPTIME (h)</label><input type="number" id="in_up" step="0.1" required class="cyber-input w-full rounded p-1 text-xs"></div>
+                        <div><label class="text-[9px] text-cyan-500">DOWNTIME (h)</label><input type="number" id="in_down" step="0.1" required class="cyber-input w-full rounded p-1 text-xs"></div>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-2">
+                        <div><label class="text-[9px] text-cyan-500">VIB (mm/s)</label><input type="number" id="in_vib" step="0.1" required class="cyber-input w-full rounded p-1 text-xs"></div>
+                        <div><label class="text-[9px] text-cyan-500">TEMP (°C)</label><input type="number" id="in_temp" step="0.1" required class="cyber-input w-full rounded p-1 text-xs"></div>
+                        <div><label class="text-[9px] text-cyan-500">RPM</label><input type="number" id="in_rpm" required class="cyber-input w-full rounded p-1 text-xs"></div>
+                    </div>
+
+                    <div class="grid grid-cols-4 gap-2">
+                        <div><label class="text-[9px] text-cyan-500">PSI DI</label><input type="number" id="in_psi_di" required class="cyber-input w-full rounded p-1 text-xs"></div>
+                        <div><label class="text-[9px] text-cyan-500">PSI DD</label><input type="number" id="in_psi_dd" required class="cyber-input w-full rounded p-1 text-xs"></div>
+                        <div><label class="text-[9px] text-cyan-500">PSI TI</label><input type="number" id="in_psi_ti" required class="cyber-input w-full rounded p-1 text-xs"></div>
+                        <div><label class="text-[9px] text-cyan-500">PSI TD</label><input type="number" id="in_psi_td" required class="cyber-input w-full rounded p-1 text-xs"></div>
+                    </div>
+
+                    <div>
+                        <label class="text-[10px] text-cyan-500 uppercase font-bold tracking-wider">Detalle de Trabajo</label>
+                        <textarea id="in_trabajo" rows="2" class="cyber-input w-full rounded p-1.5 text-xs" placeholder="Describa mantenimientos realizados..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-neon w-full py-2 rounded-lg text-sm mt-2">
+                        <i class="fas fa-cogs mr-2"></i>Procesar Datos
+                    </button>
+                </form>
+            </div>
+
+            <!-- KPIs Principales -->
+            <div class="glass-card p-5">
+                <h2 class="font-tech text-sm text-cyan-400 font-bold mb-4"><i class="fas fa-chart-pie mr-2"></i>Rendimiento de la Flota</h2>
+                <div class="grid grid-cols-3 gap-3 text-center mb-4">
+                    <div class="bg-slate-800/50 p-3 rounded-lg border border-cyan-500/20 relative">
+                        <p class="text-[10px] text-slate-400 uppercase">Disp.</p>
+                        <p id="kpi_disp" class="stat-value text-xl text-emerald-400 font-bold mt-1">0%</p>
+                        <span id="ind_disp" class="absolute top-2 right-2 text-[8px] px-1.5 py-0.5 rounded border border-current hidden"></span>
+                    </div>
+                    <div class="bg-slate-800/50 p-3 rounded-lg border border-cyan-500/20 relative">
+                        <p class="text-[10px] text-slate-400 uppercase">MTBF (h)</p>
+                        <p id="kpi_mtbf" class="stat-value text-xl text-cyan-400 font-bold mt-1">0</p>
+                        <span id="ind_mtbf" class="absolute top-2 right-2 text-[8px] px-1.5 py-0.5 rounded border border-current hidden"></span>
+                    </div>
+                    <div class="bg-slate-800/50 p-3 rounded-lg border border-cyan-500/20 relative">
+                        <p class="text-[10px] text-slate-400 uppercase">MTTR (h)</p>
+                        <p id="kpi_mttr" class="stat-value text-xl text-purple-400 font-bold mt-1">0</p>
+                        <span id="ind_mttr" class="absolute top-2 right-2 text-[8px] px-1.5 py-0.5 rounded border border-current hidden"></span>
+                    </div>
+                </div>
+                <div class="relative h-40 w-full"><canvas id="chartKpis"></canvas></div>
+            </div>
+
+            <!-- Matriz de Sensores -->
+            <div class="glass-card p-5 no-print">
+                <h2 class="font-tech text-sm text-cyan-400 font-bold mb-2"><i class="fas fa-microchip mr-2"></i>Diagnóstico de Sensores</h2>
+                <p class="text-[9px] text-slate-400 mb-3">Tildar anomalías detectadas para cruzar con dataset e IA.</p>
+                <div class="space-y-1 max-h-[180px] overflow-y-auto text-[10px] custom-scrollbar pr-2" id="sensores-container">
+                    <!-- Dinámico por JS -->
+                </div>
+            </div>
+
+            <!-- Checklist VTV -->
+            <div class="glass-card p-5 no-print">
+                <h2 class="font-tech text-sm text-cyan-400 font-bold mb-4"><i class="fas fa-clipboard-check mr-2"></i>Checklist VTV</h2>
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="relative w-14 h-14">
+                        <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                            <path class="text-slate-700" stroke-width="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <path id="vtv-progress-circle" class="text-rose-400 transition-all duration-500" stroke-dasharray="0, 100" stroke-width="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span id="vtv-pct" class="text-[10px] font-tech font-bold text-rose-400">0%</span>
+                        </div>
+                    </div>
+                    <div class="text-[10px] text-slate-400">
+                        <p class="uppercase tracking-wider">Progreso Inspección</p>
+                        <p id="vtv-status-text" class="text-rose-400 font-bold text-xs uppercase">Pendiente</p>
+                    </div>
+                </div>
+                <div class="space-y-2 max-h-[150px] overflow-y-auto text-[10px]" id="vtv-items-container">
+                    <!-- Llenado por JS -->
+                </div>
+            </div>
+
+        </div>
+
+        <!-- PANEL DERECHO: MÉTRICAS, GRÁFICOS, DATOS -->
+        <div class="lg:col-span-8 space-y-6">
+            
+            <!-- Métricas Avanzadas (Variables Sintéticas) -->
+            <div class="glass-card p-5">
+                <h2 class="font-tech text-sm text-cyan-400 font-bold mb-4"><i class="fas fa-bolt mr-2"></i>Métricas Avanzadas - Variables Sintéticas</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <!-- Cards Generadas Dinámicamente via JS -->
+                    <div id="advCards" class="contents"></div>
+                </div>
+            </div>
+
+            <!-- Gráficos -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <!-- Tendencia Temporal -->
+                <div class="glass-card p-4">
+                    <h2 class="font-tech text-xs text-cyan-400 font-bold mb-2"><i class="fas fa-chart-line mr-2"></i>Tendencia Temporal (Temp & Vib)</h2>
+                    <div class="relative h-48 w-full"><canvas id="chartTendencia"></canvas></div>
+                </div>
+
+                <!-- Dispersión KM vs Fallas -->
+                <div class="glass-card p-4 flex flex-col">
+                    <h2 class="font-tech text-xs text-cyan-400 font-bold mb-2"><i class="fas fa-project-diagram mr-2"></i>Dispersión: KM vs Falla</h2>
+                    <div class="relative h-40 w-full flex-grow"><canvas id="chartScatter"></canvas></div>
+                    <div class="text-[8px] text-slate-400 mt-2 bg-slate-900/50 p-2 rounded border border-cyan-500/20 leading-tight">
+                        <strong class="text-cyan-500">Interpretación del scatter plot:</strong><br>
+                        • Los puntos se agrupan en "clusters" según el kilometraje (0-20k, 20-40k, etc.).<br>
+                        • A medida que el vehículo envejece, los problemas se vuelven más costosos y graves, aunque menos frecuentes.<br>
+                        • Picos detectados: frenos (20k-40k), embrague/suspensión (60k-100k), caja (150k+).<br>
+                        • Útil para planificar mantenimientos preventivos y anticipar reparaciones mayores.
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Estadísticas (Describe y Correlación) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- DESCRIBE -->
+                <div class="glass-card p-4 overflow-x-auto flex flex-col">
+                    <h2 class="font-tech text-xs text-purple-400 font-bold mb-2"><i class="fas fa-calculator mr-2"></i>DESCRIBE() - Estadísticas</h2>
+                    <table class="w-full text-[9px] text-left cyber-table mb-3" id="table-describe">
+                        <!-- Llenado por JS -->
+                    </table>
+                    <div class="text-[8px] text-slate-400 mt-auto bg-slate-900/50 p-2 rounded border border-purple-500/20 leading-tight">
+                        <strong class="text-purple-400">📊 Explicación de DESCRIBE():</strong><br>
+                        • mean = promedio (ej. KM promedio 68.000).<br>
+                        • std = variabilidad (ej. vibración std 0.88 → dispersión moderada).<br>
+                        • min/max = extremos (ej. temperatura mínima 85°C, máxima 95°C).<br>
+                        • 50% = mediana, valor central.
+                    </div>
+                </div>
+
+                <!-- MATRIZ CORRELACIÓN -->
+                <div class="glass-card p-4 overflow-x-auto flex flex-col">
+                    <h2 class="font-tech text-xs text-amber-400 font-bold mb-2"><i class="fas fa-th mr-2"></i>Matriz de Correlación</h2>
+                    <table class="w-full text-[9px] text-center cyber-table mb-3" id="table-correlacion">
+                        <!-- Llenado por JS -->
+                    </table>
+                    <div class="text-[8px] text-slate-400 mt-auto bg-slate-900/50 p-2 rounded border border-amber-500/20 leading-tight">
+                        <strong class="text-amber-400">Explicación de correlaciones:</strong><br>
+                        • Positivas: KM con TEMP (0.98) → mayor km = mayor temperatura promedio. | VIB con DOWN (0.99) → vibración alta = más tiempo de inactividad.<br>
+                        • Negativas: KM con Est.Mec (-0.63) → más km reduce estrés mecánico óptimo. | RPM con Ef.Térm (-0.70) → mayor RPM reduce eficiencia térmica.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dataset Acumulado & IA -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="glass-card p-4 lg:col-span-2 overflow-hidden flex flex-col">
+                    <div class="flex justify-between items-center mb-2">
+                        <h2 class="font-tech text-xs text-cyan-400 font-bold"><i class="fas fa-table mr-2"></i>Dataset Acumulado</h2>
+                        <span class="text-[9px] text-slate-400" id="dataset-count">0/2000 registros</span>
+                    </div>
+
+                    <!-- Buscador Histórico -->
+                    <div class="flex gap-2 mb-3 bg-slate-900/40 p-2 rounded border border-cyan-500/20">
+                        <input type="text" id="search_id" class="cyber-input flex-1 rounded p-1.5 text-[10px] uppercase" placeholder="Buscar ID / Unidad" oninput="filtrarDataset()">
+                        <input type="date" id="search_fecha" class="cyber-input flex-1 rounded p-1.5 text-[10px]" oninput="filtrarDataset()">
+                        <button onclick="limpiarBusqueda()" class="btn-neon px-2 py-1 rounded text-xs" title="Limpiar Búsqueda"><i class="fas fa-times"></i></button>
+                    </div>
+
+                    <div class="overflow-auto max-h-[250px]">
+                        <table class="w-full text-[9px] text-left cyber-table" id="table-dataset">
+                            <thead>
+                                <tr>
+                                    <th class="w-8 text-center"><input type="checkbox" id="chk-all" onchange="toggleAllRows(this.checked)" title="Seleccionar todo"></th>
+                                    <th>Fecha</th><th>Unidad</th><th>Año</th><th>Motor</th><th>KM</th><th>UP</th><th>DOWN</th><th>VIB</th><th>TEMP</th><th class="w-16 text-center">Detalle</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody-dataset"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Recomendaciones IA -->
+                <div class="glass-card p-4 bg-indigo-900/20 border-indigo-500/30 flex flex-col">
+                    <div class="flex justify-between items-center mb-2 border-b border-indigo-500/20 pb-2">
+                        <h2 class="font-tech text-xs text-indigo-400 font-bold"><i class="fas fa-robot mr-2"></i>Recomendaciones IA</h2>
+                        <button onclick="llamarIA()" class="btn-neon px-2 py-1 rounded text-[9px] flex items-center gap-1 bg-indigo-900/40">
+                            ✨ Análisis IA
+                        </button>
+                    </div>
+                    <div id="ai-recommendations" class="text-[10px] space-y-2 text-slate-300 flex-grow custom-scrollbar overflow-y-auto max-h-[200px] pr-1 llm-response">
+                        <p class="italic text-slate-500">Selecciona o ingresa datos y haz clic en "Análisis IA" para obtener un diagnóstico avanzado...</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
-  </header>
 
-  <!-- 📱 MODAL DE WHATSAPP -->
-  <div id="whatsappModal" class="fixed inset-0 bg-black/90 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4 sm:p-6" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <div class="glass p-6 sm:p-8 md:p-10 rounded-3xl border border-primary/50 max-w-md w-full animate-slideDown">
-      <h3 id="modalTitle" class="text-3xl sm:text-4xl font-black mb-4 sm:mb-6 text-center gradient-text">¡Último paso!</h3>
-      <p class="text-center text-lg sm:text-xl mb-6 sm:mb-8 text-gray-200">Te redirigimos a WhatsApp con tu propuesta personalizada</p>
+    <!-- Botón WhatsApp -->
+    <a href="#" onclick="enviarWhatsApp()" class="fixed bottom-6 right-6 bg-green-500 text-white rounded-full w-14 h-14 flex items-center justify-center text-3xl shadow-[0_0_15px_rgba(34,197,94,0.6)] hover:scale-110 transition-transform z-40 no-print" title="ENVIAR DASHBOARD COMPLETO A WHATSAPP 3489686939">
+        <i class="fab fa-whatsapp"></i>
+    </a>
 
-      <form id="whatsappForm" onsubmit="enviarWhatsApp(); return false;" class="space-y-4">
-        <input type="text" id="modalNombre" placeholder="Tu nombre *" class="w-full px-4 sm:px-6 py-4 sm:py-5 glass border border-white/20 rounded-2xl focus:border-primary focus:outline-none text-base bg-transparent placeholder-gray-500" required aria-required="true">
-        <input type="email" id="modalEmail" placeholder="Email (opcional)" class="w-full px-4 sm:px-6 py-4 sm:py-5 glass border border-white/20 rounded-2xl focus:border-primary focus:outline-none text-base bg-transparent placeholder-gray-500" aria-label="Email opcional">
-        <input type="hidden" id="modalPlan">
-        <input type="hidden" id="modalPais" value="argentina">
-
-        <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2">
-          <button type="button" onclick="cerrarModal()" class="w-full sm:flex-1 py-4 sm:py-5 glass border border-white/30 rounded-2xl font-bold hover:bg-white/10 transition text-base sm:text-lg focus:outline-none focus:ring-2 focus:ring-primary/50">
-            Cancelar
-          </button>
-          <button type="submit" class="w-full sm:flex-1 py-4 sm:py-5 bg-gradient-to-r from-green-500 to-emerald-500 text-black font-black text-lg sm:text-xl rounded-2xl hover:scale-105 transition shadow-xl focus:outline-none focus:ring-2 focus:ring-green-400">
-            Enviar por WhatsApp 🚀
-          </button>
+    <!-- Modal Detalle de Registro (Reporte Completo de Fila) -->
+    <div id="modal-detalle" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm no-print">
+        <div class="glass-card w-full max-w-lg p-5 relative flex flex-col max-h-[90vh]">
+            <button onclick="cerrarModalDetalle()" class="absolute top-4 right-4 text-cyan-400 hover:text-rose-400 transition-colors p-2">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            <h3 class="font-tech text-lg text-cyan-400 font-bold mb-4 border-b border-cyan-500/30 pb-2">
+                <i class="fas fa-file-alt mr-2"></i>Reporte de Trabajo
+            </h3>
+            <div class="overflow-y-auto pr-2 text-sm text-slate-300 space-y-4 custom-scrollbar" id="modal-detalle-content">
+                <!-- Se inyecta por JS -->
+            </div>
         </div>
-      </form>
-      
-      <p class="text-xs text-gray-500 text-center mt-6">
-        🔒 Tus datos están seguros • Respuesta en minutos
-      </p>
     </div>
-  </div>
 
-  <!-- 🎨 FONDO DE PARTÍCULAS -->
-  <div id="particles-js"></div>
+    <!-- Funcionalidad JavaScript -->
+    <script>
+        // ----------------------------------------------------
+        // API GEMINI CONFIG Y LLAMADO
+        // ----------------------------------------------------
+        const apiKey = "AIzaSyA8kGRYruC6JvfaRCaj0oAn5BM5inhlHPM"; // Clave proporcionada por el usuario
 
-  <!-- 🌟 SECCIÓN HERO -->
-  <section class="relative min-h-screen flex items-center justify-center px-4 sm:px-6 pt-20">
-    <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-25">
-      <source src="https://assets.mixkit.co/videos/preview/mixkit-neon-matrix-rain-and-digital-glitch-32694-large.mp4" type="video/mp4">
-      <source src="https://assets.mixkit.co/videos/preview/mixkit-neon-matrix-rain-and-digital-glitch-32694-medium.mp4" type="video/mp4">
-    </video>
-    <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-[#050511]/95 to-[#050511]"></div>
-    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(0,240,255,0.1)_0%,_transparent_70%)]"></div>
+        async function fetchGemini(prompt, retries = 5) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            
+            // INYECCIÓN DEL CONTEXTO EXHAUSTIVO (CONOCIMIENTO EXPERTO DE LA IA)
+            const systemContext = `Eres NEXO-ART IA, un ingeniero experto en mecánica automotriz, mantenimiento predictivo y análisis de datos de telemetría de flotas. Analiza la data entregada, identifica problemas raíz de forma profesional, señala riesgos predictivos y entrega 3 pasos clave a seguir. Responde en español de forma concisa. IMPORTANTE: Usa etiquetas HTML válidas y simples para formatear tu respuesta (como <strong>, <ul>, <li>, <br>) para que se renderice bien en un dashboard web.
+            
+            BASE DE CONOCIMIENTO TÉCNICA OBLIGATORIA:
+            Este resumen exhaustivo sintetiza la información técnica de las fuentes sobre el funcionamiento, mantenimiento y diagnóstico de motores de combustión interna, sistemas de inyección, lubricación y componentes periféricos.
+            1. Causas Críticas de Falla en el Motor: El motor puede fallar por diversos factores, siendo el sobrecalentamiento uno de los más graves (fugas en radiador, mangueras o fallos en bomba de agua). Otros: Lubricación Deficiente, Cascabeleo (Pistoneo), Correa de Distribución, Negligencia de Alertas, Combustible Equivocado.
+            2. La Ciencia de la Lubricación y el Análisis de Fluidos: El lubricante separa superficies metálicas. El Análisis de Aceite Usado mide oxidación, agotamiento de aditivos (TAN/TBN) y contaminantes (agua, glicol, hollín, silicio abrasivo).
+            3. Calidad del Combustible y Sistemas de Inyección: El diésel sucio erosiona inyectores. Fallas se manifiestan por humo blanco, pérdida de potencia y ralentí irregular.
+            4. Acumulación de Carbonilla y Sistemas de Emisiones: Obstruye inyección y reduce rendimiento. El DPF puede saturarse si no alcanza temperatura de regeneración.
+            5. Planes de Mantenimiento y Otros Componentes: Mantenimiento preventivo permite 250,000 km. Batería tiene vida útil promedio de 2 años. Líquido de frenos debe cambiarse cada 2 años. Suspensión delantera se desgasta primero.`;
 
-    <div class="relative z-10 text-center max-w-7xl mx-auto px-2">
-      <div class="inline-flex items-center gap-2 px-4 py-2 glass rounded-full mb-6 sm:mb-8 animate-float">
-        <span class="w-2 h-2 bg-accent rounded-full animate-pulse"></span>
-        <span class="text-sm text-gray-300">✨ Landings que facturan 24/7</span>
-      </div>
-      
-      <h1 class="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black leading-tight sm:leading-none mb-6 sm:mb-10 text-shadow">
-        TU LANDING<br><span class="gradient-text">FACTURA SOLA</span>
-      </h1>
-      
-      <p class="text-lg sm:text-2xl md:text-4xl font-bold text-gray-200 mb-8 sm:mb-12 px-2 max-w-4xl mx-auto">
-        100% estática • carga en menos de 0.8s • Clasifica tus leads automáticamente
-      </p>
-      
-      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-        <button onclick="abrirModal('Avanzado')" class="px-8 sm:px-12 py-4 sm:py-5 bg-gradient-to-r from-primary to-cyan-400 text-black font-black text-lg sm:text-xl rounded-2xl hover:scale-105 transition shadow-2xl btn-glow">
-          EMPEZAR AHORA →
-        </button>
-        <a href="#planes" class="px-8 sm:px-12 py-4 sm:py-5 glass border border-white/30 rounded-2xl font-bold hover:bg-white/10 transition text-lg sm:text-xl">
-          Ver Planes ↓
-        </a>
-      </div>
-      
-      <div class="mt-12 sm:mt-16 flex flex-wrap justify-center gap-6 text-sm text-gray-400">
-        <div class="flex items-center gap-2">
-          <span class="text-accent">✓</span>
-          <span>Sin mensualidades</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="text-accent">✓</span>
-          <span>Entrega en 24HS</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="text-accent">✓</span>
-          <span>Soporte incluido</span>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Scroll indicator -->
-    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-      <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-      </svg>
-    </div>
-  </section>
-
-  <!-- 💡 MENSAJE ESTÁTICO -->
-  <section class="py-12 sm:py-16 bg-black/50 backdrop-blur-xl text-center px-4 border-y border-white/5">
-    <p class="text-xl sm:text-2xl md:text-3xl font-black text-primary mb-3 sm:mb-4">
-      Todas nuestras webs son 100% estáticas (HTML + CSS + JS)
-    </p>
-    <p class="text-base sm:text-xl text-gray-300 leading-relaxed max-w-3xl mx-auto">
-      Carga instantánea • Puntaje 100/100 Google • Nunca se cae • Sin hosting caro • SEO optimizado
-    </p>
-  </section>
-
-  <!-- 🎬 VIDEO EXPLICATIVO EMBEBIDO -->
-  <section class="py-16 sm:py-24 px-4 sm:px-6 bg-gradient-to-b from-black/30 to-black/50">
-    <div class="max-w-5xl mx-auto text-center">
-      <h2 class="text-3xl sm:text-5xl font-black mb-6 sm:mb-8 gradient-text">
-        CONOCÉ CÓMO FUNCIONA NEXO-ART
-      </h2>
-      <p class="text-base sm:text-xl text-gray-300 mb-8 sm:mb-12 max-w-3xl mx-auto">
-        Mirá nuestro video explicativo directamente aquí y descubrí cómo nuestras landings pueden transformar tu negocio y empezar a facturar automáticamente.
-      </p>
-      
-      <!-- VIDEO DE YOUTUBE -->
-      <div class="relative w-full max-w-4xl mx-auto aspect-video rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl shadow-primary/20 border border-white/10 glass">
-        <iframe 
-          src="https://www.youtube.com/embed/1tHb9OWXvAI?rel=0&modestbranding=1&playsinline=1" 
-          title="Video explicativo NEXO-ART: Landings que convierten"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-          allowfullscreen
-          class="absolute inset-0 w-full h-full"
-          loading="lazy"
-          referrerpolicy="strict-origin-when-cross-origin">
-        </iframe>
-      </div>
-      
-      <p class="text-sm text-gray-500 mt-6 flex items-center justify-center gap-2 flex-wrap">
-        <span>⏱️</span>
-        <span>Duración: 3-5 minutos</span>
-        <span class="mx-2 hidden sm:inline">•</span>
-        <span>🔊</span>
-        <span>Activá el sonido para mejor experiencia</span>
-        <span class="mx-2 hidden sm:inline">•</span>
-        <span>📱</span>
-        <span>Compatible con móvil y desktop</span>
-      </p>
-    </div>
-  </section>
-
-  <!-- 💰 PLANES CON PRECIOS DINÁMICOS -->
-  <section id="planes" class="py-20 sm:py-32 px-4 sm:px-6 max-w-7xl mx-auto">
-    <h2 class="text-4xl sm:text-6xl md:text-8xl font-black text-center mb-12 sm:mb-20 px-2 gradient-text">ELIGÍ TU RESULTADO</h2>
-    
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 md:gap-12">
-
-      <!-- ===== PLAN BÁSICO ===== -->
-      <article class="plan-card glass p-6 sm:p-8 md:p-12 rounded-3xl border border-white/10 hover:border-primary/50 transition text-center flex flex-col relative">
-        
-        <!-- 🏷️ BADGE 10% OFF (SOLO ARGENTINA) -->
-        <div id="badge-10off" class="badge-descount absolute top-3 sm:top-4 right-3 sm:right-4 bg-gradient-to-r from-red-500 to-orange-500 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-full font-black text-sm sm:text-lg whitespace-nowrap z-10 shadow-lg">10% OFF</div>
-        
-        <h3 class="text-3xl sm:text-4xl font-black mb-3 sm:mb-4">Básico</h3>
-        <div id="price-basico" class="text-4xl sm:text-6xl font-black mb-6 sm:mb-8 price-badge text-shadow">$88.000</div>
-        
-        <ul class="text-left space-y-3 sm:space-y-5 text-gray-300 text-base sm:text-lg mb-8 sm:mb-10 flex-grow">
-          <li class="leading-relaxed flex items-start gap-3">
-            <span class="text-accent mt-1">✓</span>
-            <span>Landing 100% estática</span>
-          </li>
-          <li class="leading-relaxed flex items-start gap-3">
-            <span class="text-accent mt-1">✓</span>
-            <span>Diseño premium responsive</span>
-          </li>
-          <li class="leading-relaxed flex items-start gap-3">
-            <span class="text-accent mt-1">✓</span>
-            <span>Formulario de captura</span>
-          </li>
-          <li class="leading-relaxed flex items-start gap-3">
-            <span class="text-accent mt-1">✓</span>
-            <span>Entrega en 24HS</span>
-          </li>
-        </ul>
-        
-        <!-- BOTÓN DE CRÉDITO (Solo Argentina) -->
-        <button id="btn-credito-basico" onclick="mostrarInfoCredito()" class="w-full mb-3 sm:mb-4 py-2 sm:py-3 glass border border-accent/40 text-accent font-bold text-sm sm:text-base rounded-xl hover:bg-accent/10 transition flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-accent/50">
-          <span>💳</span> Pagar en 2 cuotas de $48.000
-        </button>
-        
-        <button onclick="abrirModal('Básico')" class="w-full py-4 sm:py-6 bg-gradient-to-r from-cyan-500 to-blue-500 text-black font-black text-lg sm:text-xl rounded-2xl hover:scale-105 transition shadow-xl mt-auto btn-glow focus:outline-none focus:ring-2 focus:ring-cyan-400">
-          EMPEZAR YA
-        </button>
-      </article>
-
-      <!-- ===== PLAN AVANZADO EMPRESA (DESTACADO) ===== -->
-      <article class="plan-card glass p-6 sm:p-8 md:p-12 rounded-3xl border-4 border-primary shadow-2xl shadow-primary/60 transform md:scale-110 relative overflow-hidden flex flex-col">
-        <div class="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent pointer-events-none"></div>
-        <div class="absolute top-3 sm:top-4 right-3 sm:right-4 bg-gradient-to-r from-primary to-cyan-400 text-black px-4 sm:px-8 py-2 sm:py-3 rounded-full font-black text-sm sm:text-lg whitespace-nowrap shadow-lg z-10">🔥 MÁS VENDIDO</div>
-        
-        <h3 class="text-4xl sm:text-5xl font-black mb-4 sm:mb-6 mt-2 sm:mt-0">Avanzado Empresa</h3>
-        <div id="price-avanzado" class="text-5xl sm:text-7xl font-black text-primary mb-6 sm:mb-8 price-badge text-shadow">$160.000</div>
-        
-        <ul class="text-left space-y-3 sm:space-y-5 text-gray-200 text-base sm:text-lg mb-6 sm:mb-8 flex-grow">
-          <li class="leading-relaxed flex items-start gap-3">
-            <span class="text-primary mt-1">✓</span>
-            <span>Todo lo del Básico</span>
-          </li>
-          <li class="leading-relaxed flex items-start gap-3">
-            <span class="text-primary mt-1">✓</span>
-            <span>Animaciones premium</span>
-          </li>
-          <li class="leading-relaxed flex items-start gap-3">
-            <span class="text-primary mt-1">✓</span>
-            <span>CRM automático</span>
-          </li>
-          <li class="leading-relaxed flex items-start gap-3">
-            <span class="text-primary mt-1">✓</span>
-            <span>Mantenimiento mensual</span>
-          </li>
-          <li class="leading-relaxed flex items-start gap-3">
-            <span class="text-primary mt-1">✓</span>
-            <span>Entrega en 24HS</span>
-          </li>
-        </ul>
-
-        <!-- MICRO TARJETA MANTENIMIENTO MENSUAL -->
-        <div class="mb-6 sm:mb-8 p-4 bg-gradient-to-r from-primary/20 to-cyan-400/20 border-2 border-primary/50 rounded-2xl">
-          <p class="text-sm text-gray-300 mb-1">Mantenimiento Mensual</p>
-          <p id="price-mantenimiento-avanzado" class="text-2xl sm:text-3xl font-black text-primary">$20 USD<span class="text-sm text-gray-400 font-normal">/mes</span></p>
-        </div>
-        
-        <button onclick="abrirModal('Avanzado')" class="w-full py-5 sm:py-7 bg-primary text-black font-black text-xl sm:text-2xl rounded-2xl hover:bg-white transform hover:scale-105 transition shadow-2xl mt-auto btn-glow focus:outline-none focus:ring-2 focus:ring-primary">
-          RESERVAR MI AVANZADO
-        </button>
-      </article>
-
-      <!-- ===== PLAN PREMIUM ===== -->
-      <article class="plan-card glass p-6 sm:p-8 md:p-12 rounded-3xl border border-secondary/50 hover:border-secondary transition text-center flex flex-col">
-        <h3 class="text-3xl sm:text-4xl font-black mb-3 sm:mb-4">Premium</h3>
-        <div id="price-premium" class="text-4xl sm:text-6xl font-black text-secondary mb-6 sm:mb-8 price-badge text-shadow">$180.000</div>
-        
-        <ul class="text-left space-y-3 sm:space-y-5 text-gray-300 text-base sm:text-lg mb-6 sm:mb-8 flex-grow">
-          <li class="leading-relaxed flex items-start gap-3">
-            <span class="text-secondary mt-1">✓</span>
-            <span>Todo lo del Avanzado</span>
-          </li>
-          <li class="leading-relaxed flex items-start gap-3">
-            <span class="text-secondary mt-1">✓</span>
-            <span>Web completa full custom</span>
-          </li>
-          <li class="leading-relaxed flex items-start gap-3">
-            <span class="text-secondary mt-1">✓</span>
-            <span>SEO técnico avanzado</span>
-          </li>
-          <li class="leading-relaxed flex items-start gap-3">
-            <span class="text-secondary mt-1">✓</span>
-            <span>Mantenimiento mensual</span>
-          </li>
-          <li class="leading-relaxed flex items-start gap-3">
-            <span class="text-secondary mt-1">✓</span>
-            <span>Estrategia 1 a 1</span>
-          </li>
-          <li class="leading-relaxed flex items-start gap-3">
-            <span class="text-secondary mt-1">✓</span>
-            <span>Entrega en 24HS</span>
-          </li>
-        </ul>
-
-        <!-- MICRO TARJETA MANTENIMIENTO MENSUAL -->
-        <div class="mb-6 sm:mb-8 p-4 bg-gradient-to-r from-secondary/20 to-pink-500/20 border-2 border-secondary/50 rounded-2xl">
-          <p class="text-sm text-gray-300 mb-1">Mantenimiento Mensual</p>
-          <p id="price-mantenimiento-premium" class="text-2xl sm:text-3xl font-black text-secondary">$20 USD<span class="text-sm text-gray-400 font-normal">/mes</span></p>
-        </div>
-        
-        <button onclick="abrirModal('Premium')" class="w-full py-4 sm:py-6 bg-gradient-to-r from-secondary to-pink-500 text-black font-black text-lg sm:text-xl rounded-2xl hover:scale-105 transition mt-auto btn-glow focus:outline-none focus:ring-2 focus:ring-secondary">
-          DOMINAR MI MERCADO
-        </button>
-      </article>
-    </div>
-    
-    <!-- Nota de precios -->
-    <p class="text-center text-gray-500 text-sm mt-12 max-w-2xl mx-auto">
-      💡 <strong>Nota:</strong> Los precios en USD para Latinoamérica se pagan vía transferencia internacional, PayPal o criptomonedas. 
-      Argentina: precios en pesos con opción de crédito para plan Básico.
-    </p>
-  </section>
-
-  <!-- 🎨 SECCIÓN: TRABAJOS REALIZADOS -->
-  <section class="py-20 sm:py-32 px-4 sm:px-6 max-w-7xl mx-auto">
-    <h2 class="text-4xl sm:text-6xl md:text-8xl font-black text-center mb-12 sm:mb-20 px-2 gradient-text">TRABAJOS REALIZADOS</h2>
-    
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 md:gap-12">
-      
-      <!-- PROYECTO 1: MECANICA LEON -->
-      <a href="https://nexoar-art.github.io/MECANICA-LEON/" target="_blank" rel="noopener noreferrer" 
-         class="plan-card glass p-6 sm:p-8 md:p-12 rounded-3xl border border-white/10 hover:border-primary/50 transition text-center flex flex-col group">
-        <div class="w-full aspect-video mb-6 rounded-xl overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-          <span class="text-4xl">🔧</span>
-        </div>
-        <h3 class="text-2xl sm:text-3xl font-black mb-4 group-hover:text-primary transition">MECANICA LEON</h3>
-        <p class="text-gray-300 text-base sm:text-lg mb-6 flex-grow">Landing page para taller mecánico • Diseño responsive • Captura de leads</p>
-        <span class="inline-block py-3 px-6 bg-gradient-to-r from-primary to-cyan-400 text-black font-black rounded-2xl group-hover:scale-105 transition">
-          VER PROYECTO →
-        </span>
-      </a>
-
-      <!-- PROYECTO 2: PEKA AUTOPARTS -->
-      <a href="https://nexoar-art.github.io/PEKA-AUTOPART/" target="_blank" rel="noopener noreferrer" 
-         class="plan-card glass p-6 sm:p-8 md:p-12 rounded-3xl border border-white/10 hover:border-primary/50 transition text-center flex flex-col group">
-        <div class="w-full aspect-video mb-6 rounded-xl overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-          <span class="text-4xl">🚗</span>
-        </div>
-        <h3 class="text-2xl sm:text-3xl font-black mb-4 group-hover:text-primary transition">PEKA AUTOPARTS</h3>
-        <p class="text-gray-300 text-base sm:text-lg mb-6 flex-grow">E-commerce estático para autopartes • Catálogo interactivo • Optimizado para móviles</p>
-        <span class="inline-block py-3 px-6 bg-gradient-to-r from-primary to-cyan-400 text-black font-black rounded-2xl group-hover:scale-105 transition">
-          VER PROYECTO →
-        </span>
-      </a>
-
-      <!-- PROYECTO 3: ARGENTPLAY -->
-      <a href="https://nexoar-art.github.io/ArgenPlay/" target="_blank" rel="noopener noreferrer" 
-         class="plan-card glass p-6 sm:p-8 md:p-12 rounded-3xl border border-white/10 hover:border-primary/50 transition text-center flex flex-col group">
-        <div class="w-full aspect-video mb-6 rounded-xl overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-          <span class="text-4xl">🎮</span>
-        </div>
-        <h3 class="text-2xl sm:text-3xl font-black mb-4 group-hover:text-primary transition">ARGENTPLAY</h3>
-        <p class="text-gray-300 text-base sm:text-lg mb-6 flex-grow">Plataforma de gaming • Animaciones premium • Experiencia inmersiva</p>
-        <span class="inline-block py-3 px-6 bg-gradient-to-r from-primary to-cyan-400 text-black font-black rounded-2xl group-hover:scale-105 transition">
-          VER PROYECTO →
-        </span>
-      </a>
-
-      <!-- PROYECTO 4: AUXILIO DE CAMIONES DOLORES SORIANO -->
-      <a href="https://nexoar-art.github.io/AXILIO-DE-CAMIONES-DOLORES-SORIANO/" target="_blank" rel="noopener noreferrer" 
-         class="plan-card glass p-6 sm:p-8 md:p-12 rounded-3xl border border-white/10 hover:border-primary/50 transition text-center flex flex-col group">
-        <div class="w-full aspect-video mb-6 rounded-xl overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-          <span class="text-4xl">🚛</span>
-        </div>
-        <h3 class="text-2xl sm:text-3xl font-black mb-4 group-hover:text-primary transition">AUXILIO DE CAMIONES DOLORES SORIANO</h3>
-        <p class="text-gray-300 text-base sm:text-lg mb-6 flex-grow">Servicio de auxilio vial • Diseño profesional • Captura de clientes 24/7</p>
-        <span class="inline-block py-3 px-6 bg-gradient-to-r from-primary to-cyan-400 text-black font-black rounded-2xl group-hover:scale-105 transition">
-          VER PROYECTO →
-        </span>
-      </a>
-    </div>
-  </section>
-
-  <!-- 🚀 CTA FINAL -->
-  <section class="py-16 sm:py-24 px-4 sm:px-6 text-center">
-    <div class="max-w-4xl mx-auto">
-      <h3 class="text-3xl sm:text-5xl font-black mb-6 sm:mb-8 gradient-text">¿Listo para que tu landing facture sola?</h3>
-      <p class="text-lg sm:text-xl text-gray-300 mb-8 sm:mb-10">No esperes más. Tu competencia ya está convirtiendo visitantes en clientes.</p>
-      <button onclick="abrirModal('Avanzado')" class="px-10 sm:px-20 py-6 sm:py-8 bg-gradient-to-r from-primary to-cyan-400 text-black font-black text-xl sm:text-2xl rounded-3xl hover:scale-105 transform transition shadow-2xl w-full sm:w-auto animate-pulseBtn btn-glow focus:outline-none focus:ring-2 focus:ring-primary">
-        EMPEZAR YA →
-      </button>
-      <p class="text-sm text-gray-500 mt-4">Sin compromiso • Respuesta en minutos • Pago seguro</p>
-    </div>
-  </section>
-
-  <!-- 💳 MÉTODOS DE PAGO SEGUROS -->
-  <section class="py-12 px-4 sm:px-6 border-t border-white/10 bg-gradient-to-b from-black/50 to-transparent">
-    <div class="max-w-5xl mx-auto">
-      <p class="text-center text-gray-400 text-sm mb-8 font-medium tracking-wide">
-        🔒 PAGOS 100% SEGUROS Y ENCRIPTADOS
-      </p>
-      <div class="flex flex-wrap justify-center items-center gap-8 sm:gap-16">
-        <!-- Mercado Pago -->
-        <div class="flex flex-col items-center gap-3 group cursor-pointer">
-          <div class="payment-card w-40 h-16 bg-white rounded-xl flex items-center justify-center p-4 shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform duration-300 relative overflow-hidden">
-            <img src="https://http2.mlstatic.com/frontend-assets/ui-navigation/5.19.1/mercadolibre/logo__small.png" 
-                 alt="Mercado Pago" 
-                 class="h-full object-contain transition-opacity duration-300"
-                 onerror="this.parentElement.innerHTML='<span class=\'text-blue-600 font-black text-xl\'>MercadoPago</span>'">
-            <span class="hover-text">MERCADO PAGO</span>
-          </div>
-          <span class="text-xs text-gray-500">Argentina</span>
-        </div>
-
-        <!-- PayPal -->
-        <div class="flex flex-col items-center gap-3 group cursor-pointer">
-          <div class="payment-card w-40 h-16 bg-white rounded-xl flex items-center justify-center p-4 shadow-lg shadow-blue-600/20 group-hover:scale-110 transition-transform duration-300 relative overflow-hidden">
-            <img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_111x69.jpg" 
-                 alt="PayPal" 
-                 class="h-full object-contain transition-opacity duration-300"
-                 onerror="this.parentElement.innerHTML='<span class=\'text-blue-700 font-black text-xl\'>PayPal</span>'">
-            <span class="hover-text">PAYPAL</span>
-          </div>
-          <span class="text-xs text-gray-500">Internacional</span>
-        </div>
-
-        <!-- Global66 -->
-        <div class="flex flex-col items-center gap-3 group cursor-pointer">
-          <div class="payment-card w-40 h-16 bg-white rounded-xl flex items-center justify-center p-4 shadow-lg shadow-purple-500/20 group-hover:scale-110 transition-transform duration-300 relative overflow-hidden">
-            <img src="GLOBAL66.png" 
-                 alt="Global66" 
-                 class="h-full object-contain transition-opacity duration-300"
-                 onerror="this.parentElement.innerHTML='<span class=\'text-purple-600 font-black text-xl\'>Global66</span>'">
-            <span class="hover-text">GLOBAL66</span>
-          </div>
-          <span class="text-xs text-gray-500">Latam</span>
-        </div>
-      </div>
-      
-      <div class="mt-8 text-center">
-        <p class="text-xs text-gray-500 flex items-center justify-center gap-2 flex-wrap">
-          <span>✓</span>
-          <span>Transferencias bancarias</span>
-          <span class="mx-2">•</span>
-          <span>Criptomonedas (USDT/BTC)</span>
-          <span class="mx-2">•</span>
-          <span>Tarjetas de crédito/débito</span>
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- 📞 BOTONES FLOTANTES DE CONTACTO -->
-  
-  <!-- LinkedIn - Lado derecho (abajo) -->
-  <a href="https://www.linkedin.com/in/nexo-art-591a64389/" target="_blank" rel="noopener noreferrer"
-     class="fixed bottom-6 right-6 z-50 flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-[#0077B5] hover:bg-[#005885] rounded-full shadow-2xl shadow-[#0077B5]/40 transition-all duration-300 hover:scale-110 group"
-     aria-label="Contáctanos por LinkedIn" title="Contáctanos por LinkedIn">
-    <svg class="w-7 h-7 sm:w-8 sm:h-8 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-    </svg>
-    <span class="absolute -top-10 right-0 bg-black/90 text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none border border-white/20">
-      LinkedIn
-    </span>
-  </a>
-
-  <!-- WhatsApp Principal: 3489686939 - Lado derecho (arriba) -->
-  <a href="https://api.whatsapp.com/send?phone=543489686939&text=Hola%20NEXO-Art!%20Quiero%20más%20información%20sobre%20sus%20servicios." target="_blank" rel="noopener noreferrer"
-     class="fixed bottom-24 right-6 z-50 flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-[#25D366] hover:bg-[#128C7E] rounded-full shadow-2xl shadow-[#25D366]/40 transition-all duration-300 hover:scale-110 group"
-     aria-label="WhatsApp: 3489686939" title="WhatsApp: 3489686939">
-    <svg class="w-7 h-7 sm:w-8 sm:h-8 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
-    </svg>
-    <span class="absolute -top-10 right-0 bg-black/90 text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none border border-white/20">
-      WhatsApp: 3489686939
-    </span>
-  </a>
-
-  <!-- Telegram: +543489686939 - Lado izquierdo (abajo) -->
-  <a href="https://t.me/+543489686939" target="_blank" rel="noopener noreferrer"
-     class="fixed bottom-6 left-6 z-50 flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-[#0088cc] hover:bg-[#006699] rounded-full shadow-2xl shadow-[#0088cc]/40 transition-all duration-300 hover:scale-110 group"
-     aria-label="Telegram: +543489686939" title="Telegram: +543489686939">
-    <svg class="w-7 h-7 sm:w-8 sm:h-8 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
-    </svg>
-    <span class="absolute -top-10 left-0 bg-black/90 text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none border border-white/20">
-      Telegram: +543489686939
-    </span>
-  </a>
-
-  <!-- WhatsApp EMERGENCIA 3834689137 - Lado izquierdo (arriba) -->
-  <a href="https://api.whatsapp.com/send?phone=543834689137&text=🚨%20EMERGENCIA%20NEXO-Art:%20Necesito%20asistencia%20inmediata.%20Mi%20nombre%20es:" target="_blank" rel="noopener noreferrer"
-     class="fixed bottom-24 left-6 z-50 flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-[#25D366] hover:bg-[#128C7E] rounded-xl sm:rounded-2xl shadow-2xl shadow-[#25D366]/40 transition-all duration-300 hover:scale-110 group border-2 border-white/30"
-     aria-label="WhatsApp EMERGENCIA: 3834689137" title="WhatsApp EMERGENCIA: 3834689137">
-    <div class="relative w-full h-full flex items-center justify-center">
-      <svg class="w-8 h-8 sm:w-9 sm:h-9 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
-      </svg>
-      <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-black px-1.5 py-0.5 rounded-sm border border-white/50 animate-pulse">!</span>
-    </div>
-    <span class="absolute -top-12 left-1/2 -translate-x-1/2 bg-red-600/95 text-white text-xs font-bold px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none border border-white/30 shadow-lg">
-      🚨 EMERGENCIA: 3834689137
-    </span>
-  </a>
-
-  <!-- ⚙️ SCRIPT COMPLETO CON TODA LA LÓGICA -->
-  <script>
-    // ============================================
-    // 🌍 CONFIGURACIÓN DE PRECIOS POR PAÍS
-    // ============================================
-    const preciosPorPais = {
-      argentina: {
-        basico: { precio: "$88.000", credito: "2 cuotas de $48.000", mostrarCredito: true, mostrarDescuento: true },
-        avanzado: { precio: "$160.000", mantenimiento: "$20 USD" },
-        premium: { precio: "$180.000", mantenimiento: "$20 USD" }
-      },
-      bolivia: {
-        basico: { precio: "$70 USD", credito: null, mostrarCredito: false, mostrarDescuento: false },
-        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
-        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
-      },
-      brasil: {
-        basico: { precio: "$70 USD", credito: null, mostrarCredito: false, mostrarDescuento: false },
-        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
-        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
-      },
-      chile: {
-        basico: { precio: "$70 USD", credito: null, mostrarCredito: false, mostrarDescuento: false },
-        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
-        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
-      },
-      colombia: {
-        basico: { precio: "$70 USD", credito: null, mostrarCredito: false, mostrarDescuento: false },
-        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
-        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
-      },
-      costarica: {
-        basico: { precio: "$70 USD", credito: null, mostrarCredito: false, mostrarDescuento: false },
-        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
-        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
-      },
-      cuba: {
-        basico: { precio: "$70 USD", credito: null, mostrarCredito: false, mostrarDescuento: false },
-        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
-        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
-      },
-      ecuador: {
-        basico: { precio: "$70 USD", credito: null, mostrarCredito: false, mostrarDescuento: false },
-        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
-        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
-      },
-      elsalvador: {
-        basico: { precio: "$70 USD", credito: null, mostrarCredito: false, mostrarDescuento: false },
-        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
-        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
-      },
-      guatemala: {
-        basico: { precio: "$70 USD", credito: null, mostrarCredito: false, mostrarDescuento: false },
-        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
-        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
-      },
-      honduras: {
-        basico: { precio: "$70 USD", credito: null, mostrarCredito: false, mostrarDescuento: false },
-        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
-        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
-      },
-      mexico: {
-        basico: { precio: "$70 USD", credito: null, mostrarCredito: false, mostrarDescuento: false },
-        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
-        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
-      },
-      nicaragua: {
-        basico: { precio: "$70 USD", credito: null, mostrarCredito: false, mostrarDescuento: false },
-        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
-        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
-      },
-      panama: {
-        basico: { precio: "$70 USD", credito: null, mostrarCredito: false, mostrarDescuento: false },
-        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
-        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
-      },
-      paraguay: {
-        basico: { precio: "$70 USD", credito: null, mostrarCredito: false, mostrarDescuento: false },
-        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
-        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
-      },
-      peru: {
-        basico: { precio: "$70 USD", credito: null, mostrarCredito: false, mostrarDescuento: false },
-        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
-        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
-      },
-      rd: {
-        basico: { precio: "$70 USD", credito: null, mostrarCredito: false, mostrarDescuento: false },
-        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
-        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
-      },
-      uruguay: {
-        basico: { precio: "$70 USD", credito: null, mostrarCredito: false, mostrarDescuento: false },
-        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
-        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
-      },
-      venezuela: {
-        basico: { precio: "$70 USD", credito: null, mostrarCredito: false, mostrarDescuento: false },
-        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
-        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
-      }
-    };
-
-    let paisActual = 'argentina';
-
-    // ============================================
-    // 🔄 FUNCIÓN: CAMBIAR PAÍS Y ACTUALIZAR UI
-    // ============================================
-    function cambiarPais() {
-      const selector = document.getElementById('countrySelector');
-      const nuevoPais = selector.value;
-      
-      // Evitar recarga innecesaria
-      if (nuevoPais === paisActual) return;
-      
-      paisActual = nuevoPais;
-      const precios = preciosPorPais[paisActual];
-      
-      // Animación y actualización de precios
-      ['basico', 'avanzado', 'premium'].forEach(plan => {
-        const el = document.getElementById(`price-${plan}`);
-        if (el) {
-          el.classList.add('price-change');
-          setTimeout(() => {
-            el.textContent = precios[plan].precio;
-            el.classList.remove('price-change');
-          }, 200);
-        }
-      });
-      
-      // Actualizar precios de mantenimiento
-      const mantAvanzado = document.getElementById('price-mantenimiento-avanzado');
-      const mantPremium = document.getElementById('price-mantenimiento-premium');
-      if (mantAvanzado) {
-        mantAvanzado.innerHTML = `${precios.avanzado.mantenimiento}<span class="text-sm text-gray-400 font-normal">/mes</span>`;
-      }
-      if (mantPremium) {
-        mantPremium.innerHTML = `${precios.premium.mantenimiento}<span class="text-sm text-gray-400 font-normal">/mes</span>`;
-      }
-      
-      // Mostrar/ocultar botón de crédito para plan Básico
-      const btnCredito = document.getElementById('btn-credito-basico');
-      if (btnCredito) {
-        if (precios.basico.mostrarCredito) {
-          btnCredito.style.display = 'flex';
-          btnCredito.innerHTML = `<span>💳</span> Pagar en ${precios.basico.credito}`;
-        } else {
-          btnCredito.style.display = 'none';
-        }
-      }
-      
-      // 🏷️ MOSTRAR/OCULTAR BADGE "10% OFF"
-      const badge10off = document.getElementById('badge-10off');
-      if (badge10off) {
-        if (precios.basico.mostrarDescuento) {
-          badge10off.style.display = 'block';
-        } else {
-          badge10off.style.display = 'none';
-        }
-      }
-      
-      // Actualizar campo oculto del modal
-      document.getElementById('modalPais').value = paisActual;
-      
-      // Guardar preferencia en localStorage
-      try {
-        localStorage.setItem('nexoar-pais', paisActual);
-      } catch(e) {
-        console.log('localStorage no disponible');
-      }
-      
-      // Feedback visual al usuario
-      mostrarNotificacion(`🌎 Precios actualizados para ${selector.options[selector.selectedIndex].text}`);
-    }
-
-    // ============================================
-    // 💬 FUNCIÓN: ABRIR MODAL DE WHATSAPP
-    // ============================================
-    function abrirModal(plan) {
-      document.getElementById('modalPlan').value = plan;
-      document.getElementById('modalPais').value = paisActual;
-      document.getElementById('whatsappModal').classList.remove('hidden');
-      document.getElementById('modalNombre').focus();
-      
-      // Prevenir scroll del body
-      document.body.style.overflow = 'hidden';
-    }
-
-    // ============================================
-    // ❌ FUNCIÓN: CERRAR MODAL
-    // ============================================
-    function cerrarModal() {
-      document.getElementById('whatsappModal').classList.add('hidden');
-      document.body.style.overflow = '';
-      
-      // Limpiar formulario
-      document.getElementById('whatsappForm').reset();
-    }
-
-    // ============================================
-    // 📤 FUNCIÓN: ENVIAR A WHATSAPP
-    // ============================================
-    function enviarWhatsApp() {
-      const nombre = document.getElementById('modalNombre').value.trim();
-      const email = document.getElementById('modalEmail').value.trim();
-      const plan = document.getElementById('modalPlan').value;
-      const pais = document.getElementById('modalPais').value || paisActual;
-
-      // Validación
-      if (!nombre) {
-        alert("⚠️ Por favor, ingresá tu nombre para continuar");
-        document.getElementById('modalNombre').focus();
-        return;
-      }
-
-      // Mensajes personalizados por plan y país
-      const precios = preciosPorPais[pais];
-      const mensajes = {
-        "Básico": `🚀 *Hola NEXO-Art!* Me llamo *${nombre}* y quiero el plan *BÁSICO* por *${precios.basico.precio}*. ¡Empecemos ya!`,
-        "Avanzado": `🚀 *Hola NEXO-Art!* Soy *${nombre}* y quiero el plan *AVANZADO EMPRESA* por *${precios.avanzado.precio}* + mantenimiento mensual *${precios.avanzado.mantenimiento}*. ¡Es el más vendido y necesito que mi landing facture sola!`,
-        "Premium": `🚀 *Hola NEXO-Art!* Mi nombre es *${nombre}* y quiero el plan *PREMIUM* por *${precios.premium.precio}* + mantenimiento mensual *${precios.premium.mantenimiento}*. ¡Quiero dominar mi mercado con una web full custom!`
-      };
-
-      let mensaje = mensajes[plan] || mensajes["Avanzado"];
-      if (email) mensaje += `\n📧 Email: ${email}`;
-      mensaje += `\n🌍 País: ${pais.charAt(0).toUpperCase() + pais.slice(1)}`;
-
-      const textoFinal = encodeURIComponent(mensaje);
-      const whatsappUrl = `https://api.whatsapp.com/send?phone=+543489686939&text=${textoFinal}`;
-      
-      // Abrir WhatsApp en nueva pestaña
-      window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
-      
-      // Cerrar modal y feedback
-      cerrarModal();
-      mostrarNotificacion('✅ ¡Mensaje enviado! Te contactaremos en breve');
-      
-      // Opcional: Analytics o CRM
-      // registrarConversion({ plan, pais, nombre, email });
-    }
-
-    // ============================================
-    // 💳 FUNCIÓN: MOSTRAR INFO DE CRÉDITO
-    // ============================================
-    function mostrarInfoCredito() {
-      const precios = preciosPorPais[paisActual].basico;
-      
-      if (!precios.mostrarCredito) {
-        alert("💳 *Opción de crédito disponible solo para Argentina*\n\nPara Latinoamérica, el pago se realiza en USD vía:\n• Transferencia internacional\n• PayPal\n• Criptomonedas (USDT, BTC)\n\n¿Tenés consultas? ¡Escribinos por WhatsApp! 🚀");
-        return;
-      }
-      
-      alert(`💳 *OPCIÓN DE CRÉDITO - PLAN BÁSICO*\n\n✅ Adquirí tu landing por $88.000 en:\n\n• 2 cuotas fijas de $48.000 pesos\n• Sin interés adicional\n• Aprobación inmediata\n\n🔹 Primera cuota: al confirmar el proyecto\n🔹 Segunda cuota: a los 15 días\n\n¡Empezá hoy y pagá cómodo! 🚀`);
-    }
-
-    // ============================================
-    // 🔔 FUNCIÓN: MOSTRAR NOTIFICACIÓN TEMPORAL
-    // ============================================
-    function mostrarNotificacion(mensaje) {
-      // Crear elemento de notificación
-      const notif = document.createElement('div');
-      notif.className = 'fixed bottom-24 left-1/2 -translate-x-1/2 z-50 px-6 py-4 glass border border-accent/50 rounded-2xl text-accent font-medium shadow-2xl animate-slideDown';
-      notif.style.maxWidth = '90%';
-      notif.style.textAlign = 'center';
-      notif.innerHTML = mensaje;
-      
-      document.body.appendChild(notif);
-      
-      // Eliminar después de 4 segundos
-      setTimeout(() => {
-        notif.style.opacity = '0';
-        notif.style.transform = 'translateY(-20px)';
-        notif.style.transition = 'all 0.3s ease';
-        setTimeout(() => notif.remove(), 300);
-      }, 4000);
-    }
-
-    // ============================================
-    // 🎨 INICIALIZAR PARTÍCULAS
-    // ============================================
-    function inicializarParticulas() {
-      if (typeof particlesJS !== 'undefined') {
-        particlesJS("particles-js", {
-          particles: {
-            number: { value: 80, density: { enable: true, value_area: 800 } },
-            color: { value: "#00F0FF" },
-            shape: { type: "circle" },
-            opacity: { value: 0.4, random: true },
-            size: { value: 3, random: true },
-            line_linked: {
-              enable: true,
-              distance: 150,
-              color: "#00F0FF",
-              opacity: 0.2,
-              width: 1
-            },
-            move: {
-              enable: true,
-              speed: 2,
-              direction: "none",
-              random: true,
-              straight: false,
-              out_mode: "out",
-              bounce: false
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                systemInstruction: { parts: [{ text: systemContext }] }
+            };
+            
+            let delay = 1000;
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                    if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
+                    const data = await res.json();
+                    return data.candidates[0].content.parts[0].text;
+                } catch (e) {
+                    if (i === retries - 1) throw e;
+                    await new Promise(r => setTimeout(r, delay));
+                    delay *= 2; 
+                }
             }
-          },
-          interactivity: {
-            detect_on: "canvas",
-            events: {
-              onhover: { enable: true, mode: "repulse" },
-              onclick: { enable: true, mode: "push" },
-              resize: true
+        }
+
+        // ----------------------------------------------------
+        // ESTADO GLOBAL Y CONFIGURACIÓN MEMORIA
+        // ----------------------------------------------------
+        const MAX_RECORDS = 2000;
+        const STORAGE_KEY = 'nexo_art_db';
+        let db = []; 
+        let selectedRows = new Set(); 
+        let filtroActualID = "";
+        let filtroActualFecha = "";
+
+        let chartTendenciaObj = null;
+        let chartScatterObj = null;
+        let chartKpisObj = null;
+
+        const advMetricsConfig = [
+            { id: 'desgaste', name: 'Desgaste/km', min: 20, optMin: 40, optMax: 80, max: 100, unit: '' },
+            { id: 'termovib', name: 'Ciclo Termovib', min: 5000, optMin: 10000, optMax: 50000, max: 80000, unit: '' },
+            { id: 'inactividad', name: 'Inactividad', min: 0, optMin: 20, optMax: 40, max: 60, unit: '%' },
+            { id: 'eficiencia', name: 'Eficiencia Térmica', min: 0.2, optMin: 0.3, optMax: 0.45, max: 0.5, unit: '' },
+            { id: 'presion', name: 'Presión Promedio', min: 28, optMin: 30, optMax: 35, max: 38, unit: ' PSI' },
+            { id: 'balance', name: 'Balance Presión', min: 0, optMin: 0, optMax: 1, max: 2, unit: '' },
+            { id: 'estres', name: 'Estrés Mecánico', min: 0, optMin: 30, optMax: 70, max: 100, unit: '' },
+            { id: 'dispOp', name: 'Disp. Operativa', min: 70, optMin: 85, optMax: 95, max: 100, unit: '%' },
+        ];
+
+        // Definición Exhaustiva de Sensores y Anomalías
+        const defSensores = [
+            { id: 'O2', label: 'Sensor de Oxígeno (O2)', falla: 'Provoca mezcla rica o pobre y alto consumo de combustible', fuente: '(1,2)' },
+            { id: 'MAP', label: 'Sensor MAP (Presión Múltiple)', falla: 'Genera pérdida de potencia y altera la inyección de combustible', fuente: '(1,2)' },
+            { id: 'CP', label: 'Sensor CP (Cigüeñal)', falla: 'Es vital para el arranque; si falla, el motor puede no encender', fuente: '(1)' },
+            { id: 'ST', label: 'Sensor ST (Temperatura/ECT)', falla: 'Lecturas o datos erróneos que afectan el arranque y el consumo', fuente: '(1,2)' },
+            { id: 'MAV', label: 'Sensor MAV (MAF/Flujo de aire)', falla: 'Puede causar un ralentí irregular', fuente: '(1)' },
+            { id: 'Detonacion', label: 'Sensor de Detonación', falla: 'Detecta cascabeleo o golpeteo anormal y retrasa el avance', fuente: '(1,2)' },
+            { id: 'TPS', label: 'Sensor TPS (Acelerador)', falla: 'Altera la aceleración y puede provocar tirones', fuente: '(1,2)' },
+            { id: 'CMP', label: 'Sensor CMP (Árbol de levas)', falla: 'Una señal incorrecta genera desajustes en el motor', fuente: '(2)' },
+            { id: 'PresionComb', label: 'Sensor de Presión de Combustible', falla: 'Activa el Check Engine si la presión del riel está fuera de rango', fuente: '(2)' },
+            { id: 'PresionTurbo', label: 'Sensor de Presión del Turbo', falla: 'Su falla hace que el motor pierda fuerza', fuente: '(1)' },
+            { id: 'Velocidad', label: 'Sensor de Velocidad', falla: 'Vuelve errático el velocímetro', fuente: '(1)' },
+            { id: 'PresionAceite', label: 'Sensor de Presión de Aceite', falla: 'Enciende alertas específicas en el tablero', fuente: '(1)' },
+            { id: 'CheckEngine', label: 'Check Engine', falla: 'El motor o un sensor crítico reporta un problema', fuente: '(2,3)' },
+            { id: 'EPC', label: 'EPC', falla: 'Falla en el acelerador electrónico o su sistema de control', fuente: '(3)' },
+            { id: 'ABS', label: 'ABS', falla: 'Avería en el sistema de frenos antibloqueo', fuente: '(3)' },
+            { id: 'ControlTraccion', label: 'Control de Tracción', falla: 'El sistema está fallando o se ha desactivado', fuente: '(3)' },
+            { id: 'Airbag', label: 'Airbag', falla: 'Advierte una falla en el sistema de seguridad', fuente: '(3)' },
+            { id: 'Direccion', label: 'Dirección Asistida', falla: 'Problema en la asistencia del volante; este puede ponerse duro', fuente: '(3)' }
+        ];
+
+        const vtvItems = [
+            {id: 'v_luces', label: 'Luces y Señalización'},
+            {id: 'v_frenos', label: 'Sistema de Frenos y ABS'},
+            {id: 'v_neumaticos', label: 'Neumáticos y Llantas'},
+            {id: 'v_direccion', label: 'Dirección y Suspensión'},
+            {id: 'v_escape', label: 'Gases de Escape'},
+            {id: 'v_doc', label: 'Documentación / Seguro'}
+        ];
+
+        // ----------------------------------------------------
+        // MANEJO DE MEMORIA LOCAL (LOCALSTORAGE CELULAR/PC)
+        // ----------------------------------------------------
+        function guardarEnMemoria() {
+            if (db.length > MAX_RECORDS) {
+                db = db.slice(db.length - MAX_RECORDS);
             }
-          },
-          retina_detect: true
-        });
-      }
-    }
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+        }
 
-    // ============================================
-    // 🚀 INICIALIZACIÓN AL CARGAR LA PÁGINA
-    // ============================================
-    document.addEventListener('DOMContentLoaded', function() {
-      // 1. Inicializar partículas
-      inicializarParticulas();
-      
-      // 2. Recuperar país guardado
-      try {
-        const paisGuardado = localStorage.getItem('nexoar-pais');
-        if (paisGuardado && preciosPorPais[paisGuardado]) {
-          const selector = document.getElementById('countrySelector');
-          selector.value = paisGuardado;
-          paisActual = paisGuardado;
-          cambiarPais(); // Aplicar precios sin animación inicial
+        function cargarDeMemoria() {
+            const data = localStorage.getItem(STORAGE_KEY);
+            if (data) {
+                try {
+                    db = JSON.parse(data);
+                } catch (e) {
+                    console.error("Error parseando localStorage", e);
+                    db = [];
+                }
+            } else {
+                db = [];
+            }
         }
-      } catch(e) {
-        console.log('localStorage no disponible');
-      }
-      
-      // 3. Cerrar modal con tecla ESC
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-          cerrarModal();
-        }
-      });
-      
-      // 4. Cerrar modal al hacer clic fuera
-      document.getElementById('whatsappModal').addEventListener('click', function(e) {
-        if (e.target === this) {
-          cerrarModal();
-        }
-      });
-      
-      // 5. Smooth scroll para enlaces internos
-      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-          e.preventDefault();
-          const target = document.querySelector(this.getAttribute('href'));
-          if (target) {
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-        });
-      });
-      
-      // 6. Lazy load para iframes
-      if ('loading' in HTMLIFrameElement.prototype) {
-        document.querySelectorAll('iframe[loading="lazy"]').forEach(iframe => {
-          iframe.src = iframe.src;
-        });
-      }
-    });
 
-    // ============================================
-    // 📊 FUNCIÓN OPCIONAL: REGISTRAR CONVERSIÓN
-    // ============================================
-    // function registrarConversion(datos) {
-    //   // Ejemplo: enviar a Google Analytics, Meta Pixel, o tu CRM
-    //   if (typeof gtag !== 'undefined') {
-    //     gtag('event', 'conversion', {
-    //       'send_to': 'AW-XXXXXXXXX/XXXXXXXXXXX',
-    //       'value': 1.0,
-    //       'currency': 'USD',
-    //       'transaction_id': `${datos.plan}_${datos.pais}_${Date.now()}`
-    //     });
-    //   }
-    //   
-    //   // Ejemplo: webhook a tu backend
-    //   // fetch('https://tu-api.com/webhook/conversion', {
-    //   //   method: 'POST',
-    //   //   headers: { 'Content-Type': 'application/json' },
-    //   //   body: JSON.stringify(datos)
-    //   // });
-    // }
-  </script>
+        // ----------------------------------------------------
+        // MODAL DE DETALLE DE FILA
+        // ----------------------------------------------------
+        function verDetalle(idx) {
+            const r = db[idx];
+            if(!r) return;
+
+            const content = `
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-slate-900/50 p-2 rounded border border-cyan-500/20"><span class="text-cyan-500 text-[10px] uppercase block font-bold">Unidad</span> <span class="font-bold text-white text-lg">${r.unidad}</span></div>
+                    <div class="bg-slate-900/50 p-2 rounded border border-cyan-500/20"><span class="text-cyan-500 text-[10px] uppercase block font-bold">ID Registro</span> <span class="font-bold text-white">${r.id}</span></div>
+                    <div class="bg-slate-900/50 p-2 rounded border border-cyan-500/20"><span class="text-cyan-500 text-[10px] uppercase block font-bold">Fecha (Entrada)</span> <span class="text-slate-200">${r.fecha}</span></div>
+                    <div class="bg-slate-900/50 p-2 rounded border border-cyan-500/20"><span class="text-cyan-500 text-[10px] uppercase block font-bold">Motor / Año Fab.</span> <span class="text-slate-200">${r.motor} - Año ${r.anio}</span></div>
+                    <div class="bg-slate-900/50 p-2 rounded border border-cyan-500/20"><span class="text-cyan-500 text-[10px] uppercase block font-bold">Kilometraje</span> <span class="text-slate-200">${r.km.toLocaleString()} km</span></div>
+                    <div class="bg-slate-900/50 p-2 rounded border border-cyan-500/20"><span class="text-cyan-500 text-[10px] uppercase block font-bold">RPM</span> <span class="text-slate-200">${r.rpm}</span></div>
+                </div>
+
+                <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-4 mb-2">Lecturas y Diagnóstico</h4>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
+                    <div class="bg-emerald-900/20 p-2 rounded border border-emerald-500/30"><span class="text-emerald-500 text-[10px] uppercase block">Uptime</span> <span class="font-bold text-white">${r.up} h</span></div>
+                    <div class="bg-rose-900/20 p-2 rounded border border-rose-500/30"><span class="text-rose-500 text-[10px] uppercase block">Downtime</span> <span class="font-bold text-white">${r.down} h</span></div>
+                    <div class="bg-purple-900/20 p-2 rounded border border-purple-500/30"><span class="text-purple-400 text-[10px] uppercase block">Vibración</span> <span class="font-bold text-white">${r.vib}</span></div>
+                    <div class="bg-amber-900/20 p-2 rounded border border-amber-500/30"><span class="text-amber-400 text-[10px] uppercase block">Temperatura</span> <span class="font-bold text-white">${r.temp}°</span></div>
+                </div>
+
+                <div class="grid grid-cols-4 gap-2 text-center mt-2">
+                    <div class="bg-slate-900/30 p-2 rounded border border-slate-700"><span class="text-slate-400 text-[9px] uppercase block">PSI DI</span> <span class="text-white">${r.psi_di}</span></div>
+                    <div class="bg-slate-900/30 p-2 rounded border border-slate-700"><span class="text-slate-400 text-[9px] uppercase block">PSI DD</span> <span class="text-white">${r.psi_dd}</span></div>
+                    <div class="bg-slate-900/30 p-2 rounded border border-slate-700"><span class="text-slate-400 text-[9px] uppercase block">PSI TI</span> <span class="text-white">${r.psi_ti}</span></div>
+                    <div class="bg-slate-900/30 p-2 rounded border border-slate-700"><span class="text-slate-400 text-[9px] uppercase block">PSI TD</span> <span class="text-white">${r.psi_td}</span></div>
+                </div>
+
+                <div class="mt-4">
+                    <span class="text-cyan-500 text-[11px] uppercase font-bold tracking-wider block mb-2"><i class="fas fa-tools mr-1"></i> Detalle del Trabajo Realizado</span>
+                    <div class="bg-black/60 p-4 rounded-lg border border-cyan-500/40 text-sm text-slate-200 whitespace-pre-wrap leading-relaxed">${r.trabajo || '<span class="italic text-slate-500">Sin detalles registrados en la bitácora.</span>'}</div>
+                </div>
+            `;
+
+            document.getElementById('modal-detalle-content').innerHTML = content;
+            document.getElementById('modal-detalle').classList.remove('hidden');
+        }
+
+        function cerrarModalDetalle() {
+            document.getElementById('modal-detalle').classList.add('hidden');
+        }
+
+        // ----------------------------------------------------
+        // FUNCIONES DE INTERFAZ BÁSICA (CARTAS, SENSORES, VTV)
+        // ----------------------------------------------------
+        function initAdvCards() {
+            const container = document.getElementById('advCards');
+            let html = '';
+            advMetricsConfig.forEach(c => {
+                html += `
+                <div class="bg-slate-800/40 p-3 rounded-lg border border-cyan-500/10 hover:border-cyan-500/40 transition-all">
+                    <p class="text-[9px] text-slate-400 uppercase font-bold truncate" title="${c.name}">${c.name}</p>
+                    <p id="val_${c.id}" class="stat-value text-base text-white mt-1">Sin datos</p>
+                    <div class="prog-bar-bg"><div id="bar_${c.id}" class="prog-bar-fill bg-cyan-500" style="width: 0%"></div></div>
+                    <p class="text-[7px] text-slate-500 mt-1 flex justify-between">
+                        <span>Min:${c.min >= 1000 ? c.min/1000+'k' : c.min}</span>
+                        <span class="text-emerald-500">Opt:${c.optMin >= 1000 ? c.optMin/1000+'k' : c.optMin}-${c.optMax >= 1000 ? c.optMax/1000+'k' : c.optMax}</span>
+                        <span>Max:${c.max >= 1000 ? c.max/1000+'k' : c.max}</span>
+                    </p>
+                </div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function renderSensores() {
+            const container = document.getElementById('sensores-container');
+            let html = '';
+            defSensores.forEach(s => {
+                html += `<label class="flex items-start gap-2 cursor-pointer hover:bg-cyan-900/30 p-1.5 rounded transition-colors">
+                            <input type="checkbox" class="sensor-chk mt-1" value="${s.id}" onchange="actualizarDashboard()"> 
+                            <div><span class="font-bold text-cyan-400">${s.label}</span></div>
+                         </label>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function renderVTV() {
+            const container = document.getElementById('vtv-items-container');
+            let html = '';
+            vtvItems.forEach(item => {
+                html += `<label class="flex items-center gap-2 cursor-pointer hover:bg-cyan-900/30 p-1 rounded">
+                            <input type="checkbox" class="vtv-chk" value="${item.label}" onchange="updateVTVProgress()"> ${item.label}
+                         </label>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function updateVTVProgress() {
+            const chks = document.querySelectorAll('.vtv-chk');
+            const checked = document.querySelectorAll('.vtv-chk:checked').length;
+            const total = chks.length;
+            const pct = total === 0 ? 0 : Math.round((checked / total) * 100);
+
+            const circle = document.getElementById('vtv-progress-circle');
+            circle.setAttribute('stroke-dasharray', `${pct}, 100`);
+            
+            const pctEl = document.getElementById('vtv-pct');
+            pctEl.innerText = `${pct}%`;
+
+            const statusText = document.getElementById('vtv-status-text');
+            
+            circle.classList.remove('text-rose-400', 'text-amber-400', 'text-emerald-400');
+            pctEl.classList.remove('text-rose-400', 'text-amber-400', 'text-emerald-400');
+
+            if(pct === 100) {
+                statusText.innerText = 'Apto';
+                statusText.className = 'text-emerald-400 font-bold text-xs uppercase';
+                circle.classList.add('text-emerald-400');
+                pctEl.classList.add('text-emerald-400');
+            } else if(pct >= 50) {
+                statusText.innerText = 'En Proceso';
+                statusText.className = 'text-amber-400 font-bold text-xs uppercase';
+                circle.classList.add('text-amber-400');
+                pctEl.classList.add('text-amber-400');
+            } else {
+                statusText.innerText = 'Pendiente';
+                statusText.className = 'text-rose-400 font-bold text-xs uppercase';
+                circle.classList.add('text-rose-400');
+                pctEl.classList.add('text-rose-400');
+            }
+        }
+
+        function formatearFechaCorto(fechaStr) {
+            if (!fechaStr) return '';
+            const meses = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+            const partes = fechaStr.split('-');
+            if(partes.length === 3) {
+                return `${partes[2]} ${meses[parseInt(partes[1], 10) - 1]}`;
+            }
+            return fechaStr;
+        }
+
+        // ----------------------------------------------------
+        // INICIALIZACIÓN
+        // ----------------------------------------------------
+        window.onload = () => {
+            initAdvCards();
+            renderSensores();
+            renderVTV();
+            cargarDeMemoria();
+            document.getElementById('in_fecha').valueAsDate = new Date();
+            actualizarDashboard();
+        };
+
+        // ----------------------------------------------------
+        // LÓGICA DE DATOS
+        // ----------------------------------------------------
+        function procesarDatos(e) {
+            e.preventDefault();
+            
+            const record = {
+                fecha: document.getElementById('in_fecha').value,
+                unidad: document.getElementById('in_unidad').value.toUpperCase(),
+                id: document.getElementById('in_id').value.toUpperCase(),
+                motor: document.getElementById('in_motor').value,
+                anio: parseInt(document.getElementById('in_anio').value),
+                km: parseFloat(document.getElementById('in_km').value),
+                up: parseFloat(document.getElementById('in_up').value),
+                down: parseFloat(document.getElementById('in_down').value),
+                vib: parseFloat(document.getElementById('in_vib').value),
+                temp: parseFloat(document.getElementById('in_temp').value),
+                rpm: parseFloat(document.getElementById('in_rpm').value),
+                psi_di: parseFloat(document.getElementById('in_psi_di').value),
+                psi_dd: parseFloat(document.getElementById('in_psi_dd').value),
+                psi_ti: parseFloat(document.getElementById('in_psi_ti').value),
+                psi_td: parseFloat(document.getElementById('in_psi_td').value),
+                trabajo: document.getElementById('in_trabajo').value
+            };
+
+            db.push(record);
+            guardarEnMemoria();
+            e.target.reset(); 
+            document.getElementById('in_fecha').valueAsDate = new Date();
+            
+            selectedRows.clear(); 
+            actualizarDashboard();
+        }
+
+        function limpiarFiltros() {
+            if(confirm("⚠️ ¿Seguro que deseas borrar toda la base de datos (se perderá el histórico)?")) {
+                db = [];
+                guardarEnMemoria();
+                selectedRows.clear();
+                limpiarBusqueda();
+                actualizarDashboard();
+            }
+        }
+
+        function filtrarDataset() {
+            filtroActualID = document.getElementById('search_id').value.toUpperCase();
+            filtroActualFecha = document.getElementById('search_fecha').value;
+            selectedRows.clear(); 
+            actualizarDashboard();
+        }
+
+        function limpiarBusqueda() {
+            document.getElementById('search_id').value = "";
+            document.getElementById('search_fecha').value = "";
+            filtroActualID = "";
+            filtroActualFecha = "";
+            selectedRows.clear();
+            actualizarDashboard();
+        }
+
+        function obtenerDbFiltrada() {
+            return db.filter(r => {
+                const matchID = filtroActualID === "" || r.id.includes(filtroActualID) || r.unidad.includes(filtroActualID);
+                const matchFecha = filtroActualFecha === "" || r.fecha === filtroActualFecha;
+                return matchID && matchFecha;
+            });
+        }
+
+        function toggleRow(index) {
+            if(selectedRows.has(index)) selectedRows.delete(index);
+            else selectedRows.add(index);
+            actualizarDashboard();
+        }
+
+        function toggleAllRows(isChecked) {
+            const dbFiltradaMap = db.map((r, i) => ({...r, originalIdx: i}))
+                                    .filter(r => {
+                                        const matchID = filtroActualID === "" || r.id.includes(filtroActualID) || r.unidad.includes(filtroActualID);
+                                        const matchFecha = filtroActualFecha === "" || r.fecha === filtroActualFecha;
+                                        return matchID && matchFecha;
+                                    });
+
+            if(isChecked) {
+                dbFiltradaMap.forEach(r => selectedRows.add(r.originalIdx));
+            } else {
+                dbFiltradaMap.forEach(r => selectedRows.delete(r.originalIdx));
+            }
+            actualizarDashboard();
+        }
+
+        // ----------------------------------------------------
+        // ACTUALIZACIÓN GLOBAL
+        // ----------------------------------------------------
+        function actualizarDashboard() {
+            const dbFiltrada = obtenerDbFiltrada();
+            renderDatasetTable(dbFiltrada);
+            
+            const activeDb = selectedRows.size > 0 ? db.filter((_, i) => selectedRows.has(i)) : dbFiltrada;
+            
+            calcKPIsGenerales(activeDb);
+            
+            if(activeDb.length > 0) {
+                calcMetricasAvanzadas(activeDb[activeDb.length-1]); 
+                calcEstadisticasDescribe(activeDb);
+                calcMatrizCorrelacion(activeDb);
+                generarRecomendacionesLocales(activeDb);
+            } else {
+                limpiarPanelesAvanzados();
+            }
+            drawCharts(activeDb);
+        }
+
+        function limpiarPanelesAvanzados() {
+            document.getElementById('table-describe').innerHTML = '';
+            document.getElementById('table-correlacion').innerHTML = '';
+            document.getElementById('ai-recommendations').innerHTML = '<p class="italic text-slate-500">Selecciona o ingresa datos y haz clic en "Análisis IA" para obtener un diagnóstico avanzado...</p>';
+            initAdvCards();
+        }
+
+        function getSynthetic(r) {
+            const desgaste = (r.km / 1000) * (r.vib / 2);
+            const termovib = r.temp * r.vib * 100;
+            const inactividad = (r.down / (r.up + r.down)) * 100;
+            const eficiencia = 1 - ((r.temp - 80) / 100) - (r.vib / 10);
+            const presiones = [r.psi_di, r.psi_dd, r.psi_ti, r.psi_td];
+            const presProm = presiones.reduce((a,b)=>a+b,0)/4;
+            const balPres = Math.max(...presiones) - Math.min(...presiones);
+            const estres = (r.rpm / 50) + (r.temp / 2) + (r.vib * 5);
+            const dispOp = (r.up / (r.up + r.down)) * 100;
+
+            return {
+                desgaste: desgaste, termovib: termovib, inactividad: inactividad,
+                eficiencia: eficiencia, presion: presProm, balance: balPres,
+                estres: estres, dispOp: dispOp
+            };
+        }
+
+        // ----------------------------------------------------
+        // CÁLCULOS KPI Y SINTÉTICOS
+        // ----------------------------------------------------
+        function calcKPIsGenerales(activeDb) {
+            if(!activeDb || activeDb.length === 0) {
+                document.getElementById('kpi_disp').innerText = '0%';
+                document.getElementById('kpi_mtbf').innerText = '0';
+                document.getElementById('kpi_mttr').innerText = '0';
+                ['ind_disp', 'ind_mtbf', 'ind_mttr'].forEach(id => document.getElementById(id).classList.add('hidden'));
+                return;
+            }
+            
+            const tUp = activeDb.reduce((acc, r) => acc + r.up, 0);
+            const tDown = activeDb.reduce((acc, r) => acc + r.down, 0);
+            const n = activeDb.length;
+            
+            const mtbf = tUp / n;
+            const mttr = tDown / n;
+            const disp = (tUp + tDown) > 0 ? (tUp / (tUp + tDown)) * 100 : 0;
+
+            document.getElementById('kpi_disp').innerText = disp.toFixed(1) + '%';
+            document.getElementById('kpi_mtbf').innerText = mtbf.toFixed(1);
+            document.getElementById('kpi_mttr').innerText = mttr.toFixed(1);
+
+            const indDisp = document.getElementById('ind_disp');
+            indDisp.classList.remove('hidden');
+            if(disp >= 85) {
+                indDisp.className = 'absolute top-2 right-2 text-[8px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/50';
+                indDisp.innerText = 'Óptimo';
+            } else if(disp >= 70) {
+                indDisp.className = 'absolute top-2 right-2 text-[8px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold border border-amber-500/50';
+                indDisp.innerText = 'Aceptable';
+            } else {
+                indDisp.className = 'absolute top-2 right-2 text-[8px] px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-400 font-bold border border-rose-500/50';
+                indDisp.innerText = 'Crítico';
+            }
+
+            const indMtbf = document.getElementById('ind_mtbf');
+            indMtbf.classList.remove('hidden');
+            if(mtbf >= 100) {
+                indMtbf.className = 'absolute top-2 right-2 text-[8px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/50';
+                indMtbf.innerText = 'Alto';
+            } else if(mtbf >= 50) {
+                indMtbf.className = 'absolute top-2 right-2 text-[8px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold border border-amber-500/50';
+                indMtbf.innerText = 'Medio';
+            } else {
+                indMtbf.className = 'absolute top-2 right-2 text-[8px] px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-400 font-bold border border-rose-500/50';
+                indMtbf.innerText = 'Bajo';
+            }
+
+            const indMttr = document.getElementById('ind_mttr');
+            indMttr.classList.remove('hidden');
+            if(mttr <= 5) {
+                indMttr.className = 'absolute top-2 right-2 text-[8px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/50';
+                indMttr.innerText = 'Óptimo';
+            } else if(mttr <= 15) {
+                indMttr.className = 'absolute top-2 right-2 text-[8px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold border border-amber-500/50';
+                indMttr.innerText = 'Medio';
+            } else {
+                indMttr.className = 'absolute top-2 right-2 text-[8px] px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-400 font-bold border border-rose-500/50';
+                indMttr.innerText = 'Alto';
+            }
+
+            document.getElementById('kpi_disp').className = `stat-value text-xl font-bold mt-1 ${disp >= 85 ? 'text-emerald-400' : (disp >= 70 ? 'text-amber-400' : 'text-rose-400')}`;
+            document.getElementById('kpi_mtbf').className = `stat-value text-xl font-bold mt-1 ${mtbf >= 100 ? 'text-emerald-400' : (mtbf >= 50 ? 'text-amber-400' : 'text-rose-400')}`;
+            document.getElementById('kpi_mttr').className = `stat-value text-xl font-bold mt-1 ${mttr <= 5 ? 'text-emerald-400' : (mttr <= 15 ? 'text-amber-400' : 'text-rose-400')}`;
+        }
+
+        function calcMetricasAvanzadas(last) {
+            const values = getSynthetic(last);
+
+            advMetricsConfig.forEach(config => {
+                const val = values[config.id];
+                const displayVal = (config.unit === '%') ? val.toFixed(1) : (val > 1000 ? (val/1000).toFixed(1)+'k' : val.toFixed(2));
+                
+                let colorClass = 'bg-cyan-500';
+                if(val < config.optMin) colorClass = 'bg-amber-400'; 
+                else if(val > config.optMax) colorClass = 'bg-rose-500'; 
+                else colorClass = 'bg-emerald-400'; 
+
+                let pct = ((val - config.min) / (config.max - config.min)) * 100;
+                pct = Math.max(0, Math.min(100, pct)); 
+
+                document.getElementById(`val_${config.id}`).innerText = displayVal + config.unit;
+                document.getElementById(`bar_${config.id}`).style.width = pct + '%';
+                document.getElementById(`bar_${config.id}`).className = `prog-bar-fill ${colorClass}`;
+            });
+        }
+
+        function calcEstadisticasDescribe(activeDb) {
+            const table = document.getElementById('table-describe');
+            if(!activeDb || activeDb.length === 0) return;
+
+            const cols = ['km', 'up', 'down', 'vib', 'temp', 'rpm'];
+            const headerHTML = `<thead><tr><th>Estadística</th>${cols.map(c => `<th>${c.toUpperCase()}</th>`).join('')}</tr></thead>`;
+            
+            const rowLabels = [
+                {key: 'count', label: 'count'}, {key: 'mean', label: 'mean'}, {key: 'std', label: 'std'},
+                {key: 'min', label: 'min'}, {key: 'q25', label: '25%'}, {key: 'q50', label: '50%'},
+                {key: 'q75', label: '75%'}, {key: 'max', label: 'max'}
+            ];
+
+            function getStats(arr) {
+                if(arr.length === 0) return null;
+                arr.sort((a,b) => a-b);
+                const sum = arr.reduce((a,b) => a+b, 0);
+                const mean = sum / arr.length;
+                const variance = arr.reduce((a,b) => a + Math.pow(b-mean, 2), 0) / arr.length;
+                const std = Math.sqrt(variance);
+                
+                const quartile = (q) => {
+                    const pos = (arr.length - 1) * q;
+                    const base = Math.floor(pos);
+                    const rest = pos - base;
+                    if(arr[base+1] !== undefined) return arr[base] + rest * (arr[base+1] - arr[base]);
+                    return arr[base];
+                };
+
+                return {
+                    count: arr.length, mean: mean, std: std, min: arr[0],
+                    q25: quartile(0.25), q50: quartile(0.50), q75: quartile(0.75), max: arr[arr.length-1]
+                };
+            }
+
+            const matrixStats = {};
+            cols.forEach(col => {
+                const dataArr = activeDb.map(r => r[col]);
+                matrixStats[col] = getStats(dataArr);
+            });
+
+            let bodyHTML = '<tbody>';
+            rowLabels.forEach(row => {
+                let tr = `<tr><td class="font-bold text-cyan-500">${row.label}</td>`;
+                cols.forEach(col => {
+                    const val = matrixStats[col][row.key];
+                    tr += `<td>${parseFloat(val).toFixed(2)}</td>`;
+                });
+                tr += '</tr>';
+                bodyHTML += tr;
+            });
+            bodyHTML += '</tbody>';
+
+            table.innerHTML = headerHTML + bodyHTML;
+        }
+
+        function pearson(x, y) {
+            const n = x.length;
+            if(n === 0) return 0;
+            let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0, sumY2 = 0;
+            for(let i=0; i<n; i++) {
+                sumX += x[i]; sumY += y[i]; sumXY += x[i]*y[i];
+                sumX2 += x[i]*x[i]; sumY2 += y[i]*y[i];
+            }
+            const num = (n * sumXY) - (sumX * sumY);
+            const den = Math.sqrt((n * sumX2 - sumX*sumX) * (n * sumY2 - sumY*sumY));
+            if(den === 0) return 0;
+            return num / den;
+        }
+
+        function calcMatrizCorrelacion(activeDb) {
+            const table = document.getElementById('table-correlacion');
+            if(!activeDb || activeDb.length < 2) {
+                table.innerHTML = '<tr><td class="text-slate-500 p-2">Requiere al menos 2 registros</td></tr>';
+                return;
+            }
+
+            const extDb = activeDb.map(r => ({ ...r, ...getSynthetic(r) }));
+            const cols = ['km', 'vib', 'temp', 'down', 'desgaste', 'termovib', 'inactividad', 'eficiencia', 'estres', 'dispOp'];
+            const colLabels = { km: 'KM', vib: 'VIB', temp: 'TMP', down: 'DWN', desgaste: 'DSG', termovib: 'TMV', inactividad: 'INA', eficiencia: 'EFI', estres: 'EST', dispOp: 'DOP' };
+
+            const headerHTML = `<thead><tr><th></th>${cols.map(c => `<th title="${c}">${colLabels[c]}</th>`).join('')}</tr></thead>`;
+            
+            let bodyHTML = '<tbody>';
+            cols.forEach(rowCol => {
+                let tr = `<tr><td class="font-bold text-cyan-500 text-left" title="${rowCol}">${colLabels[rowCol]}</td>`;
+                cols.forEach(colCol => {
+                    const arrX = extDb.map(r => r[rowCol]);
+                    const arrY = extDb.map(r => r[colCol]);
+                    const coef = pearson(arrX, arrY);
+                    
+                    const intensity = Math.abs(coef);
+                    let bgColor = 'transparent';
+                    if(intensity > 0.5) bgColor = coef > 0 ? `rgba(16, 185, 129, ${intensity-0.3})` : `rgba(244, 63, 94, ${intensity-0.3})`;
+                    
+                    tr += `<td style="background: ${bgColor}; border: 1px solid rgba(6,182,212,0.1)">${coef.toFixed(2)}</td>`;
+                });
+                tr += '</tr>';
+                bodyHTML += tr;
+            });
+            bodyHTML += '</tbody>';
+            
+            table.innerHTML = headerHTML + bodyHTML;
+        }
+
+        // ----------------------------------------------------
+        // INTELIGENCIA ARTIFICIAL Y LÓGICA DE NEGOCIO
+        // ----------------------------------------------------
+        function generarRecomendacionesLocales(activeDb) {
+            const container = document.getElementById('ai-recommendations');
+            if(!activeDb || activeDb.length === 0) return;
+            const last = activeDb[activeDb.length-1];
+            
+            let html = '<p class="text-[10px] text-cyan-400 font-bold mb-2 border-b border-slate-700/50 pb-1">ANÁLISIS DE ESTADO ACTUAL:</p>';
+            let tieneAlertas = false;
+            
+            if(last.temp > 95) { html += `<p class="border-l-2 border-rose-500 pl-2 mt-1">⚠️ <span class="text-rose-400 font-bold">ALERTA TÉRMICA:</span> Temp ${last.temp.toFixed(1)}°C. Revisar sistema de refrigeración urgente.</p>`; tieneAlertas = true; }
+            else if(last.temp > 85) { html += `<p class="border-l-2 border-amber-500 pl-2 mt-1">🟡 <span class="text-amber-400">Atención Térmica:</span> Temp ${last.temp.toFixed(1)}°C. Monitorear.</p>`; tieneAlertas = true; }
+            
+            if(last.vib > 4) { html += `<p class="border-l-2 border-rose-500 pl-2 mt-1">〰️ <span class="text-rose-400 font-bold">VIBRACIÓN ALTA:</span> ${last.vib.toFixed(1)} mm/s. Riesgo de rodamiento o desbalanceo inminente.</p>`; tieneAlertas = true; }
+
+            if(last.anio && last.fecha) {
+                const anioEntrada = parseInt(last.fecha.split('-')[0]);
+                if(anioEntrada - last.anio >= 2) {
+                    html += `<p class="border-l-2 border-purple-500 pl-2 mt-1">🔋 <span class="text-purple-400 font-bold">MANTENIMIENTO PREVENTIVO:</span> Vehículo con 2 o más años de antigüedad (Año Fab. ${last.anio}). Según normativa, es vital revisar/reemplazar Batería y Líquido de Frenos.</p>`;
+                    tieneAlertas = true;
+                }
+            }
+
+            const chks = document.querySelectorAll('.sensor-chk:checked');
+            if(chks.length > 0) {
+                html += '<p class="text-[10px] text-cyan-400 font-bold mt-3 mb-1 border-b border-slate-700/50 pb-1">ANOMALÍAS DE SENSORES REPORTADAS:</p>';
+                chks.forEach(chk => {
+                    const sInfo = defSensores.find(s => s.id === chk.value);
+                    if(sInfo) {
+                        html += `<p class="border-l-2 border-orange-500 pl-2 mt-1">🚨 <span class="text-orange-400 font-bold">${sInfo.label}:</span> ${sInfo.falla}. <span class="text-[8px] text-slate-500">Fuente: ${sInfo.fuente}</span></p>`;
+                        tieneAlertas = true;
+                    }
+                });
+            }
+
+            if(!tieneAlertas) {
+                html += `<p class="text-emerald-400 mt-2"><i class="fas fa-check-circle mr-1"></i> Parámetros estables. Operación óptima sugerida sin anomalías detectadas en sensores ni telemetría.</p>`;
+            }
+
+            container.innerHTML = html;
+        }
+
+        async function llamarIA() {
+            const activeDb = selectedRows.size > 0 ? db.filter((_, i) => selectedRows.has(i)) : obtenerDbFiltrada();
+            if(activeDb.length === 0) return alert("No hay datos en el panel actual para ser analizados por la IA.");
+            
+            const container = document.getElementById('ai-recommendations');
+            container.innerHTML = '<p class="italic text-indigo-400"><i class="fas fa-spinner fa-spin mr-2"></i> ✨ Gemini está procesando la telemetría y las fuentes técnicas para un diagnóstico avanzado...</p>';
+            
+            const last = activeDb[activeDb.length-1];
+            const syn = getSynthetic(last);
+            
+            const chks = document.querySelectorAll('.sensor-chk:checked');
+            const sensoresFallandoStr = Array.from(chks).map(chk => {
+                const info = defSensores.find(s => s.id === chk.value);
+                return info ? info.label : chk.value;
+            }).join(', ');
+
+            const vtvStatus = document.getElementById('vtv-status-text').innerText;
+            const vtvPct = document.getElementById('vtv-pct').innerText;
+
+            const prompt = `Analiza los siguientes datos del vehículo ${last.unidad} (ID: ${last.id}):
+            - Especificaciones: Motor ${last.motor}, Año Fab. ${last.anio}.
+            - Telemetría Actual: KM: ${last.km.toLocaleString()}, Temperatura ${last.temp}°C, Vibración ${last.vib} mm/s, RPM ${last.rpm}.
+            - Presiones (PSI): DI ${last.psi_di}, DD ${last.psi_dd}, TI ${last.psi_ti}, TD ${last.psi_td}.
+            - Uso Reciente: Uptime ${last.up}h, Downtime ${last.down}h.
+            - Métricas Sintéticas Calculadas por el HUB: Desgaste/KM ${syn.desgaste.toFixed(2)}, Eficiencia Térmica ${syn.eficiencia.toFixed(2)}, Estrés Mecánico ${syn.estres.toFixed(2)}.
+            - Anomalías de Sensores Reportadas en Taller: ${sensoresFallandoStr || 'Ninguna'}.
+            - Preparación VTV: ${vtvPct} (${vtvStatus}).
+            - Notas/Bitácora del Taller: ${last.trabajo || 'Ninguno'}
+            
+            Utilizando TU BASE DE CONOCIMIENTO (Secciones 1 a 5) y comparando el Año de Fabricación con la fecha de hoy, genera una evaluación predictiva detallada que incluya: 
+            1) Identificación de anomalías urgentes o latentes relacionando telemetría y sensores.
+            2) Explicación técnica de la consecuencia a corto plazo. 
+            3) 3 acciones de mantenimiento recomendadas y priorizadas.`;
+            
+            try {
+                const responseText = await fetchGemini(prompt);
+                container.innerHTML = `<div class="bg-indigo-950/40 p-3 rounded border border-indigo-500/50 llm-response">${responseText}</div>`;
+            } catch (err) {
+                container.innerHTML = `<p class="text-rose-400"><i class="fas fa-exclamation-triangle"></i> Error al contactar con Gemini AI. Intenta de nuevo más tarde o verifica la consola para detalles.</p>`;
+                setTimeout(() => generarRecomendacionesLocales(activeDb), 3500);
+            }
+        }
+
+
+        // ----------------------------------------------------
+        // TABLAS Y GRÁFICOS UI
+        // ----------------------------------------------------
+        function renderDatasetTable(dbFiltrada) {
+            const tbody = document.getElementById('tbody-dataset');
+            document.getElementById('dataset-count').innerText = `${db.length}/${MAX_RECORDS} registros (Memoria)`;
+            
+            let html = '';
+            
+            const displayDb = db.map((r, i) => ({...r, originalIdx: i}))
+                                .filter(r => {
+                                    const matchID = filtroActualID === "" || r.id.includes(filtroActualID) || r.unidad.includes(filtroActualID);
+                                    const matchFecha = filtroActualFecha === "" || r.fecha === filtroActualFecha;
+                                    return matchID && matchFecha;
+                                }).reverse();
+            
+            displayDb.forEach(r => {
+                const checked = selectedRows.has(r.originalIdx) ? 'checked' : '';
+                html += `
+                <tr class="${checked ? 'bg-cyan-900/20' : ''}">
+                    <td class="text-center"><input type="checkbox" class="row-chk cursor-pointer" onchange="toggleRow(${r.originalIdx})" ${checked}></td>
+                    <td class="whitespace-nowrap">${formatearFechaCorto(r.fecha)}</td>
+                    <td class="font-bold text-cyan-400">${r.unidad}</td>
+                    <td>${r.anio}</td>
+                    <td>${r.motor}</td>
+                    <td>${r.km.toLocaleString()}</td>
+                    <td class="text-emerald-400">${r.up.toFixed(1)}</td>
+                    <td class="text-rose-400">${r.down.toFixed(1)}</td>
+                    <td class="${r.vib > 4 ? 'text-rose-400 font-bold':''}">${r.vib.toFixed(1)}</td>
+                    <td class="${r.temp > 95 ? 'text-rose-400 font-bold':''}">${r.temp.toFixed(1)}</td>
+                    <td class="text-center">
+                        <button onclick="verDetalle(${r.originalIdx})" class="btn-neon p-1 rounded-md text-[10px] w-full" title="Ver detalle del reporte">
+                            <i class="fas fa-eye"></i> Ver
+                        </button>
+                    </td>
+                </tr>`;
+            });
+            tbody.innerHTML = html;
+
+            const chkAll = document.getElementById('chk-all');
+            if(chkAll) chkAll.checked = (displayDb.length > 0 && Array.from(selectedRows).length === displayDb.length);
+        }
+
+        function drawCharts(activeDb) {
+            Chart.defaults.color = '#94a3b8';
+            Chart.defaults.font.family = "'Orbitron', sans-serif";
+            
+            if (!activeDb || activeDb.length === 0) {
+                if(chartKpisObj) chartKpisObj.destroy();
+                if(chartTendenciaObj) chartTendenciaObj.destroy();
+                if(chartScatterObj) chartScatterObj.destroy();
+                return;
+            }
+            
+            const labels = activeDb.map(r => formatearFechaCorto(r.fecha)); 
+            const tempData = activeDb.map(r => r.temp);
+            const vibData = activeDb.map(r => r.vib);
+
+            const upData = activeDb.map(r => r.up);
+            const downData = activeDb.map(r => r.down);
+            const dispData = activeDb.map(r => ((r.up / (r.up + r.down)) * 100).toFixed(1));
+
+            const ctxK = document.getElementById('chartKpis').getContext('2d');
+            if(chartKpisObj) chartKpisObj.destroy();
+            chartKpisObj = new Chart(ctxK, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label: 'Uptime (h)', data: upData, type: 'line', borderColor: '#10b981', backgroundColor: 'transparent', borderDash: [5, 5], tension: 0.3, yAxisID: 'y' },
+                        { label: 'Downtime (h)', data: downData, backgroundColor: 'rgba(244, 63, 94, 0.6)', yAxisID: 'y' },
+                        { label: 'Disp. %', data: dispData, type: 'line', borderColor: '#06b6d4', backgroundColor: '#06b6d4', yAxisID: 'y1', tension: 0.3 }
+                    ]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: true, position: 'bottom', labels: { boxWidth: 8, font:{size:8} } } },
+                    scales: {
+                        x: { title: { display: true, text: 'Fecha', font:{size:9} }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                        y: { title: { display: true, text: 'Horas', font:{size:9} }, type: 'linear', position: 'left', min: 0, max: 500, ticks: { stepSize: 100 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                        y1: { title: { display: true, text: '%', font:{size:9} }, type: 'linear', position: 'right', min: 0, max: 100, grid: { drawOnChartArea: false } }
+                    }
+                }
+            });
+
+            const ctxT = document.getElementById('chartTendencia').getContext('2d');
+            if(chartTendenciaObj) chartTendenciaObj.destroy();
+            chartTendenciaObj = new Chart(ctxT, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label: 'Temp °C', data: tempData, borderColor: '#06b6d4', backgroundColor: 'rgba(6,182,212,0.1)', yAxisID: 'y', fill: true, tension: 0.4 },
+                        { label: 'Vib mm/s', data: vibData, borderColor: '#8b5cf6', backgroundColor: 'rgba(139,92,246,0.1)', yAxisID: 'y1', type: 'bar', barPercentage: 0.5 }
+                    ]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: true, position: 'top', labels: { boxWidth: 10, font:{size:9} } } },
+                    scales: {
+                        x: { grid: { color: 'rgba(255,255,255,0.05)' } },
+                        y: { type: 'linear', position: 'left', grid: { color: 'rgba(255,255,255,0.05)' } },
+                        y1: { type: 'linear', position: 'right', grid: { drawOnChartArea: false } }
+                    }
+                }
+            });
+
+            const scatterData = activeDb.map(r => {
+                let probFalla = (r.down * 2) + (r.temp > 90 ? 20 : 0) + (r.vib * 5);
+                let p = Math.min(100, probFalla);
+                
+                let fallaInfo = "Filtros/Aceite";
+                if(r.km > 150000 || p > 80) fallaInfo = "Caja/Motor (Crítico)";
+                else if(r.km > 60000 || p > 50) fallaInfo = "Embrague/Suspensión";
+                else if(r.km > 20000 || p > 30) fallaInfo = "Frenos/Alineación";
+
+                return { x: r.km, y: p, r: (r.down > 10 ? 8 : 4), falla: fallaInfo }; 
+            });
+
+            const ctxS = document.getElementById('chartScatter').getContext('2d');
+            if(chartScatterObj) chartScatterObj.destroy();
+            chartScatterObj = new Chart(ctxS, {
+                type: 'bubble', 
+                data: {
+                    datasets: [{
+                        label: 'Prob. Falla (%)',
+                        data: scatterData,
+                        backgroundColor: 'rgba(244, 63, 94, 0.6)',
+                        borderColor: '#f43f5e'
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.raw.falla}: ${context.raw.y.toFixed(1)}% Prob.`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { title: { display: true, text: 'Kilometraje', font:{size:9} }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                        y: { title: { display: true, text: 'Riesgo / Prob. (%)', font:{size:9} }, grid: { color: 'rgba(255,255,255,0.05)' }, min: 0, max: 100 }
+                    }
+                }
+            });
+        }
+
+        // ----------------------------------------------------
+        // EXPORTACIÓN DE DATOS (CSV Y PDF)
+        // ----------------------------------------------------
+        function exportarCSV() {
+            const activeDb = selectedRows.size > 0 ? db.filter((_, i) => selectedRows.has(i)) : obtenerDbFiltrada();
+            if(activeDb.length === 0) return alert("No hay datos para exportar.");
+            
+            const keys = Object.keys(activeDb[0]).filter(k => k !== 'originalIdx');
+            let csvContent = "data:text/csv;charset=utf-8," 
+                + keys.join(",") + "\n"
+                + activeDb.map(e => keys.map(k => {
+                    let val = e[k];
+                    if(typeof val === 'string' && val.includes(',')) return `"${val}"`;
+                    return val;
+                }).join(",")).join("\n");
+            
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `NEXO_ART_Export_${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function exportarPDF() {
+            const activeDb = selectedRows.size > 0 ? db.filter((_, i) => selectedRows.has(i)) : obtenerDbFiltrada();
+            if(activeDb.length === 0) return alert("No hay datos para exportar.");
+
+            const last = activeDb[activeDb.length-1];
+            const syn = getSynthetic(last);
+            
+            const disp = document.getElementById('kpi_disp').innerText;
+            const mtbf = document.getElementById('kpi_mtbf').innerText;
+            const mttr = document.getElementById('kpi_mttr').innerText;
+            
+            const vtvPct = document.getElementById('vtv-pct').innerText;
+            const vtvStatus = document.getElementById('vtv-status-text').innerText;
+            const vtvChecks = Array.from(document.querySelectorAll('.vtv-chk:checked')).map(c => `<li><span style="color:#10b981; font-weight:bold;">✔</span> ${c.value}</li>`).join('');
+            const vtvUnchecks = Array.from(document.querySelectorAll('.vtv-chk:not(:checked)')).map(c => `<li><span style="color:#f43f5e; font-weight:bold;">✖</span> ${c.value}</li>`).join('');
+            
+            const aiHtml = document.getElementById('ai-recommendations').innerHTML;
+
+            const uniqueUnits = [...new Set(activeDb.map(r => r.unidad))];
+            const reportTitle = uniqueUnits.length === 1 ? `REPORTE TÉCNICO: ${uniqueUnits[0]}` : `REPORTE DE FLOTA (${uniqueUnits.length} Unidades)`;
+
+            let tableHtml = `
+                <table class="w-full text-left text-[10px] border-collapse mt-4">
+                    <thead>
+                        <tr class="bg-cyan-900 text-white">
+                            <th class="p-2 border border-cyan-700">Fecha</th>
+                            <th class="p-2 border border-cyan-700">Unidad</th>
+                            <th class="p-2 border border-cyan-700">Año</th>
+                            <th class="p-2 border border-cyan-700">KM</th>
+                            <th class="p-2 border border-cyan-700">Up/Down</th>
+                            <th class="p-2 border border-cyan-700">Vib/Temp</th>
+                            <th class="p-2 border border-cyan-700">RPM</th>
+                            <th class="p-2 border border-cyan-700">PSI Prom.</th>
+                            <th class="p-2 border border-cyan-700">Detalle Trabajo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            activeDb.forEach((r, idx) => {
+                const psiProm = (r.psi_di + r.psi_dd + r.psi_ti + r.psi_td) / 4;
+                const bgClass = idx % 2 === 0 ? 'bg-slate-50' : 'bg-white';
+                tableHtml += `
+                    <tr class="${bgClass} text-slate-700 break-inside-avoid">
+                        <td class="p-2 border border-slate-200 whitespace-nowrap">${formatearFechaCorto(r.fecha)}</td>
+                        <td class="p-2 border border-slate-200 font-bold">${r.unidad}</td>
+                        <td class="p-2 border border-slate-200">${r.anio}</td>
+                        <td class="p-2 border border-slate-200">${r.km.toLocaleString()}</td>
+                        <td class="p-2 border border-slate-200"><span class="text-emerald-600">${r.up.toFixed(1)}h</span> / <span class="text-rose-600">${r.down.toFixed(1)}h</span></td>
+                        <td class="p-2 border border-slate-200"><span class="${r.vib>4?'text-rose-600 font-bold':''}">${r.vib.toFixed(1)}</span> / <span class="${r.temp>95?'text-rose-600 font-bold':''}">${r.temp.toFixed(1)}°</span></td>
+                        <td class="p-2 border border-slate-200">${r.rpm}</td>
+                        <td class="p-2 border border-slate-200">${psiProm.toFixed(1)}</td>
+                        <td class="p-2 border border-slate-200 text-[8px] leading-tight">${r.trabajo || '-'}</td>
+                    </tr>
+                `;
+            });
+            tableHtml += `</tbody></table>`;
+
+            const pdfContainer = document.createElement('div');
+            pdfContainer.id = "temp-pdf-export";
+            pdfContainer.className = "bg-white text-slate-800 font-sans";
+            pdfContainer.style.width = "800px";
+            pdfContainer.style.position = "absolute";
+            pdfContainer.style.left = "-9999px";
+            pdfContainer.style.top = "0";
+
+            pdfContainer.innerHTML = `
+                <style>
+                    #temp-pdf-export .text-rose-400, #temp-pdf-export .text-rose-500 { color: #e11d48 !important; }
+                    #temp-pdf-export .text-amber-400, #temp-pdf-export .text-amber-500 { color: #d97706 !important; }
+                    #temp-pdf-export .text-emerald-400, #temp-pdf-export .text-emerald-500 { color: #059669 !important; }
+                    #temp-pdf-export .text-purple-400, #temp-pdf-export .text-purple-500 { color: #7e22ce !important; }
+                    #temp-pdf-export .text-cyan-400, #temp-pdf-export .text-cyan-500 { color: #0e7490 !important; }
+                    #temp-pdf-export .text-blue-400, #temp-pdf-export .text-blue-500 { color: #1d4ed8 !important; }
+                    #temp-pdf-export .text-slate-300, #temp-pdf-export .text-slate-400, #temp-pdf-export .text-slate-500 { color: #334155 !important; }
+                    #temp-pdf-export p { margin-bottom: 0.5rem; }
+                    #temp-pdf-export .llm-response { font-size: 11px; line-height: 1.4; }
+                </style>
+                <div style="padding: 40px;">
+                    <!-- HEADER -->
+                    <div class="flex justify-between items-center border-b-4 border-cyan-600 pb-4 mb-6">
+                        <div>
+                            <h1 class="text-4xl font-bold text-cyan-800" style="font-family: 'Orbitron', sans-serif;">NEXO-ART</h1>
+                            <p class="text-xs tracking-[0.2em] text-slate-500 uppercase font-bold" style="font-family: 'Orbitron', sans-serif;">Motor Intelligence</p>
+                        </div>
+                        <div class="text-right">
+                            <h2 class="text-2xl font-bold text-slate-800 uppercase">${reportTitle}</h2>
+                            <p class="text-sm text-slate-500">Generado el: ${new Date().toLocaleDateString('es-ES')}</p>
+                        </div>
+                    </div>
+
+                    <!-- KPIs -->
+                    <div class="grid grid-cols-3 gap-4 mb-6">
+                        <div class="bg-slate-50 p-4 rounded-lg border-l-4 border-emerald-500 border border-slate-200">
+                            <p class="text-[10px] text-slate-500 uppercase font-bold">Disponibilidad</p>
+                            <p class="text-3xl font-bold text-emerald-600" style="font-family: 'Orbitron', sans-serif;">${disp}</p>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-lg border-l-4 border-cyan-500 border border-slate-200">
+                            <p class="text-[10px] text-slate-500 uppercase font-bold">MTBF</p>
+                            <p class="text-3xl font-bold text-cyan-600" style="font-family: 'Orbitron', sans-serif;">${mtbf} h</p>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-lg border-l-4 border-purple-500 border border-slate-200">
+                            <p class="text-[10px] text-slate-500 uppercase font-bold">MTTR</p>
+                            <p class="text-3xl font-bold text-purple-600" style="font-family: 'Orbitron', sans-serif;">${mttr} h</p>
+                        </div>
+                    </div>
+
+                    <!-- METRICAS SINTETICAS -->
+                    <div class="mb-6">
+                        <h3 class="text-sm font-bold text-cyan-800 uppercase border-b border-slate-200 pb-1 mb-3">Métricas Sintéticas (Último Registro)</h3>
+                        <div class="grid grid-cols-4 gap-2 text-center">
+                            <div class="bg-slate-50 p-2 rounded border border-slate-200">
+                                <p class="text-[9px] text-slate-500 uppercase font-bold">Desgaste/KM</p>
+                                <p class="text-lg font-bold text-slate-700" style="font-family: 'Orbitron', sans-serif;">${syn.desgaste.toFixed(1)}</p>
+                            </div>
+                            <div class="bg-slate-50 p-2 rounded border border-slate-200">
+                                <p class="text-[9px] text-slate-500 uppercase font-bold">Eficiencia</p>
+                                <p class="text-lg font-bold text-slate-700" style="font-family: 'Orbitron', sans-serif;">${syn.eficiencia.toFixed(2)}</p>
+                            </div>
+                            <div class="bg-slate-50 p-2 rounded border border-slate-200">
+                                <p class="text-[9px] text-slate-500 uppercase font-bold">Estrés Mecánico</p>
+                                <p class="text-lg font-bold text-slate-700" style="font-family: 'Orbitron', sans-serif;">${syn.estres.toFixed(1)}</p>
+                            </div>
+                            <div class="bg-slate-50 p-2 rounded border border-slate-200">
+                                <p class="text-[9px] text-slate-500 uppercase font-bold">Disp. Operativa</p>
+                                <p class="text-lg font-bold text-slate-700" style="font-family: 'Orbitron', sans-serif;">${syn.dispOp.toFixed(1)}%</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- IA & VTV -->
+                    <div class="grid grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h3 class="text-sm font-bold text-cyan-800 uppercase border-b border-slate-200 pb-1 mb-3">Diagnóstico Experto</h3>
+                            <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 text-[11px] text-slate-700 leading-relaxed">
+                                ${aiHtml}
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-bold text-cyan-800 uppercase border-b border-slate-200 pb-1 mb-3">Estado VTV: ${vtvPct} (${vtvStatus})</h3>
+                            <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 text-[11px] flex gap-4">
+                                <ul class="flex-1 list-none p-0 m-0 space-y-1 text-slate-600">
+                                    ${vtvChecks || '<li class="italic">Ningún ítem marcado</li>'}
+                                </ul>
+                                <ul class="flex-1 list-none p-0 m-0 space-y-1 text-slate-600">
+                                    ${vtvUnchecks}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TABLA DATASET -->
+                    <div>
+                        <h3 class="text-sm font-bold text-cyan-800 uppercase border-b border-slate-200 pb-1 mb-2">Detalle de Registros Analizados</h3>
+                        ${tableHtml}
+                    </div>
+
+                    <!-- FOOTER -->
+                    <div class="mt-8 pt-4 border-t border-slate-200 text-center text-[10px] text-slate-400">
+                        NEXO-ART Motor Intelligence - Documento Confidencial Generado Automáticamente
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(pdfContainer);
+
+            const opt = {
+                margin:       [5, 0, 5, 0],
+                filename:     `NEXO_ART_Reporte_${new Date().toISOString().split('T')[0]}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, letterRendering: true, windowWidth: 800 },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
+            };
+
+            const btnPdf = document.querySelector('button[onclick="exportarPDF()"]');
+            const oldText = btnPdf.innerHTML;
+            btnPdf.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i>Generando...';
+
+            html2pdf().set(opt).from(pdfContainer).save().then(() => {
+                document.body.removeChild(pdfContainer);
+                btnPdf.innerHTML = oldText;
+            });
+        }
+
+        // Integración Hub -> WhatsApp
+        function enviarWhatsApp() {
+            const activeDb = selectedRows.size > 0 ? db.filter((_, i) => selectedRows.has(i)) : obtenerDbFiltrada();
+            if(activeDb.length === 0) return alert("No hay datos para reportar.");
+            const last = activeDb[activeDb.length-1];
+            const syn = getSynthetic(last);
+
+            const disp = document.getElementById('kpi_disp').innerText;
+            const mtbf = document.getElementById('kpi_mtbf').innerText;
+            const mttr = document.getElementById('kpi_mttr').innerText;
+
+            let report = `🚀 *NEXO-ART MOTOR INTELLIGENCE* 🚀\n`;
+            report += `📊 *Reporte de Diagnóstico Avanzado*\n\n`;
+            
+            report += `*Unidad Analizada:* ${last.unidad} (Año: ${last.anio} | Motor: ${last.motor})\n`;
+            report += `*Kilometraje:* ${last.km.toLocaleString()} km\n`;
+            report += `*Fecha:* ${last.fecha}\n\n`;
+
+            report += `⚙️ *KPIs de Flota:*\n`;
+            report += `✅ Disponibilidad: ${disp}\n`;
+            report += `⏱️ MTBF: ${parseFloat(mtbf).toFixed(1)} h\n`;
+            report += `🔧 MTTR: ${parseFloat(mttr).toFixed(1)} h\n\n`;
+
+            report += `🔬 *Métricas Sintéticas (Último Registro):*\n`;
+            report += `🔸 Desgaste/km: ${syn.desgaste.toFixed(1)}\n`;
+            report += `🔸 Eficiencia Térmica: ${syn.eficiencia.toFixed(2)}\n`;
+            report += `🔸 Estrés Mecánico: ${syn.estres.toFixed(1)}\n`;
+            report += `🔸 Disp. Operativa: ${syn.dispOp.toFixed(1)}%\n\n`;
+
+            report += `👨‍🔧 *Sensores & Lecturas Principales:*\n`;
+            report += `🌡️ TEMP: ${last.temp.toFixed(1)} °C\n`;
+            report += `〰️ VIB: ${last.vib.toFixed(1)} mm/s\n`;
+            report += `🔄 RPM: ${last.rpm}\n\n`;
+
+            const vtvPct = document.getElementById('vtv-pct').innerText;
+            const vtvStatus = document.getElementById('vtv-status-text').innerText;
+            const vtvChks = document.querySelectorAll('.vtv-chk:checked');
+            let vtvCheckedNames = [];
+            vtvChks.forEach(c => vtvCheckedNames.push(c.value));
+            
+            report += `📋 *Checklist VTV:*\n`;
+            report += `🔸 Progreso: ${vtvPct} (${vtvStatus})\n`;
+            if(vtvCheckedNames.length > 0) {
+                report += `🔸 Completados: ${vtvCheckedNames.join(', ')}\n`;
+            }
+            report += `\n`;
+
+            const chks = document.querySelectorAll('.sensor-chk:checked');
+            if(chks.length > 0) {
+                report += `🚨 *Anomalías de Sensores Reportadas:*\n`;
+                chks.forEach(chk => {
+                    const sInfo = defSensores.find(s => s.id === chk.value);
+                    if(sInfo) {
+                        report += `- *${sInfo.label}:* ${sInfo.falla} (Fuente: ${sInfo.fuente})\n`;
+                    }
+                });
+                report += `\n`;
+            }
+
+            // Validar lógica de batería (2 años)
+            if(last.anio && last.fecha) {
+                const anioEntrada = parseInt(last.fecha.split('-')[0]);
+                if(anioEntrada - last.anio >= 2) {
+                    report += `🔋 *MANTENIMIENTO PREVENTIVO:* Vehículo con 2 o más años de antigüedad. Revisar/Reemplazar Batería y Líquido de Frenos.\n\n`;
+                }
+            }
+
+            report += `🧠 *Recomendación Inicial / HUB:*\n`;
+            if (last.temp > 95 || last.vib > 4 || (chks.length > 0 && last.rpm > 3000)) {
+                report += `⚠️ *ALERTA CRÍTICA*: Se detectaron parámetros fuera del rango de seguridad. Detener unidad o programar revisión INMEDIATA.\n`;
+            } else {
+                report += `✅ *OPERACIÓN SEGURA*: Unidad en parámetros operacionales aceptables. Mantener el programa de monitoreo predictivo.\n`;
+            }
+
+            const encodedUri = encodeURIComponent(report);
+            window.open(`https://wa.me/3489686939?text=${encodedUri}`, "_blank");
+        }
+    </script>
 </body>
 </html>
