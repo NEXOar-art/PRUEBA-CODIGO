@@ -180,6 +180,32 @@
     .badge-descount {
       transition: all 0.3s ease;
     }
+
+    /* === HOVER TEXT PARA TARJETAS DE PAGO === */
+    .payment-card {
+      position: relative;
+    }
+    .payment-card .hover-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      opacity: 0;
+      transition: all 0.3s ease;
+      font-weight: 700;
+      font-size: 0.875rem;
+      color: #374151;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+    .payment-card:hover .hover-text {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    .payment-card:hover img {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
   </style>
 </head>
 <body class="antialiased selection:bg-primary selection:text-black">
@@ -196,8 +222,24 @@
         <span class="text-gray-400 text-xs">🌎</span>
         <select id="countrySelector" class="country-select text-sm" onchange="cambiarPais()" aria-label="Seleccionar país">
           <option value="argentina">🇦🇷 Argentina</option>
+          <option value="bolivia">🇧🇴 Bolivia</option>
+          <option value="brasil">🇧 Brasil</option>
           <option value="chile">🇨🇱 Chile</option>
+          <option value="colombia">🇨🇴 Colombia</option>
+          <option value="costarica">🇨🇷 Costa Rica</option>
+          <option value="cuba">🇨🇺 Cuba</option>
+          <option value="ecuador">🇪🇨 Ecuador</option>
+          <option value="elsalvador">🇸🇻 El Salvador</option>
+          <option value="guatemala">🇬🇹 Guatemala</option>
+          <option value="honduras">🇭🇳 Honduras</option>
+          <option value="mexico">🇲🇽 México</option>
+          <option value="nicaragua">🇳 Nicaragua</option>
+          <option value="panama">🇵🇦 Panamá</option>
+          <option value="paraguay">🇵🇾 Paraguay</option>
+          <option value="peru">🇵🇪 Perú</option>
+          <option value="rd">🇩🇴 República Dominicana</option>
           <option value="uruguay">🇺🇾 Uruguay</option>
+          <option value="venezuela">🇻 Venezuela</option>
         </select>
       </div>
     </div>
@@ -380,15 +422,15 @@
         </button>
       </article>
 
-      <!-- ===== PLAN AVANZADO (DESTACADO) ===== -->
+      <!-- ===== PLAN AVANZADO EMPRESA (DESTACADO) ===== -->
       <article class="plan-card glass p-6 sm:p-8 md:p-12 rounded-3xl border-4 border-primary shadow-2xl shadow-primary/60 transform md:scale-110 relative overflow-hidden flex flex-col">
         <div class="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent pointer-events-none"></div>
         <div class="absolute top-3 sm:top-4 right-3 sm:right-4 bg-gradient-to-r from-primary to-cyan-400 text-black px-4 sm:px-8 py-2 sm:py-3 rounded-full font-black text-sm sm:text-lg whitespace-nowrap shadow-lg z-10">🔥 MÁS VENDIDO</div>
         
-        <h3 class="text-4xl sm:text-5xl font-black mb-4 sm:mb-6 mt-2 sm:mt-0">Avanzado</h3>
+        <h3 class="text-4xl sm:text-5xl font-black mb-4 sm:mb-6 mt-2 sm:mt-0">Avanzado Empresa</h3>
         <div id="price-avanzado" class="text-5xl sm:text-7xl font-black text-primary mb-6 sm:mb-8 price-badge text-shadow">$160.000</div>
         
-        <ul class="text-left space-y-3 sm:space-y-5 text-gray-200 text-base sm:text-lg mb-8 sm:mb-12 flex-grow">
+        <ul class="text-left space-y-3 sm:space-y-5 text-gray-200 text-base sm:text-lg mb-6 sm:mb-8 flex-grow">
           <li class="leading-relaxed flex items-start gap-3">
             <span class="text-primary mt-1">✓</span>
             <span>Todo lo del Básico</span>
@@ -403,13 +445,19 @@
           </li>
           <li class="leading-relaxed flex items-start gap-3">
             <span class="text-primary mt-1">✓</span>
-            <span>Diagnóstico mensual</span>
+            <span>Mantenimiento mensual</span>
           </li>
           <li class="leading-relaxed flex items-start gap-3">
             <span class="text-primary mt-1">✓</span>
             <span>Entrega en 24HS</span>
           </li>
         </ul>
+
+        <!-- MICRO TARJETA MANTENIMIENTO MENSUAL -->
+        <div class="mb-6 sm:mb-8 p-4 bg-gradient-to-r from-primary/20 to-cyan-400/20 border-2 border-primary/50 rounded-2xl">
+          <p class="text-sm text-gray-300 mb-1">Mantenimiento Mensual</p>
+          <p id="price-mantenimiento-avanzado" class="text-2xl sm:text-3xl font-black text-primary">$20 USD<span class="text-sm text-gray-400 font-normal">/mes</span></p>
+        </div>
         
         <button onclick="abrirModal('Avanzado')" class="w-full py-5 sm:py-7 bg-primary text-black font-black text-xl sm:text-2xl rounded-2xl hover:bg-white transform hover:scale-105 transition shadow-2xl mt-auto btn-glow focus:outline-none focus:ring-2 focus:ring-primary">
           RESERVAR MI AVANZADO
@@ -421,7 +469,7 @@
         <h3 class="text-3xl sm:text-4xl font-black mb-3 sm:mb-4">Premium</h3>
         <div id="price-premium" class="text-4xl sm:text-6xl font-black text-secondary mb-6 sm:mb-8 price-badge text-shadow">$180.000</div>
         
-        <ul class="text-left space-y-3 sm:space-y-5 text-gray-300 text-base sm:text-lg mb-8 sm:mb-10 flex-grow">
+        <ul class="text-left space-y-3 sm:space-y-5 text-gray-300 text-base sm:text-lg mb-6 sm:mb-8 flex-grow">
           <li class="leading-relaxed flex items-start gap-3">
             <span class="text-secondary mt-1">✓</span>
             <span>Todo lo del Avanzado</span>
@@ -447,6 +495,12 @@
             <span>Entrega en 24HS</span>
           </li>
         </ul>
+
+        <!-- MICRO TARJETA MANTENIMIENTO MENSUAL -->
+        <div class="mb-6 sm:mb-8 p-4 bg-gradient-to-r from-secondary/20 to-pink-500/20 border-2 border-secondary/50 rounded-2xl">
+          <p class="text-sm text-gray-300 mb-1">Mantenimiento Mensual</p>
+          <p id="price-mantenimiento-premium" class="text-2xl sm:text-3xl font-black text-secondary">$20 USD<span class="text-sm text-gray-400 font-normal">/mes</span></p>
+        </div>
         
         <button onclick="abrirModal('Premium')" class="w-full py-4 sm:py-6 bg-gradient-to-r from-secondary to-pink-500 text-black font-black text-lg sm:text-xl rounded-2xl hover:scale-105 transition mt-auto btn-glow focus:outline-none focus:ring-2 focus:ring-secondary">
           DOMINAR MI MERCADO
@@ -456,7 +510,7 @@
     
     <!-- Nota de precios -->
     <p class="text-center text-gray-500 text-sm mt-12 max-w-2xl mx-auto">
-      💡 <strong>Nota:</strong> Los precios en USD para Chile y Uruguay se pagan vía transferencia internacional, PayPal o criptomonedas. 
+      💡 <strong>Nota:</strong> Los precios en USD para Latinoamérica se pagan vía transferencia internacional, PayPal o criptomonedas. 
       Argentina: precios en pesos con opción de crédito para plan Básico.
     </p>
   </section>
@@ -505,6 +559,19 @@
           VER PROYECTO →
         </span>
       </a>
+
+      <!-- PROYECTO 4: AUXILIO DE CAMIONES DOLORES SORIANO -->
+      <a href="https://nexoar-art.github.io/AXILIO-DE-CAMIONES-DOLORES-SORIANO/" target="_blank" rel="noopener noreferrer" 
+         class="plan-card glass p-6 sm:p-8 md:p-12 rounded-3xl border border-white/10 hover:border-primary/50 transition text-center flex flex-col group">
+        <div class="w-full aspect-video mb-6 rounded-xl overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+          <span class="text-4xl">🚛</span>
+        </div>
+        <h3 class="text-2xl sm:text-3xl font-black mb-4 group-hover:text-primary transition">AUXILIO DE CAMIONES DOLORES SORIANO</h3>
+        <p class="text-gray-300 text-base sm:text-lg mb-6 flex-grow">Servicio de auxilio vial • Diseño profesional • Captura de clientes 24/7</p>
+        <span class="inline-block py-3 px-6 bg-gradient-to-r from-primary to-cyan-400 text-black font-black rounded-2xl group-hover:scale-105 transition">
+          VER PROYECTO →
+        </span>
+      </a>
     </div>
   </section>
 
@@ -529,33 +596,36 @@
       <div class="flex flex-wrap justify-center items-center gap-8 sm:gap-16">
         <!-- Mercado Pago -->
         <div class="flex flex-col items-center gap-3 group cursor-pointer">
-          <div class="w-40 h-16 bg-white rounded-xl flex items-center justify-center p-4 shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform duration-300">
+          <div class="payment-card w-40 h-16 bg-white rounded-xl flex items-center justify-center p-4 shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform duration-300 relative overflow-hidden">
             <img src="https://http2.mlstatic.com/frontend-assets/ui-navigation/5.19.1/mercadolibre/logo__small.png" 
                  alt="Mercado Pago" 
-                 class="h-full object-contain"
+                 class="h-full object-contain transition-opacity duration-300"
                  onerror="this.parentElement.innerHTML='<span class=\'text-blue-600 font-black text-xl\'>MercadoPago</span>'">
+            <span class="hover-text">MERCADO PAGO</span>
           </div>
           <span class="text-xs text-gray-500">Argentina</span>
         </div>
 
         <!-- PayPal -->
         <div class="flex flex-col items-center gap-3 group cursor-pointer">
-          <div class="w-40 h-16 bg-white rounded-xl flex items-center justify-center p-4 shadow-lg shadow-blue-600/20 group-hover:scale-110 transition-transform duration-300">
+          <div class="payment-card w-40 h-16 bg-white rounded-xl flex items-center justify-center p-4 shadow-lg shadow-blue-600/20 group-hover:scale-110 transition-transform duration-300 relative overflow-hidden">
             <img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_111x69.jpg" 
                  alt="PayPal" 
-                 class="h-full object-contain"
+                 class="h-full object-contain transition-opacity duration-300"
                  onerror="this.parentElement.innerHTML='<span class=\'text-blue-700 font-black text-xl\'>PayPal</span>'">
+            <span class="hover-text">PAYPAL</span>
           </div>
           <span class="text-xs text-gray-500">Internacional</span>
         </div>
 
         <!-- Global66 -->
         <div class="flex flex-col items-center gap-3 group cursor-pointer">
-          <div class="w-40 h-16 bg-white rounded-xl flex items-center justify-center p-4 shadow-lg shadow-purple-500/20 group-hover:scale-110 transition-transform duration-300">
+          <div class="payment-card w-40 h-16 bg-white rounded-xl flex items-center justify-center p-4 shadow-lg shadow-purple-500/20 group-hover:scale-110 transition-transform duration-300 relative overflow-hidden">
             <img src="GLOBAL66.png" 
                  alt="Global66" 
-                 class="h-full object-contain"
+                 class="h-full object-contain transition-opacity duration-300"
                  onerror="this.parentElement.innerHTML='<span class=\'text-purple-600 font-black text-xl\'>Global66</span>'">
+            <span class="hover-text">GLOBAL66</span>
           </div>
           <span class="text-xs text-gray-500">Latam</span>
         </div>
@@ -576,7 +646,7 @@
 
   <!-- 📞 BOTONES FLOTANTES DE CONTACTO -->
   
-  <!-- LinkedIn - Lado derecho -->
+  <!-- LinkedIn - Lado derecho (abajo) -->
   <a href="https://www.linkedin.com/in/nexo-art-591a64389/" target="_blank" rel="noopener noreferrer"
      class="fixed bottom-6 right-6 z-50 flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-[#0077B5] hover:bg-[#005885] rounded-full shadow-2xl shadow-[#0077B5]/40 transition-all duration-300 hover:scale-110 group"
      aria-label="Contáctanos por LinkedIn" title="Contáctanos por LinkedIn">
@@ -588,7 +658,7 @@
     </span>
   </a>
 
-  <!-- WhatsApp Principal: 3489686939 - Lado derecho -->
+  <!-- WhatsApp Principal: 3489686939 - Lado derecho (arriba) -->
   <a href="https://api.whatsapp.com/send?phone=543489686939&text=Hola%20NEXO-Art!%20Quiero%20más%20información%20sobre%20sus%20servicios." target="_blank" rel="noopener noreferrer"
      class="fixed bottom-24 right-6 z-50 flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-[#25D366] hover:bg-[#128C7E] rounded-full shadow-2xl shadow-[#25D366]/40 transition-all duration-300 hover:scale-110 group"
      aria-label="WhatsApp: 3489686939" title="WhatsApp: 3489686939">
@@ -600,9 +670,21 @@
     </span>
   </a>
 
-  <!-- WhatsApp EMERGENCIA 3834689137 - Lado izquierdo -->
+  <!-- Telegram: +543489686939 - Lado izquierdo (abajo) -->
+  <a href="https://t.me/+543489686939" target="_blank" rel="noopener noreferrer"
+     class="fixed bottom-6 left-6 z-50 flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-[#0088cc] hover:bg-[#006699] rounded-full shadow-2xl shadow-[#0088cc]/40 transition-all duration-300 hover:scale-110 group"
+     aria-label="Telegram: +543489686939" title="Telegram: +543489686939">
+    <svg class="w-7 h-7 sm:w-8 sm:h-8 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+    </svg>
+    <span class="absolute -top-10 left-0 bg-black/90 text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none border border-white/20">
+      Telegram: +543489686939
+    </span>
+  </a>
+
+  <!-- WhatsApp EMERGENCIA 3834689137 - Lado izquierdo (arriba) -->
   <a href="https://api.whatsapp.com/send?phone=543834689137&text=🚨%20EMERGENCIA%20NEXO-Art:%20Necesito%20asistencia%20inmediata.%20Mi%20nombre%20es:" target="_blank" rel="noopener noreferrer"
-     class="fixed bottom-6 left-6 z-50 flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-[#25D366] hover:bg-[#128C7E] rounded-xl sm:rounded-2xl shadow-2xl shadow-[#25D366]/40 transition-all duration-300 hover:scale-110 group border-2 border-white/30"
+     class="fixed bottom-24 left-6 z-50 flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-[#25D366] hover:bg-[#128C7E] rounded-xl sm:rounded-2xl shadow-2xl shadow-[#25D366]/40 transition-all duration-300 hover:scale-110 group border-2 border-white/30"
      aria-label="WhatsApp EMERGENCIA: 3834689137" title="WhatsApp EMERGENCIA: 3834689137">
     <div class="relative w-full h-full flex items-center justify-center">
       <svg class="w-8 h-8 sm:w-9 sm:h-9 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -623,18 +705,98 @@
     const preciosPorPais = {
       argentina: {
         basico: { precio: "$88.000", credito: "2 cuotas de $48.000", mostrarCredito: true, mostrarDescuento: true },
-        avanzado: { precio: "$160.000" },
-        premium: { precio: "$180.000" }
+        avanzado: { precio: "$160.000", mantenimiento: "$20 USD" },
+        premium: { precio: "$180.000", mantenimiento: "$20 USD" }
+      },
+      bolivia: {
+        basico: { precio: "$70 USD", credito: null, mostrarCredito: false, mostrarDescuento: false },
+        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
+        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
+      },
+      brasil: {
+        basico: { precio: "$70 USD", credito: null, mostrarCredito: false, mostrarDescuento: false },
+        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
+        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
       },
       chile: {
         basico: { precio: "$70 USD", credito: null, mostrarCredito: false, mostrarDescuento: false },
-        avanzado: { precio: "$120 USD" },
-        premium: { precio: "$160 USD" }
+        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
+        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
+      },
+      colombia: {
+        basico: { precio: "$70 USD", credito: null, mostrarCredito: false, mostrarDescuento: false },
+        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
+        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
+      },
+      costarica: {
+        basico: { precio: "$70 USD", credito: null, mostrarCredito: false, mostrarDescuento: false },
+        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
+        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
+      },
+      cuba: {
+        basico: { precio: "$70 USD", credito: null, mostrarCredito: false, mostrarDescuento: false },
+        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
+        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
+      },
+      ecuador: {
+        basico: { precio: "$70 USD", credito: null, mostrarCredito: false, mostrarDescuento: false },
+        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
+        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
+      },
+      elsalvador: {
+        basico: { precio: "$70 USD", credito: null, mostrarCredito: false, mostrarDescuento: false },
+        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
+        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
+      },
+      guatemala: {
+        basico: { precio: "$70 USD", credito: null, mostrarCredito: false, mostrarDescuento: false },
+        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
+        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
+      },
+      honduras: {
+        basico: { precio: "$70 USD", credito: null, mostrarCredito: false, mostrarDescuento: false },
+        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
+        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
+      },
+      mexico: {
+        basico: { precio: "$70 USD", credito: null, mostrarCredito: false, mostrarDescuento: false },
+        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
+        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
+      },
+      nicaragua: {
+        basico: { precio: "$70 USD", credito: null, mostrarCredito: false, mostrarDescuento: false },
+        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
+        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
+      },
+      panama: {
+        basico: { precio: "$70 USD", credito: null, mostrarCredito: false, mostrarDescuento: false },
+        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
+        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
+      },
+      paraguay: {
+        basico: { precio: "$70 USD", credito: null, mostrarCredito: false, mostrarDescuento: false },
+        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
+        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
+      },
+      peru: {
+        basico: { precio: "$70 USD", credito: null, mostrarCredito: false, mostrarDescuento: false },
+        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
+        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
+      },
+      rd: {
+        basico: { precio: "$70 USD", credito: null, mostrarCredito: false, mostrarDescuento: false },
+        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
+        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
       },
       uruguay: {
         basico: { precio: "$70 USD", credito: null, mostrarCredito: false, mostrarDescuento: false },
-        avanzado: { precio: "$120 USD" },
-        premium: { precio: "$160 USD" }
+        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
+        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
+      },
+      venezuela: {
+        basico: { precio: "$70 USD", credito: null, mostrarCredito: false, mostrarDescuento: false },
+        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
+        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
       }
     };
 
@@ -664,6 +826,16 @@
           }, 200);
         }
       });
+      
+      // Actualizar precios de mantenimiento
+      const mantAvanzado = document.getElementById('price-mantenimiento-avanzado');
+      const mantPremium = document.getElementById('price-mantenimiento-premium');
+      if (mantAvanzado) {
+        mantAvanzado.innerHTML = `${precios.avanzado.mantenimiento}<span class="text-sm text-gray-400 font-normal">/mes</span>`;
+      }
+      if (mantPremium) {
+        mantPremium.innerHTML = `${precios.premium.mantenimiento}<span class="text-sm text-gray-400 font-normal">/mes</span>`;
+      }
       
       // Mostrar/ocultar botón de crédito para plan Básico
       const btnCredito = document.getElementById('btn-credito-basico');
@@ -744,8 +916,8 @@
       const precios = preciosPorPais[pais];
       const mensajes = {
         "Básico": `🚀 *Hola NEXO-Art!* Me llamo *${nombre}* y quiero el plan *BÁSICO* por *${precios.basico.precio}*. ¡Empecemos ya!`,
-        "Avanzado": `🚀 *Hola NEXO-Art!* Soy *${nombre}* y quiero el plan *AVANZADO* por *${precios.avanzado.precio}*. ¡Es el más vendido y necesito que mi landing facture sola!`,
-        "Premium": `🚀 *Hola NEXO-Art!* Mi nombre es *${nombre}* y quiero el plan *PREMIUM* por *${precios.premium.precio}*. ¡Quiero dominar mi mercado con una web full custom!`
+        "Avanzado": `🚀 *Hola NEXO-Art!* Soy *${nombre}* y quiero el plan *AVANZADO EMPRESA* por *${precios.avanzado.precio}* + mantenimiento mensual *${precios.avanzado.mantenimiento}*. ¡Es el más vendido y necesito que mi landing facture sola!`,
+        "Premium": `🚀 *Hola NEXO-Art!* Mi nombre es *${nombre}* y quiero el plan *PREMIUM* por *${precios.premium.precio}* + mantenimiento mensual *${precios.premium.mantenimiento}*. ¡Quiero dominar mi mercado con una web full custom!`
       };
 
       let mensaje = mensajes[plan] || mensajes["Avanzado"];
@@ -773,7 +945,7 @@
       const precios = preciosPorPais[paisActual].basico;
       
       if (!precios.mostrarCredito) {
-        alert("💳 *Opción de crédito disponible solo para Argentina*\n\nPara Chile y Uruguay, el pago se realiza en USD vía:\n• Transferencia internacional\n• PayPal\n• Criptomonedas (USDT, BTC)\n\n¿Tenés consultas? ¡Escribinos por WhatsApp! 🚀");
+        alert("💳 *Opción de crédito disponible solo para Argentina*\n\nPara Latinoamérica, el pago se realiza en USD vía:\n• Transferencia internacional\n• PayPal\n• Criptomonedas (USDT, BTC)\n\n¿Tenés consultas? ¡Escribinos por WhatsApp! 🚀");
         return;
       }
       
