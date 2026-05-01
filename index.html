@@ -179,7 +179,7 @@
                 </div>
                 <div class="grid grid-cols-3 gap-2">
                     <div><label class="text-[9px] text-cyan-500">VIB (mm/s)</label><input type="number" id="in_vib" step="0.1" required class="cyber-input w-full rounded p-1 text-xs"></div>
-                    <div><label class="text-[9px] text-cyan-500">TEMP (°C)</label><input type="number" id="in_temp" step="0.1" required class="cyber-input w-full rounded p-1 text-xs"></div>
+                    <div><label class="text-[9px] text-cyan-500">TEMP ACEITE(°C)</label><input type="number" id="in_temp" step="0.1" required class="cyber-input w-full rounded p-1 text-xs"></div>
                     <div><label class="text-[9px] text-cyan-500">RPM</label><input type="number" id="in_rpm" required class="cyber-input w-full rounded p-1 text-xs"></div>
                 </div>
                 <div class="grid grid-cols-4 gap-2">
@@ -262,6 +262,17 @@
         <div class="glass-card p-5">
             <h2 class="font-tech text-sm text-cyan-400 font-bold mb-4"><i class="fas fa-bolt mr-2"></i>Métricas Avanzadas - Variables Sintéticas</h2>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="advCards"></div>
+        </div>
+
+        <!-- TARJETA NUEVA: DIAGNÓSTICO TÉRMICO POR DERIVADAS -->
+        <div class="glass-card p-5 border-l-4 border-l-amber-500" id="card-diagnostico-termico">
+            <h2 class="font-tech text-sm text-amber-400 font-bold mb-2"><i class="fas fa-thermometer-half mr-2"></i>Diagnóstico Térmico (Derivadas)</h2>
+            <p class="text-[10px] text-slate-400 mb-3">Análisis histórico de temperatura del aceite (Requiere mín. 4 registros de la misma unidad).</p>
+            <div id="diag-termico-resultado" class="p-3 bg-slate-900/50 rounded border border-slate-700 flex items-center justify-between">
+                <span class="text-xs font-bold text-slate-300">Estado Diagnóstico:</span>
+                <span id="diag-termico-badge" class="px-2 py-1 rounded text-[10px] font-bold bg-slate-800 text-slate-500">Esperando datos...</span>
+            </div>
+            <div id="diag-termico-detalles" class="mt-3 text-[9px] text-slate-400 space-y-1"></div>
         </div>
 
         <!-- Gráficos -->
@@ -480,7 +491,7 @@
             up: parseFloat(document.getElementById('in_up').value),
             down: parseFloat(document.getElementById('in_down').value),
             vib: parseFloat(document.getElementById('in_vib').value),
-            temp: parseFloat(document.getElementById('in_temp').value),
+            temp: parseFloat(document.getElementById('in_temp').value), 
             rpm: parseFloat(document.getElementById('in_rpm').value),
             psi_di: parseFloat(document.getElementById('in_psi_di').value),
             psi_dd: parseFloat(document.getElementById('in_psi_dd').value),
@@ -553,6 +564,8 @@
         const activeDb = selectedRows.size > 0 ? db.filter((_, i) => selectedRows.has(i)) : dbFiltrada;
         
         calcKPIsGenerales(activeDb);
+        calcDiagnosticoTermico(activeDb); 
+        
         if(activeDb.length > 0) {
             calcMetricasAvanzadas(activeDb[activeDb.length-1]);
             calcEstadisticasDescribe(activeDb);
@@ -569,6 +582,7 @@
         document.getElementById('table-correlacion').innerHTML = "";
         document.getElementById('ai-recommendations').innerHTML = '<p class="italic text-slate-500">Selecciona o ingresa datos y haz clic en "✨ Análisis IA".</p>';
         initAdvCards();
+        limpiarDiagnosticoTermico();
     }
 
     function getSynthetic(r) {
@@ -728,8 +742,80 @@
         table.innerHTML = headerHTML + bodyHTML;
     }
 
+    function calcDiagnosticoTermico(activeDb) {
+        const badge = document.getElementById('diag-termico-badge');
+        const detalles = document.getElementById('diag-termico-detalles');
+
+        if (!activeDb || activeDb.length === 0) {
+            limpiarDiagnosticoTermico();
+            return;
+        }
+        
+        const ultimaUnidad = activeDb[activeDb.length - 1].unidad;
+        const historialUnidad = activeDb.filter(r => r.unidad === ultimaUnidad);
+
+        if (historialUnidad.length < 4) {
+            badge.className = "px-2 py-1 rounded text-[10px] font-bold bg-slate-800 text-slate-500 border border-slate-600";
+            badge.innerText = "REQUIERE MÍNIMO 4 DATOS";
+            detalles.innerHTML = `<p class="mt-2 text-slate-400">Unidad <strong>${ultimaUnidad}</strong>: Registros actuales: ${historialUnidad.length}/4</p>`;
+            return;
+        }
+
+        const ultimos = historialUnidad.slice(-4);
+        const t3 = ultimos[0].temp; 
+        const t2 = ultimos[1].temp;
+        const t1 = ultimos[2].temp;
+        const t0 = ultimos[3].temp; 
+
+        const d1_actual = t0 - t1;
+        const d1_previo1 = t1 - t2;
+        
+        const d2_actual = d1_actual - d1_previo1;
+
+        let estado = "Normal";
+        let colorClass = "bg-emerald-900/40 text-emerald-400 border-emerald-500/50";
+        let mensaje = "Variaciones suaves dentro del rango esperado. Condición estable.";
+
+        if (d1_actual < -8) { 
+            estado = "Lubricación Insuficiente";
+            colorClass = "bg-blue-900/40 text-blue-400 border-blue-500/50";
+            mensaje = "Caída brusca de temperatura. Posible pérdida de lubricación o fuga en el sistema.";
+        }
+        else if (d2_actual > 4) { 
+            estado = "Alerta Bloque Motor";
+            colorClass = "bg-rose-900/40 text-rose-400 border-rose-500/50";
+            mensaje = "Aceleración térmica elevada. Tendencia a sobrecalentamiento rápido, riesgo estructural en bloque del motor.";
+        }
+        else if (d1_actual > 0 && d1_actual > d1_previo1 && d1_actual >= 2) { 
+            estado = "Alerta Cigüeñal";
+            colorClass = "bg-amber-900/40 text-amber-400 border-amber-500/50";
+            mensaje = "Aumento sostenido de temperatura con pendiente positiva fuerte. Posible fricción anormal o sobrecarga en el cigüeñal.";
+        }
+
+        badge.className = `px-2 py-1 rounded text-[10px] font-bold border ${colorClass} uppercase tracking-wider`;
+        badge.innerText = estado;
+
+        detalles.innerHTML = `
+            <div class="grid grid-cols-2 gap-2 mt-2">
+                <div class="bg-slate-800/50 p-1.5 rounded border border-slate-700/50"><span class="block text-cyan-500 mb-0.5">Temp Actual (T0):</span> ${t0.toFixed(1)} °C</div>
+                <div class="bg-slate-800/50 p-1.5 rounded border border-slate-700/50"><span class="block text-cyan-500 mb-0.5">Temp Previa (T-1):</span> ${t1.toFixed(1)} °C</div>
+                <div class="bg-slate-800/50 p-1.5 rounded border border-slate-700/50"><span class="block text-purple-400 mb-0.5">1ra Derivada (T'):</span> ${d1_actual > 0 ? '+'+d1_actual.toFixed(2) : d1_actual.toFixed(2)} °C/t</div>
+                <div class="bg-slate-800/50 p-1.5 rounded border border-slate-700/50"><span class="block text-rose-400 mb-0.5">2da Derivada (T''):</span> ${d2_actual > 0 ? '+'+d2_actual.toFixed(2) : d2_actual.toFixed(2)} °C/t²</div>
+            </div>
+            <div class="mt-2 p-2 bg-black/30 rounded border border-slate-700">
+                <p class="text-slate-300 italic font-medium"><i class="fas fa-info-circle mr-1 text-amber-500"></i> ${mensaje}</p>
+            </div>
+        `;
+    }
+
+    function limpiarDiagnosticoTermico() {
+        document.getElementById('diag-termico-badge').className = "px-2 py-1 rounded text-[10px] font-bold bg-slate-800 text-slate-500";
+        document.getElementById('diag-termico-badge').innerText = "ESPERANDO DATOS...";
+        document.getElementById('diag-termico-detalles').innerHTML = "";
+    }
+
     // ==========================================
-    // NUEVO MOTOR IA LOCAL (AUTÓNOMO Y OFFLINE)
+    // MOTOR DE INTELIGENCIA LOCAL (IA OFFLINE)
     // ==========================================
     function llamarIALocal() {
         const activeDb = selectedRows.size > 0 ? db.filter((_, i) => selectedRows.has(i)) : obtenerDbFiltrada();
@@ -739,11 +825,9 @@
         const last = activeDb[activeDb.length-1];
         const syn = getSynthetic(last);
         
-        // Detección de sensores marcados
         const chks = document.querySelectorAll('.sensor-chk:checked');
         const sensoresFallando = Array.from(chks).map(c => c.value);
 
-        // Extracción de contexto estadístico poblacional de la muestra actual
         const temps = activeDb.map(r => r.temp);
         const vibs = activeDb.map(r => r.vib);
         const meanTemp = temps.reduce((a,b)=>a+b,0) / (temps.length || 1);
@@ -754,67 +838,137 @@
         const zScoreTemp = stdTemp > 0 ? ((last.temp - meanTemp) / stdTemp).toFixed(2) : 0;
         const zScoreVib = stdVib > 0 ? ((last.vib - meanVib) / stdVib).toFixed(2) : 0;
 
-        // Cálculo de Antigüedad
         const anioFab = last.anio || new Date().getFullYear();
         const age = new Date(last.fecha).getFullYear() - anioFab;
 
-        let html = `<div class="p-2 space-y-3">`;
-        html += `<h3 class="text-cyan-400 font-bold border-b border-cyan-500/30 pb-1">Análisis Diagnóstico Inmediato</h3>`;
-
-        // 1. Evaluación de Telemetría
-        html += `<div class="bg-slate-800/50 p-2 rounded border border-slate-600">`;
-        html += `<p class="font-bold text-slate-300">1. Métricas de Telemetría <sup class="text-indigo-400">(1)</sup></p>`;
-        html += `<ul class="list-disc pl-4 mt-1 text-slate-400">`;
-        if (last.temp > 95) html += `<li><strong class="text-rose-400">Anomalía Térmica:</strong> ${last.temp}°C detectada. Desviación de +${zScoreTemp}σ (desviaciones estándar) respecto a la media poblacional, indicando un desgaste anormal en refrigeración.</li>`;
-        else html += `<li><strong>Temperatura:</strong> Nominal (${last.temp}°C) con una desviación poblacional de ${zScoreTemp}σ.</li>`;
+        container.innerHTML = '<p class="italic text-indigo-400"><i class="fas fa-spinner fa-spin mr-2"></i> ✨ Procesando telemetría, derivadas y bases de conocimiento técnico...</p>';
         
-        if (last.vib > 4) html += `<li><strong class="text-rose-400">Vibración Crítica:</strong> ${last.vib} mm/s (Z-Score: +${zScoreVib}σ). Riesgo en ejes o rodamientos.</li>`;
-        else html += `<li><strong>Vibración:</strong> ${last.vib} mm/s, dentro del espectro esperado.</li>`;
-        html += `<li><strong>Downtime asociado:</strong> ${last.down}h.</li>`;
-        html += `</ul></div>`;
+        setTimeout(() => {
+            let html = `<div class="p-2 space-y-3">`;
+            html += `<h3 class="text-cyan-400 font-bold border-b border-cyan-500/30 pb-1">Análisis Diagnóstico Inmediato</h3>`;
 
-        // 2. Evaluación de Datos Sintéticos
-        html += `<div class="bg-slate-800/50 p-2 rounded border border-slate-600">`;
-        html += `<p class="font-bold text-slate-300">2. Análisis de Variables Sintéticas <sup class="text-indigo-400">(2)</sup></p>`;
-        html += `<ul class="list-disc pl-4 mt-1 text-slate-400">`;
-        html += `<li><strong>Índice de Desgaste:</strong> ${syn.desgaste.toFixed(1)} / 100 ${syn.desgaste > 80 ? '<span class="text-rose-400">(Severo)</span>' : '(Controlado)'}.</li>`;
-        html += `<li><strong>Estrés Mecánico Computado:</strong> ${syn.estres.toFixed(1)}.</li>`;
-        html += `</ul></div>`;
+            // 1. Evaluación de Telemetría
+            html += `<div class="bg-slate-800/50 p-2 rounded border border-slate-600">`;
+            html += `<p class="font-bold text-slate-300">1. Métricas de Telemetría <sup class="text-indigo-400">(1)</sup></p>`;
+            html += `<ul class="list-disc pl-4 mt-1 text-slate-400">`;
+            if (last.temp > 95) html += `<li><strong class="text-rose-400">Anomalía Térmica:</strong> ${last.temp}°C detectada. Desviación de +${zScoreTemp}σ (desviaciones estándar) respecto a la media poblacional, indicando un desgaste anormal en refrigeración.</li>`;
+            else html += `<li><strong>Temperatura:</strong> Nominal (${last.temp}°C) con una desviación poblacional de ${zScoreTemp}σ.</li>`;
+            
+            if (last.vib > 4) html += `<li><strong class="text-rose-400">Vibración Crítica:</strong> ${last.vib} mm/s (Z-Score: +${zScoreVib}σ). Riesgo en ejes o rodamientos.</li>`;
+            else html += `<li><strong>Vibración:</strong> ${last.vib} mm/s, dentro del espectro esperado.</li>`;
+            html += `<li><strong>Downtime asociado:</strong> ${last.down}h.</li>`;
+            html += `</ul></div>`;
 
-        // 3. Antigüedad y Ciclo de Vida
-        html += `<div class="bg-slate-800/50 p-2 rounded border border-slate-600">`;
-        html += `<p class="font-bold text-slate-300">3. Evaluación de Antigüedad <sup class="text-indigo-400">(3)</sup></p>`;
-        html += `<ul class="list-disc pl-4 mt-1 text-slate-400">`;
-        html += `<li><strong>Fabricación:</strong> ${anioFab} (${age} años de servicio).</li>`;
-        if (age > 10 || last.km > 150000) {
-            html += `<li><strong>Fase de Desgaste:</strong> Equipo en tercio final de vida útil o cluster de alto KM (${last.km.toLocaleString()} km). Curva de riesgo alta en componentes críticos (caja/compresión).</li>`;
-        } else {
-            html += `<li><strong>Fase de Desgaste:</strong> Operación en periodo de vida óptimo o medio (${last.km.toLocaleString()} km).</li>`;
-        }
-        html += `</ul></div>`;
+            // 2. Evaluación de Datos Sintéticos
+            html += `<div class="bg-slate-800/50 p-2 rounded border border-slate-600">`;
+            html += `<p class="font-bold text-slate-300">2. Análisis de Variables Sintéticas <sup class="text-indigo-400">(2)</sup></p>`;
+            html += `<ul class="list-disc pl-4 mt-1 text-slate-400">`;
+            html += `<li><strong>Índice de Desgaste:</strong> ${syn.desgaste.toFixed(1)} / 100 ${syn.desgaste > 80 ? '<span class="text-rose-400">(Severo)</span>' : '(Controlado)'}.</li>`;
+            html += `<li><strong>Estrés Mecánico Computado:</strong> ${syn.estres.toFixed(1)}.</li>`;
+            html += `</ul></div>`;
 
-        // 4. Sensores y Entrecruzamiento
-        if (sensoresFallando.length > 0) {
-            html += `<div class="bg-rose-900/20 p-2 rounded border border-rose-500/30">`;
-            html += `<p class="font-bold text-rose-400">4. Anomalías en Sensores Activos</p>`;
-            html += `<p class="text-slate-300 mt-1">El entrecruzamiento de las métricas anteriores (1, 2) corrobora las alertas en los sensores: <strong>${sensoresFallando.join(', ')}</strong>. Se requiere orden de trabajo inmediata.</p>`;
-            html += `</div>`;
-        } else {
-            html += `<div class="bg-emerald-900/20 p-2 rounded border border-emerald-500/30">`;
-            html += `<p class="font-bold text-emerald-400">4. Sensores Libres de Alertas</p>`;
-            html += `<p class="text-slate-300 mt-1">No se marcaron sensores anómalos que modifiquen la proyección estadística base.</p>`;
-            html += `</div>`;
-        }
+            // 3. Antigüedad y Ciclo de Vida
+            html += `<div class="bg-slate-800/50 p-2 rounded border border-slate-600">`;
+            html += `<p class="font-bold text-slate-300">3. Evaluación de Antigüedad <sup class="text-indigo-400">(3)</sup></p>`;
+            html += `<ul class="list-disc pl-4 mt-1 text-slate-400">`;
+            html += `<li><strong>Fabricación:</strong> ${anioFab} (${age} años de servicio).</li>`;
+            if (age > 10 || last.km > 150000) {
+                html += `<li><strong>Fase de Desgaste:</strong> Equipo en tercio final de vida útil o cluster de alto KM (${last.km.toLocaleString()} km). Curva de riesgo alta en componentes críticos (caja/compresión).</li>`;
+            } else {
+                html += `<li><strong>Fase de Desgaste:</strong> Operación en periodo de vida óptimo o medio (${last.km.toLocaleString()} km).</li>`;
+            }
+            html += `</ul></div>`;
 
-        // 5. Bases de Conocimiento Citadas
-        html += `<div class="mt-4 pt-2 border-t border-indigo-500/30 text-[9px] text-indigo-300 leading-relaxed">`;
-        html += `<p class="font-bold mb-1 text-indigo-400 tracking-wider">BASES DE CONOCIMIENTO Y DEFINICIONES:</p>`;
-        html += `<p><strong class="text-indigo-200">(1) Norma ISO 10816 y Contexto Estadístico:</strong> Define límites absolutos para la severidad vibratoria en equipos rotativos. La evaluación utiliza la varianza (σ) para identificar comportamientos atípicos en base al universo total de registros de la flota activa en el dashboard.</p>`;
-        html += `<p><strong class="text-indigo-200">(2) Tribología y Desgaste Predictivo:</strong> Los modelos sintéticos calculan la fricción y degeneración de fluidos cruzando el ratio RPM/Vibración/Temperatura, proyectando el agotamiento inminente de la película lubricante.</p>`;
-        html += `<p><strong class="text-indigo-200">(3) Distribución de Weibull y MTTF:</strong> Proyección de la fase de fallas por desgaste ("wear-out phase") utilizando la ventana temporal de antigüedad (Año Actual vs Año Fabricación) y exposición a los kilómetros.</p>`;
-        html += `</div></div>`;
+            // 4. Sensores y Entrecruzamiento
+            if (sensoresFallando.length > 0) {
+                html += `<div class="bg-rose-900/20 p-2 rounded border border-rose-500/30">`;
+                html += `<p class="font-bold text-rose-400">4. Anomalías en Sensores Activos</p>`;
+                html += `<p class="text-slate-300 mt-1">El entrecruzamiento de las métricas anteriores (1, 2) corrobora las alertas en los sensores: <strong>${sensoresFallando.join(', ')}</strong>. Se requiere orden de trabajo inmediata.</p>`;
+                html += `</div>`;
+            } else {
+                html += `<div class="bg-emerald-900/20 p-2 rounded border border-emerald-500/30">`;
+                html += `<p class="font-bold text-emerald-400">4. Sensores Libres de Alertas</p>`;
+                html += `<p class="text-slate-300 mt-1">No se marcaron sensores anómalos que modifiquen la proyección estadística base.</p>`;
+                html += `</div>`;
+            }
 
-        container.innerHTML = html;
+            // 5. Análisis Cinemático de Uso (Derivadas de KM)
+            const historialUnidad = activeDb.filter(r => r.unidad === last.unidad);
+            let analisisKmHtml = '';
+            
+            if (historialUnidad.length >= 3) {
+                const u0 = historialUnidad[historialUnidad.length - 1]; // Actual
+                const u1 = historialUnidad[historialUnidad.length - 2];
+                const u2 = historialUnidad[historialUnidad.length - 3];
+
+                const t0 = new Date(u0.fecha).getTime();
+                const t1 = new Date(u1.fecha).getTime();
+                const t2 = new Date(u2.fecha).getTime();
+
+                // Diferencia en días. Si es 0 (mismo día), usamos 1 para evitar divisiones por cero.
+                const dt1 = Math.max(1, (t0 - t1) / (1000 * 3600 * 24)); 
+                const dt2 = Math.max(1, (t1 - t2) / (1000 * 3600 * 24));
+
+                const v1 = (u0.km - u1.km) / dt1; // KM/día actual
+                const v2 = (u1.km - u2.km) / dt2; // KM/día previo
+                const a = v1 - v2; // Aceleración KM/día^2
+
+                let catUso = "Uso normal";
+                let colorUso = "text-emerald-400";
+                let descUso = "Variaciones suaves dentro del rango esperado.";
+
+                if (v1 > 100 && a > 0) { 
+                    catUso = "Desgaste acelerado";
+                    colorUso = "text-rose-400";
+                    descUso = "Primera derivada alta y creciente. Mayor probabilidad de desgaste acelerado en piezas de fricción (embrague, frenos, neumáticos).";
+                } else if (a > 10) {
+                    catUso = "Mantenimiento anticipado";
+                    colorUso = "text-amber-400";
+                    descUso = "Segunda derivada positiva. Riesgo de mantenimiento no programado (ej. correa de distribución antes de lo previsto).";
+                } else if (a < -10 || v1 < 5) {
+                    catUso = "Riesgo eléctrico por inactividad";
+                    colorUso = "text-purple-400";
+                    descUso = "Segunda derivada negativa o acumulación baja. Vehículo parado mucho tiempo, riesgo eléctrico (sulfatación bornes, pérdida carga) o fluidos.";
+                }
+
+                let mantRec = "";
+                const kmActual = u0.km;
+                if (kmActual >= 100000) mantRec = "Riesgo de fisuras en bloque, desgaste de cigüeñal e inyectores.";
+                else if (kmActual >= 60000) mantRec = "Correa de distribución y bomba de agua.";
+                else if (kmActual >= 40000) mantRec = "Revisión de frenos y suspensión.";
+                else if (kmActual >= 10000) mantRec = "Cambio de aceite y filtros.";
+                else mantRec = "Mantenimiento de rodaje inicial.";
+
+                analisisKmHtml = `
+                <div class="bg-slate-800/50 p-2 rounded border border-slate-600 mt-3">
+                    <p class="font-bold text-slate-300">5. Análisis Cinemático de Uso (Derivadas de KM) <sup class="text-indigo-400">(4)</sup></p>
+                    <ul class="list-disc pl-4 mt-1 text-slate-400">
+                        <li><strong class="${colorUso}">${catUso}:</strong> ${descUso}</li>
+                        <li><strong>Derivadas:</strong> Tasa (K') ${v1.toFixed(1)} km/d | Acel (K'') ${a > 0 ? '+'+a.toFixed(1) : a.toFixed(1)} km/d²</li>
+                        <li><strong>Intervalo Recomendado (${kmActual.toLocaleString()} km):</strong> ${mantRec}</li>
+                    </ul>
+                </div>`;
+            } else {
+                analisisKmHtml = `
+                <div class="bg-slate-800/50 p-2 rounded border border-slate-600 mt-3">
+                    <p class="font-bold text-slate-300">5. Análisis Cinemático de Uso (Derivadas de KM)</p>
+                    <p class="text-slate-400 text-[10px] mt-1">Requiere al menos 3 registros históricos de la misma unidad para calcular las derivadas de kilometraje.</p>
+                </div>`;
+            }
+
+            html += analisisKmHtml;
+
+            // 6. Bases de Conocimiento Citadas
+            html += `<div class="mt-4 pt-2 border-t border-indigo-500/30 text-[9px] text-indigo-300 leading-relaxed">`;
+            html += `<p class="font-bold mb-1 text-indigo-400 tracking-wider">BASES DE CONOCIMIENTO Y DEFINICIONES:</p>`;
+            html += `<p><strong class="text-indigo-200">(1) Norma ISO 10816 y Contexto Estadístico:</strong> Define límites absolutos para la severidad vibratoria en equipos rotativos. La evaluación utiliza la varianza (σ) para identificar comportamientos atípicos en base al universo total de registros de la flota activa en el dashboard.</p>`;
+            html += `<p><strong class="text-indigo-200">(2) Tribología y Desgaste Predictivo:</strong> Los modelos sintéticos calculan la fricción y degeneración de fluidos cruzando el ratio RPM/Vibración/Temperatura, proyectando el agotamiento inminente de la película lubricante.</p>`;
+            html += `<p><strong class="text-indigo-200">(3) Distribución de Weibull y MTTF:</strong> Proyección de la fase de fallas por desgaste ("wear-out phase") utilizando la ventana temporal de antigüedad (Año Actual vs Año Fabricación) y exposición a los kilómetros.</p>`;
+            html += `<p><strong class="text-indigo-200">(4) Análisis de Serie Histórica (KM):</strong> El cruce de la 1ra y 2da derivada de kilómetros recorridos permite predecir el desgaste acelerado en fricción o los riesgos de inactividad eléctrica/química.</p>`;
+            html += `</div></div>`;
+
+            container.innerHTML = html;
+        }, 800);
     }
 
     // INTERFAZ DE DATOS Y GRAFICOS
@@ -1005,7 +1159,6 @@
     }
 
     function exportarPDF() {
-        // Lógica de exportación de PDF se mantiene funcional según base
         alert("El exportador PDF sigue intacto y vinculado a html2pdf.");
     }
 
