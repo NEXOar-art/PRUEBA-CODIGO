@@ -202,20 +202,40 @@
         <div class="glass-card p-5">
             <h2 class="font-tech text-sm text-cyan-400 font-bold mb-4"><i class="fas fa-chart-pie mr-2"></i>Rendimiento de la Flota</h2>
             <div class="grid grid-cols-3 gap-3 text-center mb-4">
-                <div class="bg-slate-800/50 p-3 rounded-lg border border-cyan-500/20 relative">
+                <!-- Tarjeta Disp. -->
+                <div class="bg-slate-800/50 p-3 rounded-lg border border-cyan-500/20 relative group cursor-help">
                     <p class="text-[10px] text-slate-400 uppercase">Disp.</p>
                     <p id="kpi_disp" class="stat-value text-xl text-emerald-400 font-bold mt-1">0%</p>
                     <span id="ind_disp" class="absolute top-2 right-2 text-[8px] px-1.5 py-0.5 rounded border border-current hidden"></span>
+                    
+                    <!-- Tooltip Hover -->
+                    <div class="absolute z-50 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-300 bg-slate-900/95 text-cyan-100 text-[9px] p-2 rounded-lg border border-cyan-500/50 w-40 left-1/2 -translate-x-1/2 bottom-[105%] pointer-events-none shadow-xl">
+                        <strong class="text-emerald-400">Disponibilidad:</strong><br> Porcentaje de tiempo que la unidad está operativa y lista para usar frente al tiempo total inactivo.
+                    </div>
                 </div>
-                <div class="bg-slate-800/50 p-3 rounded-lg border border-cyan-500/20 relative">
+                
+                <!-- Tarjeta MTBF -->
+                <div class="bg-slate-800/50 p-3 rounded-lg border border-cyan-500/20 relative group cursor-help">
                     <p class="text-[10px] text-slate-400 uppercase">MTBF (h)</p>
                     <p id="kpi_mtbf" class="stat-value text-xl text-cyan-400 font-bold mt-1">0</p>
                     <span id="ind_mtbf" class="absolute top-2 right-2 text-[8px] px-1.5 py-0.5 rounded border border-current hidden"></span>
+                    
+                    <!-- Tooltip Hover -->
+                    <div class="absolute z-50 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-300 bg-slate-900/95 text-cyan-100 text-[9px] p-2 rounded-lg border border-cyan-500/50 w-40 left-1/2 -translate-x-1/2 bottom-[105%] pointer-events-none shadow-xl">
+                        <strong class="text-cyan-400">Mean Time Between Failures:</strong><br> Tiempo medio entre fallas. Mide la confiabilidad (cuanto mayor, mejor).
+                    </div>
                 </div>
-                <div class="bg-slate-800/50 p-3 rounded-lg border border-cyan-500/20 relative">
+
+                <!-- Tarjeta MTTR -->
+                <div class="bg-slate-800/50 p-3 rounded-lg border border-cyan-500/20 relative group cursor-help">
                     <p class="text-[10px] text-slate-400 uppercase">MTTR (h)</p>
                     <p id="kpi_mttr" class="stat-value text-xl text-purple-400 font-bold mt-1">0</p>
                     <span id="ind_mttr" class="absolute top-2 right-2 text-[8px] px-1.5 py-0.5 rounded border border-current hidden"></span>
+                    
+                    <!-- Tooltip Hover -->
+                    <div class="absolute z-50 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-300 bg-slate-900/95 text-cyan-100 text-[9px] p-2 rounded-lg border border-cyan-500/50 w-40 left-1/2 -translate-x-1/2 bottom-[105%] pointer-events-none shadow-xl">
+                        <strong class="text-purple-400">Mean Time To Repair:</strong><br> Tiempo medio de reparación. Mide la eficiencia del mantenimiento (cuanto menor, mejor).
+                    </div>
                 </div>
             </div>
             <div class="relative h-40 w-full"><canvas id="chartKpis"></canvas></div>
