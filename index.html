@@ -113,21 +113,37 @@
         .llm-response strong { color: #818cf8; }
         .llm-response ul { padding-left: 1rem; margin-top: 0.5rem; }
         .llm-response li { margin-bottom: 0.25rem; list-style-type: disc; }
+        
+        /* Animación de pulso para el logo */
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .animate-pulse {
+            animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
     </style>
 </head>
 <body class="p-4 md:p-6" id="dashboard-body">
 
 <!-- Header Global -->
 <header class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 no-print glass-card p-4">
-    <div class="flex items-center gap-3">
-        <div class="w-12 h-12 rounded-full border-2 border-cyan-400 flex items-center justify-center bg-cyan-900/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.5)]">
-            <i class="fas fa-microchip text-xl"></i>
+    <div class="flex items-center gap-4">
+        <!-- Logo Circular NEXO-Art -->
+        <div class="relative group">
+            <div class="w-16 h-16 rounded-full border-2 border-cyan-400 flex items-center justify-center bg-gradient-to-br from-cyan-900/40 to-slate-900/60 shadow-[0_0_20px_rgba(6,182,212,0.4)] overflow-hidden hover:shadow-[0_0_30px_rgba(6,182,212,0.6)] transition-all duration-300">
+                <img src="NEXO.png" alt="NEXO-Art Logo" class="w-12 h-12 object-contain drop-shadow-[0_0_8px_rgba(6,182,212,0.8)]">
+            </div>
+            <!-- Efecto de brillo animado -->
+            <div class="absolute inset-0 rounded-full border border-cyan-300/30 animate-pulse pointer-events-none"></div>
         </div>
+        
         <div>
-            <h1 class="text-2xl font-tech font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">NEXO-ART</h1>
-            <p class="text-xs tracking-[0.2em] text-cyan-500/80 uppercase font-tech">Motor Intelligence</p>
+            <h1 class="text-2xl font-tech font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-cyan-300 drop-shadow-[0_0_10px_rgba(6,182,212,0.5)]">NEXO-ART</h1>
+            <p class="text-xs tracking-[0.25em] text-cyan-500/80 uppercase font-tech font-semibold">Motor Intelligence</p>
         </div>
     </div>
+    
     <div class="flex flex-wrap items-center justify-center gap-2">
         <button onclick="limpiarFiltros()" class="btn-neon px-3 py-1.5 rounded text-xs" title="Borrar toda la base de datos"><i class="fas fa-trash-alt mr-1"></i>Reset DB</button>
         <button onclick="exportarCSV()" class="btn-neon px-3 py-1.5 rounded text-xs"><i class="fas fa-file-csv mr-1"></i>CSV</button>
