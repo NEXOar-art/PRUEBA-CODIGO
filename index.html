@@ -101,8 +101,13 @@
             font-family: 'Orbitron', sans-serif;
             border-bottom: 2px solid rgba(6, 182, 212, 0.3);
             padding: 8px;
+            white-space: nowrap;
         }
-        .cyber-table td { border-bottom: 1px solid rgba(6, 182, 212, 0.1); padding: 8px; }
+        .cyber-table td { 
+            border-bottom: 1px solid rgba(6, 182, 212, 0.1); 
+            padding: 8px; 
+            white-space: nowrap;
+        }
         .cyber-table tr:hover td { background: rgba(6, 182, 212, 0.05); }
         @media print {
             body { background: white !important; color: black !important; }
@@ -113,39 +118,74 @@
         .llm-response strong { color: #818cf8; }
         .llm-response ul { padding-left: 1rem; margin-top: 0.5rem; }
         .llm-response li { margin-bottom: 0.25rem; list-style-type: disc; }
-        
-        /* Animación de pulso para el logo */
-        @keyframes pulse-glow {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+        /* === NUEVO: Estilos para imágenes === */
+        .img-thumbnail {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            cursor: pointer;
+            transition: all 0.2s;
         }
-        .animate-pulse {
-            animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        .img-thumbnail:hover {
+            border-color: #06b6d4;
+            box-shadow: 0 0 10px rgba(6, 182, 212, 0.4);
+            transform: scale(1.05);
         }
+        .img-placeholder {
+            width: 40px;
+            height: 40px;
+            border-radius: 4px;
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px dashed rgba(6, 182, 212, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(6, 182, 212, 0.6);
+            font-size: 14px;
+        }
+        .modal-img-full {
+            max-width: 100%;
+            max-height: 60vh;
+            border-radius: 8px;
+            border: 2px solid rgba(6, 182, 212, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+        .img-upload-preview {
+            max-width: 100%;
+            max-height: 150px;
+            border-radius: 8px;
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            margin-top: 8px;
+            display: none;
+        }
+        .upload-status {
+            font-size: 9px;
+            margin-top: 4px;
+            min-height: 16px;
+        }
+        .upload-status.uploading { color: #fbbf24; }
+        .upload-status.success { color: #10b981; }
+        .upload-status.error { color: #f43f5e; }
     </style>
 </head>
 <body class="p-4 md:p-6" id="dashboard-body">
 
 <!-- Header Global -->
 <header class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 no-print glass-card p-4">
-    <div class="flex items-center gap-4">
-        <!-- Logo Circular NEXO-Art -->
-        <div class="relative group">
-            <div class="w-16 h-16 rounded-full border-2 border-cyan-400 flex items-center justify-center bg-gradient-to-br from-cyan-900/40 to-slate-900/60 shadow-[0_0_20px_rgba(6,182,212,0.4)] overflow-hidden hover:shadow-[0_0_30px_rgba(6,182,212,0.6)] transition-all duration-300">
-                <img src="NEXO.png" alt="NEXO-Art Logo" class="w-12 h-12 object-contain drop-shadow-[0_0_8px_rgba(6,182,212,0.8)]">
-            </div>
-            <!-- Efecto de brillo animado -->
-            <div class="absolute inset-0 rounded-full border border-cyan-300/30 animate-pulse pointer-events-none"></div>
+    <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-full border-2 border-cyan-400 flex items-center justify-center bg-cyan-900/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.5)]">
+            <i class="fas fa-microchip text-xl"></i>
         </div>
-        
         <div>
-            <h1 class="text-2xl font-tech font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-cyan-300 drop-shadow-[0_0_10px_rgba(6,182,212,0.5)]">NEXO-ART</h1>
-            <p class="text-xs tracking-[0.25em] text-cyan-500/80 uppercase font-tech font-semibold">Motor Intelligence</p>
+            <h1 class="text-2xl font-tech font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">NEXO-ART</h1>
+            <p class="text-xs tracking-[0.2em] text-cyan-500/80 uppercase font-tech">Motor Intelligence</p>
         </div>
     </div>
-    
     <div class="flex flex-wrap items-center justify-center gap-2">
-        <button onclick="limpiarFiltros()" class="btn-neon px-3 py-1.5 rounded text-xs" title="Borrar toda la base de datos"><i class="fas fa-trash-alt mr-1"></i>Reset DB</button>
+        <button onclick="limpiarFiltros()" class="btn-neon px-3 py-1.5 rounded text-xs" title="Borrar toda la base de datos local"><i class="fas fa-trash-alt mr-1"></i>Reset DB</button>
+        <button id="btn-bajar-nube" onclick="bajarDatosNube()" class="btn-neon px-3 py-1.5 rounded text-xs" title="Descargar registros de la nube"><i class="fas fa-cloud-download-alt mr-1"></i>Bajar Nube</button>
         <button onclick="exportarCSV()" class="btn-neon px-3 py-1.5 rounded text-xs"><i class="fas fa-file-csv mr-1"></i>CSV</button>
         <button onclick="exportarPDF()" class="btn-neon px-3 py-1.5 rounded text-xs"><i class="fas fa-file-pdf mr-1"></i>PDF</button>
         <button onclick="location.reload()" class="btn-neon px-3 py-1.5 rounded text-xs"><i class="fas fa-sync-alt mr-1"></i>Actualizar</button>
@@ -208,6 +248,15 @@
                     <label class="text-[10px] text-cyan-500 uppercase font-bold tracking-wider">Detalle de Trabajo</label>
                     <textarea id="in_trabajo" rows="2" class="cyber-input w-full rounded p-1.5 text-xs" placeholder="Describa mantenimientos realizados..."></textarea>
                 </div>
+                <!-- === NUEVO: Input para imagen === -->
+                <div>
+                    <label class="text-[10px] text-cyan-500 uppercase font-bold tracking-wider flex items-center gap-2">
+                        <i class="fas fa-image"></i> Imagen de Referencia (Opcional)
+                    </label>
+                    <input type="file" id="in_imagen" accept="image/*" class="cyber-input w-full rounded p-1.5 text-xs file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:bg-cyan-900/30 file:text-cyan-400 hover:file:bg-cyan-900/50">
+                    <img id="img-preview" class="img-upload-preview" alt="Vista previa">
+                    <div id="upload-status" class="upload-status"></div>
+                </div>
                 <button type="submit" class="btn-neon w-full py-2 rounded-lg text-sm mt-2">
                     <i class="fas fa-cogs mr-2"></i>Procesar Datos
                 </button>
@@ -261,12 +310,8 @@
         <div class="glass-card p-5 no-print">
             <h2 class="font-tech text-sm text-cyan-400 font-bold mb-2"><i class="fas fa-microchip mr-2"></i>Diagnóstico de Sensores</h2>
             <p class="text-[9px] text-slate-400 mb-3">Tildar anomalías detectadas para cruzar con dataset e IA.</p>
-            <div class="space-y-2 max-h-[150px] overflow-y-auto text-[10px]">
-                <label class="flex items-center gap-2 cursor-pointer hover:bg-cyan-900/30 p-1 rounded"><input type="checkbox" class="sensor-chk" value="Check Engine"> Check Engine (Alerta General)</label>
-                <label class="flex items-center gap-2 cursor-pointer hover:bg-cyan-900/30 p-1 rounded"><input type="checkbox" class="sensor-chk" value="Temperatura"> Alarma Temperatura Alta</label>
-                <label class="flex items-center gap-2 cursor-pointer hover:bg-cyan-900/30 p-1 rounded"><input type="checkbox" class="sensor-chk" value="Presión Aceite"> Caída Presión Aceite</label>
-                <label class="flex items-center gap-2 cursor-pointer hover:bg-cyan-900/30 p-1 rounded"><input type="checkbox" class="sensor-chk" value="ABS/Frenos"> Falla ABS / Frenos</label>
-                <label class="flex items-center gap-2 cursor-pointer hover:bg-cyan-900/30 p-1 rounded"><input type="checkbox" class="sensor-chk" value="DPF/EGR"> Alerta DPF / EGR</label>
+            <div class="space-y-1 max-h-[180px] overflow-y-auto text-[10px] custom-scrollbar pr-2" id="sensores-container">
+                <!-- Dinámico por JS -->
             </div>
         </div>
 
@@ -360,7 +405,7 @@
                         <thead>
                             <tr>
                                 <th class="w-8 text-center"><input type="checkbox" id="chk-all" onchange="toggleAllRows(this.checked)" title="Seleccionar todo"></th>
-                                <th>Fecha</th><th>Unidad</th><th>Motor</th><th>KM</th><th>UP</th><th>DOWN</th><th>VIB</th><th>TEMP</th><th class="w-16 text-center">Detalle</th>
+                                <th>Fecha</th><th>Unidad</th><th>Motor</th><th>KM</th><th>UP</th><th>DOWN</th><th>VIB</th><th>TEMP</th><th class="w-12 text-center">Img</th><th class="w-16 text-center">Detalle</th>
                             </tr>
                         </thead>
                         <tbody id="tbody-dataset"></tbody>
@@ -397,7 +442,82 @@
     <i class="fab fa-whatsapp"></i>
 </a>
 
-<!-- LOGICA JS -->
+<!-- LOGICA JS SUPABASE -->
+<script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+    const supabaseUrl = "https://frggsxlgpxlexasixtdj.supabase.co";
+    const supabaseKey = "sb_publishable_IJ5fiIeJHPK_acU_LulfDg_6xfi6_Ho";
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    window.guardarDatoSupabase = async function(unidad, km, temp) {
+        const { data, error } = await supabase
+            .from("vehiculos")
+            .insert([{ unidad: unidad, kilometros: km, temperatura: temp, fecha: new Date().toISOString() }]);
+        if (error) console.error("Error en Supabase:", error);
+        else console.log("Dato guardado en Supabase:", data);
+    };
+
+    window.leerDatosSupabase = async function() {
+        const { data, error } = await supabase
+            .from("vehiculos")
+            .select("*")
+            .order("fecha", { ascending: true });
+        if (error) {
+            console.error(error);
+            alert("❌ Error al descargar datos de la nube: " + error.message);
+        } else {
+            console.log("Datos desde Supabase:", data);
+            if (data && data.length > 0) {
+                window.actualizarDbDesdeNube(data);
+            } else {
+                alert("⚠️ La base de datos en la nube no tiene registros aún.");
+            }
+        }
+    };
+
+    // === NUEVO: Función para subir imagen a Supabase Storage ===
+    window.subirImagenSupabase = async function(file, recordId, unidad) {
+        if (!file) return null;
+        
+        const statusEl = document.getElementById('upload-status');
+        statusEl.className = 'upload-status uploading';
+        statusEl.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i>Subiendo imagen...';
+        
+        try {
+            // Generar nombre único: unidad_fecha_id_timestamp.ext
+            const ext = file.name.split('.').pop().toLowerCase();
+            const fileName = `${unidad}_${recordId}_${Date.now()}.${ext}`;
+            const filePath = `imagenes_registros/${fileName}`;
+            
+            const { data, error } = await supabase.storage
+                .from('nexo-art-images')
+                .upload(filePath, file, {
+                    cacheControl: '3600',
+                    upsert: false
+                });
+            
+            if (error) throw error;
+            
+            // Obtener URL pública
+            const { data: { publicUrl } } = supabase.storage
+                .from('nexo-art-images')
+                .getPublicUrl(filePath);
+            
+            statusEl.className = 'upload-status success';
+            statusEl.innerHTML = '<i class="fas fa-check mr-1"></i>Imagen subida';
+            
+            return publicUrl;
+            
+        } catch (err) {
+            console.error("Error subiendo imagen:", err);
+            statusEl.className = 'upload-status error';
+            statusEl.innerHTML = `<i class="fas fa-exclamation-triangle mr-1"></i>Error: ${err.message}`;
+            return null;
+        }
+    };
+</script>
+
 <script>
     // ESTADO GLOBAL
     const MAX_RECORDS = 2000;
@@ -421,6 +541,27 @@
         { id: 'dispop', name: 'Disp. Operativa', min: 70, optMin: 85, optMax: 95, max: 100, unit: '%' }
     ];
 
+    const defSensores = [
+        { id: 'O2', label: 'Sensor de Oxígeno (O2)', falla: 'Provoca mezcla rica o pobre y alto consumo de combustible', fuente: '(1,2)' },
+        { id: 'MAP', label: 'Sensor MAP (Presión Múltiple)', falla: 'Genera pérdida de potencia y altera la inyección de combustible', fuente: '(1,2)' },
+        { id: 'CP', label: 'Sensor CP (Cigüeñal)', falla: 'Es vital para el arranque; si falla, el motor puede no encender', fuente: '(1)' },
+        { id: 'ST', label: 'Sensor ST (Temperatura/ECT)', falla: 'Lecturas o datos erróneos que afectan el arranque y el consumo', fuente: '(1,2)' },
+        { id: 'MAV', label: 'Sensor MAV (MAF/Flujo de aire)', falla: 'Puede causar un ralentí irregular', fuente: '(1)' },
+        { id: 'Detonacion', label: 'Sensor de Detonación', falla: 'Detecta cascabeleo o golpeteo anormal y retrasa el avance', fuente: '(1,2)' },
+        { id: 'TPS', label: 'Sensor TPS (Acelerador)', falla: 'Altera la aceleración y puede provocar tirones', fuente: '(1,2)' },
+        { id: 'CMP', label: 'Sensor CMP (Árbol de levas)', falla: 'Una señal incorrecta genera desajustes en el motor', fuente: '(2)' },
+        { id: 'PresionComb', label: 'Sensor de Presión de Combustible', falla: 'Activa el Check Engine si la presión del riel está fuera de rango', fuente: '(2)' },
+        { id: 'PresionTurbo', label: 'Sensor de Presión del Turbo', falla: 'Su falla hace que el motor pierda fuerza', fuente: '(1)' },
+        { id: 'Velocidad', label: 'Sensor de Velocidad', falla: 'Vuelve errático el velocímetro', fuente: '(1)' },
+        { id: 'PresionAceite', label: 'Sensor de Presión de Aceite', falla: 'Enciende alertas específicas en el tablero', fuente: '(1)' },
+        { id: 'CheckEngine', label: 'Check Engine', falla: 'El motor o un sensor crítico reporta un problema', fuente: '(2,3)' },
+        { id: 'EPC', label: 'EPC', falla: 'Falla en el acelerador electrónico o su sistema de control', fuente: '(3)' },
+        { id: 'ABS', label: 'ABS', falla: 'Avería en el sistema de frenos antibloqueo', fuente: '(3)' },
+        { id: 'ControlTraccion', label: 'Control de Tracción', falla: 'El sistema está fallando o se ha desactivado', fuente: '(3)' },
+        { id: 'Airbag', label: 'Airbag', falla: 'Advierte una falla en el sistema de seguridad', fuente: '(3)' },
+        { id: 'Direccion', label: 'Dirección Asistida', falla: 'Problema en la asistencia del volante; este puede ponerse duro', fuente: '(3)' }
+    ];
+
     const vtvItems = [
         {id: 'v_luces', label: 'Luces y Señalización'},
         {id: 'v_frenos', label: 'Sistema de Frenos y ABS'},
@@ -442,6 +583,24 @@
         } else { db = []; }
     }
 
+    // === NUEVO: Vista previa de imagen al seleccionar archivo ===
+    document.getElementById('in_imagen')?.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        const preview = document.getElementById('img-preview');
+        
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                preview.src = evt.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        } else {
+            preview.style.display = 'none';
+            preview.src = '';
+        }
+    });
+
     // RENDERIZADO INTERFAZ
     function initAdvCards() {
         const container = document.getElementById('advCards');
@@ -458,6 +617,18 @@
                     <span>Max:${c.max >= 1000 ? c.max/1000+'k' : c.max}</span>
                 </p>
             </div>`;
+        });
+        container.innerHTML = html;
+    }
+
+    function renderSensores() {
+        const container = document.getElementById('sensores-container');
+        let html = '';
+        defSensores.forEach(s => {
+            html += `<label class="flex items-start gap-2 cursor-pointer hover:bg-cyan-900/30 p-1.5 rounded transition-colors">
+                        <input type="checkbox" class="sensor-chk mt-1" value="${s.id}" onchange="actualizarDashboard()"> 
+                        <div><span class="font-bold text-cyan-400">${s.label}</span></div>
+                     </label>`;
         });
         container.innerHTML = html;
     }
@@ -509,14 +680,19 @@
 
     window.onload = () => {
         initAdvCards();
+        renderSensores();
         renderVTV();
         cargarDeMemoria();
         document.getElementById('in_fecha').valueAsDate = new Date();
         actualizarDashboard();
     };
 
-    function procesarDatos(e) {
+    async function procesarDatos(e) {
         e.preventDefault();
+        
+        // Generar ID único para el registro (para nombre de archivo de imagen)
+        const recordId = Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+        
         const record = {
             fecha: document.getElementById('in_fecha').value,
             unidad: document.getElementById('in_unidad').value.toUpperCase(),
@@ -533,18 +709,85 @@
             psi_dd: parseFloat(document.getElementById('in_psi_dd').value),
             psi_ti: parseFloat(document.getElementById('in_psi_ti').value),
             psi_td: parseFloat(document.getElementById('in_psi_td').value),
-            trabajo: document.getElementById('in_trabajo').value
+            trabajo: document.getElementById('in_trabajo').value,
+            // === NUEVO: Campo para URL de imagen ===
+            imagen_url: null,
+            record_id: recordId  // ID único para asociar imagen
         };
+        
+        // === NUEVO: Procesar imagen si se seleccionó ===
+        const fileInput = document.getElementById('in_imagen');
+        const file = fileInput.files[0];
+        
+        if (file) {
+            if (typeof window.subirImagenSupabase === "function") {
+                const imgUrl = await window.subirImagenSupabase(file, recordId, record.unidad);
+                if (imgUrl) {
+                    record.imagen_url = imgUrl;
+                }
+            }
+        }
+        
         db.push(record);
         guardarEnMemoria();
+        
+        if(typeof window.guardarDatoSupabase === "function") {
+            window.guardarDatoSupabase(record.unidad, record.km, record.temp);
+        }
+        
         e.target.reset();
         document.getElementById('in_fecha').valueAsDate = new Date();
+        document.getElementById('img-preview').style.display = 'none';
+        document.getElementById('img-preview').src = '';
+        document.getElementById('upload-status').innerHTML = '';
+        
         selectedRows.clear();
         actualizarDashboard();
     }
 
+    window.actualizarDbDesdeNube = function(data) {
+        db = data.map(r => ({
+            fecha: r.fecha ? r.fecha.split('T')[0] : new Date().toISOString().split('T')[0],
+            unidad: r.unidad || 'N/A',
+            id: r.id || 'N/A',
+            anio: r.anio || new Date().getFullYear(),
+            motor: r.motor || 'Desconocido',
+            km: r.kilometros || r.km || 0,
+            up: r.up || 0,
+            down: r.down || 0,
+            vib: r.vib || 0,
+            temp: r.temperatura || r.temp || 0,
+            rpm: r.rpm || 0,
+            psi_di: r.psi_di || 0,
+            psi_dd: r.psi_dd || 0,
+            psi_ti: r.psi_ti || 0,
+            psi_td: r.psi_td || 0,
+            trabajo: r.trabajo || '',
+            // === NUEVO: Soporte para imagen_url desde nube ===
+            imagen_url: r.imagen_url || null,
+            record_id: r.record_id || null
+        }));
+        guardarEnMemoria();
+        selectedRows.clear();
+        actualizarDashboard();
+        alert(`✅ Se descargaron y sincronizaron ${db.length} registros desde la nube exitosamente.`);
+    };
+
+    window.bajarDatosNube = async function() {
+        const btn = document.getElementById('btn-bajar-nube');
+        if(btn) btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i>Bajando...';
+        
+        if (typeof window.leerDatosSupabase === "function") {
+            await window.leerDatosSupabase();
+        } else {
+            alert("Error: Conexión a la nube no inicializada.");
+        }
+        
+        if(btn) btn.innerHTML = '<i class="fas fa-cloud-download-alt mr-1"></i>Bajar Nube';
+    };
+
     function limpiarFiltros() {
-        if(confirm("¿Seguro que deseas borrar toda la base de datos?")) {
+        if(confirm("¿Seguro que deseas borrar toda la base de datos local?")) {
             db = [];
             guardarEnMemoria();
             selectedRows.clear();
@@ -1012,6 +1255,27 @@
         const r = db[idx];
         if(!r) return;
         const anioTexto = r.anio ? ` (Fab. ${r.anio})` : '';
+        
+        // === NUEVO: Sección de imagen en el modal ===
+        let imgSection = '';
+        if (r.imagen_url) {
+            imgSection = `
+            <div class="mt-4">
+                <span class="text-cyan-500 text-[11px] uppercase font-bold tracking-wider block mb-2"><i class="fas fa-image mr-1"></i> Imagen de Referencia</span>
+                <div class="flex justify-center">
+                    <img src="${r.imagen_url}" alt="Imagen registro ${r.id}" class="modal-img-full" onerror="this.parentElement.innerHTML='<p class=\'text-rose-400 text-xs\'>⚠️ Imagen no disponible</p>'">
+                </div>
+            </div>`;
+        } else {
+            imgSection = `
+            <div class="mt-4">
+                <span class="text-cyan-500 text-[11px] uppercase font-bold tracking-wider block mb-2"><i class="fas fa-image mr-1"></i> Imagen de Referencia</span>
+                <div class="bg-slate-900/50 p-4 rounded-lg border border-dashed border-cyan-500/30 text-center">
+                    <p class="text-slate-500 text-xs"><i class="fas fa-cloud-upload-alt mr-1"></i> Sin imagen asociada a este registro</p>
+                </div>
+            </div>`;
+        }
+        
         const content = `
         <div class="grid grid-cols-2 gap-4">
             <div class="bg-slate-900/50 p-2 rounded border border-cyan-500/20"><span class="text-cyan-500 text-[10px] uppercase block font-bold">Unidad</span> <span class="font-bold text-white text-lg">${r.unidad}</span></div>
@@ -1028,6 +1292,7 @@
             <div class="bg-purple-900/20 p-2 rounded border border-purple-500/30"><span class="text-purple-400 text-[10px] uppercase block">Vibración</span> <span class="font-bold text-white">${r.vib}</span></div>
             <div class="bg-amber-900/20 p-2 rounded border border-amber-500/30"><span class="text-amber-400 text-[10px] uppercase block">Temperatura</span> <span class="font-bold text-white">${r.temp}°</span></div>
         </div>
+        ${imgSection}
         <div class="mt-4">
             <span class="text-cyan-500 text-[11px] uppercase font-bold tracking-wider block mb-2"><i class="fas fa-tools mr-1"></i> Detalle del Trabajo Realizado</span>
             <div class="bg-black/60 p-4 rounded-lg border border-cyan-500/40 text-sm text-slate-200 whitespace-pre-wrap leading-relaxed">${r.trabajo || '<span class="italic text-slate-500">Sin detalles registrados en la bitácora.</span>'}</div>
@@ -1052,6 +1317,20 @@
         
         displayDb.forEach(r => {
             const checked = selectedRows.has(r.originalIdx) ? 'checked' : '';
+            
+            // === NUEVO: Columna de miniatura de imagen ===
+            let imgCell = '';
+            if (r.imagen_url) {
+                imgCell = `
+                <td class="text-center">
+                    <img src="${r.imagen_url}" alt="Img ${r.id}" class="img-thumbnail" 
+                         onerror="this.outerHTML='<div class=\'img-placeholder\' title=\'Imagen no disponible\'><i class=\'fas fa-image-slash\'></i></div>'"
+                         onclick="verDetalle(${r.originalIdx})" title="Ver imagen en detalle">
+                </td>`;
+            } else {
+                imgCell = `<td class="text-center"><div class="img-placeholder" title="Sin imagen"><i class="fas fa-image-slash"></i></div></td>`;
+            }
+            
             html += `
             <tr class="${checked ? 'bg-cyan-900/20' : ''}">
                 <td class="text-center"><input type="checkbox" class="row-chk cursor-pointer" onchange="toggleRow(${r.originalIdx})" ${checked}></td>
@@ -1063,6 +1342,7 @@
                 <td class="text-rose-400">${r.down.toFixed(1)}</td>
                 <td class="${r.vib > 4 ? 'text-rose-400 font-bold' : ''}">${r.vib.toFixed(1)}</td>
                 <td class="${r.temp > 95 ? 'text-rose-400 font-bold' : ''}">${r.temp.toFixed(1)}</td>
+                ${imgCell}
                 <td class="text-center">
                     <button onclick="verDetalle(${r.originalIdx})" class="btn-neon p-1 rounded-md text-[10px] w-full" title="Ver detalle">
                         <i class="fas fa-eye"></i> Ver
@@ -1195,26 +1475,247 @@
     }
 
     function exportarPDF() {
-        alert("El exportador PDF sigue intacto y vinculado a html2pdf.");
-    }
-
-    function enviarWhatsApp() {
         const activeDb = selectedRows.size > 0 ? db.filter((_, i) => selectedRows.has(i)) : obtenerDbFiltrada();
-        if(activeDb.length === 0) return alert("No hay datos para reportar.");
+        if(activeDb.length === 0) return alert("No hay datos para exportar.");
+
         const last = activeDb[activeDb.length-1];
         const syn = getSynthetic(last);
+        
         const disp = document.getElementById('kpi_disp').innerText;
         const mtbf = document.getElementById('kpi_mtbf').innerText;
         const mttr = document.getElementById('kpi_mttr').innerText;
         
-        let report = '*NEXO-ART MOTOR INTELLIGENCE*\n';
-        report += '*Reporte de Diagnóstico Avanzado Local*\n\n';
-        report += `*Unidad Analizada:* ${last.unidad} (${last.motor})\n`;
-        report += `*Kilometraje:* ${last.km.toLocaleString()} km\n`;
-        report += `*Fecha:* ${last.fecha}\n\n`;
+        const vtvPct = document.getElementById('vtv-pct').innerText;
+        const vtvStatus = document.getElementById('vtv-status-text').innerText;
+        const vtvChecks = Array.from(document.querySelectorAll('.vtv-chk:checked')).map(c => `<li><span style="color:#10b981; font-weight:bold;">✔</span> ${c.value}</li>`).join('');
+        const vtvUnchecks = Array.from(document.querySelectorAll('.vtv-chk:not(:checked)')).map(c => `<li><span style="color:#f43f5e; font-weight:bold;">✖</span> ${c.value}</li>`).join('');
         
+        const aiHtml = document.getElementById('ai-recommendations').innerHTML;
+
+        const uniqueUnits = [...new Set(activeDb.map(r => r.unidad))];
+        const reportTitle = uniqueUnits.length === 1 ? `REPORTE TÉCNICO: ${uniqueUnits[0]}` : `REPORTE DE FLOTA (${uniqueUnits.length} Unidades)`;
+
+        let tableHtml = `
+            <table class="w-full text-left text-[10px] border-collapse mt-4">
+                <thead>
+                    <tr class="bg-cyan-900 text-white">
+                        <th class="p-2 border border-cyan-700">Fecha</th>
+                        <th class="p-2 border border-cyan-700">Unidad</th>
+                        <th class="p-2 border border-cyan-700">Año</th>
+                        <th class="p-2 border border-cyan-700">KM</th>
+                        <th class="p-2 border border-cyan-700">Up/Down</th>
+                        <th class="p-2 border border-cyan-700">Vib/Temp</th>
+                        <th class="p-2 border border-cyan-700">RPM</th>
+                        <th class="p-2 border border-cyan-700">PSI Prom.</th>
+                        <th class="p-2 border border-cyan-700">Img</th>
+                        <th class="p-2 border border-cyan-700">Detalle Trabajo</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+        
+        activeDb.forEach((r, idx) => {
+            const psiProm = (r.psi_di + r.psi_dd + r.psi_ti + r.psi_td) / 4;
+            const bgClass = idx % 2 === 0 ? 'bg-slate-50' : 'bg-white';
+            // === NUEVO: Columna de imagen en PDF (miniatura o placeholder) ===
+            const imgCell = r.imagen_url 
+                ? `<td class="p-2 border border-slate-200 text-center"><img src="${r.imagen_url}" style="width:30px;height:30px;object-fit:cover;border-radius:3px;" onerror="this.outerHTML='<span style=\'color:#94a3b8;font-size:10px\'>🖼️</span>'"></td>`
+                : `<td class="p-2 border border-slate-200 text-center"><span style="color:#94a3b8;font-size:10px">🖼️</span></td>`;
+            
+            tableHtml += `
+                <tr class="${bgClass} text-slate-700 break-inside-avoid">
+                    <td class="p-2 border border-slate-200 whitespace-nowrap">${formatearFechaCorto(r.fecha)}</td>
+                    <td class="p-2 border border-slate-200 font-bold">${r.unidad}</td>
+                    <td class="p-2 border border-slate-200">${r.anio}</td>
+                    <td class="p-2 border border-slate-200">${r.km.toLocaleString()}</td>
+                    <td class="p-2 border border-slate-200"><span class="text-emerald-600">${r.up.toFixed(1)}h</span> / <span class="text-rose-600">${r.down.toFixed(1)}h</span></td>
+                    <td class="p-2 border border-slate-200"><span class="${r.vib>4?'text-rose-600 font-bold':''}">${r.vib.toFixed(1)}</span> / <span class="${r.temp>95?'text-rose-600 font-bold':''}">${r.temp.toFixed(1)}°</span></td>
+                    <td class="p-2 border border-slate-200">${r.rpm}</td>
+                    <td class="p-2 border border-slate-200">${psiProm.toFixed(1)}</td>
+                    ${imgCell}
+                    <td class="p-2 border border-slate-200 text-[8px] leading-tight">${r.trabajo || '-'}</td>
+                </tr>
+            `;
+        });
+        tableHtml += `</tbody></table>`;
+
+        const pdfContainer = document.createElement('div');
+        pdfContainer.id = "temp-pdf-export";
+        pdfContainer.className = "bg-white text-slate-800 font-sans";
+        pdfContainer.style.width = "800px";
+        pdfContainer.style.position = "absolute";
+        pdfContainer.style.left = "-9999px";
+        pdfContainer.style.top = "0";
+
+        pdfContainer.innerHTML = `
+            <style>
+                #temp-pdf-export .text-rose-400, #temp-pdf-export .text-rose-500 { color: #e11d48 !important; }
+                #temp-pdf-export .text-amber-400, #temp-pdf-export .text-amber-500 { color: #d97706 !important; }
+                #temp-pdf-export .text-emerald-400, #temp-pdf-export .text-emerald-500 { color: #059669 !important; }
+                #temp-pdf-export .text-purple-400, #temp-pdf-export .text-purple-500 { color: #7e22ce !important; }
+                #temp-pdf-export .text-cyan-400, #temp-pdf-export .text-cyan-500 { color: #0e7490 !important; }
+                #temp-pdf-export .text-blue-400, #temp-pdf-export .text-blue-500 { color: #1d4ed8 !important; }
+                #temp-pdf-export .text-slate-300, #temp-pdf-export .text-slate-400, #temp-pdf-export .text-slate-500 { color: #334155 !important; }
+                #temp-pdf-export p { margin-bottom: 0.5rem; }
+                #temp-pdf-export .llm-response { font-size: 11px; line-height: 1.4; }
+            </style>
+            <div style="padding: 40px;">
+                <!-- HEADER -->
+                <div class="flex justify-between items-center border-b-4 border-cyan-600 pb-4 mb-6">
+                    <div>
+                        <h1 class="text-4xl font-bold text-cyan-800" style="font-family: 'Orbitron', sans-serif;">NEXO-ART</h1>
+                        <p class="text-xs tracking-[0.2em] text-slate-500 uppercase font-bold" style="font-family: 'Orbitron', sans-serif;">Motor Intelligence</p>
+                    </div>
+                    <div class="text-right">
+                        <h2 class="text-2xl font-bold text-slate-800 uppercase">${reportTitle}</h2>
+                        <p class="text-sm text-slate-500">Generado el: ${new Date().toLocaleDateString('es-ES')}</p>
+                    </div>
+                </div>
+
+                <!-- KPIs -->
+                <div class="grid grid-cols-3 gap-4 mb-6">
+                    <div class="bg-slate-50 p-4 rounded-lg border-l-4 border-emerald-500 border border-slate-200">
+                        <p class="text-[10px] text-slate-500 uppercase font-bold">Disponibilidad</p>
+                        <p class="text-3xl font-bold text-emerald-600" style="font-family: 'Orbitron', sans-serif;">${disp}</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-lg border-l-4 border-cyan-500 border border-slate-200">
+                        <p class="text-[10px] text-slate-500 uppercase font-bold">MTBF</p>
+                        <p class="text-3xl font-bold text-cyan-600" style="font-family: 'Orbitron', sans-serif;">${mtbf} h</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-lg border-l-4 border-purple-500 border border-slate-200">
+                        <p class="text-[10px] text-slate-500 uppercase font-bold">MTTR</p>
+                        <p class="text-3xl font-bold text-purple-600" style="font-family: 'Orbitron', sans-serif;">${mttr} h</p>
+                    </div>
+                </div>
+
+                <!-- METRICAS SINTETICAS -->
+                <div class="mb-6">
+                    <h3 class="text-sm font-bold text-cyan-800 uppercase border-b border-slate-200 pb-1 mb-3">Métricas Sintéticas (Último Registro)</h3>
+                    <div class="grid grid-cols-4 gap-2 text-center">
+                        <div class="bg-slate-50 p-2 rounded border border-slate-200">
+                            <p class="text-[9px] text-slate-500 uppercase font-bold">Desgaste/KM</p>
+                            <p class="text-lg font-bold text-slate-700" style="font-family: 'Orbitron', sans-serif;">${syn.desgaste.toFixed(1)}</p>
+                        </div>
+                        <div class="bg-slate-50 p-2 rounded border border-slate-200">
+                            <p class="text-[9px] text-slate-500 uppercase font-bold">Eficiencia</p>
+                            <p class="text-lg font-bold text-slate-700" style="font-family: 'Orbitron', sans-serif;">${syn.eficiencia.toFixed(2)}</p>
+                        </div>
+                        <div class="bg-slate-50 p-2 rounded border border-slate-200">
+                            <p class="text-[9px] text-slate-500 uppercase font-bold">Estrés Mecánico</p>
+                            <p class="text-lg font-bold text-slate-700" style="font-family: 'Orbitron', sans-serif;">${syn.estres.toFixed(1)}</p>
+                        </div>
+                        <div class="bg-slate-50 p-2 rounded border border-slate-200">
+                            <p class="text-[9px] text-slate-500 uppercase font-bold">Disp. Operativa</p>
+                            <p class="text-lg font-bold text-slate-700" style="font-family: 'Orbitron', sans-serif;">${syn.dispop.toFixed(1)}%</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- IA & VTV -->
+                <div class="grid grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <h3 class="text-sm font-bold text-cyan-800 uppercase border-b border-slate-200 pb-1 mb-3">Diagnóstico Experto</h3>
+                        <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 text-[11px] text-slate-700 leading-relaxed">
+                            ${aiHtml}
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-cyan-800 uppercase border-b border-slate-200 pb-1 mb-3">Estado VTV: ${vtvPct} (${vtvStatus})</h3>
+                        <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 text-[11px] flex gap-4">
+                            <ul class="flex-1 list-none p-0 m-0 space-y-1 text-slate-600">
+                                ${vtvChecks || '<li class="italic">Ningún ítem marcado</li>'}
+                            </ul>
+                            <ul class="flex-1 list-none p-0 m-0 space-y-1 text-slate-600">
+                                ${vtvUnchecks}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TABLA DATASET -->
+                <div>
+                    <h3 class="text-sm font-bold text-cyan-800 uppercase border-b border-slate-200 pb-1 mb-2">Detalle de Registros Analizados</h3>
+                    ${tableHtml}
+                </div>
+
+                <!-- FOOTER -->
+                <div class="mt-8 pt-4 border-t border-slate-200 text-center text-[10px] text-slate-400">
+                    NEXO-ART Motor Intelligence - Documento Confidencial Generado Automáticamente
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(pdfContainer);
+
+        const opt = {
+            margin:       [5, 0, 5, 0],
+            filename:     `NEXO_ART_Reporte_${new Date().toISOString().split('T')[0]}.pdf`,
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2, useCORS: true, letterRendering: true, windowWidth: 800 },
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+            pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
+        };
+
+        const btnPdf = document.querySelector('button[onclick="exportarPDF()"]');
+        const oldText = btnPdf.innerHTML;
+        btnPdf.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i>Generando...';
+
+        html2pdf().set(opt).from(pdfContainer).save().then(() => {
+            document.body.removeChild(pdfContainer);
+            btnPdf.innerHTML = oldText;
+            
+            // Disparar WhatsApp Global Report luego del PDF
+            enviarWhatsAppGlobal(activeDb, disp, mtbf, mttr, vtvPct, vtvStatus);
+        });
+    }
+
+    function enviarWhatsAppGlobal(activeDb, disp, mtbf, mttr, vtvPct, vtvStatus) {
+        let report = `🚀 *NEXO-ART: REPORTE GENERAL DE PLATAFORMA* 🚀\n\n`;
+        report += `📊 *Resumen Global*\n`;
+        report += `🔸 Total Registros Analizados: ${activeDb.length}\n`;
+        
+        const uniqueUnits = [...new Set(activeDb.map(r => r.unidad))];
+        report += `🔸 Unidades: ${uniqueUnits.length}\n`;
+        report += `🔸 Fecha: ${new Date().toLocaleDateString('es-ES')}\n\n`;
+
+        report += `⚙️ *Rendimiento Promedio:*\n`;
+        report += `✅ Disponibilidad: ${disp}\n`;
+        report += `⏱️ MTBF: ${parseFloat(mtbf).toFixed(1)} h\n`;
+        report += `🔧 MTTR: ${parseFloat(mttr).toFixed(1)} h\n\n`;
+
+        report += `📋 *Estado VTV General:*\n`;
+        report += `🔸 Progreso: ${vtvPct} (${vtvStatus})\n\n`;
+
+        report += `📝 *Detalle de Registros (Dato por Dato):*\n`;
+        
+        const ultimos = activeDb.slice(-30).reverse();
+        ultimos.forEach((r, idx) => {
+            const imgIndicator = r.imagen_url ? '🖼️ ' : '';
+            report += `▪️ ${imgIndicator}*${r.unidad}* | F: ${r.fecha} | KM: ${r.km} | UP/DWN: ${r.up}/${r.down} | TMP: ${r.temp}°C | VIB: ${r.vib}\n`;
+        });
+
+        if(activeDb.length > 30) {
+            report += `\n_(Mostrando los 30 más recientes de ${activeDb.length})_\n`;
+        }
+
+        report += `\n🔗 *NEXO-ART Motor Intelligence* - Análisis Profesional.`;
+
         const encodedUri = encodeURIComponent(report);
         window.open(`https://wa.me/3489686939?text=${encodedUri}`, "_blank");
+    }
+
+    // Funcionalidad WhatsApp individual/global al tocar el boton inferior
+    function enviarWhatsApp() {
+        const activeDb = selectedRows.size > 0 ? db.filter((_, i) => selectedRows.has(i)) : obtenerDbFiltrada();
+        if(activeDb.length === 0) return alert("No hay datos para reportar.");
+        
+        const disp = document.getElementById('kpi_disp').innerText;
+        const mtbf = document.getElementById('kpi_mtbf').innerText;
+        const mttr = document.getElementById('kpi_mttr').innerText;
+        const vtvPct = document.getElementById('vtv-pct').innerText;
+        const vtvStatus = document.getElementById('vtv-status-text').innerText;
+
+        enviarWhatsAppGlobal(activeDb, disp, mtbf, mttr, vtvPct, vtvStatus);
     }
 </script>
 </body>
