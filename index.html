@@ -1,1722 +1,2028 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NEXO-ART Motor Intelligence - HUB Dashboard</title>
-    <!-- Librerías -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- Fuentes -->
-    <link href="https://fonts.googleapis.com/css?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
-    <!-- Configuración Tailwind -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        tech: ['Orbitron', 'sans-serif'],
-                    },
-                    colors: {
-                        cyber: {
-                            dark: '#0a0e1a',
-                            card: 'rgba(15, 23, 42, 0.85)',
-                            border: 'rgba(6, 182, 212, 0.25)',
-                            glow: 'rgba(6, 182, 212, 0.5)',
-                            accent: '#06b6d4'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <!-- Estilos Personalizados -->
-    <style>
-        body {
-            background-color: #0a0e1a;
-            color: #e2e8f0;
-            background-image:
-                radial-gradient(circle at 15% 50%, rgba(6, 182, 212, 0.05), transparent 25%),
-                radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.05), transparent 25%);
-            background-attachment: fixed;
-            min-height: 100vh;
-        }
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #0f172a; }
-        ::-webkit-scrollbar-thumb { background: rgba(6, 182, 212, 0.4); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
-        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(6, 182, 212, 0.5); }
-        .glass-card {
-            background: rgba(15, 23, 42, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(6, 182, 212, 0.2);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(6, 182, 212, 0.1);
-            border-radius: 12px;
-            transition: all 0.3s ease;
-        }
-        .glass-card:hover {
-            border-color: rgba(6, 182, 212, 0.4);
-            box-shadow: 0 8px 30px rgba(6, 182, 212, 0.15);
-        }
-        .btn-neon {
-            background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(8, 145, 178, 0.2));
-            border: 1px solid #06b6d4;
-            color: #06b6d4;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .btn-neon:hover {
-            background: #06b6d4;
-            color: #0a0e1a;
-            box-shadow: 0 0 15px rgba(6, 182, 212, 0.6);
-        }
-        .cyber-input {
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid rgba(6, 182, 212, 0.3);
-            color: #06b6d4;
-            font-family: 'Orbitron', sans-serif;
-            transition: all 0.3s;
-        }
-        .cyber-input:focus {
-            outline: none;
-            border-color: #06b6d4;
-            box-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
-        }
-        @media screen and (max-width: 768px) {
-            input, select, textarea { font-size: 16px !important; }
-        }
-        .stat-value { font-family: 'Orbitron', sans-serif; }
-        .prog-bar-bg { background: rgba(148, 163, 184, 0.15); border-radius: 4px; height: 6px; overflow: hidden; margin-top: 5px; }
-        .prog-bar-fill { height: 100%; transition: width 0.5s, background 0.5s; }
-        .cyber-table th {
-            background: rgba(6, 182, 212, 0.1);
-            color: #06b6d4;
-            font-family: 'Orbitron', sans-serif;
-            border-bottom: 2px solid rgba(6, 182, 212, 0.3);
-            padding: 8px;
-            white-space: nowrap;
-        }
-        .cyber-table td { 
-            border-bottom: 1px solid rgba(6, 182, 212, 0.1); 
-            padding: 8px; 
-            white-space: nowrap;
-        }
-        .cyber-table tr:hover td { background: rgba(6, 182, 212, 0.05); }
-        @media print {
-            body { background: white !important; color: black !important; }
-            .no-print { display: none !important; }
-            .glass-card { border: 1px solid #ccc; box-shadow: none; background: white; break-inside: avoid; }
-            .text-cyan-400 { color: #0284c7 !important; }
-        }
-        .llm-response strong { color: #818cf8; }
-        .llm-response ul { padding-left: 1rem; margin-top: 0.5rem; }
-        .llm-response li { margin-bottom: 0.25rem; list-style-type: disc; }
-        /* === NUEVO: Estilos para imágenes === */
-        .img-thumbnail {
-            width: 40px;
-            height: 40px;
-            object-fit: cover;
-            border-radius: 4px;
-            border: 1px solid rgba(6, 182, 212, 0.3);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .img-thumbnail:hover {
-            border-color: #06b6d4;
-            box-shadow: 0 0 10px rgba(6, 182, 212, 0.4);
-            transform: scale(1.05);
-        }
-        .img-placeholder {
-            width: 40px;
-            height: 40px;
-            border-radius: 4px;
-            background: rgba(6, 182, 212, 0.1);
-            border: 1px dashed rgba(6, 182, 212, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: rgba(6, 182, 212, 0.6);
-            font-size: 14px;
-        }
-        .modal-img-full {
-            max-width: 100%;
-            max-height: 60vh;
-            border-radius: 8px;
-            border: 2px solid rgba(6, 182, 212, 0.3);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-        }
-        .img-upload-preview {
-            max-width: 100%;
-            max-height: 150px;
-            border-radius: 8px;
-            border: 1px solid rgba(6, 182, 212, 0.3);
-            margin-top: 8px;
-            display: none;
-        }
-        .upload-status {
-            font-size: 9px;
-            margin-top: 4px;
-            min-height: 16px;
-        }
-        .upload-status.uploading { color: #fbbf24; }
-        .upload-status.success { color: #10b981; }
-        .upload-status.error { color: #f43f5e; }
-    </style>
-</head>
-<body class="p-4 md:p-6" id="dashboard-body">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="Todo Casero - Rotisería con los mejores sándwiches, hamburguesas, pizzas y pastas caseras. Abierto de Lun-Dom: 19:30-23:45" />
+<title>Todo Casero - Rotisería | Campana</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+:root {
+--primary-color: #e67e22;
+--secondary-color: #f39c12;
+--light-color: #fffbe6;
+--dark-color: #333;
+--accent-color: #25d366;
+--assistant-color: #4285f4;
+--shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+* {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+}
+body {
+font-family: 'Segoe UI', 'Roboto', sans-serif;
+line-height: 1.6;
+background-color: var(--light-color);
+color: var(--dark-color);
+}
 
-<!-- Header Global -->
-<header class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 no-print glass-card p-4">
-    <div class="flex items-center gap-3">
-        <div class="w-12 h-12 rounded-full border-2 border-cyan-400 flex items-center justify-center bg-cyan-900/30 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.5)]">
-            <i class="fas fa-microchip text-xl"></i>
-        </div>
-        <div>
-            <h1 class="text-2xl font-tech font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">NEXO-ART</h1>
-            <p class="text-xs tracking-[0.2em] text-cyan-500/80 uppercase font-tech">Motor Intelligence</p>
-        </div>
-    </div>
-    <div class="flex flex-wrap items-center justify-center gap-2">
-        <button onclick="limpiarFiltros()" class="btn-neon px-3 py-1.5 rounded text-xs" title="Borrar toda la base de datos local"><i class="fas fa-trash-alt mr-1"></i>Reset DB</button>
-        <button id="btn-bajar-nube" onclick="bajarDatosNube()" class="btn-neon px-3 py-1.5 rounded text-xs" title="Descargar registros de la nube"><i class="fas fa-cloud-download-alt mr-1"></i>Bajar Nube</button>
-        <button onclick="exportarCSV()" class="btn-neon px-3 py-1.5 rounded text-xs"><i class="fas fa-file-csv mr-1"></i>CSV</button>
-        <button onclick="exportarPDF()" class="btn-neon px-3 py-1.5 rounded text-xs"><i class="fas fa-file-pdf mr-1"></i>PDF</button>
-        <button onclick="location.reload()" class="btn-neon px-3 py-1.5 rounded text-xs"><i class="fas fa-sync-alt mr-1"></i>Actualizar</button>
-    </div>
+/* 🔹 Banner superior persuasivo de Instagram */
+.instagram-top-banner {
+  background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  color: white;
+  padding: 0.8rem 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  font-size: 0.95rem;
+  text-align: center;
+  box-shadow: var(--shadow);
+  z-index: 101;
+  position: relative;
+}
+.instagram-top-banner span {
+  font-weight: 500;
+}
+.btn-instagram-micro {
+  background: white;
+  color: #bc1888;
+  padding: 0.5rem 1.2rem;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s;
+  animation: microEffect 1s infinite alternate;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.btn-instagram-micro:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(188, 24, 136, 0.4);
+  color: #cc2366;
+}
+.btn-instagram-micro i {
+  font-size: 1.1rem;
+}
+
+header {
+background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+padding: 1.5rem;
+text-align: center;
+box-shadow: var(--shadow);
+position: relative;
+z-index: 100;
+}
+.logo {
+font-size: 2.5rem;
+font-weight: bold;
+color: white;
+margin-bottom: 0.5rem;
+text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+animation: microEffect 1s infinite alternate;
+}
+@keyframes microEffect {
+from { transform: scale(1); }
+to { transform: scale(1.05); }
+}
+.tagline {
+color: white;
+font-style: italic;
+margin-bottom: 1rem;
+}
+nav {
+display: flex;
+justify-content: center;
+gap: 1.5rem;
+margin: 1rem;
+flex-wrap: wrap;
+}
+nav a {
+text-decoration: none;
+color: white;
+font-weight: bold;
+padding: 0.5rem 1rem;
+border-radius: 4px;
+transition: background 0.3s;
+display: flex;
+align-items: center;
+gap: 0.5rem;
+}
+nav a:hover {
+background-color: rgba(255,255,255,0.2);
+}
+.hero {
+background: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover;
+height: 60vh;
+display: flex;
+align-items: center;
+justify-content: center;
+text-align: center;
+position: relative;
+}
+.hero::before {
+content: '';
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0,0,0,0.5);
+}
+.hero-content {
+position: relative;
+z-index: 1;
+color: white;
+max-width: 800px;
+padding: 2rem;
+}
+.hero h1 {
+font-size: 2.5rem;
+margin-bottom: 1rem;
+}
+.hero p {
+font-size: 1.2rem;
+margin-bottom: 2rem;
+}
+.btn {
+display: inline-block;
+background-color: var(--primary-color);
+color: white;
+padding: 0.8rem 1.5rem;
+border-radius: 4px;
+text-decoration: none;
+font-weight: bold;
+transition: all 0.3s;
+border: none;
+cursor: pointer;
+}
+.btn:hover {
+background-color: #d35400;
+transform: translateY(-2px);
+box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+.btn-whatsapp {
+background-color: var(--accent-color);
+}
+.btn-whatsapp:hover {
+background-color: #128C7E;
+}
+.section {
+padding: 4rem 2rem;
+max-width: 1200px;
+margin: 0 auto;
+}
+.section-title {
+text-align: center;
+margin-bottom: 3rem;
+font-size: 2rem;
+color: var(--primary-color);
+position: relative;
+}
+.section-title::after {
+content: '';
+display: block;
+width: 80px;
+height: 4px;
+background-color: var(--secondary-color);
+margin: 0.5rem auto 0;
+}
+.menu-section {
+background-color: white;
+border-radius: 8px;
+box-shadow: var(--shadow);
+padding: 2rem;
+margin-bottom: 2rem;
+}
+.category {
+margin-bottom: 2rem;
+}
+.category-header {
+background-color: var(--primary-color);
+color: white;
+padding: 1rem;
+border-radius: 4px;
+cursor: pointer;
+display: flex;
+justify-content: space-between;
+align-items: center;
+transition: all 0.3s;
+}
+.category-header:hover {
+background-color: #d35400;
+}
+.category-header h3 {
+margin: 0;
+}
+.products {
+display: none;
+padding: 1rem;
+background-color: #f9f9f9;
+border-radius: 0 0 4px 4px;
+}
+.product {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 1rem;
+border-bottom: 1px solid #eee;
+transition: all 0.3s;
+}
+.product:last-child {
+border-bottom: none;
+}
+.product:hover {
+background-color: #f1f1f1;
+}
+.product-info {
+flex: 1;
+}
+.product-name {
+font-weight: bold;
+font-size: 1.1rem;
+margin-bottom: 0.3rem;
+}
+.product-description {
+color: #666;
+font-size: 0.9rem;
+}
+.product-price {
+font-weight: bold;
+color: var(--primary-color);
+font-size: 1.2rem;
+margin-left: 1rem;
+white-space: nowrap;
+}
+.product-image {
+width: 80px;
+height: 80px;
+object-fit: cover;
+border-radius: 4px;
+margin-left: 1rem;
+}
+.add-to-cart {
+background-color: var(--secondary-color);
+color: white;
+padding: 0.5rem 1rem;
+border-radius: 4px;
+border: none;
+cursor: pointer;
+margin-left: 1rem;
+transition: all 0.3s;
+}
+.add-to-cart:hover {
+background-color: #e67e22;
+}
+.quantity-controls {
+display: flex;
+align-items: center;
+gap: 0.5rem;
+margin-left: 1rem;
+}
+.quantity-btn {
+background-color: var(--primary-color);
+color: white;
+border: none;
+border-radius: 4px;
+width: 30px;
+height: 30px;
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+transition: background-color 0.3s;
+}
+.quantity-btn:hover {
+background-color: #d35400;
+}
+.quantity-display {
+min-width: 30px;
+text-align: center;
+font-weight: bold;
+}
+.offer-banner {
+background: linear-gradient(135deg, #e74c3c, #c0392b);
+color: white;
+padding: 1rem;
+text-align: center;
+border-radius: 4px;
+margin-bottom: 2rem;
+animation: pulse 2s infinite;
+}
+@keyframes pulse {
+0% { transform: scale(1); }
+50% { transform: scale(1.02); }
+100% { transform: scale(1); }
+}
+.info-cards {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+gap: 2rem;
+margin-top: 3rem;
+}
+.info-card {
+background-color: white;
+border-radius: 8px;
+box-shadow: var(--shadow);
+padding: 2rem;
+text-align: center;
+}
+.info-card i {
+font-size: 2.5rem;
+color: var(--primary-color);
+margin-bottom: 1rem;
+}
+.info-card h3 {
+margin-bottom: 1rem;
+color: var(--primary-color);
+}
+.payment-info {
+background-color: #f8f9fa;
+padding: 1.5rem;
+border-radius: 4px;
+margin-top: 2rem;
+border-left: 4px solid var(--accent-color);
+transition: all 0.3s;
+}
+.payment-info:hover {
+transform: translateY(-2px);
+box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+.payment-method {
+display: flex;
+align-items: center;
+margin-bottom: 1rem;
+}
+.payment-method input {
+margin-right: 1rem;
+}
+footer {
+background-color: var(--dark-color);
+color: white;
+text-align: center;
+padding: 2rem;
+margin-top: 3rem;
+}
+.footer-content {
+max-width: 1200px;
+margin: 0 auto;
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+gap: 2rem;
+text-align: left;
+}
+.footer-section h3 {
+margin-bottom: 1rem;
+color: var(--secondary-color);
+}
+.footer-section ul {
+list-style: none;
+}
+.footer-section ul li {
+margin-bottom: 0.5rem;
+}
+.footer-section ul li a {
+color: #ddd;
+text-decoration: none;
+transition: color 0.3s;
+}
+.footer-section ul li a:hover {
+color: var(--secondary-color);
+}
+.copyright {
+margin-top: 2rem;
+padding-top: 1rem;
+border-top: 1px solid #444;
+font-size: 0.9rem;
+color: #bbb;
+transition: color 0.3s;
+}
+.copyright:hover {
+color: white;
+}
+.copyright span {
+cursor: pointer;
+text-decoration: underline;
+color: var(--accent-color);
+transition: color 0.3s;
+}
+.copyright span:hover {
+color: var(--primary-color);
+}
+.whatsapp-float {
+position: fixed;
+bottom: 20px;
+right: 20px;
+background-color: var(--accent-color);
+color: white;
+width: 60px;
+height: 60px;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 2rem;
+box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+transition: all 0.3s;
+z-index: 99;
+text-decoration: none;
+}
+.whatsapp-float:hover {
+background-color: #128C7E;
+transform: translateY(-5px);
+box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+}
+.assistant-float {
+position: fixed;
+bottom: 90px;
+right: 20px;
+background-color: var(--assistant-color);
+color: white;
+width: 60px;
+height: 60px;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 1.8rem;
+box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+transition: all 0.3s;
+z-index: 99;
+text-decoration: none;
+animation: bounce 2s infinite;
+}
+.assistant-float:hover {
+background-color: #3367d6;
+transform: translateY(-5px);
+box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+animation: none;
+}
+@keyframes bounce {
+0%, 100% { transform: translateY(0); }
+50% { transform: translateY(-10px); }
+}
+.assistant-tooltip {
+position: fixed;
+bottom: 160px;
+right: 20px;
+background-color: white;
+color: var(--dark-color);
+padding: 0.8rem 1rem;
+border-radius: 8px;
+box-shadow: var(--shadow);
+font-size: 0.9rem;
+max-width: 220px;
+text-align: center;
+z-index: 100;
+animation: fadeIn 0.3s ease-out;
+border-left: 4px solid var(--assistant-color);
+}
+.assistant-tooltip::after {
+content: '';
+position: absolute;
+bottom: -6px;
+right: 20px;
+border-width: 6px 6px 0;
+border-style: solid;
+border-color: white transparent transparent;
+}
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(10px); }
+to { opacity: 1; transform: translateY(0); }
+}
+.cart-modal {
+display: none;
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0,0,0,0.7);
+z-index: 999;
+justify-content: center;
+align-items: center;
+}
+.cart-content {
+background-color: white;
+padding: 2rem;
+border-radius: 8px;
+max-width: 600px;
+width: 90%;
+max-height: 80vh;
+overflow-y: auto;
+}
+.cart-content h3 {
+margin-bottom: 1rem;
+color: var(--primary-color);
+}
+.cart-item {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 1rem 0;
+border-bottom: 1px solid #eee;
+}
+.cart-item:last-child {
+border-bottom: none;
+}
+.cart-item span {
+flex: 1;
+}
+.cart-item button {
+background-color: #e74c3c;
+color: white;
+padding: 0.5rem;
+border: none;
+border-radius: 4px;
+cursor: pointer;
+}
+.cart-total {
+margin-top: 1rem;
+font-weight: bold;
+text-align: right;
+}
+.cart-actions {
+margin-top: 1rem;
+display: flex;
+justify-content: space-between;
+}
+.customer-info input {
+width: 100%;
+padding: 0.8rem;
+margin-bottom: 1rem;
+border: 1px solid #ddd;
+border-radius: 4px;
+}
+.chat-widget {
+position: fixed;
+bottom: 90px;
+right: 20px;
+width: 300px;
+background-color: white;
+border-radius: 8px;
+box-shadow: var(--shadow);
+z-index: 100;
+display: none;
+}
+.chat-header {
+background: var(--primary-color);
+color: white;
+padding: 1rem;
+border-radius: 8px 8px 0 0;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+.chat-body {
+max-height: 300px;
+overflow-y: auto;
+padding: 1rem;
+}
+.chat-message {
+margin-bottom: 1rem;
+padding: 0.5rem;
+border-radius: 4px;
+}
+.chat-message.user {
+background-color: var(--light-color);
+text-align: right;
+}
+.chat-message.bot {
+background-color: #f1f1f1;
+text-align: left;
+}
+.chat-input {
+display: flex;
+padding: 1rem;
+border-top: 1px solid #eee;
+}
+.chat-input input {
+flex: 1;
+padding: 0.5rem;
+border: 1px solid #ddd;
+border-radius: 4px 0 0 4px;
+}
+.chat-input button {
+padding: 0.5rem 1rem;
+background-color: var(--primary-color);
+color: white;
+border: none;
+border-radius: 0 4px 4px 0;
+cursor: pointer;
+}
+.admin-panel {
+display: none;
+position: fixed;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+background: white;
+padding: 2rem;
+box-shadow: 0 0 20px rgba(0,0,0,0.3);
+z-index: 1000;
+width: 90%;
+max-width: 800px;
+max-height: 90vh;
+overflow-y: auto;
+border-radius: 8px;
+}
+.admin-panel h3 {
+color: var(--primary-color);
+margin-bottom: 1.5rem;
+text-align: center;
+}
+.admin-form {
+display: grid;
+gap: 1rem;
+}
+.admin-form label {
+font-weight: bold;
+color: var(--dark-color);
+}
+.admin-form input,
+.admin-form select,
+.admin-form textarea {
+padding: 0.8rem;
+border: 1px solid #ddd;
+border-radius: 4px;
+font-family: inherit;
+}
+.admin-form button {
+padding: 0.8rem;
+background-color: var(--primary-color);
+color: white;
+border: none;
+border-radius: 4px;
+cursor: pointer;
+font-weight: bold;
+transition: background 0.3s;
+}
+.admin-form button:hover {
+background-color: #d35400;
+}
+.close-admin {
+position: absolute;
+top: 1rem;
+right: 1rem;
+background: none;
+border: none;
+font-size: 1.5rem;
+cursor: pointer;
+color: #666;
+}
+.image-preview {
+max-width: 150px;
+max-height: 150px;
+margin-top: 0.5rem;
+display: block;
+}
+.product-list {
+margin-top: 2rem;
+}
+.product-item {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 1rem;
+border-bottom: 1px solid #eee;
+}
+.product-item button {
+margin-left: 1rem;
+}
+.offer-form {
+margin-top: 2rem;
+border-top: 1px solid #eee;
+padding-top: 1rem;
+}
+@media (max-width: 768px) {
+.instagram-top-banner {
+  flex-direction: column;
+  padding: 0.6rem;
+}
+.instagram-top-banner span {
+  font-size: 0.9rem;
+}
+.btn-instagram-micro {
+  padding: 0.4rem 1rem;
+  font-size: 0.9rem;
+}
+.hero h1 {
+font-size: 2rem;
+}
+.hero p {
+font-size: 1rem;
+}
+.section {
+padding: 2rem 1rem;
+}
+.product {
+flex-direction: column;
+align-items: flex-start;
+}
+.product-price {
+margin-left: 0;
+margin-top: 0.5rem;
+}
+.product-image {
+margin-left: 0;
+margin-top: 1rem;
+}
+.add-to-cart {
+margin-left: 0;
+margin-top: 0.5rem;
+}
+.chat-widget {
+width: 90%;
+bottom: 90px;
+right: 10px;
+}
+.assistant-float {
+bottom: 90px;
+right: 10px;
+}
+.assistant-tooltip {
+right: 10px;
+}
+}
+.category-arrow {
+transition: transform 0.3s;
+}
+.category-header.active .category-arrow {
+transform: rotate(90deg);
+}
+.modal {
+display: none;
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0,0,0,0.7);
+z-index: 999;
+justify-content: center;
+align-items: center;
+}
+.modal-content {
+background-color: white;
+padding: 2rem;
+border-radius: 8px;
+max-width: 500px;
+width: 90%;
+text-align: center;
+}
+.modal h3 {
+margin-bottom: 1rem;
+color: var(--primary-color);
+}
+.modal input {
+width: 100%;
+padding: 0.8rem;
+margin-bottom: 1rem;
+border: 1px solid #ddd;
+border-radius: 4px;
+}
+.modal button {
+margin-top: 1rem;
+}
+.animate-text {
+opacity: 0;
+transform: translateY(20px);
+animation: slideIn 1s ease-out forwards;
+}
+@keyframes slideIn {
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+/* Estilos adicionales para el modal de postre */
+.dessert-modal {
+display: none;
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0,0,0,0.7);
+z-index: 1000;
+justify-content: center;
+align-items: center;
+}
+.dessert-content {
+background-color: white;
+padding: 2rem;
+border-radius: 12px;
+max-width: 500px;
+width: 90%;
+text-align: center;
+box-shadow: var(--shadow);
+}
+.dessert-options {
+display: flex;
+flex-direction: column;
+gap: 1rem;
+margin-top: 1.5rem;
+}
+.dessert-btn {
+background-color: var(--primary-color);
+color: white;
+padding: 1rem;
+border-radius: 8px;
+border: none;
+cursor: pointer;
+font-weight: bold;
+transition: all 0.3s;
+}
+.dessert-btn:hover {
+background-color: #d35400;
+}
+.no-thanks {
+background-color: #ccc;
+margin-top: 1rem;
+}
+.no-thanks:hover {
+background-color: #aaa;
+}
+/* Indicador de stock bajo */
+.stock-low {
+color: #e74c3c;
+font-size: 0.8rem;
+font-weight: bold;
+}
+/* Badge de disponibilidad */
+.availability-badge {
+display: inline-block;
+padding: 0.2rem 0.5rem;
+border-radius: 4px;
+font-size: 0.75rem;
+font-weight: bold;
+margin-left: 0.5rem;
+}
+.availability-badge.in-stock {
+background-color: #27ae60;
+color: white;
+}
+.availability-badge.out-stock {
+background-color: #e74c3c;
+color: white;
+}
+.availability-badge.low-stock {
+background-color: #f39c12;
+color: white;
+}
+/* Video container styles */
+.video-container {
+position: relative;
+padding-bottom: 56.25%;
+height: 0;
+overflow: hidden;
+max-width: 100%;
+background: #000;
+border-radius: 12px;
+box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+margin: 2rem 0;
+}
+.video-container iframe {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+border: 0;
+}
+</style>
+<script>
+const cacheBuster = `?v=${new Date().getTime()}`;
+const scripts = [
+"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js",
+"https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js",
+"https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"
+];
+scripts.forEach(src => document.write(`<script src="${src}${cacheBuster}"><\/script>`));
+</script>
+</head>
+<body>
+
+<!-- 🔹 Banner superior persuasivo de Instagram -->
+<div class="instagram-top-banner">
+  <span>📸 ¡Síguenos en Instagram para ver nuestras delicias caseras y promociones exclusivas! ✨</span>
+  <a href="https://www.instagram.com/todocasero.rotiseria_/" target="_blank" class="btn-instagram-micro" aria-label="Seguir en Instagram">
+    <i class="fab fa-instagram"></i> Ver Nuestro Instagram
+  </a>
+</div>
+
+<header>
+<div class="logo">Todo Casero</div>
+<div class="tagline">Auténtica comida casera en Campana</div>
+<nav>
+<a href="#inicio">Inicio</a>
+<a href="#menu">Menú</a>
+<a href="#pedidos">Cómo Pedir</a>
+<a href="#contacto">Contacto</a>
+<a href="https://www.instagram.com/todocasero.rotiseria_/" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+<a href="#" id="viewCart"><i class="fas fa-shopping-cart"></i> Carrito (<span id="cartCount">0</span>)</a>
+</nav>
 </header>
 
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-    <!-- PANEL IZQUIERDO -->
-    <div class="lg:col-span-4 space-y-6">
-        <!-- Ingesta de Datos -->
-        <div class="glass-card p-5 no-print">
-            <h2 class="font-tech text-sm text-cyan-400 font-bold mb-4"><i class="fas fa-database mr-2"></i>Ingesta de Datos</h2>
-            <form id="ingesta-form" class="space-y-3" onsubmit="procesarDatos(event)">
-                <div class="grid grid-cols-3 gap-3">
-                    <div>
-                        <label class="text-[10px] text-cyan-500 uppercase font-bold tracking-wider">Unidad</label>
-                        <input type="text" id="in_unidad" required class="cyber-input w-full rounded p-1.5 text-xs uppercase" placeholder="V-01">
-                    </div>
-                    <div>
-                        <label class="text-[10px] text-cyan-500 uppercase font-bold tracking-wider">ID</label>
-                        <input type="text" id="in_id" required class="cyber-input w-full rounded p-1.5 text-xs uppercase" placeholder="XYZ">
-                    </div>
-                    <div>
-                        <label class="text-[10px] text-cyan-500 uppercase font-bold tracking-wider">Año Fab.</label>
-                        <input type="number" id="in_anio" required class="cyber-input w-full rounded p-1.5 text-xs" placeholder="2018">
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="text-[10px] text-cyan-500 uppercase font-bold tracking-wider">Motor</label>
-                        <select id="in_motor" class="cyber-input w-full rounded p-1.5 text-xs">
-                            <option value="Gasolina">Gasolina</option>
-                            <option value="Diésel">Diésel</option>
-                            <option value="Híbrido">Híbrido</option>
-                            <option value="Eléctrico">Eléctrico</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="text-[10px] text-cyan-500 uppercase font-bold tracking-wider">Fecha</label>
-                        <input type="date" id="in_fecha" required class="cyber-input w-full rounded p-1.5 text-xs">
-                    </div>
-                </div>
-                <div class="grid grid-cols-3 gap-2">
-                    <div><label class="text-[9px] text-cyan-500">KM</label><input type="number" id="in_km" required class="cyber-input w-full rounded p-1 text-xs"></div>
-                    <div><label class="text-[9px] text-cyan-500">UPTIME (h)</label><input type="number" id="in_up" step="0.1" required class="cyber-input w-full rounded p-1 text-xs"></div>
-                    <div><label class="text-[9px] text-cyan-500">DOWNTIME (h)</label><input type="number" id="in_down" step="0.1" required class="cyber-input w-full rounded p-1 text-xs"></div>
-                </div>
-                <div class="grid grid-cols-3 gap-2">
-                    <div><label class="text-[9px] text-cyan-500">VIB (mm/s)</label><input type="number" id="in_vib" step="0.1" required class="cyber-input w-full rounded p-1 text-xs"></div>
-                    <div><label class="text-[9px] text-cyan-500">TEMP ACEITE(°C)</label><input type="number" id="in_temp" step="0.1" required class="cyber-input w-full rounded p-1 text-xs"></div>
-                    <div><label class="text-[9px] text-cyan-500">RPM</label><input type="number" id="in_rpm" required class="cyber-input w-full rounded p-1 text-xs"></div>
-                </div>
-                <div class="grid grid-cols-4 gap-2">
-                    <div><label class="text-[9px] text-cyan-500">PSI DI</label><input type="number" id="in_psi_di" required class="cyber-input w-full rounded p-1 text-xs"></div>
-                    <div><label class="text-[9px] text-cyan-500">PSI DD</label><input type="number" id="in_psi_dd" required class="cyber-input w-full rounded p-1 text-xs"></div>
-                    <div><label class="text-[9px] text-cyan-500">PSI TI</label><input type="number" id="in_psi_ti" required class="cyber-input w-full rounded p-1 text-xs"></div>
-                    <div><label class="text-[9px] text-cyan-500">PSI TD</label><input type="number" id="in_psi_td" required class="cyber-input w-full rounded p-1 text-xs"></div>
-                </div>
-                <div>
-                    <label class="text-[10px] text-cyan-500 uppercase font-bold tracking-wider">Detalle de Trabajo</label>
-                    <textarea id="in_trabajo" rows="2" class="cyber-input w-full rounded p-1.5 text-xs" placeholder="Describa mantenimientos realizados..."></textarea>
-                </div>
-                <!-- === NUEVO: Input para imagen === -->
-                <div>
-                    <label class="text-[10px] text-cyan-500 uppercase font-bold tracking-wider flex items-center gap-2">
-                        <i class="fas fa-image"></i> Imagen de Referencia (Opcional)
-                    </label>
-                    <input type="file" id="in_imagen" accept="image/*" class="cyber-input w-full rounded p-1.5 text-xs file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:bg-cyan-900/30 file:text-cyan-400 hover:file:bg-cyan-900/50">
-                    <img id="img-preview" class="img-upload-preview" alt="Vista previa">
-                    <div id="upload-status" class="upload-status"></div>
-                </div>
-                <button type="submit" class="btn-neon w-full py-2 rounded-lg text-sm mt-2">
-                    <i class="fas fa-cogs mr-2"></i>Procesar Datos
-                </button>
-            </form>
-        </div>
+<section class="hero" id="inicio">
+<div class="hero-content">
+<h1>Los sabores más caseros de Campana</h1>
+<p>Delicias recién hechas todos los días de 19:30 a 23:45</p>
+<a href="#menu" class="btn">Ver Menú</a>
+<a href="https://api.whatsapp.com/send?phone=543489358998&text=Hola%20Todo%20Casero!!!" class="btn btn-whatsapp">Chatear con María</a>
+</div>
+</section>
 
-        <!-- KPIs Principales -->
-        <div class="glass-card p-5">
-            <h2 class="font-tech text-sm text-cyan-400 font-bold mb-4"><i class="fas fa-chart-pie mr-2"></i>Rendimiento de la Flota</h2>
-            <div class="grid grid-cols-3 gap-3 text-center mb-4">
-                <!-- Tarjeta Disp. -->
-                <div class="bg-slate-800/50 p-3 rounded-lg border border-cyan-500/20 relative group cursor-help">
-                    <p class="text-[10px] text-slate-400 uppercase">Disp.</p>
-                    <p id="kpi_disp" class="stat-value text-xl text-emerald-400 font-bold mt-1">0%</p>
-                    <span id="ind_disp" class="absolute top-2 right-2 text-[8px] px-1.5 py-0.5 rounded border border-current hidden"></span>
-                    
-                    <!-- Tooltip Hover -->
-                    <div class="absolute z-50 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-300 bg-slate-900/95 text-cyan-100 text-[9px] p-2 rounded-lg border border-cyan-500/50 w-40 left-1/2 -translate-x-1/2 bottom-[105%] pointer-events-none shadow-xl">
-                        <strong class="text-emerald-400">Disponibilidad:</strong><br> Porcentaje de tiempo que la unidad está operativa y lista para usar frente al tiempo total inactivo.
-                    </div>
-                </div>
-                
-                <!-- Tarjeta MTBF -->
-                <div class="bg-slate-800/50 p-3 rounded-lg border border-cyan-500/20 relative group cursor-help">
-                    <p class="text-[10px] text-slate-400 uppercase">MTBF (h)</p>
-                    <p id="kpi_mtbf" class="stat-value text-xl text-cyan-400 font-bold mt-1">0</p>
-                    <span id="ind_mtbf" class="absolute top-2 right-2 text-[8px] px-1.5 py-0.5 rounded border border-current hidden"></span>
-                    
-                    <!-- Tooltip Hover -->
-                    <div class="absolute z-50 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-300 bg-slate-900/95 text-cyan-100 text-[9px] p-2 rounded-lg border border-cyan-500/50 w-40 left-1/2 -translate-x-1/2 bottom-[105%] pointer-events-none shadow-xl">
-                        <strong class="text-cyan-400">Mean Time Between Failures:</strong><br> Tiempo medio entre fallas. Mide la confiabilidad (cuanto mayor, mejor).
-                    </div>
-                </div>
-
-                <!-- Tarjeta MTTR -->
-                <div class="bg-slate-800/50 p-3 rounded-lg border border-cyan-500/20 relative group cursor-help">
-                    <p class="text-[10px] text-slate-400 uppercase">MTTR (h)</p>
-                    <p id="kpi_mttr" class="stat-value text-xl text-purple-400 font-bold mt-1">0</p>
-                    <span id="ind_mttr" class="absolute top-2 right-2 text-[8px] px-1.5 py-0.5 rounded border border-current hidden"></span>
-                    
-                    <!-- Tooltip Hover -->
-                    <div class="absolute z-50 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-300 bg-slate-900/95 text-cyan-100 text-[9px] p-2 rounded-lg border border-cyan-500/50 w-40 left-1/2 -translate-x-1/2 bottom-[105%] pointer-events-none shadow-xl">
-                        <strong class="text-purple-400">Mean Time To Repair:</strong><br> Tiempo medio de reparación. Mide la eficiencia del mantenimiento (cuanto menor, mejor).
-                    </div>
-                </div>
-            </div>
-            <div class="relative h-40 w-full"><canvas id="chartKpis"></canvas></div>
-        </div>
-
-        <!-- Matriz de Sensores -->
-        <div class="glass-card p-5 no-print">
-            <h2 class="font-tech text-sm text-cyan-400 font-bold mb-2"><i class="fas fa-microchip mr-2"></i>Diagnóstico de Sensores</h2>
-            <p class="text-[9px] text-slate-400 mb-3">Tildar anomalías detectadas para cruzar con dataset e IA.</p>
-            <div class="space-y-1 max-h-[180px] overflow-y-auto text-[10px] custom-scrollbar pr-2" id="sensores-container">
-                <!-- Dinámico por JS -->
-            </div>
-        </div>
-
-        <!-- Checklist VTV -->
-        <div class="glass-card p-5 no-print">
-            <h2 class="font-tech text-sm text-cyan-400 font-bold mb-4"><i class="fas fa-clipboard-check mr-2"></i>Checklist VTV</h2>
-            <div class="flex items-center gap-4 mb-4">
-                <div class="relative w-14 h-14">
-                    <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-                        <path class="text-slate-700" stroke-width="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <path id="vtv-progress-circle" class="text-rose-400 transition-all duration-500" stroke-dasharray="0, 100" stroke-width="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                    </svg>
-                    <div class="absolute inset-0 flex items-center justify-center">
-                        <span id="vtv-pct" class="text-[10px] font-tech font-bold text-rose-400">0%</span>
-                    </div>
-                </div>
-                <div class="text-[10px] text-slate-400">
-                    <p class="uppercase tracking-wider">Progreso Inspección</p>
-                    <p id="vtv-status-text" class="text-rose-400 font-bold text-xs uppercase">Pendiente</p>
-                </div>
-            </div>
-            <div class="space-y-2 max-h-[150px] overflow-y-auto text-[10px]" id="vtv-items-container"></div>
-        </div>
-    </div>
-
-    <!-- PANEL DERECHO -->
-    <div class="lg:col-span-8 space-y-6">
-        <!-- Métricas Avanzadas -->
-        <div class="glass-card p-5">
-            <h2 class="font-tech text-sm text-cyan-400 font-bold mb-4"><i class="fas fa-bolt mr-2"></i>Métricas Avanzadas - Variables Sintéticas</h2>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="advCards"></div>
-        </div>
-
-        <!-- TARJETA NUEVA: DIAGNÓSTICO TÉRMICO POR DERIVADAS -->
-        <div class="glass-card p-5 border-l-4 border-l-amber-500" id="card-diagnostico-termico">
-            <h2 class="font-tech text-sm text-amber-400 font-bold mb-2"><i class="fas fa-thermometer-half mr-2"></i>Diagnóstico Térmico (Derivadas)</h2>
-            <p class="text-[10px] text-slate-400 mb-3">Análisis histórico de temperatura del aceite (Requiere mín. 4 registros de la misma unidad).</p>
-            <div id="diag-termico-resultado" class="p-3 bg-slate-900/50 rounded border border-slate-700 flex items-center justify-between">
-                <span class="text-xs font-bold text-slate-300">Estado Diagnóstico:</span>
-                <span id="diag-termico-badge" class="px-2 py-1 rounded text-[10px] font-bold bg-slate-800 text-slate-500">Esperando datos...</span>
-            </div>
-            <div id="diag-termico-detalles" class="mt-3 text-[9px] text-slate-400 space-y-1"></div>
-        </div>
-
-        <!-- Gráficos -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="glass-card p-4">
-                <h2 class="font-tech text-xs text-cyan-400 font-bold mb-2"><i class="fas fa-chart-line mr-2"></i>Tendencia Temporal (Temp & Vib)</h2>
-                <div class="relative h-48 w-full"><canvas id="chartTendencia"></canvas></div>
-            </div>
-            <div class="glass-card p-4 flex flex-col">
-                <h2 class="font-tech text-xs text-cyan-400 font-bold mb-2"><i class="fas fa-project-diagram mr-2"></i>Dispersión: KM vs Riesgo Falla</h2>
-                <div class="relative h-40 w-full flex-grow"><canvas id="chartScatter"></canvas></div>
-                <div class="text-[8px] text-slate-400 mt-2 bg-slate-900/50 p-2 rounded border border-cyan-500/20 leading-tight">
-                    <strong class="text-cyan-500">Interpretación del scatter plot:</strong><br>
-                    • Los puntos se agrupan en clusters. A medida que el vehículo envejece, los problemas cambian en severidad.<br>
-                    • Útil para planificar mantenimientos preventivos y anticipar reparaciones mayores basadas en probabilidad.
-                </div>
-            </div>
-        </div>
-
-        <!-- Estadísticas -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="glass-card p-4 overflow-x-auto flex flex-col">
-                <h2 class="font-tech text-xs text-purple-400 font-bold mb-2"><i class="fas fa-calculator mr-2"></i>DESCRIBE() - Estadísticas</h2>
-                <table class="w-full text-[9px] text-left cyber-table mb-3" id="table-describe"></table>
-                <div class="text-[8px] text-slate-400 mt-auto bg-slate-900/50 p-2 rounded border border-purple-500/20 leading-tight">
-                    <strong class="text-purple-400">Contexto estadístico fundamental para la IA local.</strong>
-                </div>
-            </div>
-            <div class="glass-card p-4 overflow-x-auto flex flex-col">
-                <h2 class="font-tech text-xs text-amber-400 font-bold mb-2"><i class="fas fa-th mr-2"></i>Matriz de Correlación</h2>
-                <table class="w-full text-[9px] text-center cyber-table mb-3" id="table-correlacion"></table>
-            </div>
-        </div>
-
-        <!-- Dataset & IA -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="glass-card p-4 lg:col-span-2 overflow-hidden flex flex-col">
-                <div class="flex justify-between items-center mb-2">
-                    <h2 class="font-tech text-xs text-cyan-400 font-bold"><i class="fas fa-table mr-2"></i>Dataset Acumulado</h2>
-                    <span class="text-[9px] text-slate-400" id="dataset-count">0/2000 registros</span>
-                </div>
-                <div class="flex gap-2 mb-3 bg-slate-900/40 p-2 rounded border border-cyan-500/20">
-                    <input type="text" id="search_id" class="cyber-input flex-1 rounded p-1.5 text-[10px] uppercase" placeholder="Buscar ID / Unidad" oninput="filtrarDataset()">
-                    <input type="date" id="search_fecha" class="cyber-input flex-1 rounded p-1.5 text-[10px]" oninput="filtrarDataset()">
-                    <button onclick="limpiarBusqueda()" class="btn-neon px-2 py-1 rounded text-xs" title="Limpiar Búsqueda"><i class="fas fa-times"></i></button>
-                </div>
-                <div class="overflow-auto max-h-[250px]">
-                    <table class="w-full text-[9px] text-left cyber-table" id="table-dataset">
-                        <thead>
-                            <tr>
-                                <th class="w-8 text-center"><input type="checkbox" id="chk-all" onchange="toggleAllRows(this.checked)" title="Seleccionar todo"></th>
-                                <th>Fecha</th><th>Unidad</th><th>Motor</th><th>KM</th><th>UP</th><th>DOWN</th><th>VIB</th><th>TEMP</th><th class="w-12 text-center">Img</th><th class="w-16 text-center">Detalle</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbody-dataset"></tbody>
-                    </table>
-                </div>
-            </div>
-            <!-- Recomendaciones IA Local -->
-            <div class="glass-card p-4 bg-indigo-900/20 border-indigo-500/30 flex flex-col">
-                <div class="flex justify-between items-center mb-2 border-b border-indigo-500/20 pb-2">
-                    <h2 class="font-tech text-xs text-indigo-400 font-bold"><i class="fas fa-robot mr-2"></i>Motor IA Local</h2>
-                    <button onclick="llamarIALocal()" class="btn-neon px-2 py-1 rounded text-[9px] flex items-center gap-1 bg-indigo-900/40">
-                        ✨ Análisis IA
-                    </button>
-                </div>
-                <div id="ai-recommendations" class="text-[10px] space-y-2 text-slate-300 flex-grow custom-scrollbar overflow-y-auto max-h-[250px] pr-1 llm-response">
-                    <p class="italic text-slate-500">Selecciona o ingresa datos y haz clic en "✨ Análisis IA" para ejecutar el cruce automático de datos de forma inmediata y offline.</p>
-                </div>
-            </div>
-        </div>
-    </div>
+<section class="section" id="menu">
+<h2 class="section-title">Nuestro Menú</h2>
+<div class="offer-banner" id="offerBanner">
+<h3>¡Ofertas Especiales!</h3>
+<p id="offerText"></p>
 </div>
 
-<!-- Modal Detalle -->
-<div id="modal-detalle" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm no-print">
-    <div class="glass-card w-full max-w-lg p-5 relative flex flex-col max-h-[90vh]">
-        <button onclick="cerrarModalDetalle()" class="absolute top-4 right-4 text-cyan-400 hover:text-rose-400 transition-colors p-2"><i class="fas fa-times text-xl"></i></button>
-        <h3 class="font-tech text-lg text-cyan-400 font-bold mb-4 border-b border-cyan-500/30 pb-2"><i class="fas fa-file-alt mr-2"></i>Reporte de Trabajo</h3>
-        <div class="overflow-y-auto pr-2 text-sm text-slate-300 space-y-4 custom-scrollbar" id="modal-detalle-content"></div>
-    </div>
+<!-- Combos Section -->
+<section id="combos" class="mb-12 bg-gradient-to-b from-gray-50 to-white relative before:absolute before:inset-0 before:bg-[url('image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMjBweCIgaGVpZ2h0PSIyMHB4IiB2aWV3Qm94PSIwIDAgMjAgMjAiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDIwIDIwIiB4bWw6c3BhY2U9InByZXNlcnZlIj48Y2lyY2xlIGZpbGw9IiNGRkZGRkYiIGN4PSIxMCIgY3k9IjEwIiByPSIxIi8+PC9zdmc+')] before:bg-[length:10px_10px] before:opacity-5">
+<h2 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-600 mb-6 text-center">🍔🍕Combos Deliciosos para 2 a 6 personas🍔🍕</h2>
+<div id="combosContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Los combos se generarán aquí por JavaScript -->
+</div>
+</section>
+
+<div class="menu-section">
+<div id="categoriesContainer"></div>
+</div>
+</section>
+
+<section class="section" id="pedidos">
+<h2 class="section-title text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-600 mb-6 text-center opacity-0 transition-opacity duration-500" data-scroll-reveal>Cómo Hacer tu Pedido</h2>
+<div class="relative overflow-hidden mb-8">
+<div class="flex transition-transform duration-500 ease-in-out" id="carousel">
+<div class="min-w-full flex-shrink-0 bg-white rounded-xl shadow-md p-6 transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:border-orange-400 border-2 border-transparent text-center opacity-0 translate-y-10" data-scroll-reveal data-delay="0.1s">
+<i class="fas fa-utensils text-4xl text-orange-500 mb-4"></i>
+<h3 class="text-xl font-bold text-gray-800 mb-2">1. Elige tu comida</h3>
+<p class="text-gray-600 mb-4">Selecciona entre nuestra variedad de sándwiches, pizzas, pastas y más.</p>
+</div>
+<div class="min-w-full flex-shrink-0 bg-white rounded-xl shadow-md p-6 transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:border-orange-400 border-2 border-transparent text-center opacity-0 translate-y-10" data-scroll-reveal data-delay="0.2s">
+<i class="fas fa-comment text-4xl text-orange-500 mb-4"></i>
+<h3 class="text-xl font-bold text-gray-800 mb-2">2. Haz tu pedido</h3>
+<p class="text-gray-600 mb-4">Chatea con nuestra asistente María por WhatsApp al +54 348 9358998.</p>
+</div>
+<div class="min-w-full flex-shrink-0 bg-white rounded-xl shadow-md p-6 transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:border-orange-400 border-2 border-transparent text-center opacity-0 translate-y-10" data-scroll-reveal data-delay="0.3s">
+<i class="fas fa-store text-4xl text-orange-500 mb-4"></i>
+<h3 class="text-xl font-bold text-gray-800 mb-2">3. Recoge en local</h3>
+<p class="text-gray-600 mb-4">Retira tu pedido en nuestro local en el horario acordado.</p>
+</div>
+</div>
+<button class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-orange-500 text-white p-2 rounded-full hover:bg-orange-600 transition-all" id="prevBtn">‹</button>
+<button class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-orange-500 text-white p-2 rounded-full hover:bg-orange-600 transition-all" id="nextBtn">›</button>
 </div>
 
-<!-- WhatsApp Btn -->
-<a href="#" onclick="enviarWhatsApp()" class="fixed bottom-6 right-6 bg-green-500 text-white rounded-full w-14 h-14 flex items-center justify-center text-3xl shadow-[0_0_15px_rgba(34,197,94,0.6)] hover:scale-110 transition-transform z-40 no-print" title="ENVIAR A WHATSAPP">
-    <i class="fab fa-whatsapp"></i>
+<!-- VIDEO TUTORIAL DE YOUTUBE -->
+<div class="bg-white p-6 rounded-xl shadow-md border border-orange-100 animate-fade-in-up">
+    <h3 class="text-2xl font-bold text-center text-gray-800 mb-2">
+        🎬 ¿Prefieres ver cómo funciona?
+    </h3>
+    <p class="text-center text-gray-600 mb-6">Mira nuestra guía rápida paso a paso</p>
+    
+    <div class="video-container">
+        <iframe 
+            src="https://www.youtube.com/embed/Q01bNH6-CFk?start=56&rel=0&modestbranding=1" 
+            title="Video Tutorial Todo Casero - Cómo hacer tu pedido" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen
+            loading="lazy">
+        </iframe>
+    </div>
+    
+    <p class="text-center text-gray-500 mt-4 text-sm">
+        <i class="fas fa-play-circle text-orange-500 mr-2"></i>
+        Aprende a usar el carrito, chatear con María y retirar tu pedido.
+    </p>
+</div>
+<!-- FIN VIDEO TUTORIAL -->
+
+</section>
+
+<section class="section" id="contacto">
+<h2 class="section-title text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-600 mb-6 text-center opacity-0 transition-opacity duration-500" data-scroll-reveal>Contacto</h2>
+<div class="relative overflow-hidden">
+<div class="flex transition-transform duration-500 ease-in-out" id="contactCarousel">
+<div class="min-w-full flex-shrink-0 bg-white rounded-xl shadow-md p-6 transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:border-orange-400 border-2 border-transparent text-center opacity-0 translate-y-10" data-scroll-reveal data-delay="0.1s">
+<i class="fas fa-map-marker-alt text-4xl text-orange-500 mb-4"></i>
+<h3 class="text-xl font-bold text-gray-800 mb-2">Ubicación</h3>
+<p class="text-gray-600 mb-4">Campana, Buenos Aires</p>
+</div>
+<div class="min-w-full flex-shrink-0 bg-white rounded-xl shadow-md p-6 transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:border-orange-400 border-2 border-transparent text-center opacity-0 translate-y-10" data-scroll-reveal data-delay="0.2s">
+<i class="fas fa-clock text-4xl text-orange-500 mb-4"></i>
+<h3 class="text-xl font-bold text-gray-800 mb-2">Horario</h3>
+<p class="text-gray-600 mb-4">Lunes a Domingo<br>19:30 - 23:45</p>
+</div>
+<div class="min-w-full flex-shrink-0 bg-white rounded-xl shadow-md p-6 transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:border-orange-400 border-2 border-transparent text-center opacity-0 translate-y-10" data-scroll-reveal data-delay="0.3s">
+<i class="fab fa-whatsapp text-4xl text-orange-500 mb-4"></i>
+<h3 class="text-xl font-bold text-gray-800 mb-2">Teléfono</h3>
+<p class="text-gray-600 mb-4">+54 348 9358998</p>
+</div>
+</div>
+<button class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-orange-500 text-white p-2 rounded-full hover:bg-orange-600 transition-all" id="prevBtnContact">‹</button>
+<button class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-orange-500 text-white p-2 rounded-full hover:bg-orange-600 transition-all" id="nextBtnContact">›</button>
+</div>
+</section>
+
+<div id="chatWidget" class="chat-widget">
+<div class="chat-header">
+<span>Chat con María de Todo Casero</span>
+<button onclick="toggleChat()">×</button>
+</div>
+<div class="chat-body" id="chatBody"></div>
+<div class="chat-input">
+<input type="text" id="chatInput" placeholder="Escribe tu consulta...">
+<button onclick="sendChatMessage()">Enviar</button>
+</div>
+</div>
+
+<footer>
+<div class="footer-content">
+<div class="footer-section">
+<h3>Todo Casero</h3>
+<p>Auténtica comida casera preparada con los mejores ingredientes y mucho amor.</p>
+</div>
+<div class="footer-section">
+<h3>Menú</h3>
+<ul>
+<li><a href="#menu">Sándwiches</a></li>
+<li><a href="#menu">Pizzas</a></li>
+<li><a href="#menu">Pastas</a></li>
+<li><a href="#menu">Hamburguesas</a></li>
+</ul>
+</div>
+<div class="footer-section">
+<h3>Contacto</h3>
+<ul>
+<li><i class="fas fa-map-marker-alt"></i> Campana, BA</li>
+<li><i class="fas fa-phone"></i> +54 348 9358998</li>
+<li><i class="fas fa-clock"></i> Lun-Dom: 19:30-23:45</li>
+</ul>
+</div>
+</div>
+<div class="copyright bg-gray-800 py-4 text-center rounded-t-lg shadow-md">
+© 2025 Todo Casero - Todos los derechos reservados |
+<span id="adminLink" class="cursor-pointer text-underline text-accent-color hover:text-primary-color transition-colors">Acceso Administrador</span>
+</div>
+</footer>
+
+<div id="cartModal" class="cart-modal">
+<div class="cart-content">
+<h3>Tu Carrito</h3>
+<div id="cartItems"></div>
+<div class="cart-total" id="cartTotal"></div>
+<div class="customer-info">
+<h4>Datos del Cliente</h4>
+<input type="text" id="customerName" placeholder="Nombre" required>
+<input type="tel" id="customerPhone" placeholder="Celular" required>
+</div>
+<div class="payment-info">
+<h4>Métodos de Pago</h4>
+<div class="payment-method">
+<input type="radio" id="cartEfectivo" name="payment" value="Efectivo" checked>
+<label for="cartEfectivo">Efectivo al retirar</label>
+</div>
+<div class="payment-method">
+<input type="radio" id="cartTransferencia" name="payment" value="Transferencia">
+<label for="cartTransferencia">Transferencia bancaria</label>
+</div>
+</div>
+<div class="cart-actions">
+<button class="btn" onclick="closeCart()">Cerrar</button>
+<button class="btn btn-whatsapp" id="sendOrder">Enviar Pedido por WhatsApp</button>
+</div>
+</div>
+</div>
+
+<!-- Modal para sugerir postre -->
+<div id="dessertModal" class="dessert-modal">
+<div class="dessert-content">
+<h3 class="text-2xl font-bold text-var(--primary-color) mb-4">¡Termina tu pedido con un dulce!</h3>
+<p class="mb-6">¿Quieres agregar un postre casero?</p>
+<div class="dessert-options" id="dessertOptions">
+<!-- Se llenan dinámicamente -->
+</div>
+<button class="dessert-btn no-thanks mt-4" onclick="skipDessert()">No, gracias</button>
+</div>
+</div>
+
+<div id="adminPanel" class="admin-panel">
+<button class="close-admin" onclick="closeAdmin()">×</button>
+<h3>Panel de Administración</h3>
+<form id="productForm" class="admin-form">
+<div>
+<label for="categorySelect">Categoría</label>
+<select id="categorySelect" required>
+<option value="">Seleccione una categoría</option>
+<option value="Sándwiches">Sándwiches</option>
+<option value="Pizzas">Pizzas</option>
+<option value="Pizzas Individuales">Pizzas Individuales</option>
+<option value="Pastas">Pastas</option>
+<option value="Hamburguesas">Hamburguesas</option>
+<option value="Acompañamientos">Acompañamientos</option>
+<option value="Empanadas">Empanadas</option>
+<option value="Postres">Postres</option>
+<option value="Al Plato">Al Plato</option>
+</select>
+</div>
+<div>
+<label for="productName">Nombre del Producto</label>
+<input type="text" id="productName" required placeholder="Ej: Sándwich de Bondiola">
+</div>
+<div>
+<label for="productPrice">Precio (ARS)</label>
+<input type="number" id="productPrice" required placeholder="Ej: 9000">
+</div>
+<div>
+<label for="productDescription">Descripción</label>
+<textarea id="productDescription" rows="3" placeholder="Descripción del producto"></textarea>
+</div>
+<div>
+<label for="productImage">Subir Imagen del Producto</label>
+<input type="file" id="productImage" accept="image/*">
+</div>
+<div>
+<label for="productImageUrl">O ingrese URL de la Imagen</label>
+<input type="url" id="productImageUrl" placeholder="Ej: https://example.com/image.jpg">
+</div>
+<button type="submit">Agregar/Editar Producto</button>
+<button type="button" id="saveChanges">Guardar Todos los Cambios</button>
+</form>
+<div class="product-list" id="productList"></div>
+</div>
+
+<div id="adminModal" class="modal">
+<div class="modal-content">
+<h3>Acceso Administrador</h3>
+<p>Ingrese la clave de acceso:</p>
+<input type="password" id="adminPassword" placeholder="Clave de acceso">
+<button class="btn" onclick="checkAdminPassword()">Ingresar</button>
+</div>
+</div>
+
+<!-- 🔹 BOTÓN FLOTANTE DEL ASISTENTE INTELIGENTE -->
+<a href="https://notebooklm.google.com/notebook/bdef646b-85d8-4601-b523-3ebec3768093?authuser=2" target="_blank" class="assistant-float" title="Asistente Inteligente Todo Casero" aria-label="Asistente Inteligente de Todo Casero">
+<i class="fas fa-robot"></i>
+</a>
+<div class="assistant-tooltip" id="assistantTooltip">
+💡 ¿Tienes dudas? Pregúntale a nuestro Asistente Inteligente sobre menú, precios, horarios y promociones.
+</div>
+
+<!-- 🔹 Botón flotante de WhatsApp -->
+<a href="https://api.whatsapp.com/send?phone=543489358998&text=Hola%20Todo%20Casero!!!" target="_blank" class="whatsapp-float" title="Chatear con María por WhatsApp" aria-label="WhatsApp">
+<i class="fab fa-whatsapp"></i>
 </a>
 
-<!-- LOGICA JS SUPABASE -->
-<script type="module">
-    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-
-    const supabaseUrl = "https://frggsxlgpxlexasixtdj.supabase.co";
-    const supabaseKey = "sb_publishable_IJ5fiIeJHPK_acU_LulfDg_6xfi6_Ho";
-    const supabase = createClient(supabaseUrl, supabaseKey);
-
-    window.guardarDatoSupabase = async function(unidad, km, temp) {
-        const { data, error } = await supabase
-            .from("vehiculos")
-            .insert([{ unidad: unidad, kilometros: km, temperatura: temp, fecha: new Date().toISOString() }]);
-        if (error) console.error("Error en Supabase:", error);
-        else console.log("Dato guardado en Supabase:", data);
-    };
-
-    window.leerDatosSupabase = async function() {
-        const { data, error } = await supabase
-            .from("vehiculos")
-            .select("*")
-            .order("fecha", { ascending: true });
-        if (error) {
-            console.error(error);
-            alert("❌ Error al descargar datos de la nube: " + error.message);
-        } else {
-            console.log("Datos desde Supabase:", data);
-            if (data && data.length > 0) {
-                window.actualizarDbDesdeNube(data);
-            } else {
-                alert("⚠️ La base de datos en la nube no tiene registros aún.");
-            }
-        }
-    };
-
-    // === NUEVO: Función para subir imagen a Supabase Storage ===
-    window.subirImagenSupabase = async function(file, recordId, unidad) {
-        if (!file) return null;
-        
-        const statusEl = document.getElementById('upload-status');
-        statusEl.className = 'upload-status uploading';
-        statusEl.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i>Subiendo imagen...';
-        
-        try {
-            // Generar nombre único: unidad_fecha_id_timestamp.ext
-            const ext = file.name.split('.').pop().toLowerCase();
-            const fileName = `${unidad}_${recordId}_${Date.now()}.${ext}`;
-            const filePath = `imagenes_registros/${fileName}`;
-            
-            const { data, error } = await supabase.storage
-                .from('nexo-art-images')
-                .upload(filePath, file, {
-                    cacheControl: '3600',
-                    upsert: false
-                });
-            
-            if (error) throw error;
-            
-            // Obtener URL pública
-            const { data: { publicUrl } } = supabase.storage
-                .from('nexo-art-images')
-                .getPublicUrl(filePath);
-            
-            statusEl.className = 'upload-status success';
-            statusEl.innerHTML = '<i class="fas fa-check mr-1"></i>Imagen subida';
-            
-            return publicUrl;
-            
-        } catch (err) {
-            console.error("Error subiendo imagen:", err);
-            statusEl.className = 'upload-status error';
-            statusEl.innerHTML = `<i class="fas fa-exclamation-triangle mr-1"></i>Error: ${err.message}`;
-            return null;
-        }
-    };
-</script>
-
 <script>
-    // ESTADO GLOBAL
-    const MAX_RECORDS = 2000;
-    const STORAGE_KEY = 'nexo_art_db';
-    let db = [];
-    let selectedRows = new Set();
-    let filtroActualID = "";
-    let filtroActualFecha = "";
-    let chartTendenciaObj = null;
-    let chartScatterObj = null;
-    let chartKpisObj = null;
-
-    const advMetricsConfig = [
-        { id: 'desgaste', name: 'Desgaste/km', min: 20, optMin: 40, optMax: 80, max: 100, unit: "" },
-        { id: 'termovib', name: 'Ciclo Termovib', min: 5000, optMin: 10000, optMax: 50000, max: 80000, unit: "" },
-        { id: 'inactividad', name: 'Inactividad', min: 0, optMin: 20, optMax: 40, max: 60, unit: '%' },
-        { id: 'eficiencia', name: 'Eficiencia Térmica', min: 0.2, optMin: 0.3, optMax: 0.45, max: 0.5, unit: "" },
-        { id: 'presion', name: 'Presión Promedio', min: 28, optMin: 30, optMax: 35, max: 38, unit: ' PSI' },
-        { id: 'balance', name: 'Balance Presión', min: 0, optMin: 0, optMax: 1, max: 2, unit: "" },
-        { id: 'estres', name: 'Estrés Mecánico', min: 0, optMin: 30, optMax: 70, max: 100, unit: "" },
-        { id: 'dispop', name: 'Disp. Operativa', min: 70, optMin: 85, optMax: 95, max: 100, unit: '%' }
-    ];
-
-    const defSensores = [
-        { id: 'O2', label: 'Sensor de Oxígeno (O2)', falla: 'Provoca mezcla rica o pobre y alto consumo de combustible', fuente: '(1,2)' },
-        { id: 'MAP', label: 'Sensor MAP (Presión Múltiple)', falla: 'Genera pérdida de potencia y altera la inyección de combustible', fuente: '(1,2)' },
-        { id: 'CP', label: 'Sensor CP (Cigüeñal)', falla: 'Es vital para el arranque; si falla, el motor puede no encender', fuente: '(1)' },
-        { id: 'ST', label: 'Sensor ST (Temperatura/ECT)', falla: 'Lecturas o datos erróneos que afectan el arranque y el consumo', fuente: '(1,2)' },
-        { id: 'MAV', label: 'Sensor MAV (MAF/Flujo de aire)', falla: 'Puede causar un ralentí irregular', fuente: '(1)' },
-        { id: 'Detonacion', label: 'Sensor de Detonación', falla: 'Detecta cascabeleo o golpeteo anormal y retrasa el avance', fuente: '(1,2)' },
-        { id: 'TPS', label: 'Sensor TPS (Acelerador)', falla: 'Altera la aceleración y puede provocar tirones', fuente: '(1,2)' },
-        { id: 'CMP', label: 'Sensor CMP (Árbol de levas)', falla: 'Una señal incorrecta genera desajustes en el motor', fuente: '(2)' },
-        { id: 'PresionComb', label: 'Sensor de Presión de Combustible', falla: 'Activa el Check Engine si la presión del riel está fuera de rango', fuente: '(2)' },
-        { id: 'PresionTurbo', label: 'Sensor de Presión del Turbo', falla: 'Su falla hace que el motor pierda fuerza', fuente: '(1)' },
-        { id: 'Velocidad', label: 'Sensor de Velocidad', falla: 'Vuelve errático el velocímetro', fuente: '(1)' },
-        { id: 'PresionAceite', label: 'Sensor de Presión de Aceite', falla: 'Enciende alertas específicas en el tablero', fuente: '(1)' },
-        { id: 'CheckEngine', label: 'Check Engine', falla: 'El motor o un sensor crítico reporta un problema', fuente: '(2,3)' },
-        { id: 'EPC', label: 'EPC', falla: 'Falla en el acelerador electrónico o su sistema de control', fuente: '(3)' },
-        { id: 'ABS', label: 'ABS', falla: 'Avería en el sistema de frenos antibloqueo', fuente: '(3)' },
-        { id: 'ControlTraccion', label: 'Control de Tracción', falla: 'El sistema está fallando o se ha desactivado', fuente: '(3)' },
-        { id: 'Airbag', label: 'Airbag', falla: 'Advierte una falla en el sistema de seguridad', fuente: '(3)' },
-        { id: 'Direccion', label: 'Dirección Asistida', falla: 'Problema en la asistencia del volante; este puede ponerse duro', fuente: '(3)' }
-    ];
-
-    const vtvItems = [
-        {id: 'v_luces', label: 'Luces y Señalización'},
-        {id: 'v_frenos', label: 'Sistema de Frenos y ABS'},
-        {id: 'v_neumaticos', label: 'Neumáticos y Llantas'},
-        {id: 'v_direccion', label: 'Dirección y Suspensión'},
-        {id: 'v_escape', label: 'Gases de Escape'},
-        {id: 'v_doc', label: 'Documentación / Seguro'}
-    ];
-
-    function guardarEnMemoria() {
-        if (db.length > MAX_RECORDS) db = db.slice(db.length - MAX_RECORDS);
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
-    }
-
-    function cargarDeMemoria() {
-        const data = localStorage.getItem(STORAGE_KEY);
-        if (data) {
-            try { db = JSON.parse(data); } catch (e) { db = []; }
-        } else { db = []; }
-    }
-
-    // === NUEVO: Vista previa de imagen al seleccionar archivo ===
-    document.getElementById('in_imagen')?.addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        const preview = document.getElementById('img-preview');
-        
-        if (file && file.type.startsWith('image/')) {
-            const reader = new FileReader();
-            reader.onload = function(evt) {
-                preview.src = evt.target.result;
-                preview.style.display = 'block';
-            };
-            reader.readAsDataURL(file);
-        } else {
-            preview.style.display = 'none';
-            preview.src = '';
-        }
-    });
-
-    // RENDERIZADO INTERFAZ
-    function initAdvCards() {
-        const container = document.getElementById('advCards');
-        let html = "";
-        advMetricsConfig.forEach(c => {
-            html += `
-            <div class="bg-slate-800/40 p-3 rounded-lg border border-cyan-500/10 hover:border-cyan-500/40 transition-all">
-                <p class="text-[9px] text-slate-400 uppercase font-bold truncate" title="${c.name}">${c.name}</p>
-                <p id="val_${c.id}" class="stat-value text-base text-white mt-1">Sin datos</p>
-                <div class="prog-bar-bg"><div id="bar_${c.id}" class="prog-bar-fill bg-cyan-500" style="width: 0%"></div></div>
-                <p class="text-[7px] text-slate-500 mt-1 flex justify-between">
-                    <span>Min:${c.min >= 1000 ? c.min/1000+'k' : c.min}</span>
-                    <span class="text-emerald-500">Opt:${c.optMin >= 1000 ? c.optMin/1000+'k' : c.optMin}-${c.optMax >= 1000 ? c.optMax/1000+'k' : c.optMax}</span>
-                    <span>Max:${c.max >= 1000 ? c.max/1000+'k' : c.max}</span>
-                </p>
-            </div>`;
-        });
-        container.innerHTML = html;
-    }
-
-    function renderSensores() {
-        const container = document.getElementById('sensores-container');
-        let html = '';
-        defSensores.forEach(s => {
-            html += `<label class="flex items-start gap-2 cursor-pointer hover:bg-cyan-900/30 p-1.5 rounded transition-colors">
-                        <input type="checkbox" class="sensor-chk mt-1" value="${s.id}" onchange="actualizarDashboard()"> 
-                        <div><span class="font-bold text-cyan-400">${s.label}</span></div>
-                     </label>`;
-        });
-        container.innerHTML = html;
-    }
-
-    function renderVTV() {
-        const container = document.getElementById('vtv-items-container');
-        let html = "";
-        vtvItems.forEach(item => {
-            html += `<label class="flex items-center gap-2 cursor-pointer hover:bg-cyan-900/30 p-1 rounded">
-                <input type="checkbox" class="vtv-chk" value="${item.label}" onchange="updateVTVProgress()"> ${item.label}
-            </label>`;
-        });
-        container.innerHTML = html;
-    }
-
-    function updateVTVProgress() {
-        const chks = document.querySelectorAll('.vtv-chk');
-        const checked = document.querySelectorAll('.vtv-chk:checked').length;
-        const total = chks.length;
-        const pct = total === 0 ? 0 : Math.round((checked / total) * 100);
-        const circle = document.getElementById('vtv-progress-circle');
-        circle.setAttribute('stroke-dasharray', `${pct}, 100`);
-        const pctEl = document.getElementById('vtv-pct');
-        pctEl.innerText = `${pct}%`;
-        const statusText = document.getElementById('vtv-status-text');
-        
-        circle.classList.remove('text-rose-400', 'text-amber-400', 'text-emerald-400');
-        pctEl.classList.remove('text-rose-400', 'text-amber-400', 'text-emerald-400');
-        
-        if(pct === 100) {
-            statusText.innerText = 'Apto'; statusText.className = 'text-emerald-400 font-bold text-xs uppercase';
-            circle.classList.add('text-emerald-400'); pctEl.classList.add('text-emerald-400');
-        } else if(pct >= 50) {
-            statusText.innerText = 'En Proceso'; statusText.className = 'text-amber-400 font-bold text-xs uppercase';
-            circle.classList.add('text-amber-400'); pctEl.classList.add('text-amber-400');
-        } else {
-            statusText.innerText = 'Pendiente'; statusText.className = 'text-rose-400 font-bold text-xs uppercase';
-            circle.classList.add('text-rose-400'); pctEl.classList.add('text-rose-400');
-        }
-    }
-
-    function formatearFechaCorto(fechaStr) {
-        if (!fechaStr) return "";
-        const meses = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
-        const partes = fechaStr.split('-');
-        if(partes.length === 3) return `${partes[2]} ${meses[parseInt(partes[1], 10) - 1]}`;
-        return fechaStr;
-    }
-
-    window.onload = () => {
-        initAdvCards();
-        renderSensores();
-        renderVTV();
-        cargarDeMemoria();
-        document.getElementById('in_fecha').valueAsDate = new Date();
-        actualizarDashboard();
-    };
-
-    async function procesarDatos(e) {
-        e.preventDefault();
-        
-        // Generar ID único para el registro (para nombre de archivo de imagen)
-        const recordId = Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
-        
-        const record = {
-            fecha: document.getElementById('in_fecha').value,
-            unidad: document.getElementById('in_unidad').value.toUpperCase(),
-            id: document.getElementById('in_id').value.toUpperCase(),
-            anio: parseInt(document.getElementById('in_anio').value),
-            motor: document.getElementById('in_motor').value,
-            km: parseFloat(document.getElementById('in_km').value),
-            up: parseFloat(document.getElementById('in_up').value),
-            down: parseFloat(document.getElementById('in_down').value),
-            vib: parseFloat(document.getElementById('in_vib').value),
-            temp: parseFloat(document.getElementById('in_temp').value), 
-            rpm: parseFloat(document.getElementById('in_rpm').value),
-            psi_di: parseFloat(document.getElementById('in_psi_di').value),
-            psi_dd: parseFloat(document.getElementById('in_psi_dd').value),
-            psi_ti: parseFloat(document.getElementById('in_psi_ti').value),
-            psi_td: parseFloat(document.getElementById('in_psi_td').value),
-            trabajo: document.getElementById('in_trabajo').value,
-            // === NUEVO: Campo para URL de imagen ===
-            imagen_url: null,
-            record_id: recordId  // ID único para asociar imagen
-        };
-        
-        // === NUEVO: Procesar imagen si se seleccionó ===
-        const fileInput = document.getElementById('in_imagen');
-        const file = fileInput.files[0];
-        
-        if (file) {
-            if (typeof window.subirImagenSupabase === "function") {
-                const imgUrl = await window.subirImagenSupabase(file, recordId, record.unidad);
-                if (imgUrl) {
-                    record.imagen_url = imgUrl;
-                }
-            }
-        }
-        
-        db.push(record);
-        guardarEnMemoria();
-        
-        if(typeof window.guardarDatoSupabase === "function") {
-            window.guardarDatoSupabase(record.unidad, record.km, record.temp);
-        }
-        
-        e.target.reset();
-        document.getElementById('in_fecha').valueAsDate = new Date();
-        document.getElementById('img-preview').style.display = 'none';
-        document.getElementById('img-preview').src = '';
-        document.getElementById('upload-status').innerHTML = '';
-        
-        selectedRows.clear();
-        actualizarDashboard();
-    }
-
-    window.actualizarDbDesdeNube = function(data) {
-        db = data.map(r => ({
-            fecha: r.fecha ? r.fecha.split('T')[0] : new Date().toISOString().split('T')[0],
-            unidad: r.unidad || 'N/A',
-            id: r.id || 'N/A',
-            anio: r.anio || new Date().getFullYear(),
-            motor: r.motor || 'Desconocido',
-            km: r.kilometros || r.km || 0,
-            up: r.up || 0,
-            down: r.down || 0,
-            vib: r.vib || 0,
-            temp: r.temperatura || r.temp || 0,
-            rpm: r.rpm || 0,
-            psi_di: r.psi_di || 0,
-            psi_dd: r.psi_dd || 0,
-            psi_ti: r.psi_ti || 0,
-            psi_td: r.psi_td || 0,
-            trabajo: r.trabajo || '',
-            // === NUEVO: Soporte para imagen_url desde nube ===
-            imagen_url: r.imagen_url || null,
-            record_id: r.record_id || null
-        }));
-        guardarEnMemoria();
-        selectedRows.clear();
-        actualizarDashboard();
-        alert(`✅ Se descargaron y sincronizaron ${db.length} registros desde la nube exitosamente.`);
-    };
-
-    window.bajarDatosNube = async function() {
-        const btn = document.getElementById('btn-bajar-nube');
-        if(btn) btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i>Bajando...';
-        
-        if (typeof window.leerDatosSupabase === "function") {
-            await window.leerDatosSupabase();
-        } else {
-            alert("Error: Conexión a la nube no inicializada.");
-        }
-        
-        if(btn) btn.innerHTML = '<i class="fas fa-cloud-download-alt mr-1"></i>Bajar Nube';
-    };
-
-    function limpiarFiltros() {
-        if(confirm("¿Seguro que deseas borrar toda la base de datos local?")) {
-            db = [];
-            guardarEnMemoria();
-            selectedRows.clear();
-            limpiarBusqueda();
-            actualizarDashboard();
-        }
-    }
-
-    function filtrarDataset() {
-        filtroActualID = document.getElementById('search_id').value.toUpperCase();
-        filtroActualFecha = document.getElementById('search_fecha').value;
-        selectedRows.clear();
-        actualizarDashboard();
-    }
-
-    function limpiarBusqueda() {
-        document.getElementById('search_id').value = "";
-        document.getElementById('search_fecha').value = "";
-        filtroActualID = "";
-        filtroActualFecha = "";
-        selectedRows.clear();
-        actualizarDashboard();
-    }
-
-    function obtenerDbFiltrada() {
-        return db.filter(r => {
-            const matchID = filtroActualID === "" || r.id.includes(filtroActualID) || r.unidad.includes(filtroActualID);
-            const matchFecha = filtroActualFecha === "" || r.fecha === filtroActualFecha;
-            return matchID && matchFecha;
-        });
-    }
-
-    function toggleRow(index) {
-        if(selectedRows.has(index)) selectedRows.delete(index);
-        else selectedRows.add(index);
-        actualizarDashboard();
-    }
-
-    function toggleAllRows(isChecked) {
-        const dbFiltradaMap = db.map((r, i) => ({...r, originalIdx: i})).filter(r => {
-            const matchID = filtroActualID === "" || r.id.includes(filtroActualID) || r.unidad.includes(filtroActualID);
-            const matchFecha = filtroActualFecha === "" || r.fecha === filtroActualFecha;
-            return matchID && matchFecha;
-        });
-        if(isChecked) { dbFiltradaMap.forEach(r => selectedRows.add(r.originalIdx)); } 
-        else { dbFiltradaMap.forEach(r => selectedRows.delete(r.originalIdx)); }
-        actualizarDashboard();
-    }
-
-    function actualizarDashboard() {
-        const dbFiltrada = obtenerDbFiltrada();
-        renderDatasetTable(dbFiltrada);
-        const activeDb = selectedRows.size > 0 ? db.filter((_, i) => selectedRows.has(i)) : dbFiltrada;
-        
-        calcKPIsGenerales(activeDb);
-        calcDiagnosticoTermico(activeDb); 
-        
-        if(activeDb.length > 0) {
-            calcMetricasAvanzadas(activeDb[activeDb.length-1]);
-            calcEstadisticasDescribe(activeDb);
-            calcMatrizCorrelacion(activeDb);
-            document.getElementById('ai-recommendations').innerHTML = '<p class="italic text-slate-500">Datos actualizados. Haz clic en "✨ Análisis IA" para evaluar la selección.</p>';
-        } else {
-            limpiarPanelesAvanzados();
-        }
-        drawCharts(activeDb);
-    }
-
-    function limpiarPanelesAvanzados() {
-        document.getElementById('table-describe').innerHTML = "";
-        document.getElementById('table-correlacion').innerHTML = "";
-        document.getElementById('ai-recommendations').innerHTML = '<p class="italic text-slate-500">Selecciona o ingresa datos y haz clic en "✨ Análisis IA".</p>';
-        initAdvCards();
-        limpiarDiagnosticoTermico();
-    }
-
-    function getSynthetic(r) {
-        const desgaste = (r.km/1000) * (r.vib/2);
-        const termovib = r.temp * r.vib * 100;
-        const inactividad = (r.down / (r.up + r.down)) * 100 || 0;
-        const eficiencia = 1 - ((r.temp - 80) / 100) - (r.vib / 10);
-        const presiones = [r.psi_di, r.psi_dd, r.psi_ti, r.psi_td];
-        const presProm = presiones.reduce((a,b)=>a+b,0)/4;
-        const balPres = Math.max(...presiones) - Math.min(...presiones);
-        const estres = (r.rpm/50) + (r.temp/2) + (r.vib * 5);
-        const dispOp = ((r.up/(r.up+r.down)) * 100) || 0;
-        return { desgaste, termovib, inactividad, eficiencia, presion: presProm, balance: balPres, estres, dispop: dispOp };
-    }
-
-    function calcKPIsGenerales(activeDb) {
-        if(!activeDb || activeDb.length === 0) {
-            document.getElementById('kpi_disp').innerText = '0%';
-            document.getElementById('kpi_mtbf').innerText = '0';
-            document.getElementById('kpi_mttr').innerText = '0';
-            ['ind_disp', 'ind_mtbf', 'ind_mttr'].forEach(id => document.getElementById(id).classList.add('hidden'));
-            return;
-        }
-        const tUp = activeDb.reduce((acc, r) => acc + r.up, 0);
-        const tDown = activeDb.reduce((acc, r) => acc + r.down, 0);
-        const n = activeDb.length;
-        const mtbf = tUp / n;
-        const mttr = tDown / n;
-        const disp = (tUp+tDown) > 0 ? (tUp/(tUp+tDown)) * 100 : 0;
-        
-        document.getElementById('kpi_disp').innerText = disp.toFixed(1) + '%';
-        document.getElementById('kpi_mtbf').innerText = mtbf.toFixed(1);
-        document.getElementById('kpi_mttr').innerText = mttr.toFixed(1);
-        
-        const indDisp = document.getElementById('ind_disp'); indDisp.classList.remove('hidden');
-        if(disp >= 85) { indDisp.className = 'absolute top-2 right-2 text-[8px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/50'; indDisp.innerText = 'Óptimo'; }
-        else if(disp >= 70) { indDisp.className = 'absolute top-2 right-2 text-[8px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold border border-amber-500/50'; indDisp.innerText = 'Aceptable'; }
-        else { indDisp.className = 'absolute top-2 right-2 text-[8px] px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-400 font-bold border border-rose-500/50'; indDisp.innerText = 'Crítico'; }
-        
-        const indMtbf = document.getElementById('ind_mtbf'); indMtbf.classList.remove('hidden');
-        if(mtbf >= 100) { indMtbf.className = 'absolute top-2 right-2 text-[8px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/50'; indMtbf.innerText = 'Alto'; }
-        else if(mtbf >= 50) { indMtbf.className = 'absolute top-2 right-2 text-[8px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold border border-amber-500/50'; indMtbf.innerText = 'Medio'; }
-        else { indMtbf.className = 'absolute top-2 right-2 text-[8px] px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-400 font-bold border border-rose-500/50'; indMtbf.innerText = 'Bajo'; }
-        
-        const indMttr = document.getElementById('ind_mttr'); indMttr.classList.remove('hidden');
-        if(mttr <= 5) { indMttr.className = 'absolute top-2 right-2 text-[8px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/50'; indMttr.innerText = 'Óptimo'; }
-        else if(mttr <= 15) { indMttr.className = 'absolute top-2 right-2 text-[8px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold border border-amber-500/50'; indMttr.innerText = 'Medio'; }
-        else { indMttr.className = 'absolute top-2 right-2 text-[8px] px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-400 font-bold border border-rose-500/50'; indMttr.innerText = 'Alto'; }
-    }
-
-    function calcMetricasAvanzadas(last) {
-        const values = getSynthetic(last);
-        advMetricsConfig.forEach(config => {
-            const val = values[config.id];
-            const displayVal = (config.unit === '%') ? val.toFixed(1) : (val > 1000 ? (val/1000).toFixed(1)+'k' : val.toFixed(2));
-            let colorClass = 'bg-cyan-500';
-            if(val < config.optMin) colorClass = 'bg-amber-400';
-            else if(val > config.optMax) colorClass = 'bg-rose-500';
-            else colorClass = 'bg-emerald-400';
-            
-            let pct = ((val - config.min) / (config.max - config.min)) * 100;
-            pct = Math.max(0, Math.min(100, pct));
-            
-            document.getElementById(`val_${config.id}`).innerText = displayVal + config.unit;
-            document.getElementById(`bar_${config.id}`).style.width = pct + '%';
-            document.getElementById(`bar_${config.id}`).className = `prog-bar-fill ${colorClass}`;
-        });
-    }
-
-    function calcEstadisticasDescribe(activeDb) {
-        const table = document.getElementById('table-describe');
-        if(!activeDb || activeDb.length === 0) return;
-        const cols = ['km', 'up', 'down', 'vib', 'temp', 'rpm'];
-        const headerHTML = `<thead><tr><th>Estadística</th>${cols.map(c => `<th>${c.toUpperCase()}</th>`).join("")}</tr></thead>`;
-        
-        const rowLabels = [
-            {key: 'count', label: 'count'}, {key: 'mean', label: 'mean'}, {key: 'std', label: 'std'},
-            {key: 'min', label: 'min'}, {key: 'q25', label: '25%'}, {key: 'q50', label: '50%'},
-            {key: 'q75', label: '75%'}, {key: 'max', label: 'max'}
-        ];
-
-        function getStats(arr) {
-            if(arr.length === 0) return null;
-            arr.sort((a,b) => a-b);
-            const sum = arr.reduce((a,b) => a+b, 0);
-            const mean = sum / arr.length;
-            const variance = arr.reduce((a,b) => a + Math.pow(b-mean, 2), 0) / arr.length;
-            const std = Math.sqrt(variance);
-            const quartile = (q) => {
-                const pos = (arr.length - 1) * q;
-                const base = Math.floor(pos);
-                const rest = pos - base;
-                if(arr[base+1] !== undefined) return arr[base] + rest * (arr[base+1] - arr[base]);
-                return arr[base];
-            };
-            return {
-                count: arr.length, mean: mean, std: std, min: arr[0],
-                q25: quartile(0.25), q50: quartile(0.50), q75: quartile(0.75), max: arr[arr.length-1]
-            };
-        }
-
-        const matrixStats = {};
-        cols.forEach(col => { matrixStats[col] = getStats(activeDb.map(r => r[col])); });
-
-        let bodyHTML = '<tbody>';
-        rowLabels.forEach(row => {
-            let tr = `<tr><td class="font-bold text-cyan-500">${row.label}</td>`;
-            cols.forEach(col => { tr += `<td>${parseFloat(matrixStats[col][row.key]).toFixed(2)}</td>`; });
-            tr += '</tr>';
-            bodyHTML += tr;
-        });
-        bodyHTML += '</tbody>';
-        table.innerHTML = headerHTML + bodyHTML;
-    }
-
-    function pearson(x, y) {
-        const n = x.length;
-        if(n === 0) return 0;
-        let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0, sumY2 = 0;
-        for(let i=0; i<n; i++) {
-            sumX += x[i]; sumY += y[i]; sumXY += x[i]*y[i];
-            sumX2 += x[i]*x[i]; sumY2 += y[i]*y[i];
-        }
-        const num = (n * sumXY) - (sumX * sumY);
-        const den = Math.sqrt((n * sumX2 - sumX*sumX) * (n * sumY2 - sumY*sumY));
-        if(den === 0) return 0;
-        return num / den;
-    }
-
-    function calcMatrizCorrelacion(activeDb) {
-        const table = document.getElementById('table-correlacion');
-        if(!activeDb || activeDb.length < 2) {
-            table.innerHTML = '<tr><td class="text-slate-500 p-2">Requiere al menos 2 registros</td></tr>';
-            return;
-        }
-        const extDb = activeDb.map(r => ({ ...r, ...getSynthetic(r) }));
-        const cols = ['km', 'vib', 'temp', 'down', 'desgaste', 'estres'];
-        const colLabels = { km: 'KM', vib: 'VIB', temp: 'TMP', down: 'DWN', desgaste: 'DSG', estres: 'EST' };
-        
-        const headerHTML = `<thead><tr><th></th>${cols.map(c => `<th title="${c}">${colLabels[c]}</th>`).join("")}</tr></thead>`;
-        let bodyHTML = '<tbody>';
-        cols.forEach(rowCol => {
-            let tr = `<tr><td class="font-bold text-cyan-500 text-left" title="${rowCol}">${colLabels[rowCol]}</td>`;
-            cols.forEach(colCol => {
-                const arrX = extDb.map(r => r[rowCol]);
-                const arrY = extDb.map(r => r[colCol]);
-                const coef = pearson(arrX, arrY);
-                const intensity = Math.abs(coef);
-                let bgColor = 'transparent';
-                if(intensity > 0.5) bgColor = coef > 0 ? `rgba(16, 185, 129, ${intensity-0.3})` : `rgba(244, 63, 94, ${intensity-0.3})`;
-                tr += `<td style="background: ${bgColor}; border: 1px solid rgba(6,182,212,0.1)">${coef.toFixed(2)}</td>`;
-            });
-            tr += '</tr>';
-            bodyHTML += tr;
-        });
-        bodyHTML += '</tbody>';
-        table.innerHTML = headerHTML + bodyHTML;
-    }
-
-    function calcDiagnosticoTermico(activeDb) {
-        const badge = document.getElementById('diag-termico-badge');
-        const detalles = document.getElementById('diag-termico-detalles');
-
-        if (!activeDb || activeDb.length === 0) {
-            limpiarDiagnosticoTermico();
-            return;
-        }
-        
-        const ultimaUnidad = activeDb[activeDb.length - 1].unidad;
-        const historialUnidad = activeDb.filter(r => r.unidad === ultimaUnidad);
-
-        if (historialUnidad.length < 4) {
-            badge.className = "px-2 py-1 rounded text-[10px] font-bold bg-slate-800 text-slate-500 border border-slate-600";
-            badge.innerText = "REQUIERE MÍNIMO 4 DATOS";
-            detalles.innerHTML = `<p class="mt-2 text-slate-400">Unidad <strong>${ultimaUnidad}</strong>: Registros actuales: ${historialUnidad.length}/4</p>`;
-            return;
-        }
-
-        const ultimos = historialUnidad.slice(-4);
-        const t3 = ultimos[0].temp; 
-        const t2 = ultimos[1].temp;
-        const t1 = ultimos[2].temp;
-        const t0 = ultimos[3].temp; 
-
-        const d1_actual = t0 - t1;
-        const d1_previo1 = t1 - t2;
-        
-        const d2_actual = d1_actual - d1_previo1;
-
-        let estado = "Normal";
-        let colorClass = "bg-emerald-900/40 text-emerald-400 border-emerald-500/50";
-        let mensaje = "Variaciones suaves dentro del rango esperado. Condición estable.";
-
-        if (d1_actual < -8) { 
-            estado = "Lubricación Insuficiente";
-            colorClass = "bg-blue-900/40 text-blue-400 border-blue-500/50";
-            mensaje = "Caída brusca de temperatura. Posible pérdida de lubricación o fuga en el sistema.";
-        }
-        else if (d2_actual > 4) { 
-            estado = "Alerta Bloque Motor";
-            colorClass = "bg-rose-900/40 text-rose-400 border-rose-500/50";
-            mensaje = "Aceleración térmica elevada. Tendencia a sobrecalentamiento rápido, riesgo estructural en bloque del motor.";
-        }
-        else if (d1_actual > 0 && d1_actual > d1_previo1 && d1_actual >= 2) { 
-            estado = "Alerta Cigüeñal";
-            colorClass = "bg-amber-900/40 text-amber-400 border-amber-500/50";
-            mensaje = "Aumento sostenido de temperatura con pendiente positiva fuerte. Posible fricción anormal o sobrecarga en el cigüeñal.";
-        }
-
-        badge.className = `px-2 py-1 rounded text-[10px] font-bold border ${colorClass} uppercase tracking-wider`;
-        badge.innerText = estado;
-
-        detalles.innerHTML = `
-            <div class="grid grid-cols-2 gap-2 mt-2">
-                <div class="bg-slate-800/50 p-1.5 rounded border border-slate-700/50"><span class="block text-cyan-500 mb-0.5">Temp Actual (T0):</span> ${t0.toFixed(1)} °C</div>
-                <div class="bg-slate-800/50 p-1.5 rounded border border-slate-700/50"><span class="block text-cyan-500 mb-0.5">Temp Previa (T-1):</span> ${t1.toFixed(1)} °C</div>
-                <div class="bg-slate-800/50 p-1.5 rounded border border-slate-700/50"><span class="block text-purple-400 mb-0.5">1ra Derivada (T'):</span> ${d1_actual > 0 ? '+'+d1_actual.toFixed(2) : d1_actual.toFixed(2)} °C/t</div>
-                <div class="bg-slate-800/50 p-1.5 rounded border border-slate-700/50"><span class="block text-rose-400 mb-0.5">2da Derivada (T''):</span> ${d2_actual > 0 ? '+'+d2_actual.toFixed(2) : d2_actual.toFixed(2)} °C/t²</div>
-            </div>
-            <div class="mt-2 p-2 bg-black/30 rounded border border-slate-700">
-                <p class="text-slate-300 italic font-medium"><i class="fas fa-info-circle mr-1 text-amber-500"></i> ${mensaje}</p>
-            </div>
-        `;
-    }
-
-    function limpiarDiagnosticoTermico() {
-        document.getElementById('diag-termico-badge').className = "px-2 py-1 rounded text-[10px] font-bold bg-slate-800 text-slate-500";
-        document.getElementById('diag-termico-badge').innerText = "ESPERANDO DATOS...";
-        document.getElementById('diag-termico-detalles').innerHTML = "";
-    }
-
-    // ==========================================
-    // MOTOR DE INTELIGENCIA LOCAL (IA OFFLINE)
-    // ==========================================
-    function llamarIALocal() {
-        const activeDb = selectedRows.size > 0 ? db.filter((_, i) => selectedRows.has(i)) : obtenerDbFiltrada();
-        if(activeDb.length === 0) return alert("No hay datos en el panel actual para analizar.");
-
-        const container = document.getElementById('ai-recommendations');
-        const last = activeDb[activeDb.length-1];
-        const syn = getSynthetic(last);
-        
-        const chks = document.querySelectorAll('.sensor-chk:checked');
-        const sensoresFallando = Array.from(chks).map(c => c.value);
-
-        const temps = activeDb.map(r => r.temp);
-        const vibs = activeDb.map(r => r.vib);
-        const meanTemp = temps.reduce((a,b)=>a+b,0) / (temps.length || 1);
-        const stdTemp = Math.sqrt(temps.reduce((a,b)=>a+Math.pow(b-meanTemp,2),0) / (temps.length || 1));
-        const meanVib = vibs.reduce((a,b)=>a+b,0) / (vibs.length || 1);
-        const stdVib = Math.sqrt(vibs.reduce((a,b)=>a+Math.pow(b-meanVib,2),0) / (vibs.length || 1));
-        
-        const zScoreTemp = stdTemp > 0 ? ((last.temp - meanTemp) / stdTemp).toFixed(2) : 0;
-        const zScoreVib = stdVib > 0 ? ((last.vib - meanVib) / stdVib).toFixed(2) : 0;
-
-        const anioFab = last.anio || new Date().getFullYear();
-        const age = new Date(last.fecha).getFullYear() - anioFab;
-
-        container.innerHTML = '<p class="italic text-indigo-400"><i class="fas fa-spinner fa-spin mr-2"></i> ✨ Procesando telemetría, derivadas y bases de conocimiento técnico...</p>';
-        
-        setTimeout(() => {
-            let html = `<div class="p-2 space-y-3">`;
-            html += `<h3 class="text-cyan-400 font-bold border-b border-cyan-500/30 pb-1">Análisis Diagnóstico Inmediato</h3>`;
-
-            // 1. Evaluación de Telemetría
-            html += `<div class="bg-slate-800/50 p-2 rounded border border-slate-600">`;
-            html += `<p class="font-bold text-slate-300">1. Métricas de Telemetría <sup class="text-indigo-400">(1)</sup></p>`;
-            html += `<ul class="list-disc pl-4 mt-1 text-slate-400">`;
-            if (last.temp > 95) html += `<li><strong class="text-rose-400">Anomalía Térmica:</strong> ${last.temp}°C detectada. Desviación de +${zScoreTemp}σ (desviaciones estándar) respecto a la media poblacional, indicando un desgaste anormal en refrigeración.</li>`;
-            else html += `<li><strong>Temperatura:</strong> Nominal (${last.temp}°C) con una desviación poblacional de ${zScoreTemp}σ.</li>`;
-            
-            if (last.vib > 4) html += `<li><strong class="text-rose-400">Vibración Crítica:</strong> ${last.vib} mm/s (Z-Score: +${zScoreVib}σ). Riesgo en ejes o rodamientos.</li>`;
-            else html += `<li><strong>Vibración:</strong> ${last.vib} mm/s, dentro del espectro esperado.</li>`;
-            html += `<li><strong>Downtime asociado:</strong> ${last.down}h.</li>`;
-            html += `</ul></div>`;
-
-            // 2. Evaluación de Datos Sintéticos
-            html += `<div class="bg-slate-800/50 p-2 rounded border border-slate-600">`;
-            html += `<p class="font-bold text-slate-300">2. Análisis de Variables Sintéticas <sup class="text-indigo-400">(2)</sup></p>`;
-            html += `<ul class="list-disc pl-4 mt-1 text-slate-400">`;
-            html += `<li><strong>Índice de Desgaste:</strong> ${syn.desgaste.toFixed(1)} / 100 ${syn.desgaste > 80 ? '<span class="text-rose-400">(Severo)</span>' : '(Controlado)'}.</li>`;
-            html += `<li><strong>Estrés Mecánico Computado:</strong> ${syn.estres.toFixed(1)}.</li>`;
-            html += `</ul></div>`;
-
-            // 3. Antigüedad y Ciclo de Vida
-            html += `<div class="bg-slate-800/50 p-2 rounded border border-slate-600">`;
-            html += `<p class="font-bold text-slate-300">3. Evaluación de Antigüedad <sup class="text-indigo-400">(3)</sup></p>`;
-            html += `<ul class="list-disc pl-4 mt-1 text-slate-400">`;
-            html += `<li><strong>Fabricación:</strong> ${anioFab} (${age} años de servicio).</li>`;
-            if (age > 10 || last.km > 150000) {
-                html += `<li><strong>Fase de Desgaste:</strong> Equipo en tercio final de vida útil o cluster de alto KM (${last.km.toLocaleString()} km). Curva de riesgo alta en componentes críticos (caja/compresión).</li>`;
-            } else {
-                html += `<li><strong>Fase de Desgaste:</strong> Operación en periodo de vida óptimo o medio (${last.km.toLocaleString()} km).</li>`;
-            }
-            html += `</ul></div>`;
-
-            // 4. Sensores y Entrecruzamiento
-            if (sensoresFallando.length > 0) {
-                html += `<div class="bg-rose-900/20 p-2 rounded border border-rose-500/30">`;
-                html += `<p class="font-bold text-rose-400">4. Anomalías en Sensores Activos</p>`;
-                html += `<p class="text-slate-300 mt-1">El entrecruzamiento de las métricas anteriores (1, 2) corrobora las alertas en los sensores: <strong>${sensoresFallando.join(', ')}</strong>. Se requiere orden de trabajo inmediata.</p>`;
-                html += `</div>`;
-            } else {
-                html += `<div class="bg-emerald-900/20 p-2 rounded border border-emerald-500/30">`;
-                html += `<p class="font-bold text-emerald-400">4. Sensores Libres de Alertas</p>`;
-                html += `<p class="text-slate-300 mt-1">No se marcaron sensores anómalos que modifiquen la proyección estadística base.</p>`;
-                html += `</div>`;
-            }
-
-            // 5. Análisis Cinemático de Uso (Derivadas de KM)
-            const historialUnidad = activeDb.filter(r => r.unidad === last.unidad);
-            let analisisKmHtml = '';
-            
-            if (historialUnidad.length >= 3) {
-                const u0 = historialUnidad[historialUnidad.length - 1]; // Actual
-                const u1 = historialUnidad[historialUnidad.length - 2];
-                const u2 = historialUnidad[historialUnidad.length - 3];
-
-                const t0 = new Date(u0.fecha).getTime();
-                const t1 = new Date(u1.fecha).getTime();
-                const t2 = new Date(u2.fecha).getTime();
-
-                // Diferencia en días. Si es 0 (mismo día), usamos 1 para evitar divisiones por cero.
-                const dt1 = Math.max(1, (t0 - t1) / (1000 * 3600 * 24)); 
-                const dt2 = Math.max(1, (t1 - t2) / (1000 * 3600 * 24));
-
-                const v1 = (u0.km - u1.km) / dt1; // KM/día actual
-                const v2 = (u1.km - u2.km) / dt2; // KM/día previo
-                const a = v1 - v2; // Aceleración KM/día^2
-
-                let catUso = "Uso normal";
-                let colorUso = "text-emerald-400";
-                let descUso = "Variaciones suaves dentro del rango esperado.";
-
-                if (v1 > 100 && a > 0) { 
-                    catUso = "Desgaste acelerado";
-                    colorUso = "text-rose-400";
-                    descUso = "Primera derivada alta y creciente. Mayor probabilidad de desgaste acelerado en piezas de fricción (embrague, frenos, neumáticos).";
-                } else if (a > 10) {
-                    catUso = "Mantenimiento anticipado";
-                    colorUso = "text-amber-400";
-                    descUso = "Segunda derivada positiva. Riesgo de mantenimiento no programado (ej. correa de distribución antes de lo previsto).";
-                } else if (a < -10 || v1 < 5) {
-                    catUso = "Riesgo eléctrico por inactividad";
-                    colorUso = "text-purple-400";
-                    descUso = "Segunda derivada negativa o acumulación baja. Vehículo parado mucho tiempo, riesgo eléctrico (sulfatación bornes, pérdida carga) o fluidos.";
-                }
-
-                let mantRec = "";
-                const kmActual = u0.km;
-                if (kmActual >= 100000) mantRec = "Riesgo de fisuras en bloque, desgaste de cigüeñal e inyectores.";
-                else if (kmActual >= 60000) mantRec = "Correa de distribución y bomba de agua.";
-                else if (kmActual >= 40000) mantRec = "Revisión de frenos y suspensión.";
-                else if (kmActual >= 10000) mantRec = "Cambio de aceite y filtros.";
-                else mantRec = "Mantenimiento de rodaje inicial.";
-
-                analisisKmHtml = `
-                <div class="bg-slate-800/50 p-2 rounded border border-slate-600 mt-3">
-                    <p class="font-bold text-slate-300">5. Análisis Cinemático de Uso (Derivadas de KM) <sup class="text-indigo-400">(4)</sup></p>
-                    <ul class="list-disc pl-4 mt-1 text-slate-400">
-                        <li><strong class="${colorUso}">${catUso}:</strong> ${descUso}</li>
-                        <li><strong>Derivadas:</strong> Tasa (K') ${v1.toFixed(1)} km/d | Acel (K'') ${a > 0 ? '+'+a.toFixed(1) : a.toFixed(1)} km/d²</li>
-                        <li><strong>Intervalo Recomendado (${kmActual.toLocaleString()} km):</strong> ${mantRec}</li>
-                    </ul>
-                </div>`;
-            } else {
-                analisisKmHtml = `
-                <div class="bg-slate-800/50 p-2 rounded border border-slate-600 mt-3">
-                    <p class="font-bold text-slate-300">5. Análisis Cinemático de Uso (Derivadas de KM)</p>
-                    <p class="text-slate-400 text-[10px] mt-1">Requiere al menos 3 registros históricos de la misma unidad para calcular las derivadas de kilometraje.</p>
-                </div>`;
-            }
-
-            html += analisisKmHtml;
-
-            // 6. Bases de Conocimiento Citadas
-            html += `<div class="mt-4 pt-2 border-t border-indigo-500/30 text-[9px] text-indigo-300 leading-relaxed">`;
-            html += `<p class="font-bold mb-1 text-indigo-400 tracking-wider">BASES DE CONOCIMIENTO Y DEFINICIONES:</p>`;
-            html += `<p><strong class="text-indigo-200">(1) Norma ISO 10816 y Contexto Estadístico:</strong> Define límites absolutos para la severidad vibratoria en equipos rotativos. La evaluación utiliza la varianza (σ) para identificar comportamientos atípicos en base al universo total de registros de la flota activa en el dashboard.</p>`;
-            html += `<p><strong class="text-indigo-200">(2) Tribología y Desgaste Predictivo:</strong> Los modelos sintéticos calculan la fricción y degeneración de fluidos cruzando el ratio RPM/Vibración/Temperatura, proyectando el agotamiento inminente de la película lubricante.</p>`;
-            html += `<p><strong class="text-indigo-200">(3) Distribución de Weibull y MTTF:</strong> Proyección de la fase de fallas por desgaste ("wear-out phase") utilizando la ventana temporal de antigüedad (Año Actual vs Año Fabricación) y exposición a los kilómetros.</p>`;
-            html += `<p><strong class="text-indigo-200">(4) Análisis de Serie Histórica (KM):</strong> El cruce de la 1ra y 2da derivada de kilómetros recorridos permite predecir el desgaste acelerado en fricción o los riesgos de inactividad eléctrica/química.</p>`;
-            html += `</div></div>`;
-
-            container.innerHTML = html;
-        }, 800);
-    }
-
-    // INTERFAZ DE DATOS Y GRAFICOS
-    function verDetalle(idx) {
-        const r = db[idx];
-        if(!r) return;
-        const anioTexto = r.anio ? ` (Fab. ${r.anio})` : '';
-        
-        // === NUEVO: Sección de imagen en el modal ===
-        let imgSection = '';
-        if (r.imagen_url) {
-            imgSection = `
-            <div class="mt-4">
-                <span class="text-cyan-500 text-[11px] uppercase font-bold tracking-wider block mb-2"><i class="fas fa-image mr-1"></i> Imagen de Referencia</span>
-                <div class="flex justify-center">
-                    <img src="${r.imagen_url}" alt="Imagen registro ${r.id}" class="modal-img-full" onerror="this.parentElement.innerHTML='<p class=\'text-rose-400 text-xs\'>⚠️ Imagen no disponible</p>'">
-                </div>
-            </div>`;
-        } else {
-            imgSection = `
-            <div class="mt-4">
-                <span class="text-cyan-500 text-[11px] uppercase font-bold tracking-wider block mb-2"><i class="fas fa-image mr-1"></i> Imagen de Referencia</span>
-                <div class="bg-slate-900/50 p-4 rounded-lg border border-dashed border-cyan-500/30 text-center">
-                    <p class="text-slate-500 text-xs"><i class="fas fa-cloud-upload-alt mr-1"></i> Sin imagen asociada a este registro</p>
-                </div>
-            </div>`;
-        }
-        
-        const content = `
-        <div class="grid grid-cols-2 gap-4">
-            <div class="bg-slate-900/50 p-2 rounded border border-cyan-500/20"><span class="text-cyan-500 text-[10px] uppercase block font-bold">Unidad</span> <span class="font-bold text-white text-lg">${r.unidad}</span></div>
-            <div class="bg-slate-900/50 p-2 rounded border border-cyan-500/20"><span class="text-cyan-500 text-[10px] uppercase block font-bold">ID Registro</span> <span class="font-bold text-white">${r.id}</span></div>
-            <div class="bg-slate-900/50 p-2 rounded border border-cyan-500/20"><span class="text-cyan-500 text-[10px] uppercase block font-bold">Fecha</span> <span class="text-slate-200">${r.fecha}</span></div>
-            <div class="bg-slate-900/50 p-2 rounded border border-cyan-500/20"><span class="text-cyan-500 text-[10px] uppercase block font-bold">Motor</span> <span class="text-slate-200">${r.motor}${anioTexto}</span></div>
-            <div class="bg-slate-900/50 p-2 rounded border border-cyan-500/20"><span class="text-cyan-500 text-[10px] uppercase block font-bold">Kilometraje</span> <span class="text-slate-200">${r.km.toLocaleString()} km</span></div>
-            <div class="bg-slate-900/50 p-2 rounded border border-cyan-500/20"><span class="text-cyan-500 text-[10px] uppercase block font-bold">RPM</span> <span class="text-slate-200">${r.rpm}</span></div>
-        </div>
-        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-4 mb-2">Lecturas y Diagnóstico</h4>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
-            <div class="bg-emerald-900/20 p-2 rounded border border-emerald-500/30"><span class="text-emerald-500 text-[10px] uppercase block">Uptime</span> <span class="font-bold text-white">${r.up} h</span></div>
-            <div class="bg-rose-900/20 p-2 rounded border border-rose-500/30"><span class="text-rose-500 text-[10px] uppercase block">Downtime</span> <span class="font-bold text-white">${r.down} h</span></div>
-            <div class="bg-purple-900/20 p-2 rounded border border-purple-500/30"><span class="text-purple-400 text-[10px] uppercase block">Vibración</span> <span class="font-bold text-white">${r.vib}</span></div>
-            <div class="bg-amber-900/20 p-2 rounded border border-amber-500/30"><span class="text-amber-400 text-[10px] uppercase block">Temperatura</span> <span class="font-bold text-white">${r.temp}°</span></div>
-        </div>
-        ${imgSection}
-        <div class="mt-4">
-            <span class="text-cyan-500 text-[11px] uppercase font-bold tracking-wider block mb-2"><i class="fas fa-tools mr-1"></i> Detalle del Trabajo Realizado</span>
-            <div class="bg-black/60 p-4 rounded-lg border border-cyan-500/40 text-sm text-slate-200 whitespace-pre-wrap leading-relaxed">${r.trabajo || '<span class="italic text-slate-500">Sin detalles registrados en la bitácora.</span>'}</div>
-        </div>`;
-        document.getElementById('modal-detalle-content').innerHTML = content;
-        document.getElementById('modal-detalle').classList.remove('hidden');
-    }
-
-    function cerrarModalDetalle() {
-        document.getElementById('modal-detalle').classList.add('hidden');
-    }
-
-    function renderDatasetTable(dbFiltrada) {
-        const tbody = document.getElementById('tbody-dataset');
-        document.getElementById('dataset-count').innerText = `${db.length}/${MAX_RECORDS} registros (Memoria)`;
-        let html = "";
-        const displayDb = db.map((r, i) => ({...r, originalIdx: i})).filter(r => {
-            const matchID = filtroActualID === "" || r.id.includes(filtroActualID) || r.unidad.includes(filtroActualID);
-            const matchFecha = filtroActualFecha === "" || r.fecha === filtroActualFecha;
-            return matchID && matchFecha;
-        }).reverse();
-        
-        displayDb.forEach(r => {
-            const checked = selectedRows.has(r.originalIdx) ? 'checked' : '';
-            
-            // === NUEVO: Columna de miniatura de imagen ===
-            let imgCell = '';
-            if (r.imagen_url) {
-                imgCell = `
-                <td class="text-center">
-                    <img src="${r.imagen_url}" alt="Img ${r.id}" class="img-thumbnail" 
-                         onerror="this.outerHTML='<div class=\'img-placeholder\' title=\'Imagen no disponible\'><i class=\'fas fa-image-slash\'></i></div>'"
-                         onclick="verDetalle(${r.originalIdx})" title="Ver imagen en detalle">
-                </td>`;
-            } else {
-                imgCell = `<td class="text-center"><div class="img-placeholder" title="Sin imagen"><i class="fas fa-image-slash"></i></div></td>`;
-            }
-            
-            html += `
-            <tr class="${checked ? 'bg-cyan-900/20' : ''}">
-                <td class="text-center"><input type="checkbox" class="row-chk cursor-pointer" onchange="toggleRow(${r.originalIdx})" ${checked}></td>
-                <td class="whitespace-nowrap">${formatearFechaCorto(r.fecha)}</td>
-                <td class="font-bold text-cyan-400">${r.unidad}</td>
-                <td>${r.motor}</td>
-                <td>${r.km.toLocaleString()}</td>
-                <td class="text-emerald-400">${r.up.toFixed(1)}</td>
-                <td class="text-rose-400">${r.down.toFixed(1)}</td>
-                <td class="${r.vib > 4 ? 'text-rose-400 font-bold' : ''}">${r.vib.toFixed(1)}</td>
-                <td class="${r.temp > 95 ? 'text-rose-400 font-bold' : ''}">${r.temp.toFixed(1)}</td>
-                ${imgCell}
-                <td class="text-center">
-                    <button onclick="verDetalle(${r.originalIdx})" class="btn-neon p-1 rounded-md text-[10px] w-full" title="Ver detalle">
-                        <i class="fas fa-eye"></i> Ver
-                    </button>
-                </td>
-            </tr>`;
-        });
-        tbody.innerHTML = html;
-        const chkAll = document.getElementById('chk-all');
-        if(chkAll) chkAll.checked = (displayDb.length > 0 && Array.from(selectedRows).length === displayDb.length);
-    }
-
-    function drawCharts(activeDb) {
-        Chart.defaults.color = '#94a3b8';
-        Chart.defaults.font.family = "'Orbitron', sans-serif";
-        if (!activeDb || activeDb.length === 0) {
-            if(chartKpisObj) chartKpisObj.destroy();
-            if(chartTendenciaObj) chartTendenciaObj.destroy();
-            if(chartScatterObj) chartScatterObj.destroy();
-            return;
-        }
-        const labels = activeDb.map(r => formatearFechaCorto(r.fecha));
-        const tempData = activeDb.map(r => r.temp);
-        const vibData = activeDb.map(r => r.vib);
-        const upData = activeDb.map(r => r.up);
-        const downData = activeDb.map(r => r.down);
-        const dispData = activeDb.map(r => ((r.up / (r.up + r.down)) * 100).toFixed(1));
-
-        const ctxK = document.getElementById('chartKpis').getContext('2d');
-        if(chartKpisObj) chartKpisObj.destroy();
-        chartKpisObj = new Chart(ctxK, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [
-                    { label: 'Uptime (h)', data: upData, type: 'line', borderColor: '#10b981', backgroundColor: 'transparent', borderDash: [5, 5], tension: 0.3, yAxisID: 'y' },
-                    { label: 'Downtime (h)', data: downData, backgroundColor: 'rgba(244, 63, 94, 0.6)', yAxisID: 'y' },
-                    { label: 'Disp. %', data: dispData, type: 'line', borderColor: '#06b6d4', backgroundColor: '#06b6d4', yAxisID: 'y1', tension: 0.3 }
-                ]
-            },
-            options: {
-                responsive: true, maintainAspectRatio: false,
-                plugins: { legend: { display: true, position: 'bottom', labels: { boxWidth: 8, font:{size:8}}}},
-                scales: {
-                    x: { title: { display: true, text: 'Fecha', font: {size:9} }, grid: { color: 'rgba(255,255,255,0.05)' } },
-                    y: { title: { display: true, text: 'Horas', font: {size:9} }, type: 'linear', position: 'left', min: 0, grid: { color: 'rgba(255,255,255,0.05)' } },
-                    y1: { title: { display: true, text: '%', font: {size:9} }, type: 'linear', position: 'right', min: 0, max: 100, grid: { drawOnChartArea: false }}
-                }
-            }
-        });
-
-        const ctxT = document.getElementById('chartTendencia').getContext('2d');
-        if(chartTendenciaObj) chartTendenciaObj.destroy();
-        chartTendenciaObj = new Chart(ctxT, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [
-                    { label: 'Temp °C', data: tempData, borderColor: '#06b6d4', backgroundColor: 'rgba(6,182,212,0.1)', yAxisID: 'y', fill: true, tension: 0.4 },
-                    { label: 'Vib mm/s', data: vibData, borderColor: '#8b5cf6', backgroundColor: 'rgba(139,92,246,0.1)', yAxisID: 'y1', type: 'bar', barPercentage: 0.5 }
-                ]
-            },
-            options: {
-                responsive: true, maintainAspectRatio: false,
-                plugins: { legend: { display: true, position: 'top', labels: { boxWidth: 10, font: {size:9}}}},
-                scales: {
-                    x: { grid: { color: 'rgba(255,255,255,0.05)' } },
-                    y: { type: 'linear', position: 'left', grid: { color: 'rgba(255,255,255,0.05)' } },
-                    y1: { type: 'linear', position: 'right', grid: { drawOnChartArea: false } }
-                }
-            }
-        });
-
-        const scatterData = activeDb.map(r => {
-            let probFalla = (r.down * 2) + (r.temp > 90 ? 20 : 0) + (r.vib * 5);
-            let p = Math.min(100, probFalla);
-            let fallaInfo = "Filtros/Aceite";
-            if(r.km > 150000 || p > 80) fallaInfo = "Caja/Motor (Crítico)";
-            else if(r.km > 60000 || p > 50) fallaInfo = "Embrague/Suspensión";
-            else if(r.km > 20000 || p > 30) fallaInfo = "Frenos/Alineación";
-            return { x: r.km, y: p, r: (r.down > 10 ? 8 : 4), falla: fallaInfo };
-        });
-
-        const ctxS = document.getElementById('chartScatter').getContext('2d');
-        if(chartScatterObj) chartScatterObj.destroy();
-        chartScatterObj = new Chart(ctxS, {
-            type: 'bubble',
-            data: {
-                datasets: [{
-                    label: 'Prob. Falla (%)',
-                    data: scatterData,
-                    backgroundColor: 'rgba(244, 63, 94, 0.6)',
-                    borderColor: '#f43f5e'
-                }]
-            },
-            options: {
-                responsive: true, maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        callbacks: { label: function(context) { return `${context.raw.falla}: ${context.raw.y.toFixed(1)}% Prob.`; } }
-                    }
-                },
-                scales: {
-                    x: { title: { display: true, text: 'Kilometraje', font:{size:9} }, grid: { color: 'rgba(255,255,255,0.05)' } },
-                    y: { title: { display: true, text: 'Riesgo / Prob. (%)', font: {size:9} }, grid: { color: 'rgba(255,255,255,0.05)' }, min: 0, max: 100 }
-                }
-            }
-        });
-    }
-
-    // EXPORTACIÓN Y COMPARTICIÓN
-    function exportarCSV() {
-        const activeDb = selectedRows.size > 0 ? db.filter((_, i) => selectedRows.has(i)) : obtenerDbFiltrada();
-        if(activeDb.length === 0) return alert("No hay datos para exportar.");
-        const keys = Object.keys(activeDb[0]).filter(k => k !== 'originalIdx');
-        let csvContent = "data:text/csv;charset=utf-8," + keys.join(",") + "\n" + 
-            activeDb.map(e => keys.map(k => {
-                let val = e[k];
-                if(typeof val === 'string' && val.includes(',')) return `"${val}"`;
-                return val;
-            }).join(",")).join("\n");
-        const encodedUri = encodeURI(csvContent);
-        const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", `NEXO_ART_Export_${new Date().toISOString().split('T')[0]}.csv`);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
-
-    function exportarPDF() {
-        const activeDb = selectedRows.size > 0 ? db.filter((_, i) => selectedRows.has(i)) : obtenerDbFiltrada();
-        if(activeDb.length === 0) return alert("No hay datos para exportar.");
-
-        const last = activeDb[activeDb.length-1];
-        const syn = getSynthetic(last);
-        
-        const disp = document.getElementById('kpi_disp').innerText;
-        const mtbf = document.getElementById('kpi_mtbf').innerText;
-        const mttr = document.getElementById('kpi_mttr').innerText;
-        
-        const vtvPct = document.getElementById('vtv-pct').innerText;
-        const vtvStatus = document.getElementById('vtv-status-text').innerText;
-        const vtvChecks = Array.from(document.querySelectorAll('.vtv-chk:checked')).map(c => `<li><span style="color:#10b981; font-weight:bold;">✔</span> ${c.value}</li>`).join('');
-        const vtvUnchecks = Array.from(document.querySelectorAll('.vtv-chk:not(:checked)')).map(c => `<li><span style="color:#f43f5e; font-weight:bold;">✖</span> ${c.value}</li>`).join('');
-        
-        const aiHtml = document.getElementById('ai-recommendations').innerHTML;
-
-        const uniqueUnits = [...new Set(activeDb.map(r => r.unidad))];
-        const reportTitle = uniqueUnits.length === 1 ? `REPORTE TÉCNICO: ${uniqueUnits[0]}` : `REPORTE DE FLOTA (${uniqueUnits.length} Unidades)`;
-
-        let tableHtml = `
-            <table class="w-full text-left text-[10px] border-collapse mt-4">
-                <thead>
-                    <tr class="bg-cyan-900 text-white">
-                        <th class="p-2 border border-cyan-700">Fecha</th>
-                        <th class="p-2 border border-cyan-700">Unidad</th>
-                        <th class="p-2 border border-cyan-700">Año</th>
-                        <th class="p-2 border border-cyan-700">KM</th>
-                        <th class="p-2 border border-cyan-700">Up/Down</th>
-                        <th class="p-2 border border-cyan-700">Vib/Temp</th>
-                        <th class="p-2 border border-cyan-700">RPM</th>
-                        <th class="p-2 border border-cyan-700">PSI Prom.</th>
-                        <th class="p-2 border border-cyan-700">Img</th>
-                        <th class="p-2 border border-cyan-700">Detalle Trabajo</th>
-                    </tr>
-                </thead>
-                <tbody>
-        `;
-        
-        activeDb.forEach((r, idx) => {
-            const psiProm = (r.psi_di + r.psi_dd + r.psi_ti + r.psi_td) / 4;
-            const bgClass = idx % 2 === 0 ? 'bg-slate-50' : 'bg-white';
-            // === NUEVO: Columna de imagen en PDF (miniatura o placeholder) ===
-            const imgCell = r.imagen_url 
-                ? `<td class="p-2 border border-slate-200 text-center"><img src="${r.imagen_url}" style="width:30px;height:30px;object-fit:cover;border-radius:3px;" onerror="this.outerHTML='<span style=\'color:#94a3b8;font-size:10px\'>🖼️</span>'"></td>`
-                : `<td class="p-2 border border-slate-200 text-center"><span style="color:#94a3b8;font-size:10px">🖼️</span></td>`;
-            
-            tableHtml += `
-                <tr class="${bgClass} text-slate-700 break-inside-avoid">
-                    <td class="p-2 border border-slate-200 whitespace-nowrap">${formatearFechaCorto(r.fecha)}</td>
-                    <td class="p-2 border border-slate-200 font-bold">${r.unidad}</td>
-                    <td class="p-2 border border-slate-200">${r.anio}</td>
-                    <td class="p-2 border border-slate-200">${r.km.toLocaleString()}</td>
-                    <td class="p-2 border border-slate-200"><span class="text-emerald-600">${r.up.toFixed(1)}h</span> / <span class="text-rose-600">${r.down.toFixed(1)}h</span></td>
-                    <td class="p-2 border border-slate-200"><span class="${r.vib>4?'text-rose-600 font-bold':''}">${r.vib.toFixed(1)}</span> / <span class="${r.temp>95?'text-rose-600 font-bold':''}">${r.temp.toFixed(1)}°</span></td>
-                    <td class="p-2 border border-slate-200">${r.rpm}</td>
-                    <td class="p-2 border border-slate-200">${psiProm.toFixed(1)}</td>
-                    ${imgCell}
-                    <td class="p-2 border border-slate-200 text-[8px] leading-tight">${r.trabajo || '-'}</td>
-                </tr>
-            `;
-        });
-        tableHtml += `</tbody></table>`;
-
-        const pdfContainer = document.createElement('div');
-        pdfContainer.id = "temp-pdf-export";
-        pdfContainer.className = "bg-white text-slate-800 font-sans";
-        pdfContainer.style.width = "800px";
-        pdfContainer.style.position = "absolute";
-        pdfContainer.style.left = "-9999px";
-        pdfContainer.style.top = "0";
-
-        pdfContainer.innerHTML = `
-            <style>
-                #temp-pdf-export .text-rose-400, #temp-pdf-export .text-rose-500 { color: #e11d48 !important; }
-                #temp-pdf-export .text-amber-400, #temp-pdf-export .text-amber-500 { color: #d97706 !important; }
-                #temp-pdf-export .text-emerald-400, #temp-pdf-export .text-emerald-500 { color: #059669 !important; }
-                #temp-pdf-export .text-purple-400, #temp-pdf-export .text-purple-500 { color: #7e22ce !important; }
-                #temp-pdf-export .text-cyan-400, #temp-pdf-export .text-cyan-500 { color: #0e7490 !important; }
-                #temp-pdf-export .text-blue-400, #temp-pdf-export .text-blue-500 { color: #1d4ed8 !important; }
-                #temp-pdf-export .text-slate-300, #temp-pdf-export .text-slate-400, #temp-pdf-export .text-slate-500 { color: #334155 !important; }
-                #temp-pdf-export p { margin-bottom: 0.5rem; }
-                #temp-pdf-export .llm-response { font-size: 11px; line-height: 1.4; }
-            </style>
-            <div style="padding: 40px;">
-                <!-- HEADER -->
-                <div class="flex justify-between items-center border-b-4 border-cyan-600 pb-4 mb-6">
-                    <div>
-                        <h1 class="text-4xl font-bold text-cyan-800" style="font-family: 'Orbitron', sans-serif;">NEXO-ART</h1>
-                        <p class="text-xs tracking-[0.2em] text-slate-500 uppercase font-bold" style="font-family: 'Orbitron', sans-serif;">Motor Intelligence</p>
-                    </div>
-                    <div class="text-right">
-                        <h2 class="text-2xl font-bold text-slate-800 uppercase">${reportTitle}</h2>
-                        <p class="text-sm text-slate-500">Generado el: ${new Date().toLocaleDateString('es-ES')}</p>
-                    </div>
-                </div>
-
-                <!-- KPIs -->
-                <div class="grid grid-cols-3 gap-4 mb-6">
-                    <div class="bg-slate-50 p-4 rounded-lg border-l-4 border-emerald-500 border border-slate-200">
-                        <p class="text-[10px] text-slate-500 uppercase font-bold">Disponibilidad</p>
-                        <p class="text-3xl font-bold text-emerald-600" style="font-family: 'Orbitron', sans-serif;">${disp}</p>
-                    </div>
-                    <div class="bg-slate-50 p-4 rounded-lg border-l-4 border-cyan-500 border border-slate-200">
-                        <p class="text-[10px] text-slate-500 uppercase font-bold">MTBF</p>
-                        <p class="text-3xl font-bold text-cyan-600" style="font-family: 'Orbitron', sans-serif;">${mtbf} h</p>
-                    </div>
-                    <div class="bg-slate-50 p-4 rounded-lg border-l-4 border-purple-500 border border-slate-200">
-                        <p class="text-[10px] text-slate-500 uppercase font-bold">MTTR</p>
-                        <p class="text-3xl font-bold text-purple-600" style="font-family: 'Orbitron', sans-serif;">${mttr} h</p>
-                    </div>
-                </div>
-
-                <!-- METRICAS SINTETICAS -->
-                <div class="mb-6">
-                    <h3 class="text-sm font-bold text-cyan-800 uppercase border-b border-slate-200 pb-1 mb-3">Métricas Sintéticas (Último Registro)</h3>
-                    <div class="grid grid-cols-4 gap-2 text-center">
-                        <div class="bg-slate-50 p-2 rounded border border-slate-200">
-                            <p class="text-[9px] text-slate-500 uppercase font-bold">Desgaste/KM</p>
-                            <p class="text-lg font-bold text-slate-700" style="font-family: 'Orbitron', sans-serif;">${syn.desgaste.toFixed(1)}</p>
-                        </div>
-                        <div class="bg-slate-50 p-2 rounded border border-slate-200">
-                            <p class="text-[9px] text-slate-500 uppercase font-bold">Eficiencia</p>
-                            <p class="text-lg font-bold text-slate-700" style="font-family: 'Orbitron', sans-serif;">${syn.eficiencia.toFixed(2)}</p>
-                        </div>
-                        <div class="bg-slate-50 p-2 rounded border border-slate-200">
-                            <p class="text-[9px] text-slate-500 uppercase font-bold">Estrés Mecánico</p>
-                            <p class="text-lg font-bold text-slate-700" style="font-family: 'Orbitron', sans-serif;">${syn.estres.toFixed(1)}</p>
-                        </div>
-                        <div class="bg-slate-50 p-2 rounded border border-slate-200">
-                            <p class="text-[9px] text-slate-500 uppercase font-bold">Disp. Operativa</p>
-                            <p class="text-lg font-bold text-slate-700" style="font-family: 'Orbitron', sans-serif;">${syn.dispop.toFixed(1)}%</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- IA & VTV -->
-                <div class="grid grid-cols-2 gap-6 mb-6">
-                    <div>
-                        <h3 class="text-sm font-bold text-cyan-800 uppercase border-b border-slate-200 pb-1 mb-3">Diagnóstico Experto</h3>
-                        <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 text-[11px] text-slate-700 leading-relaxed">
-                            ${aiHtml}
-                        </div>
-                    </div>
-                    <div>
-                        <h3 class="text-sm font-bold text-cyan-800 uppercase border-b border-slate-200 pb-1 mb-3">Estado VTV: ${vtvPct} (${vtvStatus})</h3>
-                        <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 text-[11px] flex gap-4">
-                            <ul class="flex-1 list-none p-0 m-0 space-y-1 text-slate-600">
-                                ${vtvChecks || '<li class="italic">Ningún ítem marcado</li>'}
-                            </ul>
-                            <ul class="flex-1 list-none p-0 m-0 space-y-1 text-slate-600">
-                                ${vtvUnchecks}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TABLA DATASET -->
-                <div>
-                    <h3 class="text-sm font-bold text-cyan-800 uppercase border-b border-slate-200 pb-1 mb-2">Detalle de Registros Analizados</h3>
-                    ${tableHtml}
-                </div>
-
-                <!-- FOOTER -->
-                <div class="mt-8 pt-4 border-t border-slate-200 text-center text-[10px] text-slate-400">
-                    NEXO-ART Motor Intelligence - Documento Confidencial Generado Automáticamente
-                </div>
-            </div>
-        `;
-
-        document.body.appendChild(pdfContainer);
-
-        const opt = {
-            margin:       [5, 0, 5, 0],
-            filename:     `NEXO_ART_Reporte_${new Date().toISOString().split('T')[0]}.pdf`,
-            image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { scale: 2, useCORS: true, letterRendering: true, windowWidth: 800 },
-            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-            pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
-        };
-
-        const btnPdf = document.querySelector('button[onclick="exportarPDF()"]');
-        const oldText = btnPdf.innerHTML;
-        btnPdf.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i>Generando...';
-
-        html2pdf().set(opt).from(pdfContainer).save().then(() => {
-            document.body.removeChild(pdfContainer);
-            btnPdf.innerHTML = oldText;
-            
-            // Disparar WhatsApp Global Report luego del PDF
-            enviarWhatsAppGlobal(activeDb, disp, mtbf, mttr, vtvPct, vtvStatus);
-        });
-    }
-
-    function enviarWhatsAppGlobal(activeDb, disp, mtbf, mttr, vtvPct, vtvStatus) {
-        let report = `🚀 *NEXO-ART: REPORTE GENERAL DE PLATAFORMA* 🚀\n\n`;
-        report += `📊 *Resumen Global*\n`;
-        report += `🔸 Total Registros Analizados: ${activeDb.length}\n`;
-        
-        const uniqueUnits = [...new Set(activeDb.map(r => r.unidad))];
-        report += `🔸 Unidades: ${uniqueUnits.length}\n`;
-        report += `🔸 Fecha: ${new Date().toLocaleDateString('es-ES')}\n\n`;
-
-        report += `⚙️ *Rendimiento Promedio:*\n`;
-        report += `✅ Disponibilidad: ${disp}\n`;
-        report += `⏱️ MTBF: ${parseFloat(mtbf).toFixed(1)} h\n`;
-        report += `🔧 MTTR: ${parseFloat(mttr).toFixed(1)} h\n\n`;
-
-        report += `📋 *Estado VTV General:*\n`;
-        report += `🔸 Progreso: ${vtvPct} (${vtvStatus})\n\n`;
-
-        report += `📝 *Detalle de Registros (Dato por Dato):*\n`;
-        
-        const ultimos = activeDb.slice(-30).reverse();
-        ultimos.forEach((r, idx) => {
-            const imgIndicator = r.imagen_url ? '🖼️ ' : '';
-            report += `▪️ ${imgIndicator}*${r.unidad}* | F: ${r.fecha} | KM: ${r.km} | UP/DWN: ${r.up}/${r.down} | TMP: ${r.temp}°C | VIB: ${r.vib}\n`;
-        });
-
-        if(activeDb.length > 30) {
-            report += `\n_(Mostrando los 30 más recientes de ${activeDb.length})_\n`;
-        }
-
-        report += `\n🔗 *NEXO-ART Motor Intelligence* - Análisis Profesional.`;
-
-        const encodedUri = encodeURIComponent(report);
-        window.open(`https://wa.me/3489686939?text=${encodedUri}`, "_blank");
-    }
-
-    // Funcionalidad WhatsApp individual/global al tocar el boton inferior
-    function enviarWhatsApp() {
-        const activeDb = selectedRows.size > 0 ? db.filter((_, i) => selectedRows.has(i)) : obtenerDbFiltrada();
-        if(activeDb.length === 0) return alert("No hay datos para reportar.");
-        
-        const disp = document.getElementById('kpi_disp').innerText;
-        const mtbf = document.getElementById('kpi_mtbf').innerText;
-        const mttr = document.getElementById('kpi_mttr').innerText;
-        const vtvPct = document.getElementById('vtv-pct').innerText;
-        const vtvStatus = document.getElementById('vtv-status-text').innerText;
-
-        enviarWhatsAppGlobal(activeDb, disp, mtbf, mttr, vtvPct, vtvStatus);
-    }
+// --- GESTIÓN DE VERSIÓN ---
+const currentVersion = '6.7';
+if (localStorage.getItem('appVersion') !== currentVersion) {
+localStorage.clear();
+localStorage.setItem('appVersion', currentVersion);
+console.log(`Cache local limpiada. Nueva versión: ${currentVersion}`);
+}
+
+// 🔹 Imágenes por defecto
+const defaultImages = {
+"bondiola": "bondiola.jpeg",
+"milanesa": "milanesa especial.jpeg",
+"tucumano": "tucumano.jpeg",
+"lomito": "lomito premium.jpeg",
+"hamburguesa completa": "hamburguesa completa.jpeg",
+"hamburguesa vegetariana": "hamburguesa vegetariana.jpeg",
+"hamburguesa doble": "hamburguesa doble.jpeg",
+"hamburguesa zapping": "hamburguesa zapping.jpeg",
+"pizza": "muzzarella.jpeg",
+"pizza fugaza": "fugaza.jpeg",
+"pizza napolitana": "napolitana.jpeg",
+"pizza especial": "especial.jpeg",
+"pizza huevo": "logo.jpeg",
+"pizza palmitos": "logo.jpeg",
+"pizza salchichas": "logo.jpeg",
+"pizza choclo": "logo.jpeg",
+"pizza americana": "logo.jpeg",
+"muzzarella individual": "muzzarella individual.jpeg",
+"fugaza individual": "muzzarella individual.jpeg",
+"napolitana individual": "milanesa napolitana.jpeg",
+"especial individual": "logo.jpeg",
+"pasta": "https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=400&h=400&fit=crop",
+"ñoquis con bolognesa": "ñoquis con bolognesa.jpeg",
+"ravioles con bolognesa": "ravioles con bolognesa.jpeg",
+"porcion de fritas": "porcion de fritas.jpeg",
+"salchipapas": "salchipapa.jpeg",
+"cono de fritas": "cono de fritas.jpeg",
+"empanadas": "empanadas.jpeg",
+"flan": "flan.jpeg",
+"torta helada": "logo.jpeg",
+"ensalada de fruta": "logo.jpeg",
+"milanesa con pure": "logo.jpeg",
+"milanesa a caballo": "Milanesa a caballo.jpeg",
+"milanesa napolitana": "logo.jpeg",
+"tucumano+salchipapa": "tucumano+salchipapa.jpeg",
+"Combo6": "COMBO6.png", 
+"default": "https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=400&h=400&fit=crop"
+};
+
+// 🔹 Función para obtener URL de imagen válida
+function getImageUrl(productName, customImage) {
+if (customImage && customImage.startsWith('http')) return customImage;
+if (customImage && customImage in defaultImages) return defaultImages[customImage];
+const lowerName = productName.toLowerCase();
+if (lowerName.includes('bondiola')) return defaultImages.bondiola;
+if (lowerName.includes('milanesa')) return defaultImages.milanesa;
+if (lowerName.includes('lomito')) return defaultImages.lomito;
+if (lowerName.includes('hamburguesa')) return defaultImages.hamburguesa;
+if (lowerName.includes('pizza')) return defaultImages.pizza;
+if (lowerName.includes('tallarines') || lowerName.includes('ñoquis') || lowerName.includes('ravioles')) return defaultImages.pasta;
+if (lowerName.includes('fritas') || lowerName.includes('salchipapa')) return defaultImages.fritas;
+if (lowerName.includes('empanada')) return defaultImages.empanadas;
+if (lowerName.includes('flan') || lowerName.includes('postre')) return defaultImages.flan;
+return defaultImages.default;
+}
+
+const defaultProducts = [
+{ id: 1, category: "Sándwiches", name: "Bondiola", price: 13000 , description: "Delicioso sándwich de bondiola con tomate, lechuga, morron, cebolla caramelizada c/Fritas.", image: "bondiola", stock: 1000},
+{ id: 2, category: "Sándwiches", name: "Bondiola Especial", price: 13500, description: "Bondiola con queso, jamon y huevo c/Fritas.", image: "bondiola", stock: 1000 },
+{ id: 3, category: "Sándwiches", name: "Bondiola Premium", price: 14500, description: "Bondiola tomate, lechuga, morron, cebolla caramelizada, queso, huevo, jamon c/Fritas.", image: "bondiola", stock: 1000},
+{ id: 4, category: "Sándwiches", name: "Sandwich Milanesa ", price: 14000, description: "Milanesa con lechuga y tomate c/Fritas.", image: "milanesa", stock: 1000 },
+{ id: 5, category: "Sándwiches", name: "Sandwich Milanesa Especial", price: 14500, description: "Sandwich de Milanesa, queso, jamon,huevo frito c/Fritas.", image: "milanesa", stock: 1000 },
+{ id: 6, category: "Sándwiches", name: "Sandwich Milanesa Completa", price: 15500, description: "Sandwich de Milanesa completo, lechuga, tomate, queso, jamon, huevo frito c/Fritas.", image: "milanesa", stock: 1000 },
+{ id: 7, category: "Sándwiches", name: "Sandwich Milanesa Premium", price: 16500, description: "Sandwich Milanesa, lechuga, tomate, huevo, queso, jamon, cebolla caramelizada, morron c/Fritas.", image: "milanesa", stock: 1000 },
+{ id: 8, category: "Sándwiches", name: "Tucumano", price: 20000, description: "Sándwich de  Milanesa de 30 cm tucumano  c/Fritas Doble.", image: "tucumano", stock: 1000 },
+{ id: 9, category: "Sándwiches", name: "Lomito Simple", price: 14000, description: "Sandwich de Lomito jugoso con tomate y lechuga c/Fritas.", image: "lomito", stock: 0 },
+{ id: 10, category: "Sándwiches", name: "Lomito Especial", price: 14500, description: "Sandwich de Lomito con jamon, queso, huevo c/Fritas.", image: "lomito", stock: 0 },
+{ id: 11, category: "Sándwiches", name: "Lomito Premium", price: 15000, description: "Sandwich de Lomito premium con lechuga, tomate, huevo frito, jamon , queso c/Fritas.", image: "lomito", stock: 0 },
+{ id: 12, category: "Hamburguesas", name: "Hamburguesa c/Cheddar", price: 11000, description: "Medallon de Carne Con Cheddar, c/Fritas.", image: "hamburguesa completa", stock: 1000 },
+{ id: 13, category: "Hamburguesas", name: "Hamburguesa Completa", price: 11500, description: "Medallon de Carne Con lechuga, tomate, huevo frito c/Fritas.", image: "hamburguesa completa", stock: 1000 },
+{ id: 14, category: "Hamburguesas", name: "Hamburguesa Vegetariana", price: 11500, description: "Medallon (Lenteja,zanahoria,cebolla), lechuga, tomate, huevo frito c/Fritas.", image: "hamburguesa vegetariana", stock: 10000 },
+{ id: 15, category: "Hamburguesas", name: "Hamburguesa Doble", price: 13000, description: "Doble Medallon carne, cheddar, huevo frito, cebolla caramelizada  c/Fritas.", image: "hamburguesa doble", stock: 1000 },
+{ id: 16, category: "Hamburguesas", name: "Hamburguesa Zapping", price: 27000, description: "Hamburguesa Gigante Zapping, lechuga tomate, huevo frito c/Fritas Doble.", image: "hamburguesa zapping", stock: 0 },
+{ id: 17, category: "Pizzas", name: "Muzzarella", price: 13500, description: "Pizza clásica con queso muzzarella, oregano, aceitunas.", image: "pizza", stock: 1000 },
+{ id: 18, category: "Pizzas", name: "Fugaza", price: 14500, description: "Pizza fugaza tradicional.", image: "pizza fugaza", stock: 1000 },
+{ id: 19, category: "Pizzas", name: "Napolitana", price: 15000, description: "Pizza napolitana con tomate, ajo y oregano.", image: "pizza napolitana", stock: 1000 },
+{ id: 20, category: "Pizzas", name: "Especial", price: 15500, description: "Pizza especial con jamon, morrones y aceitunas.", image: "pizza especial", stock: 1000 },
+{ id: 21, category: "Pizzas", name: "Huevo", price: 14400, description: "Pizza de Huevo y especias y aceitunas.", image: "pizza huevo", stock: 1000 },
+{ id: 22, category: "Pizzas", name: "Palmitos", price: 19000, description: "Pizza de Palmitos,jamon,morron, salsa golf y aceitunas.", image: "pizza palmitos", stock: 1000 },
+{ id: 23, category: "Pizzas", name: "Salchichas", price: 15400, description: "Pizza de Salchichas y aceitunas.", image: "pizza salchichas", stock: 1000 },
+{ id: 24, category: "Pizzas", name: "Choclo", price: 14500, description: "Pizza de Huevo y especias y aceitunas.", image: "pizza choclo", stock: 1000 },
+{ id: 25, category: "Pizzas", name: "Americana", price: 18500, description: "Pizza de Huevo frito papas fritas y aceitunas.", image: "pizza americana", stock: 100 },
+{ id: 26, category: "Pizzas Individuales", name: "Muzzarella Individual", price: 7500, description: "Individual con queso muzzarella.", image: "muzzarella individual", stock: 1000 },
+{ id: 27, category: "Pizzas Individuales", name: "Fugaza Individual", price: 8000, description: "Individual fugaza tradicional.", image: "muzzarella individual", stock: 1000 },
+{ id: 28, category: "Pizzas Individuales", name: "Napolitana Individual", price: 8500, description: "Individual napolitana con tomate y ajo.", image: "napolitana individual", stock: 1000 },
+{ id: 29, category: "Pizzas Individuales", name: "Especial Individual", price: 9000, description: "Individual especial con jamon y morrones.", image: "piz", stock: 1000 },
+{ id: 30, category: "Pastas", name: "Tallarines con Bolognesa", price: 11500, description: "Pasta fresca con salsa bolognesa casera.", image: "pasta", stock: 1000},
+{ id: 31, category: "Pastas", name: "Ñoquis con Bolognesa", price: 12500, description: "Ñoquis frescos con salsa bolognesa.", image: "ñoquis con bolognesa", stock: 1000 },
+{ id: 32, category: "Pastas", name: "Ravioles con Bolognesa", price: 12500, description: "Ravioles de verdura con salsa bolognesa.", image: "ravioles con bolognesa", stock: 0 },
+{ id: 33, category: "Acompañamientos", name: "Porción de Fritas", price: 7000, description: "Porción grande de papas fritas.", image: "porcion de fritas", stock: 10000 },
+{ id: 34, category: "Acompañamientos", name: "Salchipapas", price: 10500, description: "Porción grande de Salchipapas.", image: "salchipapa", stock: 10000},
+{ id: 35, category: "Acompañamientos", name: "Cono de Fritas", price: 4000, description: "Cono mediano de papas fritas.", image: "cono de fritas", stock: 10000 },
+{ id: 36, category: "Empanadas", name: "Empanadas", price: 21000, description: "Empanadas de Carne caseras x 12 unidades.", image: "empanadas", stock: 0 },
+{ id: 37, category: "Empanadas", name: "Empanadas", price: 11000, description: "Empanadas de Carne caseras x 6 unidades.", image: "empanadas", stock: 0 },
+{ id: 38, category: "Postres", name: "Flan", price: 6500, description: "C/Crema).", image: "flan", stock: 1000 },
+{ id: 39, category: "Postres", name: "Torta Helada", price: 0, description: "Crema Americana con Dulce de Leche.", image: "torta helada", stock: 0},
+{ id: 40, category: "Postres", name: "Ensalada de Frutas", price: 0, description: "Variedades de Frutas Deliciosas.", image: "ensalada de fruta", stock: 0 },
+{ id: 41, category: "Al Plato", name: "Milanesa con Puré al Plato", price: 14000, description: "Milanesa acompañada de puré de papas + pan casero.", image: "milanesa con pure", stock: 1000 },
+{ id: 42, category: "Al Plato", name: "Milanesa a Caballo al Plato", price: 14500, description: "Milanesa con huevos frito por encima + pan casero.", image:"milanesa a caballo", stock: 1000 },
+{ id: 43, category: "Al Plato", name: "Milanesa Napolitana al Plato", price: 15500, description: "Milanesa con salsa de tomate, jamon, queso, tomate c/fritas + pan casero.", image: "Milanesa napolitana", stock: 1000 },
+{ id: 44, category: "Combos", name: "Combo (6)", price: 20000, description: "2 pastas a elección + pan casero.", image: "Combo6", stock: 1000 },
+{ id: 45, category: "Combos", name: "Combo (5) 1 Sandwich Tucumano + 1 Salchipapa", price: 27000, description: "Delicioso combo para compartir entre 3 personas.", image: "tucumano+salchipapa", stock: 1000 },    
+{ id: 46, category: "Combos", name: "Combo (4) Hamburguesa Zapping con Fritas + Pizza Especial", price: 39000, description: "Delicioso combo para compartir entre 6 personas.", image: "hamburguesa zapping", stock: 0 },
+{ id: 47, category: "Combos", name: "Combo (2) de 2 Hamburguesas", price: 20000, description: "Delicioso combo para compartir entre 2 personas.", image: "hamburguesa completa", stock: 1000 },
+{ id: 48, category: "Combos", name: "Combo (3) Pizza Muzzarella + 2 Hamburguesas Completas", price: 32000, description: "Delicioso combo para compartir entre 6 personas.", image: "pizza", stock: 1000 },
+{ id: 49, category: "Combos", name: "Combo (1) Pizza Especial + porcion de Fritas", price: 19500, description: "Delicioso combo para compartir.", image: "pizza especial", stock: 1000 }
+];
+
+const defaultOffers = [
+{ id: 1, day: "lunes", description: "Pastas 10% off los Lunes", discount: 10 },
+{ id: 2, day: "martes", description: "Hamburguesa Zapping 10% off los Martes", discount: 10 },
+{ id: 3, day: "miércoles", description: "Sándwich de Bondiola 10% off los Miércoles", discount: 10 }
+];
+
+let cart = [];
+let products = JSON.parse(localStorage.getItem("products")) || defaultProducts;
+let offers = JSON.parse(localStorage.getItem("offers")) || defaultOffers;
+let editingProductId = null;
+let userName = null;
+
+function saveData() {
+localStorage.setItem("products", JSON.stringify(products));
+localStorage.setItem("offers", JSON.stringify(offers));
+}
+
+function checkAdminPassword() {
+const pass = document.getElementById("adminPassword").value;
+const hashed = CryptoJS.SHA256(pass).toString();
+const correctHash = CryptoJS.SHA256("0608").toString();
+if (hashed === correctHash) {
+document.getElementById("adminModal").style.display = "none";
+openAdmin();
+} else {
+alert("Clave incorrecta. Intente nuevamente.");
+}
+document.getElementById("adminPassword").value = "";
+}
+
+function renderCategories() {
+const categoriesContainer = document.getElementById("categoriesContainer");
+const combosContainer = document.getElementById("combosContainer");
+categoriesContainer.innerHTML = "";
+combosContainer.innerHTML = "";
+const categories = [...new Set(products.map(p => p.category))];
+categories.forEach((category, index) => {
+if (category === 'Combos') {
+const comboProducts = products.filter(p => p.category === 'Combos');
+comboProducts.forEach((product, comboIndex) => {
+const comboDiv = document.createElement('div');
+comboDiv.className = "bg-white rounded-xl shadow-md p-6 transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:border-orange-400 border-2 border-transparent relative";
+comboDiv.setAttribute('data-scroll-reveal', '');
+comboDiv.setAttribute('data-delay', `${(comboIndex + 1) * 0.1}s`);
+let specialBadge = '';
+if (product.stock > 0 && product.stock <= 10) {
+specialBadge = `<div class="absolute -top-3 -right-3 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded-full">⚠️ Pocas unidades</div>`;
+} else if (product.stock === 0) {
+specialBadge = `<div class="absolute -top-3 -right-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">❌ Agotado</div>`;
+}
+comboDiv.innerHTML = `
+${specialBadge}
+<img src="${getImageUrl(product.name, product.image)}" alt="${product.name}" class="w-full h-40 object-cover rounded-lg mb-3" loading="lazy" onerror="this.src='${defaultImages.default}'">
+<h3 class="text-xl font-bold text-gray-800 mb-2">${product.name}</h3>
+<p class="text-gray-600 mb-2">${product.description}</p>
+<div class="flex justify-between items-center">
+<span class="text-2xl font-bold text-orange-500">$${product.price.toLocaleString('es-AR')}</span>
+${product.stock > 0 ?
+`<button class="add-to-cart bg-orange-500 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-300 hover:bg-orange-600 hover:brightness-110 group" data-id="${product.id}" data-name="${product.name}" data-price="${product.price}">
+Lo Quiero <span class="inline-block ml-2 transition-transform duration-300 group-hover:translate-x-1">→</span>
+</button>` :
+`<span class="text-gray-400 font-semibold">No disponible</span>`
+}
+</div>
+`;
+combosContainer.appendChild(comboDiv);
+});
+return;
+}
+const div = document.createElement("div");
+div.className = "category";
+div.innerHTML = `
+<div class="category-header">
+<h3>${category}</h3>
+<span class="category-arrow">▶</span>
+</div>
+<div class="products"></div>
+`;
+const header = div.querySelector(".category-header");
+const content = div.querySelector(".products");
+const arrow = div.querySelector(".category-arrow");
+header.addEventListener("click", () => {
+const isOpen = content.style.display === "block";
+document.querySelectorAll(".products").forEach(p => {
+p.style.display = "none";
+p.previousElementSibling.classList.remove("active");
+});
+if (!isOpen) {
+content.style.display = "block";
+header.classList.add("active");
+}
+});
+const filteredProducts = products.filter(p => p.category === category);
+filteredProducts.forEach(product => {
+const productDiv = document.createElement("div");
+productDiv.className = "product";
+let stockBadge = '';
+if (product.stock === 0) {
+stockBadge = '<span class="availability-badge out-stock">Agotado</span>';
+} else if (product.stock <= 10) {
+stockBadge = '<span class="availability-badge low-stock">Pocas unidades</span>';
+} else {
+stockBadge = '<span class="availability-badge in-stock">Disponible</span>';
+}
+productDiv.innerHTML = `
+<div class="product-info">
+<div class="product-name">${product.name} ${stockBadge}</div>
+<div class="product-description">${product.description}</div>
+${product.stock <= 10 && product.stock > 0 ? `<div class="stock-low">⚠️ Solo quedan ${product.stock} unidades</div>` : ''}
+</div>
+<div class="product-price">$${product.price.toLocaleString('es-AR')}</div>
+<img src="${getImageUrl(product.name, product.image)}" alt="${product.name}" class="product-image" loading="lazy" onerror="this.src='${defaultImages.default}'">
+${product.stock > 0 ?
+`<button class="add-to-cart" data-id="${product.id}" data-name="${product.name}" data-price="${product.price}">Añadir</button>` :
+`<button class="add-to-cart" disabled style="background-color:#ccc;cursor:not-allowed">Agotado</button>`
+}
+`;
+content.appendChild(productDiv);
+});
+categoriesContainer.appendChild(div);
+});
+const firstCategory = categoriesContainer.querySelector(".category");
+if (firstCategory) {
+firstCategory.querySelector(".products").style.display = "block";
+firstCategory.querySelector(".category-header").classList.add("active");
+}
+document.querySelectorAll("#menu .add-to-cart:not([disabled])").forEach(button => {
+button.addEventListener("click", () => {
+const id = button.getAttribute("data-id");
+const name = button.getAttribute("data-name");
+const price = parseInt(button.getAttribute("data-price"));
+addToCart(id, name, price);
+});
+});
+const scrollRevealElements = document.querySelectorAll('[data-scroll-reveal]');
+const observer = new IntersectionObserver((entries) => {
+entries.forEach(entry => {
+if (entry.isIntersecting) {
+entry.target.classList.add('opacity-100', 'translate-y-0');
+observer.unobserve(entry.target);
+}
+});
+}, { threshold: 0.1 });
+scrollRevealElements.forEach(el => {
+el.classList.add('opacity-0', 'translate-y-10', 'transition-all', 'duration-500');
+observer.observe(el);
+});
+const today = new Date().toLocaleString('es-AR', { weekday: 'long' }).toLowerCase();
+const todayOffer = offers.find(offer => offer.day === today);
+document.getElementById('offerText').textContent = todayOffer ? todayOffer.description : '¡Consulta nuestras ofertas semanales en el menú!';
+}
+
+function addToCart(id, name, price) {
+const product = products.find(p => p.id === parseInt(id));
+if (!product) return;
+if (product.stock <= 0) {
+alert("Lo siento, este producto no está disponible en este momento. Contáctanos por WhatsApp para más información.");
+window.open("https://api.whatsapp.com/send?phone=543489358998&text=Hola%20Todo%20Casero!!%20No%20pude%20agregar%20" + encodeURIComponent(name) + "%20al%20carrito.", '_blank');
+return;
+}
+const existingItem = cart.find(item => item.id === id);
+if (existingItem) {
+if (product.stock < existingItem.quantity + 1) {
+alert("Lo siento, no hay suficiente disponibilidad para agregar más unidades de este producto.");
+return;
+}
+existingItem.quantity += 1;
+} else {
+if (product.stock < 1) {
+alert("Lo siento, este producto no está disponible en este momento.");
+return;
+}
+cart.push({ id, name, price, quantity: 1 });
+}
+updateCartDisplay();
+document.getElementById("cartModal").style.display = "flex";
+window.scrollTo({ top: 0, behavior: 'smooth' });
+const btn = event?.target;
+if (btn) {
+btn.textContent = "✓ Añadido";
+btn.style.backgroundColor = "#27ae60";
+setTimeout(() => {
+btn.textContent = "Añadir";
+btn.style.backgroundColor = "";
+}, 1500);
+}
+}
+
+function updateCartDisplay() {
+const cartItems = document.getElementById("cartItems");
+const cartTotal = document.getElementById("cartTotal");
+const cartCount = document.getElementById("cartCount");
+cartItems.innerHTML = "";
+let total = 0;
+if (cart.length === 0) {
+cartItems.innerHTML = "<p class='text-center text-gray-500 py-4'>Tu carrito está vacío 🛒</p>";
+} else {
+cart.forEach(item => {
+const itemTotal = item.price * item.quantity;
+total += itemTotal;
+const div = document.createElement("div");
+div.className = "cart-item";
+div.innerHTML = `
+<span>${item.name}</span>
+<div class="quantity-controls">
+<button class="quantity-btn" onclick="changeQuantity('${item.id}', -1)">-</button>
+<span class="quantity-display">${item.quantity}</span>
+<button class="quantity-btn" onclick="changeQuantity('${item.id}', 1)">+</button>
+</div>
+<span>$${itemTotal.toLocaleString('es-AR')}</span>
+<button onclick="removeFromCart('${item.id}')"><i class="fas fa-trash"></i></button>
+`;
+cartItems.appendChild(div);
+});
+}
+cartTotal.textContent = `Total: $${total.toLocaleString('es-AR')}`;
+cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+}
+
+function changeQuantity(id, change) {
+const product = products.find(p => p.id === parseInt(id));
+const item = cart.find(item => item.id === id);
+if (item) {
+const newQuantity = item.quantity + change;
+if (newQuantity > product.stock) {
+alert("No hay suficiente stock disponible.");
+return;
+}
+if (newQuantity < 1) {
+removeFromCart(id);
+return;
+}
+item.quantity = newQuantity;
+updateCartDisplay();
+}
+}
+
+function removeFromCart(id) {
+cart = cart.filter(item => item.id !== id);
+updateCartDisplay();
+}
+
+function generatePDF() {
+if (!window.jspdf) {
+alert("Generando tu pedido...");
+return;
+}
+const { jsPDF } = window.jspdf;
+const doc = new jsPDF();
+doc.setFontSize(18);
+doc.text("🍔 Orden Todo Casero 🍔", 20, 20);
+doc.setFontSize(12);
+doc.text(`Fecha: ${new Date().toLocaleString('es-AR')}`, 20, 30);
+doc.text(`Cliente: ${document.getElementById("customerName").value.trim() || "Sin nombre"}`, 20, 40);
+doc.text(`Celular: ${document.getElementById("customerPhone").value.trim() || "Sin teléfono"}`, 20, 50);
+doc.text("📍 Campana, Buenos Aires", 20, 60);
+doc.text("📞 +54 348 9358998", 20, 70);
+let y = 90;
+doc.text("═══════════════════════════════", 20, y);
+y += 10;
+doc.text("Producto | Cantidad | Precio | Total", 20, y);
+y += 10;
+doc.text("───────────────────────────────", 20, y);
+y += 10;
+let total = 0;
+cart.forEach(item => {
+const itemTotal = item.price * item.quantity;
+total += itemTotal;
+const line = `${item.name.substring(0,15)}... | ${item.quantity} | $${item.price} | $${itemTotal}`;
+doc.text(line, 20, y);
+y += 10;
+});
+doc.text("───────────────────────────────", 20, y);
+y += 10;
+doc.setFontSize(14);
+doc.text(`💰 TOTAL: $${total.toLocaleString('es-AR')}`, 20, y);
+const payment = document.querySelector('input[name="payment"]:checked').value;
+y += 15;
+doc.setFontSize(12);
+doc.text(`💳 Pago: ${payment}`, 20, y);
+if (payment === "Transferencia") {
+y += 10;
+doc.text("Alias: Adri.roti", 20, y);
+y += 10;
+doc.text("Titular: Adriana Basilia Enrique", 20, y);
+}
+y += 20;
+doc.text("📌 Nota: Retirar en local en el horario acordado.", 20, y);
+doc.text("¡Gracias por elegir Todo Casero! ❤️", 20, y + 10);
+doc.save(`pedido-todocasero-${new Date().toISOString().slice(0,10)}.pdf`);
+}
+
+// ✅ FUNCIÓN MEJORADA: generateWhatsAppMessage con emojis organizados
+function generateWhatsAppMessage(customerName, customerPhone) {
+let message = `🍔 *PEDIDO - TODO CASERO* 🍔
+━━━━━━━━━━━━━━━━━━━━━\n`;
+message += `👤 *Cliente*: ${customerName}\n`;
+message += `📞 *Celular*: ${customerPhone}\n`;
+message += `📅 *Fecha*: ${new Date().toLocaleString('es-AR')}\n`;
+message += `━━━━━━━━━━━━━━━━━━━━━\n\n`;
+message += `📋 *DETALLE DEL PEDIDO:*\n`;
+cart.forEach(item => {
+message += `🔹 ${item.quantity}x ${item.name}\n`;
+message += `   💰 $${(item.price * item.quantity).toLocaleString('es-AR')}\n`;
+});
+const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+message += `\n━━━━━━━━━━━━━━━━━━━━━\n`;
+message += `💰 *TOTAL A PAGAR*: *$${total.toLocaleString('es-AR')}*\n`;
+message += `━━━━━━━━━━━━━━━━━━━━━\n\n`;
+const payment = document.querySelector('input[name="payment"]:checked').value;
+message += `💳 *Método de Pago*: ${payment}\n`;
+if (payment === "Transferencia") {
+message += `🏦 *Alias*: Adri.roti\n`;
+message += `👤 *Titular*: Adriana Basilia Enrique\n`;
+}
+message += `\n📍 *Retiro*: Campana, Buenos Aires\n`;
+message += `🕐 *Horario de Atención*: 19:30 - 23:45\n`;
+message += `\n✅ *Por favor confirmar mi pedido*. ¡Gracias! 🙏`;
+return encodeURIComponent(message);
+}
+
+function toggleChat() {
+const chatWidget = document.getElementById("chatWidget");
+const isVisible = chatWidget.style.display === "block";
+chatWidget.style.display = isVisible ? "none" : "block";
+if (!isVisible && !document.getElementById("chatBody").innerHTML) {
+const chatBody = document.getElementById("chatBody");
+const welcomeMessage = document.createElement("div");
+welcomeMessage.className = "chat-message bot";
+welcomeMessage.innerHTML = `¡Hola! 👋 Soy <strong>María</strong>, tu asistente de <strong>Todo Casero</strong>.<br><br>¿En qué puedo ayudarte hoy?<br><br>💡 <em>Puedo ayudarte con:</em><br>• Ver el menú y precios<br>• Hacer un pedido<br>• Consultar horarios<br>• Información de pagos`;
+chatBody.appendChild(welcomeMessage);
+chatBody.scrollTop = chatBody.scrollHeight;
+}
+}
+
+function sendChatMessage() {
+const input = document.getElementById("chatInput");
+const message = input.value.trim();
+if (!message) return;
+const chatBody = document.getElementById("chatBody");
+const userMessage = document.createElement("div");
+userMessage.className = "chat-message user";
+userMessage.textContent = message;
+chatBody.appendChild(userMessage);
+const nameMatch = message.match(/mi nombre es (\w+)/i) || message.match(/me llamo (\w+)/i);
+if (nameMatch) {
+userName = nameMatch[1].charAt(0).toUpperCase() + nameMatch[1].slice(1).toLowerCase();
+}
+const greeting = userName ? `¡Hola ${userName}! 👋` : "¡Hola! 👋";
+const closing = "¿En qué más puedo ayudarte? 😊";
+const paymentInfo = "💳 Aceptamos: Efectivo 💵 o Transferencia 🏦 (Alias: Adri.roti)";
+let response = `${greeting} Gracias por escribir a <strong>Todo Casero</strong>. `;
+const lowerMessage = message.toLowerCase();
+if (lowerMessage.includes("menú") || lowerMessage.includes("menu") || lowerMessage.includes("carta") || lowerMessage.includes("que tienen")) {
+response += "🍽️ Nuestro menú incluye:<br><br>";
+response += "🥪 <strong>Sándwiches:</strong> Bondiola, Milanesa, Lomito, Tucumano<br>";
+response += "🍔 <strong>Hamburguesas:</strong> Completa, Vegetariana, Doble, Zapping<br>";
+response += "🍕 <strong>Pizzas:</strong> Muzzarella, Fugaza, Napolitana, Especial<br>";
+response += "🍕 <strong>Pizzas Individuales</strong><br>";
+response += "🍝 <strong>Pastas:</strong> Tallarines, Ñoquis, Ravioles con Bolognesa<br>";
+response += "🍟 <strong>Acompañamientos:</strong> Fritas, Salchipapas, Cono<br>";
+response += "🥟 <strong>Empanadas</strong> x6 o x12<br>";
+response += "🍮 <strong>Postres:</strong> Flan, Torta Helada, Ensalada de Frutas<br><br>";
+response += "¿Te gustaría que te diga el precio de algún plato en particular? 😊";
+} else if (lowerMessage.includes("precio") || lowerMessage.includes("cuánto cuesta") || lowerMessage.includes("valor") || lowerMessage.includes("precio de")) {
+const productName = lowerMessage.replace(/precio de|cuánto cuesta|el precio de|qué precio tiene|valor de/gi, "").trim();
+const product = products.find(p => p.name.toLowerCase().includes(productName) || productName.includes(p.name.toLowerCase()));
+if (product) {
+const today = new Date().toLocaleString('es-AR', { weekday: 'long' }).toLowerCase();
+const todayOffer = offers.find(o => o.day === today && o.description.toLowerCase().includes(product.name.toLowerCase()));
+let finalPrice = product.price;
+let discountText = '';
+if (todayOffer) {
+finalPrice = Math.round(product.price * (1 - todayOffer.discount/100));
+discountText = ` <span style="color:#27ae60">✨ ¡Hoy tiene ${todayOffer.discount}% OFF!</span>`;
+}
+response += `💰 <strong>${product.name}</strong>: $${finalPrice.toLocaleString('es-AR')}${discountText}<br>`;
+response += `<em>${product.description}</em><br><br>`;
+response += product.stock > 0 ? `✅ Disponible (${product.stock} unidades)` : `❌ Agotado por el momento`;
+response += `<br><br>¿Quieres agregarlo a tu carrito? 🛒`;
+} else {
+response += "🔍 No encontré ese producto exacto. Los nombres en nuestro menú son:<br>";
+response += "<em>Bondiola, Milanesa, Lomito, Hamburguesa Completa, Muzzarella, Tallarines con Bolognesa, etc.</em><br><br>";
+response += "¿Puedes decirme el nombre exacto o preguntarme por una categoría? 😊";
+}
+} else if (lowerMessage.includes("pedido") || lowerMessage.includes("comprar") || lowerMessage.includes("quiero") || lowerMessage.includes("agregar") || lowerMessage.includes("añadir")) {
+response += "¡Perfecto! 🎉 Para hacer tu pedido tienes dos opciones:<br><br>";
+response += "1️⃣ <strong>Desde la web:</strong> Ve a la sección 'Menú', elige tus platos y agrégalos al carrito 🛒<br>";
+response += "2️⃣ <strong>Por WhatsApp:</strong> Escríbeme directamente al <strong>+54 348 9358998</strong><br><br>";
+response += "💡 Tip: Puedes decirme algo como <em>'quiero 2 bondiolas y fritas'</em> y te ayudo a armar el pedido. ¿Qué te gustaría ordenar?";
+} else if (lowerMessage.includes("horario") || lowerMessage.includes("hora") || lowerMessage.includes("abierto") || lowerMessage.includes("cierra")) {
+response += "🕐 Estamos abiertos <strong>todos los días</strong> de <strong>19:30 a 23:45 hs</strong>.<br><br>";
+response += "📍 Te esperamos en <strong>Campana, Buenos Aires</strong>.<br><br>";
+response += "¿Quieres hacer tu pedido para hoy? 😊";
+} else if (lowerMessage.includes("ubicación") || lowerMessage.includes("donde están") || lowerMessage.includes("dirección") || lowerMessage.includes("campana")) {
+response += "📍 Estamos ubicados en <strong>Campana, Buenos Aires</strong>.<br><br>";
+response += "🚗 El pedido se retira en nuestro local.<br>";
+response += "📞 Para más detalles, escríbenos al +54 348 9358998.<br><br>";
+response += "¿Te ayudo a armar tu pedido? 🍔";
+} else if (lowerMessage.includes("pago") || lowerMessage.includes("pagar") || lowerMessage.includes("efectivo") || lowerMessage.includes("transferencia") || lowerMessage.includes("alias")) {
+response += `${paymentInfo}<br><br>`;
+response += "💵 <strong>Efectivo:</strong> Pagas al momento de retirar tu pedido.<br>";
+response += "🏦 <strong>Transferencia:</strong><br>";
+response += "• Alias: <strong>Adri.roti</strong><br>";
+response += "• Titular: Adriana Basilia Enrique<br><br>";
+response += "¿Con qué método prefieres pagar? 😊";
+} else if (lowerMessage.includes("oferta") || lowerMessage.includes("promoción") || lowerMessage.includes("descuento") || lowerMessage.includes("descuentos")) {
+const today = new Date().toLocaleString('es-AR', { weekday: 'long' }).toLowerCase();
+const todayOffer = offers.find(o => o.day === today);
+if (todayOffer) {
+response += `🎉 ¡HOY ${today.toUpperCase()} TENEMOS OFERTA! ✨<br><br>`;
+response += `<strong>${todayOffer.description}</strong><br>`;
+response += `<span style="color:#e74c3c;font-weight:bold">${todayOffer.discount}% de descuento</span><br><br>`;
+response += "¿Te gustaría aprovechar esta promoción? 😊";
+} else {
+response += "📅 Nuestras ofertas semanales son:<br><br>";
+offers.forEach(offer => {
+response += `• <strong>${offer.day.charAt(0).toUpperCase()+offer.day.slice(1)}:</strong> ${offer.description}<br>`;
+});
+response += "<br>¿Quieres que te cuente más sobre alguna en particular?";
+}
+} else if (lowerMessage.includes("pdf") || lowerMessage.includes("resumen") || lowerMessage.includes("comprobante")) {
+if (cart.length > 0) {
+generatePDF();
+response += "📄 ¡Listo! He generado el resumen de tu pedido en PDF.<br><br>";
+response += "¿Quieres confirmar el pedido por WhatsApp ahora? 📲";
+} else {
+response += "🛒 Tu carrito está vacío.<br><br>";
+response += "Primero agrega productos desde el menú y luego podré generar tu resumen. ¿Quieres ver el menú? 😊";
+}
+} else if (lowerMessage.includes("cancelar") || lowerMessage.includes("borrar") || lowerMessage.includes("vaciar")) {
+if (cart.length > 0) {
+cart = [];
+updateCartDisplay();
+response += "🗑️ ¡Listo! He vaciado tu carrito.<br><br>";
+response += "¿Quieres empezar un nuevo pedido? 😊";
+} else {
+response += "Tu carrito ya está vacío. ¿Te gustaría ver nuestro menú para elegir algo rico? 🍽️";
+}
+} else if (lowerMessage.includes("hola") || lowerMessage.includes("buenas") || lowerMessage.includes("saludos")) {
+response += "¡Bienvenido a <strong>Todo Casero</strong>! 🍔❤️<br><br>";
+response += "Somos una rotisería con corazón casero en Campana.<br><br>";
+response += "¿En qué puedo ayudarte hoy?<br>";
+response += "• 📋 Ver menú y precios<br>";
+response += "• 🛒 Hacer un pedido<br>";
+response += "• 🕐 Consultar horarios<br>";
+response += "• 💳 Información de pagos";
+} else if (/\d+\s*[x×]\s*.+/i.test(lowerMessage) || /\d+\s+.+/.test(lowerMessage)) {
+const orderRegex = /(\d+)\s*[x×]?\s*([a-záéíóúñ\s]+)/gi;
+const matches = [...lowerMessage.matchAll(orderRegex)];
+if (matches.length > 0) {
+response += "🎯 Entendí que quieres:<br><br>";
+let addedCount = 0;
+let notFound = [];
+matches.forEach(match => {
+const qty = parseInt(match[1]);
+const nameSearch = match[2].trim();
+const product = products.find(p => p.name.toLowerCase().includes(nameSearch));
+if (product && product.stock >= qty) {
+const existing = cart.find(c => c.id === product.id);
+if (existing) {
+existing.quantity += qty;
+} else {
+cart.push({ id: product.id, name: product.name, price: product.price, quantity: qty });
+}
+addedCount++;
+response += `✅ ${qty}x ${product.name} - $${(product.price*qty).toLocaleString('es-AR')}<br>`;
+} else if (product) {
+notFound.push(`${nameSearch} (solo hay ${product.stock} disponibles)`);
+} else {
+notFound.push(nameSearch);
+}
+});
+if (addedCount > 0) {
+updateCartDisplay();
+response += `<br>🛒 ¡Agregado a tu carrito!`;
+if (notFound.length > 0) {
+response += `<br><br>⚠️ No pude agregar: ${notFound.join(', ')}. ¿Puedes verificar el nombre?`;
+}
+response += `<br><br>¿Quieres continuar con tu pedido o agregar algo más? 😊`;
+} else {
+response += `<br>⚠️ No encontré: ${notFound.join(', ')}.<br><br>`;
+response += "Los nombres exactos son: <em>Bondiola, Milanesa, Muzzarella, Tallarines con Bolognesa</em>, etc.<br><br>";
+response += "¿Puedes intentarlo de nuevo con el nombre exacto? 😊";
+}
+}
+} else {
+response += "Entiendo tu consulta. 😊 Para ayudarte mejor, puedo:<br><br>";
+response += "• 📋 Mostrarte el menú completo<br>";
+response += "• 💰 Decirte precios de productos<br>";
+response += "• 🛒 Ayudarte a armar un pedido<br>";
+response += "• 🕐 Informarte sobre horarios<br>";
+response += "• 💳 Explicarte métodos de pago<br><br>";
+response += "¿Qué necesitas? También puedes escribirme directamente al <strong>+54 348 9358998</strong>. 📲";
+}
+response += `<br><br><em>${closing}</em>`;
+const botMessage = document.createElement("div");
+botMessage.className = "chat-message bot";
+botMessage.innerHTML = response;
+chatBody.appendChild(botMessage);
+input.value = "";
+chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+function openAdmin() {
+document.getElementById("adminPanel").style.display = "block";
+renderProductList();
+}
+function closeAdmin() {
+document.getElementById("adminPanel").style.display = "none";
+document.getElementById("productForm").reset();
+const preview = document.getElementById("previewImage");
+if (preview) preview.style.display = "none";
+document.getElementById("productImageUrl").value = "";
+editingProductId = null;
+}
+function renderProductList() {
+const productList = document.getElementById("productList");
+if (!productList) return;
+productList.innerHTML = "";
+products.forEach(product => {
+const div = document.createElement("div");
+div.className = "product-item";
+div.innerHTML = `
+<span><strong>${product.name}</strong> (${product.category}) - $${product.price.toLocaleString('es-AR')} ${product.stock <= 10 ? `<span class="stock-low">[Stock: ${product.stock}]</span>` : ''}</span>
+<div>
+<button class="btn" onclick="editProduct(${product.id})">✏️ Editar</button>
+<button class="btn" style="background-color: #e74c3c;" onclick="deleteProduct(${product.id})">🗑️ Eliminar</button>
+</div>
+`;
+productList.appendChild(div);
+});
+}
+function editProduct(id) {
+editingProductId = id;
+const product = products.find(p => p.id === id);
+if (!product) return;
+document.getElementById("categorySelect").value = product.category;
+document.getElementById("productName").value = product.name;
+document.getElementById("productPrice").value = product.price;
+document.getElementById("productDescription").value = product.description;
+document.getElementById("productImageUrl").value = product.image || "";
+const preview = document.getElementById("previewImage");
+if (preview && product.image) {
+preview.src = getImageUrl(product.name, product.image);
+preview.style.display = "block";
+}
+window.scrollTo({ top: document.getElementById("adminPanel").offsetTop, behavior: 'smooth' });
+}
+function deleteProduct(id) {
+if (confirm("⚠️ ¿Estás seguro de eliminar este producto? Esta acción no se puede deshacer.")) {
+products = products.filter(p => p.id !== id);
+saveData();
+renderProductList();
+renderCategories();
+alert("✅ Producto eliminado correctamente.");
+}
+}
+
+document.getElementById("viewCart").addEventListener("click", (e) => {
+e.preventDefault();
+updateCartDisplay();
+document.getElementById("cartModal").style.display = "flex";
+});
+
+function closeCart() {
+document.getElementById("cartModal").style.display = "none";
+}
+
+function showDessertModal() {
+const dessertOptionsDiv = document.getElementById("dessertOptions");
+dessertOptionsDiv.innerHTML = '';
+const desserts = products.filter(p => p.category === "Postres" && p.stock > 0);
+if (desserts.length > 0) {
+desserts.forEach(dessert => {
+const btn = document.createElement("button");
+btn.className = "dessert-btn";
+btn.innerHTML = `🍮 ${dessert.name} <span style="font-size:0.9em">- $${dessert.price.toLocaleString('es-AR')}</span>`;
+btn.onclick = () => {
+addToCart(dessert.id, dessert.name, dessert.price);
+document.getElementById("dessertModal").style.display = "none";
+sendOrderDirectly();
+};
+dessertOptionsDiv.appendChild(btn);
+});
+document.getElementById("dessertModal").style.display = "flex";
+} else {
+sendOrderDirectly();
+}
+}
+
+function skipDessert() {
+document.getElementById("dessertModal").style.display = "none";
+sendOrderDirectly();
+}
+
+// ✅ FUNCIÓN MEJORADA: sendOrderDirectly con número WhatsApp correcto
+function sendOrderDirectly() {
+const customerName = document.getElementById("customerName").value.trim();
+const customerPhone = document.getElementById("customerPhone").value.trim();
+if (cart.length === 0) {
+alert("🛒 El carrito está vacío. Agrega productos antes de enviar.");
+return;
+}
+if (!customerName || !customerPhone) {
+alert("📝 Por favor completa tu nombre y celular.");
+return;
+}
+// Actualizar stock
+cart.forEach(item => {
+const product = products.find(p => p.id === parseInt(item.id));
+if (product) product.stock = Math.max(0, product.stock - item.quantity);
+});
+const phoneNumber = "543489358998"; // ✅ Número formateado para WhatsApp API
+const whatsappMessage = generateWhatsAppMessage(customerName, customerPhone);
+window.open(`https://api.whatsapp.com/send?phone=${phoneNumber}&text=${whatsappMessage}`, '_blank');
+// Generar PDF y limpiar
+generatePDF();
+cart = [];
+updateCartDisplay();
+renderCategories();
+saveData();
+closeCart();
+alert("✅ ¡Pedido enviado! Revisa WhatsApp para confirmar con María. 📲");
+}
+
+document.getElementById("sendOrder").addEventListener("click", () => {
+const hasDessertStock = products.some(p => p.category === "Postres" && p.stock > 0);
+if (hasDessertStock) {
+showDessertModal();
+} else {
+sendOrderDirectly();
+}
+});
+
+document.getElementById("adminLink").addEventListener("click", function(e) {
+e.preventDefault();
+document.getElementById("adminModal").style.display = "flex";
+});
+
+document.getElementById("productForm").addEventListener("submit", function(e) {
+e.preventDefault();
+const name = document.getElementById("productName").value.trim();
+const price = parseInt(document.getElementById("productPrice").value);
+const description = document.getElementById("productDescription").value.trim();
+const category = document.getElementById("categorySelect").value;
+const imageUrl = document.getElementById("productImageUrl").value.trim();
+if (!name || isNaN(price) || !category) {
+alert("⚠️ Por favor completa los campos obligatorios: Categoría, Nombre y Precio.");
+return;
+}
+const image = imageUrl || "default";
+if (editingProductId) {
+products = products.map(p => p.id === editingProductId ? { ...p, category, name, price, description, image, stock: p.stock } : p);
+} else {
+const id = products.length ? Math.max(...products.map(p => p.id)) + 1 : 1;
+products.push({ id, category, name, price, description, image, stock: 50 });
+}
+renderProductList();
+renderCategories();
+this.reset();
+editingProductId = null;
+saveData();
+alert("✅ Producto guardado correctamente.");
+});
+
+document.getElementById("saveChanges").addEventListener("click", function() {
+saveData();
+alert("💾 ¡Todos los cambios han sido guardados exitosamente!");
+});
+
+// Inicialización
+document.addEventListener("DOMContentLoaded", function() {
+renderCategories();
+["cartModal", "adminModal", "dessertModal"].forEach(id => {
+const modal = document.getElementById(id);
+if (modal) {
+modal.addEventListener("click", function(e) {
+if (e.target === this) {
+if (id === "dessertModal") skipDessert();
+else this.style.display = "none";
+}
+});
+}
+});
+document.querySelectorAll('.animate-text').forEach((el, i) => {
+el.style.animationDelay = `${i * 0.2}s`;
+});
+const setupCarousel = (carouselId, prevBtnId, nextBtnId) => {
+const carousel = document.getElementById(carouselId);
+const prevBtn = document.getElementById(prevBtnId);
+const nextBtn = document.getElementById(nextBtnId);
+if (!carousel || !prevBtn || !nextBtn) return;
+let index = 0;
+const slides = carousel.children.length;
+const show = (i) => carousel.style.transform = `translateX(-${i * 100}%)`;
+prevBtn.onclick = () => { index = (index > 0) ? index - 1 : slides - 1; show(index); };
+nextBtn.onclick = () => { index = (index < slides - 1) ? index + 1 : 0; show(index); };
+setInterval(() => nextBtn.click(), 6000);
+};
+setupCarousel('carousel', 'prevBtn', 'nextBtn');
+setupCarousel('contactCarousel', 'prevBtnContact', 'nextBtnContact');
+const tooltip = document.getElementById('assistantTooltip');
+if (tooltip) {
+setTimeout(() => { tooltip.style.opacity = '1'; }, 4000);
+setTimeout(() => {
+tooltip.style.transition = 'opacity 0.5s';
+tooltip.style.opacity = '0';
+setTimeout(() => tooltip.style.display = 'none', 500);
+}, 10000);
+}
+document.querySelectorAll('nav a[href^="#"]').forEach(link => {
+link.addEventListener('click', function(e) {
+const target = document.querySelector(this.getAttribute('href'));
+if (target) {
+e.preventDefault();
+target.scrollIntoView({ behavior: 'smooth' });
+}
+});
+});
+console.log("✅ Todo Casero - Página cargada correctamente. Versión: " + currentVersion);
+});
 </script>
 </body>
 </html>
