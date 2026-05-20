@@ -1,2027 +1,1614 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="Todo Casero - Rotisería con los mejores sándwiches, hamburguesas, pizzas y pastas caseras. Abierto de Lun-Dom: 19:30-23:45" />
-<title>Todo Casero - Rotisería | Campana</title>
-<script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Romero Mecánica Integral - Taller de reparación de automóviles con años de experiencia. Servicio de calidad, confiable y transparente en Paysandú, Uruguay.">
+<meta name="theme-color" content="#0A0A0A">
+<title>ROMERO MECÁNICA INTEGRAL | Taller Mecánico - Diagnóstico y Reparación Profesional</title>
+<!-- Preconnect para mejor rendimiento-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Tailwind CSS CDN + Supresor de warnings-->
+<script>
+(function(){
+const originalWarn= console.warn;
+console.warn= function(...args){
+if(typeof args[0]=== 'string' && args[0].includes('cdn.tailwindcss.com')) return;
+originalWarn.apply(console, args); }; })();
+</script>
+<script src="https://cdn.tailwindcss.com/3.4.14"></script>
+<!-- Font Awesome-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Google Fonts-->
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<script>
+tailwind.config ={
+theme:{
+extend:{
+fontFamily:{
+sans:['Manrope','sans-serif'],
+display:['Space Grotesk','sans-serif'],
+},
+colors:{
+primary:{
+orange:'#FF6B35',
+amber:'#F7931E',
+dark:'#0A0A0A',
+gray:'#1A1A1A',
+card:'#2D2D2D',
+metallic:'#C0C0C0',
+light:'#F1F5F9',
+cream:'#F5F1E8'
+}
+},
+boxShadow:{
+'neon':'0 0 25px rgba(255, 107, 53, 0.45)',
+'glow':'0 0 40px rgba(255, 107, 53, 0.25)',
+'card':'0 10px 40px-10px rgba(0, 0, 0, 0.5)',
+'soft':'0 4px 20px rgba(0, 0, 0, 0.15)',
+'premium':'0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(255, 107, 53, 0.15)',
+},
+screens:{
+'xs':'475px',
+'2xl':'1400px',
+},
+animation:{
+'float':'float 6s ease-in-out infinite',
+'pulse-slow':'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+'shimmer':'shimmer 2s linear infinite',
+'gradient':'gradient 8s ease infinite',
+'scroll-banner':'scroll-banner 50s linear infinite',
+},
+keyframes:{
+float:{
+'0%, 100%':{transform:'translateY(0)'},
+'50%':{transform:'translateY(-12px)'},
+},
+shimmer:{
+'0%':{backgroundPosition:'-1000px 0'},
+'100%':{backgroundPosition:'1000px 0'},
+},
+gradient:{
+'0%, 100%':{backgroundPosition:'0% 50%'},
+'50%':{backgroundPosition:'100% 50%'},
+},
+'scroll-banner':{
+'0%':{transform:'translateX(0)'},
+'100%':{transform:'translateX(-100%)'}
+}
+}
+}
+}
+}
+</script>
 <style>
-:root {
---primary-color: #e67e22;
---secondary-color: #f39c12;
---light-color: #fffbe6;
---dark-color: #333;
---accent-color: #25d366;
---assistant-color: #4285f4;
---shadow: 0 4px 6px rgba(0,0,0,0.1);
+:root{
+--gradient-primary: linear-gradient(135deg,#FF6B35 0%,#F7931E 100%);
+--gradient-dark: linear-gradient(180deg,#0A0A0A 0%,#1A1A1A 100%);
+--gradient-metallic: linear-gradient(135deg,#E8E8E8 0%,#A8A8A8 50%,#E8E8E8 100%);
+--gradient-orange-glow: linear-gradient(135deg, rgba(255,107,53,0.3) 0%, rgba(247,147,30,0.1) 100%);
+--gradient-animated: linear-gradient(-45deg, #FF6B35, #F7931E, #FF8C42, #FF6B35);
 }
-* {
-box-sizing: border-box;
-margin: 0;
-padding: 0;
+*{
+-webkit-tap-highlight-color: transparent;
 }
-body {
-font-family: 'Segoe UI', 'Roboto', sans-serif;
-line-height: 1.6;
-background-color: var(--light-color);
-color: var(--dark-color);
-}
-
-/* 🔹 Banner superior persuasivo de Instagram */
-.instagram-top-banner {
-  background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-  color: white;
-  padding: 0.8rem 1rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-  font-size: 0.95rem;
-  text-align: center;
-  box-shadow: var(--shadow);
-  z-index: 101;
-  position: relative;
-}
-.instagram-top-banner span {
-  font-weight: 500;
-}
-.btn-instagram-micro {
-  background: white;
-  color: #bc1888;
-  padding: 0.5rem 1.2rem;
-  border-radius: 25px;
-  text-decoration: none;
-  font-weight: bold;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: all 0.3s;
-  animation: microEffect 1s infinite alternate;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-}
-.btn-instagram-micro:hover {
-  transform: scale(1.08);
-  box-shadow: 0 6px 20px rgba(188, 24, 136, 0.4);
-  color: #cc2366;
-}
-.btn-instagram-micro i {
-  font-size: 1.1rem;
-}
-
-header {
-background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-padding: 1.5rem;
-text-align: center;
-box-shadow: var(--shadow);
-position: relative;
-z-index: 100;
-}
-.logo {
-font-size: 2.5rem;
-font-weight: bold;
-color: white;
-margin-bottom: 0.5rem;
-text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-animation: microEffect 1s infinite alternate;
-}
-@keyframes microEffect {
-from { transform: scale(1); }
-to { transform: scale(1.05); }
-}
-.tagline {
-color: white;
-font-style: italic;
-margin-bottom: 1rem;
-}
-nav {
-display: flex;
-justify-content: center;
-gap: 1.5rem;
-margin: 1rem;
-flex-wrap: wrap;
-}
-nav a {
-text-decoration: none;
-color: white;
-font-weight: bold;
-padding: 0.5rem 1rem;
-border-radius: 4px;
-transition: background 0.3s;
-display: flex;
-align-items: center;
-gap: 0.5rem;
-}
-nav a:hover {
-background-color: rgba(255,255,255,0.2);
-}
-.hero {
-background: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover;
-height: 60vh;
-display: flex;
-align-items: center;
-justify-content: center;
-text-align: center;
+body{
+background: var(--gradient-dark);
+color:#E2E8F0;
+font-feature-settings:"cv02","cv03","cv04","cv11";
+overflow-x: hidden;
 position: relative;
 }
-.hero::before {
-content: '';
-position: absolute;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-background-color: rgba(0,0,0,0.5);
-}
-.hero-content {
-position: relative;
-z-index: 1;
-color: white;
-max-width: 800px;
-padding: 2rem;
-}
-.hero h1 {
-font-size: 2.5rem;
-margin-bottom: 1rem;
-}
-.hero p {
-font-size: 1.2rem;
-margin-bottom: 2rem;
-}
-.btn {
-display: inline-block;
-background-color: var(--primary-color);
-color: white;
-padding: 0.8rem 1.5rem;
-border-radius: 4px;
-text-decoration: none;
-font-weight: bold;
-transition: all 0.3s;
-border: none;
-cursor: pointer;
-}
-.btn:hover {
-background-color: #d35400;
-transform: translateY(-2px);
-box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-}
-.btn-whatsapp {
-background-color: var(--accent-color);
-}
-.btn-whatsapp:hover {
-background-color: #128C7E;
-}
-.section {
-padding: 4rem 2rem;
-max-width: 1200px;
-margin: 0 auto;
-}
-.section-title {
-text-align: center;
-margin-bottom: 3rem;
-font-size: 2rem;
-color: var(--primary-color);
-position: relative;
-}
-.section-title::after {
-content: '';
-display: block;
-width: 80px;
-height: 4px;
-background-color: var(--secondary-color);
-margin: 0.5rem auto 0;
-}
-.menu-section {
-background-color: white;
-border-radius: 8px;
-box-shadow: var(--shadow);
-padding: 2rem;
-margin-bottom: 2rem;
-}
-.category {
-margin-bottom: 2rem;
-}
-.category-header {
-background-color: var(--primary-color);
-color: white;
-padding: 1rem;
-border-radius: 4px;
-cursor: pointer;
-display: flex;
-justify-content: space-between;
-align-items: center;
-transition: all 0.3s;
-}
-.category-header:hover {
-background-color: #d35400;
-}
-.category-header h3 {
-margin: 0;
-}
-.products {
-display: none;
-padding: 1rem;
-background-color: #f9f9f9;
-border-radius: 0 0 4px 4px;
-}
-.product {
-display: flex;
-justify-content: space-between;
-align-items: center;
-padding: 1rem;
-border-bottom: 1px solid #eee;
-transition: all 0.3s;
-}
-.product:last-child {
-border-bottom: none;
-}
-.product:hover {
-background-color: #f1f1f1;
-}
-.product-info {
-flex: 1;
-}
-.product-name {
-font-weight: bold;
-font-size: 1.1rem;
-margin-bottom: 0.3rem;
-}
-.product-description {
-color: #666;
-font-size: 0.9rem;
-}
-.product-price {
-font-weight: bold;
-color: var(--primary-color);
-font-size: 1.2rem;
-margin-left: 1rem;
-white-space: nowrap;
-}
-.product-image {
-width: 80px;
-height: 80px;
-object-fit: cover;
-border-radius: 4px;
-margin-left: 1rem;
-}
-.add-to-cart {
-background-color: var(--secondary-color);
-color: white;
-padding: 0.5rem 1rem;
-border-radius: 4px;
-border: none;
-cursor: pointer;
-margin-left: 1rem;
-transition: all 0.3s;
-}
-.add-to-cart:hover {
-background-color: #e67e22;
-}
-.quantity-controls {
-display: flex;
-align-items: center;
-gap: 0.5rem;
-margin-left: 1rem;
-}
-.quantity-btn {
-background-color: var(--primary-color);
-color: white;
-border: none;
-border-radius: 4px;
-width: 30px;
-height: 30px;
-display: flex;
-align-items: center;
-justify-content: center;
-cursor: pointer;
-transition: background-color 0.3s;
-}
-.quantity-btn:hover {
-background-color: #d35400;
-}
-.quantity-display {
-min-width: 30px;
-text-align: center;
-font-weight: bold;
-}
-.offer-banner {
-background: linear-gradient(135deg, #e74c3c, #c0392b);
-color: white;
-padding: 1rem;
-text-align: center;
-border-radius: 4px;
-margin-bottom: 2rem;
-animation: pulse 2s infinite;
-}
-@keyframes pulse {
-0% { transform: scale(1); }
-50% { transform: scale(1.02); }
-100% { transform: scale(1); }
-}
-.info-cards {
-display: grid;
-grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-gap: 2rem;
-margin-top: 3rem;
-}
-.info-card {
-background-color: white;
-border-radius: 8px;
-box-shadow: var(--shadow);
-padding: 2rem;
-text-align: center;
-}
-.info-card i {
-font-size: 2.5rem;
-color: var(--primary-color);
-margin-bottom: 1rem;
-}
-.info-card h3 {
-margin-bottom: 1rem;
-color: var(--primary-color);
-}
-.payment-info {
-background-color: #f8f9fa;
-padding: 1.5rem;
-border-radius: 4px;
-margin-top: 2rem;
-border-left: 4px solid var(--accent-color);
-transition: all 0.3s;
-}
-.payment-info:hover {
-transform: translateY(-2px);
-box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-}
-.payment-method {
-display: flex;
-align-items: center;
-margin-bottom: 1rem;
-}
-.payment-method input {
-margin-right: 1rem;
-}
-footer {
-background-color: var(--dark-color);
-color: white;
-text-align: center;
-padding: 2rem;
-margin-top: 3rem;
-}
-.footer-content {
-max-width: 1200px;
-margin: 0 auto;
-display: grid;
-grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-gap: 2rem;
-text-align: left;
-}
-.footer-section h3 {
-margin-bottom: 1rem;
-color: var(--secondary-color);
-}
-.footer-section ul {
-list-style: none;
-}
-.footer-section ul li {
-margin-bottom: 0.5rem;
-}
-.footer-section ul li a {
-color: #ddd;
-text-decoration: none;
-transition: color 0.3s;
-}
-.footer-section ul li a:hover {
-color: var(--secondary-color);
-}
-.copyright {
-margin-top: 2rem;
-padding-top: 1rem;
-border-top: 1px solid #444;
-font-size: 0.9rem;
-color: #bbb;
-transition: color 0.3s;
-}
-.copyright:hover {
-color: white;
-}
-.copyright span {
-cursor: pointer;
-text-decoration: underline;
-color: var(--accent-color);
-transition: color 0.3s;
-}
-.copyright span:hover {
-color: var(--primary-color);
-}
-.whatsapp-float {
-position: fixed;
-bottom: 20px;
-right: 20px;
-background-color: var(--accent-color);
-color: white;
-width: 60px;
-height: 60px;
-border-radius: 50%;
-display: flex;
-align-items: center;
-justify-content: center;
-font-size: 2rem;
-box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-transition: all 0.3s;
-z-index: 99;
-text-decoration: none;
-}
-.whatsapp-float:hover {
-background-color: #128C7E;
-transform: translateY(-5px);
-box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-}
-.assistant-float {
-position: fixed;
-bottom: 90px;
-right: 20px;
-background-color: var(--assistant-color);
-color: white;
-width: 60px;
-height: 60px;
-border-radius: 50%;
-display: flex;
-align-items: center;
-justify-content: center;
-font-size: 1.8rem;
-box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-transition: all 0.3s;
-z-index: 99;
-text-decoration: none;
-animation: bounce 2s infinite;
-}
-.assistant-float:hover {
-background-color: #3367d6;
-transform: translateY(-5px);
-box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-animation: none;
-}
-@keyframes bounce {
-0%, 100% { transform: translateY(0); }
-50% { transform: translateY(-10px); }
-}
-.assistant-tooltip {
-position: fixed;
-bottom: 160px;
-right: 20px;
-background-color: white;
-color: var(--dark-color);
-padding: 0.8rem 1rem;
-border-radius: 8px;
-box-shadow: var(--shadow);
-font-size: 0.9rem;
-max-width: 220px;
-text-align: center;
-z-index: 100;
-animation: fadeIn 0.3s ease-out;
-border-left: 4px solid var(--assistant-color);
-}
-.assistant-tooltip::after {
-content: '';
-position: absolute;
-bottom: -6px;
-right: 20px;
-border-width: 6px 6px 0;
-border-style: solid;
-border-color: white transparent transparent;
-}
-@keyframes fadeIn {
-from { opacity: 0; transform: translateY(10px); }
-to { opacity: 1; transform: translateY(0); }
-}
-.cart-modal {
-display: none;
+body::before{
+content:'';
 position: fixed;
 top: 0;
 left: 0;
 width: 100%;
 height: 100%;
-background-color: rgba(0,0,0,0.7);
-z-index: 999;
-justify-content: center;
-align-items: center;
+background-image: url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1920&q=80');
+background-size: cover;
+background-position: center;
+background-repeat: no-repeat;
+opacity: 0.25;
+z-index: -2;
+animation: backgroundMove 40s ease-in-out infinite;
+filter: brightness(0.7) contrast(1.2);
 }
-.cart-content {
-background-color: white;
-padding: 2rem;
-border-radius: 8px;
-max-width: 600px;
-width: 90%;
-max-height: 80vh;
-overflow-y: auto;
-}
-.cart-content h3 {
-margin-bottom: 1rem;
-color: var(--primary-color);
-}
-.cart-item {
-display: flex;
-justify-content: space-between;
-align-items: center;
-padding: 1rem 0;
-border-bottom: 1px solid #eee;
-}
-.cart-item:last-child {
-border-bottom: none;
-}
-.cart-item span {
-flex: 1;
-}
-.cart-item button {
-background-color: #e74c3c;
-color: white;
-padding: 0.5rem;
-border: none;
-border-radius: 4px;
-cursor: pointer;
-}
-.cart-total {
-margin-top: 1rem;
-font-weight: bold;
-text-align: right;
-}
-.cart-actions {
-margin-top: 1rem;
-display: flex;
-justify-content: space-between;
-}
-.customer-info input {
+body::after{
+content:'';
+position: fixed;
+top: 0;
+left: 0;
 width: 100%;
-padding: 0.8rem;
-margin-bottom: 1rem;
-border: 1px solid #ddd;
-border-radius: 4px;
+height: 100%;
+background: var(--gradient-animated);
+background-size: 400% 400%;
+opacity: 0.03;
+z-index: -1;
+animation: gradient 15s ease infinite;
+pointer-events: none;
 }
-.chat-widget {
-position: fixed;
-bottom: 90px;
-right: 20px;
-width: 300px;
-background-color: white;
-border-radius: 8px;
-box-shadow: var(--shadow);
-z-index: 100;
-display: none;
+@keyframes backgroundMove{
+0%, 100%{transform: scale(1) translate(0, 0);}
+25%{transform: scale(1.08) translate(-2%, -2%);}
+50%{transform: scale(1) translate(0, -3%);}
+75%{transform: scale(1.08) translate(2%, -2%);}
 }
-.chat-header {
-background: var(--primary-color);
-color: white;
-padding: 1rem;
-border-radius: 8px 8px 0 0;
-display: flex;
-justify-content: space-between;
-align-items: center;
+.glass{
+background: rgba(26, 26, 26, 0.75);
+backdrop-filter: blur(20px) saturate(180%);
+-webkit-backdrop-filter: blur(20px) saturate(180%);
+border: 1px solid rgba(255, 107, 53, 0.2);
+box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.1);
 }
-.chat-body {
-max-height: 300px;
-overflow-y: auto;
-padding: 1rem;
+.glass-card{
+background: linear-gradient(145deg, rgba(45, 45, 45, 0.85), rgba(26, 26, 26, 0.95));
+backdrop-filter: blur(20px) saturate(180%);
+border: 1px solid rgba(255, 255, 255, 0.08);
+border-radius: 24px;
+transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+position: relative;
+overflow: hidden;
 }
-.chat-message {
-margin-bottom: 1rem;
+.glass-card:hover{
+border-color: rgba(255, 107, 53, 0.4);
+transform: translateY(-4px);
+box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 30px rgba(255, 107, 53, 0.15);
+}
+.glow-text{
+text-shadow: 0 0 30px rgba(255, 107, 53, 0.7), 0 0 60px rgba(247, 147, 30, 0.4), 0 0 90px rgba(255, 107, 53, 0.2);
+letter-spacing:-0.02em;
+}
+.gradient-text{
+background: var(--gradient-primary);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+background-size: 200% auto;
+animation: shimmer 3s linear infinite;
+}
+.pulse-glow{
+animation: pulse-glow 3s ease-in-out infinite;
+}
+@keyframes pulse-glow{
+0%, 100%{opacity: 1; box-shadow: 0 0 20px rgba(255, 107, 53, 0.4);}
+50%{opacity: 0.85; box-shadow: 0 0 50px rgba(255, 107, 53, 0.8);}
+}
+.fade-in-up{
+opacity: 0;
+transform: translateY(40px);
+animation: fadeInUp 1s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+@keyframes fadeInUp{
+to{opacity: 1; transform: translateY(0);}
+}
+.parallax-image{
+transition: transform 0.5s ease-out;
+will-change: transform;
+filter: brightness(0.85) contrast(1.15);
+}
+.parallax-bg{
+animation: subtle-move 30s ease-in-out infinite alternate;
+}
+@keyframes subtle-move{
+0%{transform: translate(0, 0) scale(1.05);}
+50%{transform: translate(5%, 3%) scale(1.1);}
+100%{transform: translate(0, 0) scale(1.05);}
+}
+.input-modern{
+background: rgba(26, 26, 26, 0.85);
+border: 2px solid rgba(255, 255, 255, 0.12);
+border-radius: 16px;
+transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+color:#fff;
+position: relative;
+width: 100%;
+-webkit-appearance: none;
+appearance: none;
+font-family: 'Manrope', sans-serif;
+font-size: 0.9rem;
+}
+.input-modern:focus{
+border-color:#FF6B35;
+box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.2), 0 0 30px rgba(255, 107, 53, 0.2);
+outline: none;
+background: rgba(26, 26, 26, 0.95);
+}
+.input-modern::placeholder{
+color: rgba(226, 232, 240, 0.4);
+}
+.input-modern option{
+background: #1A1A1A;
+color: #E2E8F0;
 padding: 0.5rem;
-border-radius: 4px;
 }
-.chat-message.user {
-background-color: var(--light-color);
-text-align: right;
+.input-modern:focus::placeholder{
+color: rgba(255, 107, 53, 0.5);
 }
-.chat-message.bot {
-background-color: #f1f1f1;
-text-align: left;
-}
-.chat-input {
-display: flex;
-padding: 1rem;
-border-top: 1px solid #eee;
-}
-.chat-input input {
-flex: 1;
-padding: 0.5rem;
-border: 1px solid #ddd;
-border-radius: 4px 0 0 4px;
-}
-.chat-input button {
-padding: 0.5rem 1rem;
-background-color: var(--primary-color);
-color: white;
+.btn-primary{
+background: var(--gradient-primary);
+color:#fff;
+font-weight: 700;
+letter-spacing: 0.02em;
+position: relative;
+overflow: hidden;
+transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
 border: none;
-border-radius: 0 4px 4px 0;
 cursor: pointer;
 }
-.admin-panel {
-display: none;
-position: fixed;
+.btn-primary::before{
+content:'';
+position: absolute;
 top: 50%;
 left: 50%;
-transform: translate(-50%, -50%);
-background: white;
-padding: 2rem;
-box-shadow: 0 0 20px rgba(0,0,0,0.3);
-z-index: 1000;
-width: 90%;
-max-width: 800px;
-max-height: 90vh;
-overflow-y: auto;
-border-radius: 8px;
-}
-.admin-panel h3 {
-color: var(--primary-color);
-margin-bottom: 1.5rem;
-text-align: center;
-}
-.admin-form {
-display: grid;
-gap: 1rem;
-}
-.admin-form label {
-font-weight: bold;
-color: var(--dark-color);
-}
-.admin-form input,
-.admin-form select,
-.admin-form textarea {
-padding: 0.8rem;
-border: 1px solid #ddd;
-border-radius: 4px;
-font-family: inherit;
-}
-.admin-form button {
-padding: 0.8rem;
-background-color: var(--primary-color);
-color: white;
-border: none;
-border-radius: 4px;
-cursor: pointer;
-font-weight: bold;
-transition: background 0.3s;
-}
-.admin-form button:hover {
-background-color: #d35400;
-}
-.close-admin {
-position: absolute;
-top: 1rem;
-right: 1rem;
-background: none;
-border: none;
-font-size: 1.5rem;
-cursor: pointer;
-color: #666;
-}
-.image-preview {
-max-width: 150px;
-max-height: 150px;
-margin-top: 0.5rem;
-display: block;
-}
-.product-list {
-margin-top: 2rem;
-}
-.product-item {
-display: flex;
-justify-content: space-between;
-align-items: center;
-padding: 1rem;
-border-bottom: 1px solid #eee;
-}
-.product-item button {
-margin-left: 1rem;
-}
-.offer-form {
-margin-top: 2rem;
-border-top: 1px solid #eee;
-padding-top: 1rem;
-}
-@media (max-width: 768px) {
-.instagram-top-banner {
-  flex-direction: column;
-  padding: 0.6rem;
-}
-.instagram-top-banner span {
-  font-size: 0.9rem;
-}
-.btn-instagram-micro {
-  padding: 0.4rem 1rem;
-  font-size: 0.9rem;
-}
-.hero h1 {
-font-size: 2rem;
-}
-.hero p {
-font-size: 1rem;
-}
-.section {
-padding: 2rem 1rem;
-}
-.product {
-flex-direction: column;
-align-items: flex-start;
-}
-.product-price {
-margin-left: 0;
-margin-top: 0.5rem;
-}
-.product-image {
-margin-left: 0;
-margin-top: 1rem;
-}
-.add-to-cart {
-margin-left: 0;
-margin-top: 0.5rem;
-}
-.chat-widget {
-width: 90%;
-bottom: 90px;
-right: 10px;
-}
-.assistant-float {
-bottom: 90px;
-right: 10px;
-}
-.assistant-tooltip {
-right: 10px;
-}
-}
-.category-arrow {
-transition: transform 0.3s;
-}
-.category-header.active .category-arrow {
-transform: rotate(90deg);
-}
-.modal {
-display: none;
-position: fixed;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-background-color: rgba(0,0,0,0.7);
-z-index: 999;
-justify-content: center;
-align-items: center;
-}
-.modal-content {
-background-color: white;
-padding: 2rem;
-border-radius: 8px;
-max-width: 500px;
-width: 90%;
-text-align: center;
-}
-.modal h3 {
-margin-bottom: 1rem;
-color: var(--primary-color);
-}
-.modal input {
-width: 100%;
-padding: 0.8rem;
-margin-bottom: 1rem;
-border: 1px solid #ddd;
-border-radius: 4px;
-}
-.modal button {
-margin-top: 1rem;
-}
-.animate-text {
-opacity: 0;
-transform: translateY(20px);
-animation: slideIn 1s ease-out forwards;
-}
-@keyframes slideIn {
-to {
-opacity: 1;
-transform: translateY(0);
-}
-}
-/* Estilos adicionales para el modal de postre */
-.dessert-modal {
-display: none;
-position: fixed;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-background-color: rgba(0,0,0,0.7);
-z-index: 1000;
-justify-content: center;
-align-items: center;
-}
-.dessert-content {
-background-color: white;
-padding: 2rem;
-border-radius: 12px;
-max-width: 500px;
-width: 90%;
-text-align: center;
-box-shadow: var(--shadow);
-}
-.dessert-options {
-display: flex;
-flex-direction: column;
-gap: 1rem;
-margin-top: 1.5rem;
-}
-.dessert-btn {
-background-color: var(--primary-color);
-color: white;
-padding: 1rem;
-border-radius: 8px;
-border: none;
-cursor: pointer;
-font-weight: bold;
-transition: all 0.3s;
-}
-.dessert-btn:hover {
-background-color: #d35400;
-}
-.no-thanks {
-background-color: #ccc;
-margin-top: 1rem;
-}
-.no-thanks:hover {
-background-color: #aaa;
-}
-/* Indicador de stock bajo */
-.stock-low {
-color: #e74c3c;
-font-size: 0.8rem;
-font-weight: bold;
-}
-/* Badge de disponibilidad */
-.availability-badge {
-display: inline-block;
-padding: 0.2rem 0.5rem;
-border-radius: 4px;
-font-size: 0.75rem;
-font-weight: bold;
-margin-left: 0.5rem;
-}
-.availability-badge.in-stock {
-background-color: #27ae60;
-color: white;
-}
-.availability-badge.out-stock {
-background-color: #e74c3c;
-color: white;
-}
-.availability-badge.low-stock {
-background-color: #f39c12;
-color: white;
-}
-/* Video container styles */
-.video-container {
-position: relative;
-padding-bottom: 56.25%;
+width: 0;
 height: 0;
-overflow: hidden;
-max-width: 100%;
-background: #000;
-border-radius: 12px;
-box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-margin: 2rem 0;
+border-radius: 50%;
+background: rgba(255,255,255,0.3);
+transform: translate(-50%, -50%);
+transition: width 0.6s, height 0.6s;
+pointer-events: none;
 }
-.video-container iframe {
+.btn-primary:hover::before{
+width: 300px;
+height: 300px;
+}
+.btn-primary:hover{
+transform: translateY(-4px) scale(1.02);
+box-shadow: 0 20px 50px rgba(255, 107, 53, 0.5), 0 0 40px rgba(255, 107, 53, 0.4);
+}
+.btn-outline{
+background: transparent;
+border: 2px solid rgba(255, 255, 255, 0.25);
+color:#fff;
+font-weight: 600;
+transition: all 0.4s ease;
+position: relative;
+overflow: hidden;
+}
+.btn-outline:hover{
+border-color:#FF6B35;
+background: rgba(255, 107, 53, 0.1);
+transform: translateY(-4px);
+box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+}
+.btn-review{
+background: linear-gradient(135deg,#FFD700 0%,#FFA500 50%,#FF8C00 100%);
+color:#0A0A0A;
+font-weight: 700;
+letter-spacing: 0.02em;
+position: relative;
+overflow: hidden;
+transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+border: none;
+cursor: pointer;
+}
+.btn-review:hover{
+transform: translateY(-4px) scale(1.02);
+box-shadow: 0 20px 50px rgba(255, 215, 0, 0.5), 0 0 40px rgba(255, 165, 0, 0.4);
+}
+::-webkit-scrollbar{width: 10px; height: 10px;}
+::-webkit-scrollbar-track{background: rgba(26, 26, 26, 0.6);border-radius: 8px;}
+::-webkit-scrollbar-thumb{background: linear-gradient(180deg,#FF6B35,#F7931E);border-radius: 8px;border: 2px solid transparent;background-clip: content-box;}
+@media(max-width: 640px){
+.text-5xl{font-size: 2.25rem; line-height: 1.15;}
+.text-7xl{font-size: 2.75rem; line-height: 1.1;}
+h1{font-size: 2.3rem;}
+.container{padding-left: 1.25rem; padding-right: 1.25rem;}
+}
+@media(max-width: 475px){
+.text-3xl{font-size: 1.75rem;}
+.py-24{padding-top: 3.5rem; padding-bottom: 3.5rem;}
+.glass-card{border-radius: 18px;}
+}
+.status-dot{position: relative;}
+.status-dot::after{
+content:'';position: absolute;top:-2px; left:-2px; right:-2px; bottom:-2px;
+border-radius: 50%;background: inherit;filter: blur(6px);opacity: 0.7;animation: pulse 2s infinite;
+}
+.particles{
+position: absolute;top: 0; left: 0; right: 0; bottom: 0;
+pointer-events: none;overflow: hidden;z-index: 0;
+}
+.particle{
+position: absolute;width: 4px; height: 4px;
+background: rgba(255, 107, 53, 0.7);border-radius: 50%;
+animation: float-particle 20s infinite linear;opacity: 0.6;
+box-shadow: 0 0 10px rgba(255, 107, 53, 0.5);
+}
+@keyframes float-particle{
+0%{transform: translateY(100vh) translateX(0); opacity: 0;}
+10%{opacity: 0.8;}
+90%{opacity: 0.8;}
+100%{transform: translateY(-20px) translateX(100px); opacity: 0;}
+}
+.label-below{
+display: block;
+margin-top: 0.5rem;
+margin-left: 0.25rem;
+font-size: 0.75rem;
+font-weight: 600;
+color: #FF6B35;
+text-transform: uppercase;
+letter-spacing: 0.08em;
+}
+.navbar-logo{
+height: 70px;
+width: 70px;
+object-fit: cover;
+border-radius: 50%;
+border: 3px solid #FF6B35;
+box-shadow: 0 0 25px rgba(255, 107, 53, 0.6), inset 0 0 20px rgba(255, 107, 53, 0.2);
+transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+position: relative;
+}
+.navbar-logo:hover{
+transform: scale(1.15);
+box-shadow: 0 0 40px rgba(255, 107, 53, 0.9), inset 0 0 30px rgba(255, 107, 53, 0.3);
+}
+
+/* ============================== */
+/* HERO LOGO - EFECTO FUEGO GRADUAL */
+/* ============================== */
+.hero-logo{
+height: 12rem;
+width: 12rem;
+object-fit: cover;
+border-radius: 50%;
+border: 5px solid #FF6B35;
+box-shadow: 0 0 40px rgba(255, 107, 53, 0.5), 0 0 80px rgba(255, 107, 53, 0.3), inset 0 0 30px rgba(255, 107, 53, 0.15);
+transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+display: block;
+margin: 0 auto;
+position: relative;
+overflow: hidden;
+background: #0A0A0A;
+}
+.hero-logo::before{
+content:'';
 position: absolute;
-top: 0;
-left: 0;
+top: 0;left: 0;right: 0;
+height: 55%;
+background: linear-gradient(180deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.15) 25%, rgba(255,255,255,0.03) 50%, transparent 100%);
+border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%;
+opacity: 0.7;
+pointer-events: none;
+z-index: 2;
+}
+.hero-logo::after{
+content:'';
+position: absolute;
+inset: -8px;
+border-radius: 50%;
+border: 2px solid rgba(255, 107, 53, 0.25);
+animation: rotate 10s linear infinite;
+pointer-events: none;
+z-index: 3;
+}
+.hero-logo .shine-effect{
+position: absolute;
+top: 0;left: -100%;
+width: 100%;height: 100%;
+background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.35) 50%, transparent 100%);
+transition: left 0.8s ease;
+pointer-events: none;
+z-index: 4;
+}
+.hero-logo:hover .shine-effect{
+left: 100%;
+}
+
+/* EFECTO FUEGO CON DESVANECIMIENTO GRADUAL */
+.fire-ring{
+position: absolute;
+inset: -14px;
+border-radius: 50%;
+pointer-events: none;
+z-index: 1;
+opacity: 0;
+transition: opacity 1s ease;
+}
+.fire-ring.active{
+opacity: 1;
+}
+.fire-ring.fading{
+animation: fade-fire 5s ease-out forwards;
+}
+@keyframes fade-fire{
+0%{opacity: 1;}
+20%{opacity: 0.8;}
+40%{opacity: 0.6;}
+60%{opacity: 0.4;}
+80%{opacity: 0.2;}
+100%{opacity: 0;}
+}
+/* Llamas ascendentes */
+.fire-ring .flame{
+position: absolute;
+bottom: -4px;
 width: 100%;
 height: 100%;
-border: 0;
+pointer-events: none;
+}
+.fire-ring .flame::before{
+content: '';
+position: absolute;
+bottom: -12px;
+left: 50%;
+transform: translateX(-50%);
+width: 85%;
+height: 70%;
+background: radial-gradient(ellipse at center bottom, 
+  rgba(255,215,0,0.9) 0%, 
+  rgba(255,107,53,0.8) 25%, 
+  rgba(255,69,0,0.6) 50%, 
+  rgba(255,0,0,0.3) 75%, 
+  transparent 100%);
+filter: blur(6px);
+animation: flames-rise 1.5s ease-in-out infinite alternate;
+border-radius: 50% 50% 30% 30%;
+}
+.fire-ring .flame::after{
+content: '';
+position: absolute;
+bottom: -8px;
+left: 50%;
+transform: translateX(-50%);
+width: 90%;
+height: 55%;
+background: radial-gradient(ellipse at center bottom,
+  rgba(255,255,200,0.95) 0%,
+  rgba(255,200,50,0.7) 20%,
+  rgba(255,107,53,0.5) 50%,
+  transparent 80%);
+filter: blur(4px);
+animation: flames-rise 1s ease-in-out infinite alternate-reverse;
+border-radius: 50% 50% 30% 30%;
+}
+/* Partículas de chispas */
+.fire-ring .spark{
+position: absolute;
+width: 3px;
+height: 3px;
+background: #FFD700;
+border-radius: 50%;
+box-shadow: 0 0 6px 2px rgba(255,165,0,0.8);
+opacity: 0;
+}
+.fire-ring.active .spark{
+animation: spark-rise 2s ease-out infinite;
+}
+.fire-ring .spark:nth-child(1){ left: 20%; animation-delay: 0s; }
+.fire-ring .spark:nth-child(2){ left: 40%; animation-delay: 0.4s; }
+.fire-ring .spark:nth-child(3){ left: 60%; animation-delay: 0.8s; }
+.fire-ring .spark:nth-child(4){ left: 80%; animation-delay: 1.2s; }
+.fire-ring .spark:nth-child(5){ left: 30%; animation-delay: 0.6s; }
+.fire-ring .spark:nth-child(6){ left: 50%; animation-delay: 1s; }
+.fire-ring .spark:nth-child(7){ left: 70%; animation-delay: 1.4s; }
+.fire-ring .spark:nth-child(8){ left: 15%; animation-delay: 0.3s; }
+
+@keyframes flames-rise{
+0%{transform: translateX(-50%) scaleY(1); opacity: 0.8;}
+100%{transform: translateX(-50%) scaleY(1.3); opacity: 1;}
+}
+@keyframes spark-rise{
+0%{
+bottom: 0;
+opacity: 0;
+transform: translateX(0) scale(1);
+}
+20%{
+opacity: 1;
+}
+100%{
+bottom: 160px;
+opacity: 0;
+transform: translateX(calc((var(--spark-x, 0)) * 1px)) scale(0.2);
+}
+}
+/* Efecto de resplandor pulsante */
+.fire-ring .glow-pulse{
+position: absolute;
+inset: -20px;
+border-radius: 50%;
+background: radial-gradient(circle, rgba(255,69,0,0.3) 0%, rgba(255,107,53,0.1) 40%, transparent 70%);
+animation: glow-pulse 2s ease-in-out infinite;
+pointer-events: none;
+}
+@keyframes glow-pulse{
+0%, 100%{transform: scale(1); opacity: 0.6;}
+50%{transform: scale(1.15); opacity: 1;}
+}
+
+.hero-logo:hover{
+transform: scale(1.08);
+box-shadow: 0 0 80px rgba(255, 107, 53, 0.8), 0 0 120px rgba(255, 107, 53, 0.5), inset 0 0 50px rgba(255, 107, 53, 0.3);
+}
+
+.hero-logo-wrapper{
+display: flex;
+justify-content: center;
+align-items: center;
+width: fit-content;
+margin: 0 auto;
+padding: 0.75rem;
+position: relative;
+z-index: 10;
+}
+.hero-logo-inner{
+position: relative;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+@keyframes rotate{
+from{transform: rotate(0deg);}
+to{transform: rotate(360deg);}
+}
+@media(max-width: 768px){
+.navbar-logo{height: 55px; width: 55px;}
+.hero-logo{height: 8rem; width: 8rem;}
+.hero-logo-wrapper{padding: 0.5rem;}
+}
+.navbar-clock{
+font-family: 'Space Grotesk', monospace;
+font-weight: 700;
+font-size: 1.15rem;
+color: #FF6B35;
+text-shadow: 0 0 15px rgba(255, 107, 53, 0.7), 0 0 30px rgba(255, 107, 53, 0.4);
+letter-spacing: 0.1em;
+background: rgba(255, 107, 53, 0.1);
+border: 2px solid rgba(255, 107, 53, 0.35);
+padding: 0.3rem 0.9rem;
+border-radius: 10px;
+backdrop-filter: blur(10px);
+box-shadow: 0 0 20px rgba(255, 107, 53, 0.25), inset 0 0 15px rgba(255, 107, 53, 0.08);
+animation: clock-pulse 2s ease-in-out infinite;
+white-space: nowrap;
+display: flex;
+align-items: center;
+gap: 0.4rem;
+}
+.navbar-clock i{font-size: 0.95rem;}
+@keyframes clock-pulse{
+0%, 100%{box-shadow: 0 0 20px rgba(255, 107, 53, 0.25), inset 0 0 15px rgba(255, 107, 53, 0.08);}
+50%{box-shadow: 0 0 35px rgba(255, 107, 53, 0.45), inset 0 0 25px rgba(255, 107, 53, 0.15);}
+}
+@media(max-width: 768px){
+.navbar-clock{font-size: 0.95rem; padding: 0.25rem 0.7rem;}
+}
+.social-btn{
+display: inline-flex;align-items: center;justify-content: center;
+width: 50px;height: 50px;border-radius: 50%;
+background: rgba(255, 255, 255, 0.05);border: 2px solid rgba(255, 255, 255, 0.15);
+color: #fff;font-size: 1.4rem;
+transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);position: relative;overflow: hidden;
+}
+.social-btn:hover{
+transform: translateY(-5px) scale(1.1);box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+.social-btn.whatsapp:hover{background: #25D366;border-color: transparent;}
+.badge-animated{position: relative;animation: badge-pulse 2s ease-in-out infinite;}
+@keyframes badge-pulse{0%, 100%{transform: scale(1);}50%{transform: scale(1.05);}}
+
+/* Select wrapper para flecha personalizada */
+.select-wrapper{position: relative;}
+.select-wrapper::after{
+content:'';position: absolute;right: 1rem;top: 50%;transform: translateY(-50%);
+width: 0;height: 0;border-left: 5px solid transparent;border-right: 5px solid transparent;
+border-top: 6px solid #FF6B35;pointer-events: none;z-index: 5;
+}
+.select-wrapper select{padding-right: 2.5rem;}
+
+/* Estilos para el formulario - inputs funcionales */
+.form-field{
+position: relative;
+margin-bottom: 0;
+}
+.form-field .field-label{
+display: block;
+font-size: 0.7rem;
+font-weight: 700;
+color: #FF6B35;
+text-transform: uppercase;
+letter-spacing: 0.1em;
+margin-bottom: 0.4rem;
+}
+.form-field .field-input{
+width: 100%;
+background: rgba(26, 26, 26, 0.85);
+border: 2px solid rgba(255, 255, 255, 0.12);
+border-radius: 14px;
+padding: 0.9rem 1rem;
+color: #E2E8F0;
+font-size: 0.9rem;
+font-family: 'Manrope', sans-serif;
+transition: all 0.3s ease;
+outline: none;
+-webkit-appearance: none;
+appearance: none;
+}
+.form-field .field-input::placeholder{
+color: rgba(226, 232, 240, 0.35);
+}
+.form-field .field-input:focus{
+border-color: #FF6B35;
+box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.15), 0 0 20px rgba(255, 107, 53, 0.1);
+background: rgba(26, 26, 26, 0.95);
+}
+.form-field .field-input:focus::placeholder{
+color: rgba(255, 107, 53, 0.4);
+}
+.form-field select.field-input{
+cursor: pointer;
+background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23FF6B35' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+background-repeat: no-repeat;
+background-position: right 1rem center;
+background-size: 12px;
+padding-right: 2.5rem;
+}
+.form-field select.field-input option{
+background: #1A1A1A;
+color: #E2E8F0;
+padding: 0.5rem;
+}
+.form-field textarea.field-input{
+resize: vertical;
+min-height: 80px;
+}
+.form-field .field-input.has-value{
+border-color: rgba(255, 107, 53, 0.5);
+}
+
+/* ✅ Banner Automático Taller - VELOCIDAD REDUCIDA */
+.banner {
+  width: 100%;
+  background: #111;
+  color: #fff;
+  font-size: 1.2em;
+  font-weight: bold;
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 12px 0;
+  border-top: 3px solid #FF6B35;
+  border-bottom: 3px solid #FF6B35;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
+.banner-track {
+  display: inline-block;
+  padding-left: 100%;
+  animation: scroll-banner 50s linear infinite;
+}
+.banner-track span {
+  margin: 0 50px;
+}
+@keyframes scroll-banner {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+@media(max-width: 640px){
+  .banner { font-size: 0.9em; padding: 10px 0; }
+  .banner-track span { margin: 0 25px; }
+}
+
+/* 🔥 HOVER TEXT PARA BOTONES FLOTANTES */
+@media(min-width: 768px){
+  .floating-btn-label{
+    display: none;
+    opacity: 0;
+    transform: translateX(8px);
+    transition: all 0.25s ease;
+    font-weight: 600;
+    white-space: nowrap;
+    font-size: 0.85rem;
+  }
+  .group:hover .floating-btn-label{
+    display: inline;
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 </style>
-<script>
-const cacheBuster = `?v=${new Date().getTime()}`;
-const scripts = [
-"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js",
-"https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js",
-"https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"
-];
-scripts.forEach(src => document.write(`<script src="${src}${cacheBuster}"><\/script>`));
-</script>
 </head>
-<body>
+<body class="antialiased relative">
 
-<!-- 🔹 Banner superior persuasivo de Instagram -->
-<div class="instagram-top-banner">
-  <span>📸 ¡Síguenos en Instagram para ver nuestras delicias caseras y promociones exclusivas! ✨</span>
-  <a href="https://www.instagram.com/todocasero.rotiseria_/" target="_blank" class="btn-instagram-micro" aria-label="Seguir en Instagram">
-    <i class="fab fa-instagram"></i> Ver Nuestro Instagram
-  </a>
+<!-- ✅ Banner Automático Taller -->
+<div class="banner">
+  <div class="banner-track">
+    <span>🧼 Limpieza de inyectores cada 6 meses = motor más eficiente</span>
+    <span>🛢️ Aceite de calidad cada 10.000 km = vida útil prolongada</span>
+    <span>⛽ Usar nafta premium = más potencia, menos desgaste</span>
+    <span>✅ Tres simples hábitos = menos consumo, menos fallas, más años de motor</span>
+    <span>📲 ¡Sacá un turno, no lo dejes pasar! WhatsApp +59898680159</span>
+    <!-- Duplicado para loop continuo -->
+    <span>🧼 Limpieza de inyectores cada 6 meses = motor más eficiente</span>
+    <span>🛢️ Aceite de calidad cada 10.000 km = vida útil prolongada</span>
+    <span>⛽ Usar nafta premium = más potencia, menos desgaste</span>
+    <span>✅ Tres simples hábitos = menos consumo, menos fallas, más años de motor</span>
+    <span>📲 ¡Sacá un turno, no lo dejes pasar! WhatsApp +59898680159</span>
+  </div>
 </div>
 
-<header>
-<div class="logo">Todo Casero</div>
-<div class="tagline">Auténtica comida casera en Campana</div>
-<nav>
-<a href="#inicio">Inicio</a>
-<a href="#menu">Menú</a>
-<a href="#pedidos">Cómo Pedir</a>
-<a href="#contacto">Contacto</a>
-<a href="https://www.instagram.com/todocasero.rotiseria_/" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
-<a href="#" id="viewCart"><i class="fas fa-shopping-cart"></i> Carrito (<span id="cartCount">0</span>)</a>
+<!-- Partículas decorativas de fondo-->
+<div class="particles" id="particles"></div>
+
+<!-- NAVBAR - POSICIONADO DEBAJO DEL BANNER PARA NO SUPERPONERSE -->
+<nav class="fixed w-full z-50 top-[52px] glass border-b border-white/10 transition-all duration-300" id="navbar">
+<div class="container mx-auto px-4 h-16 md:h-20 flex items-center relative">
+<a href="#" class="flex items-center md:absolute md:left-4 md:translate-x-0">
+<img src="LOGOROMERO.png" alt="Romero Mecánica Integral Logo" class="navbar-logo">
+</a>
+<a href="#" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:static md:translate-x-0 md:translate-y-0 md:ml-auto md:mr-auto font-display font-bold text-lg sm:text-xl md:text-2xl gradient-text tracking-tight uppercase text-center md:text-left drop-shadow-lg">
+ROMERO MECÁNICA INTEGRAL
+</a>
+<div id="navbarClock" class="hidden md:flex items-center ml-4">
+<div class="navbar-clock">
+<i class="fa-regular fa-clock"></i>
+<span id="navbarClockTime">00:00:00</span>
+</div>
+</div>
+<div class="ml-auto flex items-center gap-3 md:gap-5">
+<div id="status-badge-desktop" class="hidden md:flex items-center px-3 py-1.5 md:px-4 md:py-2 rounded-full text-xs font-semibold uppercase tracking-wide bg-white/5 border border-white/10 hover:border-primary-orange/40 transition-all">
+<span id="status-dot-desktop" class="status-dot w-2 h-2 rounded-full mr-2.5 bg-gray-500"></span>
+<span id="status-text-desktop" class="text-gray-300">Verificando...</span>
+</div>
+<div class="hidden md:flex items-center gap-3 lg:gap-5">
+<a href="#asesoramiento" class="text-gray-300 hover:text-primary-orange transition text-sm lg:text-base font-medium relative group">
+Asesoramiento
+<span class="absolute bottom-1 left-0 w-0 h-0.5 bg-primary-orange transition-all group-hover:w-full"></span>
+</a>
+<a href="#diagnostico" class="btn-primary px-4 lg:px-6 py-2 lg:py-2.5 rounded-xl font-bold transition shadow-neon uppercase text-xs lg:text-sm tracking-wide">
+Pre-Diagnóstico
+</a>
+</div>
+</div>
+</div>
+<div id="status-bar-mobile" class="md:hidden w-full py-2 text-center text-xs font-bold uppercase bg-gray-900/80 border-t border-white/10 flex items-center justify-center gap-2">
+<span id="navbarClockTimeMobile" style="font-family:'Space Grotesk',monospace;color:#FF6B35;text-shadow:0 0 10px rgba(255,107,53,0.6);">00:00:00</span>
+<span>|</span>
+<span>Verificando estado...</span>
+</div>
 </nav>
+
+<!-- Botones flotantes premium -->
+<div class="fixed bottom-24 md:bottom-8 right-4 z-50 animate-float flex flex-col gap-3">
+<a href="https://api.whatsapp.com/send?phone=59898680159" target="_blank" rel="noopener noreferrer"
+class="bg-[#25D366] hover:bg-[#128C7E] text-white p-3.5 md:p-4 rounded-full shadow-lg transition-all hover:scale-110 flex items-center justify-center gap-2 group"
+title="Chat directo por WhatsApp" style="animation: float 6s ease-in-out infinite;">
+<i class="fa-brands fa-whatsapp text-2xl md:text-3xl"></i>
+<span class="hidden lg:inline text-xs font-bold whitespace-nowrap">Chat</span>
+</a>
+<a href="#diagnostico" class="btn-primary px-5 py-3 md:px-7 md:py-3.5 rounded-2xl shadow-neon transition flex items-center gap-2.5 hover:shadow-glow text-sm font-semibold group">
+<i class="fa-solid fa-calendar-check text-lg"></i>
+<span class="floating-btn-label">Pedir Turno</span>
+<i class="fa-solid fa-arrow-right ml-1 group-hover:translate-x-1 transition-transform"></i>
+</a>
+<a href="https://maps.app.goo.gl/yiAsXENC2p94CAsE9" target="_blank" rel="noopener noreferrer" class="btn-review px-4 py-2.5 md:px-5 md:py-3 rounded-xl shadow-lg transition flex items-center gap-2 text-xs md:text-sm font-semibold group animate-float" style="animation-delay: 0.5s;">
+<i class="fa-solid fa-star text-lg"></i>
+<span class="floating-btn-label">Deja tu Reseña</span>
+</a>
+</div>
+
+<!-- HERO SECTION - PADDING AJUSTADO PARA NO SUPERPONERSE CON BANNER + NAVBAR -->
+<header class="relative pt-44 md:pt-52 lg:pt-56 pb-20 md:pt-56 md:pb-32 lg:pt-60 lg:pb-40 min-h-screen flex items-center overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-br from-primary-dark via-[#0D0D0D] to-[#0A0A0A]">
+<div class="absolute inset-0 opacity-40" style="background-image: radial-gradient(circle at 20% 35%, rgba(255,107,53, 0.2) 0%, transparent 40%), radial-gradient(circle at 80% 70%, rgba(247,147,30, 0.15) 0%, transparent 45%)"></div>
+</div>
+<div id="parallax-container" class="absolute inset-0 overflow-hidden">
+<img id="parallax-img" src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1974&auto=format&fit=crop" alt="Taller mecánico profesional" class="parallax-image w-full h-full object-cover opacity-70 parallax-bg">
+<div class="absolute inset-0 bg-gradient-to-t from-primary-dark via-primary-dark/70 to-transparent"></div>
+</div>
+<div class="container mx-auto px-4 md:px-6 relative z-10">
+<div class="max-w-4xl mx-auto text-center space-y-6 md:space-y-8">
+<div class="fade-in-up badge-animated" style="animation-delay: 0.1s;">
+<div class="inline-flex items-center gap-2 bg-primary-orange/20 border border-primary-orange/40 text-primary-orange px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider backdrop-blur-sm shadow-lg">
+<i class="fa-solid fa-microchip"></i> <span>Diagnóstico de Precisión</span>
+</div>
+</div>
+<h1 class="font-display font-black text-4xl md:text-5xl lg:text-7xl leading-tight glow-text main-title fade-in-up" style="animation-delay: 0.2s;">
+ROMERO MECÁNICA<br><span class="gradient-text">INTEGRAL</span>
+</h1>
+<!-- LOGO CIRCULAR INFERIOR -->
+<div class="hero-logo-wrapper fade-in-up" style="animation-delay: 0.25s;">
+<div class="hero-logo-inner">
+<img src="LOGOROMERO.png" alt="Romero Mecánica Integral Logo" class="hero-logo" id="heroLogo">
+<div class="shine-effect"></div>
+<!-- EFECTO FUEGO -->
+<div class="fire-ring" id="fireRing">
+<div class="glow-pulse"></div>
+<div class="flame"></div>
+<div class="spark" style="--spark-x: -20;"></div>
+<div class="spark" style="--spark-x: 15;"></div>
+<div class="spark" style="--spark-x: -10;"></div>
+<div class="spark" style="--spark-x: 25;"></div>
+<div class="spark" style="--spark-x: 5;"></div>
+<div class="spark" style="--spark-x: -30;"></div>
+<div class="spark" style="--spark-x: 20;"></div>
+<div class="spark" style="--spark-x: -5;"></div>
+</div>
+</div>
+</div>
+<p class="text-gray-300/90 text-base md:text-lg max-w-3xl mx-auto description-text fade-in-up leading-relaxed" style="animation-delay: 0.3s;">
+En Romero Mecánica Integral, entendemos que tu auto es una inversión importante y tu seguridad es primordial. Somos un taller de reparación de automóviles con años de experiencia en Paysandú, Uruguay, dedicados a brindarte un servicio de calidad, confiable y transparente. Nos especializamos en mantener tu vehículo en óptimas condiciones para que disfrutes de cada viaje con total tranquilidad.
+</p>
+<div class="grid grid-cols-3 gap-3 md:gap-5 pt-2 md:pt-4 fade-in-up" style="animation-delay: 0.5s;">
+<div class="text-center p-4 rounded-2xl bg-white/5 border border-white/10 transition">
+<span class="block text-2xl md:text-3xl font-bold gradient-text"><span id="counter1" data-target="99">0</span>%</span>
+<span class="text-xs text-gray-400 mt-1 block">Precisión</span>
+</div>
+<div class="text-center p-4 rounded-2xl bg-white/5 border border-white/10 transition">
+<span class="block text-2xl md:text-3xl font-bold gradient-text"><span id="counter2" data-target="50">0</span>min</span>
+<span class="text-xs text-gray-400 mt-1 block">Ahorro</span>
+</div>
+<div class="text-center p-4 rounded-2xl bg-white/5 border border-white/10 transition">
+<span class="block text-2xl md:text-3xl font-bold gradient-text"><span id="counter3" data-target="8000">0</span>+</span>
+<span class="text-xs text-gray-400 mt-1 block">Vehículos</span>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row gap-3.5 pt-2 justify-center fade-in-up" style="animation-delay: 0.6s;">
+<a href="#diagnostico" class="btn-primary px-6 py-3.5 rounded-xl uppercase tracking-wide flex items-center justify-center gap-2.5 group text-sm font-semibold shadow-neon">
+<span>Iniciar Diagnóstico</span> <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+</a>
+<a href="#asesoramiento" class="btn-outline px-6 py-3.5 rounded-xl uppercase tracking-wide flex items-center justify-center gap-2 text-sm font-semibold">
+<i class="fa-solid fa-book-open text-primary-orange"></i> <span>Guías Técnicas</span>
+</a>
+</div>
+</div>
+</div>
 </header>
 
-<section class="hero" id="inicio">
-<div class="hero-content">
-<h1>Los sabores más caseros de Campana</h1>
-<p>Delicias recién hechas todos los días de 19:30 a 23:45</p>
-<a href="#menu" class="btn">Ver Menú</a>
-<a href="https://api.whatsapp.com/send?phone=543489358998&text=Hola%20Todo%20Casero!!!" class="btn btn-whatsapp">Chatear con María</a>
+<!-- SECCIÓN: CENTRO DE ASESORAMIENTO -->
+<section id="asesoramiento" class="py-16 md:py-24 bg-[#0D0D0D] relative">
+<div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(255,107,53,0.1),_transparent_60%)]"></div>
+<div class="container mx-auto px-4 relative z-10">
+<div class="text-center mb-14 md:mb-20 max-w-3xl mx-auto">
+<div class="inline-block bg-primary-orange/15 border border-primary-orange/30 text-primary-orange px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-5">
+<i class="fa-solid fa-lightbulb mr-1.5"></i> <span>Conocimiento Técnico</span>
+</div>
+<h2 class="font-display font-bold text-4xl md:text-5xl gradient-text uppercase mb-5 glow-text tracking-tight">Centro de Asesoramiento</h2>
+<p class="text-gray-400/90 max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
+Detecta fallas en etapas tempranas y evita reparaciones costosas. Aprende a identificar las señales clave de tu vehículo.
+</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-7">
+<div class="glass-card">
+<div class="relative h-44 md:h-48 overflow-hidden rounded-t-2xl">
+<img src="https://placehold.co/600x400/FF6B35/0A0A0A?text=FRENOS" alt="Sistema de frenos" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+<div class="absolute inset-0 bg-gradient-to-t from-primary-dark/90 to-transparent"></div>
+<div class="absolute bottom-3 left-4">
+<span class="text-xs font-bold text-primary-orange uppercase tracking-wider">Predictivo</span>
+</div>
+</div>
+<div class="p-5 md:p-6">
+<h3 class="font-bold text-lg md:text-xl text-white mb-2.5">Señales en Frenos</h3>
+<p class="text-gray-400/90 text-sm mb-4 leading-relaxed">Chillidos, vibración en pedal o recorrido excesivo: indicadores de desgaste en pastillas o aire en el circuito.</p>
+<a href="#diagnostico" class="text-primary-orange hover:text-orange-300 font-semibold text-sm flex items-center gap-1.5 group">
+<span>Analizar ahora</span>
+<i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+</a>
+</div>
+</div>
+<div class="glass-card">
+<div class="relative h-44 md:h-48 overflow-hidden rounded-t-2xl">
+<img src="https://placehold.co/600x400/2D2D2D/FF6B35?text=BATERIA" alt="Sistema eléctrico" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+<div class="absolute inset-0 bg-gradient-to-t from-primary-dark/90 to-transparent"></div>
+<div class="absolute bottom-3 left-4">
+<span class="text-xs font-bold text-primary-orange uppercase tracking-wider">Preventivo</span>
+</div>
+</div>
+<div class="p-5 md:p-6">
+<h3 class="font-bold text-lg md:text-xl text-white mb-2.5">Batería y Alternador</h3>
+<p class="text-gray-400/90 text-sm mb-4 leading-relaxed">Arranque lento, luces tenues o parpadeantes: verifica voltaje y estado de carga antes de una falla total.</p>
+<a href="#diagnostico" class="text-primary-orange hover:text-orange-300 font-semibold text-sm flex items-center gap-1.5 group">
+<span>Verificar sistema</span>
+<i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+</a>
+</div>
+</div>
+<div class="glass-card">
+<div class="relative h-44 md:h-48 overflow-hidden rounded-t-2xl">
+<img src="https://placehold.co/600x400/F7931E/0A0A0A?text=FLUIDOS" alt="Fluidos críticos" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+<div class="absolute inset-0 bg-gradient-to-t from-primary-dark/90 to-transparent"></div>
+<div class="absolute bottom-3 left-4">
+<span class="text-xs font-bold text-primary-orange uppercase tracking-wider">Mantenimiento</span>
+</div>
+</div>
+<div class="p-5 md:p-6">
+<h3 class="font-bold text-lg md:text-xl text-white mb-2.5">Fluidos Críticos</h3>
+<p class="text-gray-400/90 text-sm mb-4 leading-relaxed">Aceite, refrigerante y líquido de frenos: niveles bajos o cambios de color indican urgencia de revisión.</p>
+<a href="#diagnostico" class="text-primary-orange hover:text-orange-300 font-semibold text-sm flex items-center gap-1.5 group">
+<span>Revisar niveles</span>
+<i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+</a>
+</div>
+</div>
+</div>
+<div class="text-center mt-10 md:mt-14">
+<a href="#diagnostico" class="inline-flex items-center gap-2.5 bg-white/5 hover:bg-white/10 border border-white/15 hover:border-primary-orange/40 text-white font-bold py-3.5 px-7 md:px-9 rounded-2xl transition-all uppercase tracking-wide text-sm shadow-soft hover:shadow-neon">
+<i class="fa-solid fa-hand-pointer text-primary-orange"></i> <span>Iniciar Pre-Diagnóstico Ahora</span>
+</a>
+</div>
 </div>
 </section>
 
-<section class="section" id="menu">
-<h2 class="section-title">Nuestro Menú</h2>
-<div class="offer-banner" id="offerBanner">
-<h3>¡Ofertas Especiales!</h3>
-<p id="offerText"></p>
+<!-- SECCIÓN: SERVICIOS INTEGRALES -->
+<section class="py-16 md:py-24 bg-primary-dark relative">
+<div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 10% 20%, rgba(255,107,53, 0.08) 0%, transparent 25%), radial-gradient(circle at 90% 80%, rgba(247,147,30, 0.08) 0%, transparent 25%)"></div>
+<div class="container mx-auto px-4 relative z-10">
+<div class="text-center mb-14 md:mb-20">
+<div class="inline-block bg-primary-orange/15 border border-primary-orange/30 text-primary-orange px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-5">
+<i class="fa-solid fa-screwdriver-wrench mr-1.5"></i> <span>Soluciones Profesionales</span>
 </div>
-
-<!-- Combos Section -->
-<section id="combos" class="mb-12 bg-gradient-to-b from-gray-50 to-white relative before:absolute before:inset-0 before:bg-[url('image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMjBweCIgaGVpZ2h0PSIyMHB4IiB2aWV3Qm94PSIwIDAgMjAgMjAiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDIwIDIwIiB4bWw6c3BhY2U9InByZXNlcnZlIj48Y2lyY2xlIGZpbGw9IiNGRkZGRkYiIGN4PSIxMCIgY3k9IjEwIiByPSIxIi8+PC9zdmc+')] before:bg-[length:10px_10px] before:opacity-5">
-<h2 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-600 mb-6 text-center">🍔🍕Combos Deliciosos para 2 a 6 personas🍔🍕</h2>
-<div id="combosContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-<!-- Los combos se generarán aquí por JavaScript -->
+<h2 class="font-display font-bold text-4xl md:text-5xl text-white uppercase mb-4 glow-text tracking-tight"><span>Servicios</span><span class="gradient-text">Integrales</span></h2>
+<p class="text-gray-400/90 max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
+Tecnología avanzada y expertise técnico para mantener tu vehículo en condiciones óptimas de seguridad y rendimiento.
+</p>
 </div>
-</section>
-
-<div class="menu-section">
-<div id="categoriesContainer"></div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+<div class="glass-card p-6 md:p-7 group">
+<div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-orange/20 to-primary-orange/20 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+<i class="fa-solid fa-laptop-code text-2xl md:text-3xl text-primary-orange"></i>
 </div>
-</section>
-
-<section class="section" id="pedidos">
-<h2 class="section-title text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-600 mb-6 text-center opacity-0 transition-opacity duration-500" data-scroll-reveal>Cómo Hacer tu Pedido</h2>
-<div class="relative overflow-hidden mb-8">
-<div class="flex transition-transform duration-500 ease-in-out" id="carousel">
-<div class="min-w-full flex-shrink-0 bg-white rounded-xl shadow-md p-6 transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:border-orange-400 border-2 border-transparent text-center opacity-0 translate-y-10" data-scroll-reveal data-delay="0.1s">
-<i class="fas fa-utensils text-4xl text-orange-500 mb-4"></i>
-<h3 class="text-xl font-bold text-gray-800 mb-2">1. Elige tu comida</h3>
-<p class="text-gray-600 mb-4">Selecciona entre nuestra variedad de sándwiches, pizzas, pastas y más.</p>
+<h3 class="font-bold text-xl text-white mb-2.5">Diagnóstico Computarizado</h3>
+<p class="text-gray-400/90 text-sm leading-relaxed">Escaneo avanzado de ECU, sensores y sistemas electrónicos con equipos de última generación.</p>
 </div>
-<div class="min-w-full flex-shrink-0 bg-white rounded-xl shadow-md p-6 transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:border-orange-400 border-2 border-transparent text-center opacity-0 translate-y-10" data-scroll-reveal data-delay="0.2s">
-<i class="fas fa-comment text-4xl text-orange-500 mb-4"></i>
-<h3 class="text-xl font-bold text-gray-800 mb-2">2. Haz tu pedido</h3>
-<p class="text-gray-600 mb-4">Chatea con nuestra asistente María por WhatsApp al +54 348 9358998.</p>
+<div class="glass-card p-6 md:p-7 group">
+<div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-orange/20 to-primary-orange/20 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+<i class="fa-solid fa-circle-stop text-2xl md:text-3xl text-primary-orange"></i>
 </div>
-<div class="min-w-full flex-shrink-0 bg-white rounded-xl shadow-md p-6 transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:border-orange-400 border-2 border-transparent text-center opacity-0 translate-y-10" data-scroll-reveal data-delay="0.3s">
-<i class="fas fa-store text-4xl text-orange-500 mb-4"></i>
-<h3 class="text-xl font-bold text-gray-800 mb-2">3. Recoge en local</h3>
-<p class="text-gray-600 mb-4">Retira tu pedido en nuestro local en el horario acordado.</p>
+<h3 class="font-bold text-xl text-white mb-2.5">Sistema de Frenos</h3>
+<p class="text-gray-400/90 text-sm leading-relaxed">Revisión integral de ABS, pastillas, discos y líquido de frenos para máxima seguridad.</p>
 </div>
+<div class="glass-card p-6 md:p-7 group">
+<div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-orange/20 to-primary-orange/20 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+<i class="fa-solid fa-car-burst text-2xl md:text-3xl text-primary-orange"></i>
 </div>
-<button class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-orange-500 text-white p-2 rounded-full hover:bg-orange-600 transition-all" id="prevBtn">‹</button>
-<button class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-orange-500 text-white p-2 rounded-full hover:bg-orange-600 transition-all" id="nextBtn">›</button>
+<h3 class="font-bold text-xl text-white mb-2.5">Suspensión y Dirección</h3>
+<p class="text-gray-400/90 text-sm leading-relaxed">Amortiguadores, rótulas, alineación y balanceo para confort y estabilidad en ruta.</p>
 </div>
-
-<!-- VIDEO TUTORIAL DE YOUTUBE -->
-<div class="bg-white p-6 rounded-xl shadow-md border border-orange-100 animate-fade-in-up">
-    <h3 class="text-2xl font-bold text-center text-gray-800 mb-2">
-        🎬 ¿Prefieres ver cómo funciona?
-    </h3>
-    <p class="text-center text-gray-600 mb-6">Mira nuestra guía rápida paso a paso</p>
-    
-    <div class="video-container">
-        <iframe 
-            src="https://www.youtube.com/embed/Q01bNH6-CFk?start=56&rel=0&modestbranding=1" 
-            title="Video Tutorial Todo Casero - Cómo hacer tu pedido" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-            allowfullscreen
-            loading="lazy">
-        </iframe>
-    </div>
-    
-    <p class="text-center text-gray-500 mt-4 text-sm">
-        <i class="fas fa-play-circle text-orange-500 mr-2"></i>
-        Aprende a usar el carrito, chatear con María y retirar tu pedido.
-    </p>
+<div class="glass-card p-6 md:p-7 group">
+<div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-orange/20 to-primary-orange/20 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+<i class="fa-solid fa-bolt text-2xl md:text-3xl text-primary-orange"></i>
 </div>
-<!-- FIN VIDEO TUTORIAL -->
-
-</section>
-
-<section class="section" id="contacto">
-<h2 class="section-title text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-600 mb-6 text-center opacity-0 transition-opacity duration-500" data-scroll-reveal>Contacto</h2>
-<div class="relative overflow-hidden">
-<div class="flex transition-transform duration-500 ease-in-out" id="contactCarousel">
-<div class="min-w-full flex-shrink-0 bg-white rounded-xl shadow-md p-6 transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:border-orange-400 border-2 border-transparent text-center opacity-0 translate-y-10" data-scroll-reveal data-delay="0.1s">
-<i class="fas fa-map-marker-alt text-4xl text-orange-500 mb-4"></i>
-<h3 class="text-xl font-bold text-gray-800 mb-2">Ubicación</h3>
-<p class="text-gray-600 mb-4">Campana, Buenos Aires</p>
+<h3 class="font-bold text-xl text-white mb-2.5">Electricidad Automotriz</h3>
+<p class="text-gray-400/90 text-sm leading-relaxed">Diagnóstico de fallas eléctricas, baterías, alternadores y sistemas de iluminación.</p>
 </div>
-<div class="min-w-full flex-shrink-0 bg-white rounded-xl shadow-md p-6 transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:border-orange-400 border-2 border-transparent text-center opacity-0 translate-y-10" data-scroll-reveal data-delay="0.2s">
-<i class="fas fa-clock text-4xl text-orange-500 mb-4"></i>
-<h3 class="text-xl font-bold text-gray-800 mb-2">Horario</h3>
-<p class="text-gray-600 mb-4">Lunes a Domingo<br>19:30 - 23:45</p>
+<div class="glass-card p-6 md:p-7 group">
+<div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-orange/20 to-primary-orange/20 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+<i class="fa-solid fa-wrench text-2xl md:text-3xl text-primary-orange"></i>
 </div>
-<div class="min-w-full flex-shrink-0 bg-white rounded-xl shadow-md p-6 transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:border-orange-400 border-2 border-transparent text-center opacity-0 translate-y-10" data-scroll-reveal data-delay="0.3s">
-<i class="fab fa-whatsapp text-4xl text-orange-500 mb-4"></i>
-<h3 class="text-xl font-bold text-gray-800 mb-2">Teléfono</h3>
-<p class="text-gray-600 mb-4">+54 348 9358998</p>
+<h3 class="font-bold text-xl text-white mb-2.5">Mecánica Integral</h3>
+<p class="text-gray-400/90 text-sm leading-relaxed">Reparaciones completas de motor, transmisión y sistemas mecánicos con garantía de calidad.</p>
+</div>
+<!-- TARJETA: CAJA DE CAMBIO -->
+<div class="glass-card p-6 md:p-7 group">
+<div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-orange/20 to-primary-orange/20 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+<i class="fa-solid fa-gears text-2xl md:text-3xl text-primary-orange"></i>
+</div>
+<h3 class="font-bold text-xl text-white mb-2.5">Caja de Cambio</h3>
+<p class="text-gray-400/90 text-sm leading-relaxed">Reparación y mantenimiento de cajas manuales y automáticas. Diagnóstico de embrague y transmisión.</p>
 </div>
 </div>
-<button class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-orange-500 text-white p-2 rounded-full hover:bg-orange-600 transition-all" id="prevBtnContact">‹</button>
-<button class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-orange-500 text-white p-2 rounded-full hover:bg-orange-600 transition-all" id="nextBtnContact">›</button>
 </div>
 </section>
 
-<div id="chatWidget" class="chat-widget">
-<div class="chat-header">
-<span>Chat con María de Todo Casero</span>
-<button onclick="toggleChat()">×</button>
+<!-- SECCIÓN: TESTIMONIOS -->
+<section class="py-16 md:py-24 bg-[#0D0D0D] border-t border-white/5">
+<div class="container mx-auto px-4">
+<div class="text-center mb-10 md:mb-14">
+<div class="inline-block bg-primary-orange/15 border border-primary-orange/30 text-primary-orange px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-5">
+<i class="fa-solid fa-comments mr-1.5"></i> <span>Experiencias Reales</span>
 </div>
-<div class="chat-body" id="chatBody"></div>
-<div class="chat-input">
-<input type="text" id="chatInput" placeholder="Escribe tu consulta...">
-<button onclick="sendChatMessage()">Enviar</button>
+<h2 class="font-display font-bold text-4xl md:text-5xl text-white uppercase glow-text tracking-tight">La Voz de Nuestros Clientes</h2>
+<p class="text-gray-400/90 max-w-2xl mx-auto mt-4 text-base md:text-lg leading-relaxed">
+Confianza construida sobre resultados verificables y atención profesional en Paysandú, Uruguay.
+</p>
+</div>
+<div class="testimonial-carousel flex gap-5 md:gap-6 overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide mx-2 px-2">
+<div class="testimonial-card glass-card p-6 md:p-7 rounded-2xl border-t-4 border-primary-orange transition flex-shrink-0 w-[85%] md:w-1/3 snap-center">
+<div class="flex justify-between items-start mb-4">
+<div class="flex text-yellow-400 text-lg">
+<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+</div>
+<i class="fa-solid fa-quote-right text-3xl text-gray-700/70"></i>
+</div>
+<p class="text-gray-300/95 italic mb-5 leading-relaxed text-sm">"Excelente servicio en Romero Mecánica Integral. Diagnóstico preciso y rápido. Me explicaron todo con claridad y profesionalismo. Totalmente recomendado."</p>
+<div class="flex items-center pt-3 border-t border-white/10">
+<div class="w-11 h-11 rounded-full bg-gradient-to-br from-primary-orange to-orange-700 flex items-center justify-center text-white font-bold mr-3.5 flex-shrink-0">MP</div>
+<div>
+<p class="font-bold text-white text-sm">Martín P.</p>
+<p class="text-xs text-gray-500">Paysandú - Chevrolet Tracker 2023</p>
 </div>
 </div>
+</div>
+<div class="testimonial-card glass-card p-6 md:p-7 rounded-2xl border-t-4 border-primary-orange transition flex-shrink-0 w-[85%] md:w-1/3 snap-center">
+<div class="flex justify-between items-start mb-4">
+<div class="flex text-yellow-400 text-lg">
+<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+</div>
+<i class="fa-solid fa-quote-right text-3xl text-gray-700/70"></i>
+</div>
+<p class="text-gray-300/95 italic mb-5 leading-relaxed text-sm">"El mejor taller de Paysandú. Proceso transparente y rápido. El pre-diagnóstico online me ahorró tiempo y dinero. Volveré sin dudas a Romero Mecánica Integral."</p>
+<div class="flex items-center pt-3 border-t border-white/10">
+<div class="w-11 h-11 rounded-full bg-gradient-to-br from-primary-orange to-orange-700 flex items-center justify-center text-white font-bold mr-3.5 flex-shrink-0">AR</div>
+<div>
+<p class="font-bold text-white text-sm">Alejandra R.</p>
+<p class="text-xs text-gray-500">Paysandú - Renault Fluence</p>
+</div>
+</div>
+</div>
+<div class="testimonial-card glass-card p-6 md:p-7 rounded-2xl border-t-4 border-primary-orange transition flex-shrink-0 w-[85%] md:w-1/3 snap-center">
+<div class="flex justify-between items-start mb-4">
+<div class="flex text-yellow-400 text-lg">
+<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+</div>
+<i class="fa-solid fa-quote-right text-3xl text-gray-700/70"></i>
+</div>
+<p class="text-gray-300/95 italic mb-5 leading-relaxed text-sm">"Llevo mi flota de utilitarios a Romero Mecánica Integral. Reportes detallados, atención personalizada y precios justos. Un taller de confianza."</p>
+<div class="flex items-center pt-3 border-t border-white/10">
+<div class="w-11 h-11 rounded-full bg-gradient-to-br from-primary-orange to-orange-700 flex items-center justify-center text-white font-bold mr-3.5 flex-shrink-0">EC</div>
+<div>
+<p class="font-bold text-white text-sm">Esteban C.</p>
+<p class="text-xs text-gray-500">Paysandú - Flota Utilitarios</p>
+</div>
+</div>
+</div>
+</div>
+<p class="text-center text-gray-500 mt-5 text-sm flex items-center justify-center gap-1.5">
+<i class="fa-solid fa-arrow-right text-primary-orange"></i> <span>Desliza para más opiniones</span>
+</p>
+</div>
+</section>
 
-<footer>
-<div class="footer-content">
-<div class="footer-section">
-<h3>Todo Casero</h3>
-<p>Auténtica comida casera preparada con los mejores ingredientes y mucho amor.</p>
+<!-- SECCIÓN: FORMULARIO DE DIAGNÓSTICO - COMPLETAMENTE FUNCIONAL -->
+<section id="diagnostico" class="py-16 md:py-24 bg-gradient-to-b from-primary-dark to-[#080808] relative overflow-hidden">
+<div class="absolute inset-0 bg-[radial-gradient(circle_at_60%_40%,rgba(255,107,53,0.1),transparent_55%)]"></div>
+<div class="container mx-auto px-4 relative z-10">
+<div class="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
+<!-- Columna informativa -->
+<div class="lg:w-1/3 space-y-6">
+<h2 class="font-display font-bold text-4xl md:text-5xl text-white mb-2 glow-text tracking-tight">
+ACELERADOR DE<br><span class="gradient-text">DIAGNÓSTICO</span>
+</h2>
+<p class="text-gray-400/90 mb-6 text-base leading-relaxed">
+Completa el formulario y nuestros técnicos prepararán el análisis previo antes de tu llegada. Optimizamos tu tiempo y recursos.
+</p>
+<div class="space-y-5 pt-2">
+<div class="flex items-start gap-4">
+<div class="bg-gradient-to-br from-primary-orange/20 to-primary-orange/20 p-3.5 rounded-xl text-primary-orange flex-shrink-0">
+<i class="fa-solid fa-stopwatch text-xl"></i>
 </div>
-<div class="footer-section">
-<h3>Menú</h3>
-<ul>
-<li><a href="#menu">Sándwiches</a></li>
-<li><a href="#menu">Pizzas</a></li>
-<li><a href="#menu">Pastas</a></li>
-<li><a href="#menu">Hamburguesas</a></li>
-</ul>
-</div>
-<div class="footer-section">
-<h3>Contacto</h3>
-<ul>
-<li><i class="fas fa-map-marker-alt"></i> Campana, BA</li>
-<li><i class="fas fa-phone"></i> +54 348 9358998</li>
-<li><i class="fas fa-clock"></i> Lun-Dom: 19:30-23:45</li>
-</ul>
+<div>
+<h4 class="font-bold text-white text-base mb-1">Ahorro de Tiempo</h4>
+<p class="text-gray-400/90 text-sm">Evita esperas innecesarias. Tu caso ya estará en análisis al llegar.</p>
 </div>
 </div>
-<div class="copyright bg-gray-800 py-4 text-center rounded-t-lg shadow-md">
-© 2025 Todo Casero - Todos los derechos reservados |
-<span id="adminLink" class="cursor-pointer text-underline text-accent-color hover:text-primary-color transition-colors">Acceso Administrador</span>
+<div class="flex items-start gap-4">
+<div class="bg-gradient-to-br from-primary-orange/20 to-primary-orange/20 p-3.5 rounded-xl text-primary-orange flex-shrink-0">
+<i class="fa-solid fa-file-waveform text-xl"></i>
+</div>
+<div>
+<h4 class="font-bold text-white text-base mb-1">Análisis Previo</h4>
+<p class="text-gray-400/90 text-sm">Preparamos herramientas y repuestos específicos para tu caso.</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<div class="bg-gradient-to-br from-primary-orange/20 to-primary-orange/20 p-3.5 rounded-xl text-primary-orange flex-shrink-0">
+<i class="fa-solid fa-shield-halved text-xl"></i>
+</div>
+<div>
+<h4 class="font-bold text-white text-base mb-1">Transparencia Total</h4>
+<p class="text-gray-400/90 text-sm">Recibirás un informe detallado con opciones de reparación y costos.</p>
+</div>
+</div>
+</div>
+<div class="glass-card p-4 rounded-xl mt-4 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-orange-500/20 flex items-center justify-center flex-shrink-0">
+<i class="fa-solid fa-check text-orange-400"></i>
+</div>
+<div>
+<p class="text-sm font-semibold text-white">Datos 100% seguros</p>
+<p class="text-xs text-gray-500">Tu información está protegida</p>
+</div>
+</div>
+</div>
+<!-- Formulario FUNCIONAL -->
+<div class="lg:w-2/3 glass-card rounded-3xl shadow-card p-6 md:p-8 w-full">
+<form id="triageForm" novalidate>
+<!-- Sección 1: Vehículo -->
+<div class="border-b border-white/10 pb-6 mb-6">
+<h3 class="text-lg font-bold text-white mb-6 flex items-center gap-3">
+<span class="bg-gradient-to-r from-primary-orange to-orange-700 text-white w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">1</span>
+<span>Datos del Vehículo</span>
+</h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+<!-- Tipo de Vehículo -->
+<div class="form-field select-wrapper">
+<label for="inputVehicleType" class="field-label">Tipo de Vehículo</label>
+<select id="inputVehicleType" class="field-input">
+<option value="" disabled selected>Seleccionar tipo...</option>
+<option value="Auto">🚗 Auto</option>
+<option value="Moto">🏍️ Moto</option>
+<option value="Cuatriciclo">🏎️ Cuatriciclo</option>
+</select>
+</div>
+<!-- Marca y Modelo -->
+<div class="form-field">
+<label for="inputVehicle" class="field-label">Marca y Modelo</label>
+<input type="text" id="inputVehicle" class="field-input" placeholder="Ej: Toyota Corolla 2020" autocomplete="off">
+</div>
+<!-- Kilometraje -->
+<div class="form-field">
+<label for="inputKm" class="field-label">Kilometraje</label>
+<input type="number" id="inputKm" class="field-input" placeholder="Ej: 85000" autocomplete="off">
+</div>
+</div>
+<!-- Combustible -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-5 mt-5">
+<div class="form-field select-wrapper">
+<label for="inputFuelType" class="field-label">Combustible</label>
+<select id="inputFuelType" class="field-input">
+<option value="" disabled selected>Seleccionar...</option>
+<option value="Naftero">⛽ Nafta / Gasolina</option>
+<option value="Diesel">🛢️ Diesel</option>
+<option value="Híbrido">🔋 Híbrido</option>
+<option value="Eléctrico">⚡ Eléctrico</option>
+</select>
+</div>
+</div>
+</div>
+<!-- Sección 2: Síntomas -->
+<div class="border-b border-white/10 pb-6 mb-6">
+<h3 class="text-lg font-bold text-white mb-6 flex items-center gap-3">
+<span class="bg-gradient-to-r from-primary-orange to-orange-700 text-white w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">2</span>
+<span>Descripción de Fallas</span>
+</h3>
+<!-- Síntomas -->
+<div class="form-field mb-5">
+<label for="inputSymptoms" class="field-label">Síntomas</label>
+<textarea id="inputSymptoms" class="field-input" rows="4" placeholder="Describe ruidos, olores, vibraciones, luces de alerta..."></textarea>
+</div>
+<!-- Contexto de la falla -->
+<div class="form-field select-wrapper">
+<label for="inputContext" class="field-label">Contexto de la falla</label>
+<select id="inputContext" class="field-input">
+<option value="" disabled selected>Seleccionar contexto...</option>
+<optgroup label="🔋 ARRANQUE Y ENERGÍA" class="font-bold">
+<option value="no_arranca_gira">Gira pero no arranca</option>
+<option value="no_arranca_nada">No da contacto</option>
+<option value="arranca_lento">Arranque lento o difícil</option>
+</optgroup>
+<optgroup label="⚙️ RENDIMIENTO" class="font-bold">
+<option value="falla_ralenti">Inestabilidad en ralentí</option>
+<option value="pierde_potencia">Pérdida de potencia</option>
+<option value="consumo_excesivo">Consumo excesivo de combustible</option>
+<option value="humo_escape">Humo en escape (color)</option>
+</optgroup>
+<optgroup label="🔊 RUIDOS Y VIBRACIONES" class="font-bold">
+<option value="ruido_frenar">Ruido al frenar</option>
+<option value="ruido_direccion">Ruido al girar dirección</option>
+<option value="vibracion_alta">Vibración en alta velocidad</option>
+<option value="ruido_motor">Ruido anormal en motor</option>
+</optgroup>
+<optgroup label="🌡️ TEMPERATURA Y FLUIDOS" class="font-bold">
+<option value="levanta_temp">Se calienta el motor</option>
+<option value="perdida_fluido">Pérdida de fluido visible</option>
+</optgroup>
+<option value="falla_frio">Solo falla en frío</option>
+<option value="falla_caliente">Solo falla en caliente</option>
+<option value="falla_intermitente">Falla intermitente</option>
+</select>
+</div>
+</div>
+<!-- Sección 3: Servicio Integral -->
+<div class="border-b border-white/10 pb-6 mb-6">
+<h3 class="text-lg font-bold text-white mb-6 flex items-center gap-3">
+<span class="bg-gradient-to-r from-primary-orange to-orange-700 text-white w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">3</span>
+<span>Servicio Integral</span>
+</h3>
+<div class="form-field select-wrapper">
+<label for="inputService" class="field-label">Servicio Requerido</label>
+<select id="inputService" class="field-input">
+<option value="" disabled selected>Selecciona un servicio...</option>
+<option value="diagnostico">🔍 Diagnóstico Computarizado</option>
+<option value="frenos">🛑 Sistema de Frenos</option>
+<option value="suspension">🔩 Suspensión</option>
+<option value="direccion">🔄 Dirección</option>
+<option value="electricidad">⚡ Electricidad Automotriz</option>
+<option value="mecanica_integral">🛠️ Mecánica Integral</option>
+<option value="caja_cambio">⚙️ Caja de Cambio</option>
+</select>
+</div>
+</div>
+<!-- Sección 4: Contacto -->
+<div class="mb-6">
+<h3 class="text-lg font-bold text-white mb-6 flex items-center gap-3">
+<span class="bg-gradient-to-r from-primary-orange to-orange-700 text-white w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">4</span>
+<span>Datos de Contacto</span>
+</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+<div class="form-field">
+<label for="inputName" class="field-label">Nombre</label>
+<input type="text" id="inputName" class="field-input" placeholder="Tu nombre completo" autocomplete="name">
+</div>
+<div class="form-field">
+<label for="inputPhone" class="field-label">WhatsApp</label>
+<input type="tel" id="inputPhone" class="field-input" placeholder="Tu número de WhatsApp" autocomplete="tel">
+</div>
+</div>
+<p class="text-xs text-gray-500 mt-4 flex items-center gap-1.5">
+<i class="fa-solid fa-lock text-primary-orange"></i> <span>Tus datos se usarán únicamente para coordinar tu turno</span>
+</p>
+</div>
+<!-- Botón de envío -->
+<button type="submit" id="submitBtn" class="btn-primary w-full font-bold uppercase text-base py-5 rounded-2xl hover:shadow-neon transition flex items-center justify-center gap-3">
+<i class="fa-brands fa-whatsapp text-2xl"></i> <span>Enviar Solicitud a ROMERO MECÁNICA INTEGRAL</span>
+</button>
+<p class="text-center text-xs text-gray-500 pt-3">
+<span>Al enviar, aceptas nuestros</span> <a href="#" class="text-primary-orange hover:underline">términos de servicio</a>
+</p>
+</form>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SECCIÓN: UBICACIÓN Y CONFIANZA -->
+<section class="py-14 md:py-20 bg-[#0D0D0D] border-t border-white/5">
+<div class="container mx-auto px-4 text-center">
+<div class="flex flex-wrap justify-center gap-8 md:gap-12 opacity-70 grayscale hover:grayscale-0 transition-all duration-500 mb-12 md:mb-16">
+<i class="fa-brands fa-toyota text-4xl md:text-5xl hover:text-white transition-colors"></i>
+<i class="fa-solid fa-car text-4xl md:text-5xl hover:text-white transition-colors"></i>
+<i class="fa-brands fa-honda text-4xl md:text-5xl hover:text-white transition-colors"></i>
+<i class="fa-brands fa-ford text-4xl md:text-5xl hover:text-white transition-colors"></i>
+<i class="fa-brands fa-volkswagen text-4xl md:text-5xl hover:text-white transition-colors"></i>
+<i class="fa-solid fa-truck-pickup text-4xl md:text-5xl hover:text-white transition-colors"></i>
+</div>
+<div class="glass-card rounded-3xl p-6 md:p-10 max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8">
+<div class="text-left max-w-md">
+<h3 class="font-display font-bold text-2xl md:text-3xl text-white mb-2">¿Dónde estamos?</h3>
+<p class="text-gray-400/90 mb-4 text-base">Visítanos para validación final y reparaciones especializadas.</p>
+<div class="flex items-start gap-3 text-gray-300/90 text-sm mb-2">
+<i class="fa-regular fa-location-dot text-primary-orange text-xl mt-0.5 flex-shrink-0"></i>
+<div>
+<p class="font-medium">Dirección:</p>
+<p>AV. SORIANO 2127 ENTRE DE 4 Y 5, PAYSANDÚ</p>
+</div>
+</div>
+<div class="flex items-start gap-3 text-gray-300/90 text-sm mb-2">
+<i class="fa-brands fa-whatsapp text-primary-orange text-xl mt-0.5 flex-shrink-0"></i>
+<div>
+<p class="font-medium">WhatsApp:</p>
+<p dir="ltr">+598 98 680 159</p>
+</div>
+</div>
+<div class="flex items-start gap-3 text-gray-300/90 text-sm mb-2">
+<i class="fa-solid fa-envelope text-primary-orange text-xl mt-0.5 flex-shrink-0"></i>
+<div>
+<p class="font-medium">E-mail:</p>
+<p>romeromecanica@email.com</p>
+</div>
+</div>
+<div class="flex items-start gap-3 text-gray-300/90 text-sm">
+<i class="fa-regular fa-clock text-primary-orange text-xl mt-0.5 flex-shrink-0"></i>
+<div>
+<p class="font-medium">Horarios de atención:</p>
+<p>Lunes a Viernes: 08:00 - 12:00 y 14:00 - 18:00 hs</p>
+<p>Sábados y Domingos: Cerrado</p>
+</div>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row gap-3">
+<a href="https://maps.app.goo.gl/yiAsXENC2p94CAsE9" target="_blank" rel="noopener noreferrer" class="btn-primary px-6 py-3.5 md:px-8 md:py-4 rounded-2xl font-bold hover:shadow-neon transition flex items-center gap-3 text-sm md:text-base whitespace-nowrap shadow-soft">
+<i class="fa-solid fa-map-location-dot text-lg"></i> <span>Ver en Google Maps</span>
+</a>
+<a href="https://maps.app.goo.gl/yiAsXENC2p94CAsE9" target="_blank" rel="noopener noreferrer" class="btn-review px-6 py-3.5 md:px-8 md:py-4 rounded-2xl font-bold hover:shadow-neon transition flex items-center gap-3 text-sm md:text-base whitespace-nowrap shadow-soft">
+<i class="fa-solid fa-star text-lg"></i> <span>Deja tu Reseña</span>
+</a>
+</div>
+</div>
+<div class="mt-10 inline-flex items-center gap-3 bg-white/5 border border-white/10 px-5 py-3 rounded-full">
+<i class="fa-solid fa-certificate text-primary-orange text-lg"></i>
+<span class="text-sm font-medium text-gray-300">Garantía en todos nuestros servicios</span>
+</div>
+</div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-primary-dark/95 text-gray-500 py-10 md:py-14 border-t border-white/10">
+<div class="container mx-auto px-4">
+<div class="flex flex-col md:flex-row items-center justify-between gap-6">
+<div class="text-center md:text-left">
+<p class="mb-2 text-white font-display font-bold text-xl md:text-2xl glow-text tracking-tight">ROMERO MECÁNICA INTEGRAL</p>
+<p class="text-sm">Paysandú, Uruguay</p>
+</div>
+<div class="flex items-center gap-4">
+<a href="https://maps.app.goo.gl/yiAsXENC2p94CAsE9" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-primary-orange hover:text-yellow-400 transition text-sm font-semibold group">
+<i class="fa-solid fa-star group-hover:scale-110 transition-transform"></i>
+<span>Deja tu Reseña</span>
+</a>
+</div>
+</div>
+<div class="border-t border-white/10 mt-6 pt-4 text-center">
+<a href="https://nexoar-art.github.io/NEXO-art/" target="_blank" rel="noopener noreferrer"
+class="inline-flex items-center gap-1.5 text-xs text-gray-600 hover:text-primary-orange transition font-medium group">
+<i class="fa-solid fa-pen-nib group-hover:scale-110 transition-transform"></i>
+Diseño: NEXO-Art
+</a>
+<p class="text-gray-600 mt-2 text-xs">Sitio web desarrollado con tecnología moderna</p>
+</div>
 </div>
 </footer>
 
-<div id="cartModal" class="cart-modal">
-<div class="cart-content">
-<h3>Tu Carrito</h3>
-<div id="cartItems"></div>
-<div class="cart-total" id="cartTotal"></div>
-<div class="customer-info">
-<h4>Datos del Cliente</h4>
-<input type="text" id="customerName" placeholder="Nombre" required>
-<input type="tel" id="customerPhone" placeholder="Celular" required>
-</div>
-<div class="payment-info">
-<h4>Métodos de Pago</h4>
-<div class="payment-method">
-<input type="radio" id="cartEfectivo" name="payment" value="Efectivo" checked>
-<label for="cartEfectivo">Efectivo al retirar</label>
-</div>
-<div class="payment-method">
-<input type="radio" id="cartTransferencia" name="payment" value="Transferencia">
-<label for="cartTransferencia">Transferencia bancaria</label>
-</div>
-</div>
-<div class="cart-actions">
-<button class="btn" onclick="closeCart()">Cerrar</button>
-<button class="btn btn-whatsapp" id="sendOrder">Enviar Pedido por WhatsApp</button>
-</div>
-</div>
-</div>
-
-<!-- Modal para sugerir postre -->
-<div id="dessertModal" class="dessert-modal">
-<div class="dessert-content">
-<h3 class="text-2xl font-bold text-var(--primary-color) mb-4">¡Termina tu pedido con un dulce!</h3>
-<p class="mb-6">¿Quieres agregar un postre casero?</p>
-<div class="dessert-options" id="dessertOptions">
-<!-- Se llenan dinámicamente -->
-</div>
-<button class="dessert-btn no-thanks mt-4" onclick="skipDessert()">No, gracias</button>
-</div>
-</div>
-
-<div id="adminPanel" class="admin-panel">
-<button class="close-admin" onclick="closeAdmin()">×</button>
-<h3>Panel de Administración</h3>
-<form id="productForm" class="admin-form">
-<div>
-<label for="categorySelect">Categoría</label>
-<select id="categorySelect" required>
-<option value="">Seleccione una categoría</option>
-<option value="Sándwiches">Sándwiches</option>
-<option value="Pizzas">Pizzas</option>
-<option value="Pizzas Individuales">Pizzas Individuales</option>
-<option value="Pastas">Pastas</option>
-<option value="Hamburguesas">Hamburguesas</option>
-<option value="Acompañamientos">Acompañamientos</option>
-<option value="Empanadas">Empanadas</option>
-<option value="Postres">Postres</option>
-<option value="Al Plato">Al Plato</option>
-</select>
-</div>
-<div>
-<label for="productName">Nombre del Producto</label>
-<input type="text" id="productName" required placeholder="Ej: Sándwich de Bondiola">
-</div>
-<div>
-<label for="productPrice">Precio (ARS)</label>
-<input type="number" id="productPrice" required placeholder="Ej: 9000">
-</div>
-<div>
-<label for="productDescription">Descripción</label>
-<textarea id="productDescription" rows="3" placeholder="Descripción del producto"></textarea>
-</div>
-<div>
-<label for="productImage">Subir Imagen del Producto</label>
-<input type="file" id="productImage" accept="image/*">
-</div>
-<div>
-<label for="productImageUrl">O ingrese URL de la Imagen</label>
-<input type="url" id="productImageUrl" placeholder="Ej: https://example.com/image.jpg">
-</div>
-<button type="submit">Agregar/Editar Producto</button>
-<button type="button" id="saveChanges">Guardar Todos los Cambios</button>
-</form>
-<div class="product-list" id="productList"></div>
-</div>
-
-<div id="adminModal" class="modal">
-<div class="modal-content">
-<h3>Acceso Administrador</h3>
-<p>Ingrese la clave de acceso:</p>
-<input type="password" id="adminPassword" placeholder="Clave de acceso">
-<button class="btn" onclick="checkAdminPassword()">Ingresar</button>
-</div>
-</div>
-
-<!-- 🔹 BOTÓN FLOTANTE DEL ASISTENTE INTELIGENTE -->
-<a href="https://notebooklm.google.com/notebook/bdef646b-85d8-4601-b523-3ebec3768093?authuser=2" target="_blank" class="assistant-float" title="Asistente Inteligente Todo Casero" aria-label="Asistente Inteligente de Todo Casero">
-<i class="fas fa-robot"></i>
+<!-- STICKY MOBILE CTA -->
+<div class="fixed bottom-0 left-0 w-full bg-gray-900/95 backdrop-blur-sm border-t border-white/10 p-4 md:hidden z-50 flex gap-3">
+<a href="#asesoramiento" class="flex-1 bg-white/5 text-white font-semibold py-3.5 rounded-xl text-center border border-white/10 hover:border-primary-orange/40 transition text-sm flex items-center justify-center gap-2">
+<i class="fa-solid fa-book-open text-primary-orange"></i><span>Guías</span>
 </a>
-<div class="assistant-tooltip" id="assistantTooltip">
-💡 ¿Tienes dudas? Pregúntale a nuestro Asistente Inteligente sobre menú, precios, horarios y promociones.
+<a href="#diagnostico" class="flex-[2] btn-primary font-bold py-3.5 rounded-xl text-center uppercase shadow-neon text-sm flex items-center justify-center gap-2">
+<i class="fa-solid fa-microchip"></i> <span>Diagnóstico</span>
+</a>
 </div>
 
-<!-- 🔹 Botón flotante de WhatsApp -->
-<a href="https://api.whatsapp.com/send?phone=543489358998&text=Hola%20Todo%20Casero!!!" target="_blank" class="whatsapp-float" title="Chatear con María por WhatsApp" aria-label="WhatsApp">
-<i class="fab fa-whatsapp"></i>
-</a>
-
+<!-- JAVASCRIPT FUNCIONAL -->
 <script>
-// --- GESTIÓN DE VERSIÓN ---
-const currentVersion = '6.7';
-if (localStorage.getItem('appVersion') !== currentVersion) {
-localStorage.clear();
-localStorage.setItem('appVersion', currentVersion);
-console.log(`Cache local limpiada. Nueva versión: ${currentVersion}`);
+document.addEventListener('DOMContentLoaded', function(){
+// ========== RELOJ DIGITAL ==========
+function updateClock(){
+const now = new Date();
+const hours = String(now.getHours()).padStart(2,'0');
+const minutes = String(now.getMinutes()).padStart(2,'0');
+const seconds = String(now.getSeconds()).padStart(2,'0');
+const timeString = hours + ':' + minutes + ':' + seconds;
+const clockElement = document.getElementById('navbarClockTime');
+if(clockElement) clockElement.textContent = timeString;
+const clockMobile = document.getElementById('navbarClockTimeMobile');
+if(clockMobile) clockMobile.textContent = timeString;
 }
+updateClock();
+setInterval(updateClock, 1000);
 
-// 🔹 Imágenes por defecto
-const defaultImages = {
-"bondiola": "bondiola.jpeg",
-"milanesa": "milanesa especial.jpeg",
-"tucumano": "tucumano.jpeg",
-"lomito": "lomito premium.jpeg",
-"hamburguesa completa": "hamburguesa completa.jpeg",
-"hamburguesa vegetariana": "hamburguesa vegetariana.jpeg",
-"hamburguesa doble": "hamburguesa doble.jpeg",
-"hamburguesa zapping": "hamburguesa zapping.jpeg",
-"pizza": "muzzarella.jpeg",
-"pizza fugaza": "fugaza.jpeg",
-"pizza napolitana": "napolitana.jpeg",
-"pizza especial": "especial.jpeg",
-"pizza huevo": "logo.jpeg",
-"pizza palmitos": "logo.jpeg",
-"pizza salchichas": "logo.jpeg",
-"pizza choclo": "logo.jpeg",
-"pizza americana": "logo.jpeg",
-"muzzarella individual": "muzzarella individual.jpeg",
-"fugaza individual": "muzzarella individual.jpeg",
-"napolitana individual": "milanesa napolitana.jpeg",
-"especial individual": "logo.jpeg",
-"pasta": "https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=400&h=400&fit=crop",
-"ñoquis con bolognesa": "ñoquis con bolognesa.jpeg",
-"ravioles con bolognesa": "ravioles con bolognesa.jpeg",
-"porcion de fritas": "porcion de fritas.jpeg",
-"salchipapas": "salchipapa.jpeg",
-"cono de fritas": "cono de fritas.jpeg",
-"empanadas": "empanadas.jpeg",
-"flan": "flan.jpeg",
-"torta helada": "logo.jpeg",
-"ensalada de fruta": "logo.jpeg",
-"milanesa con pure": "logo.jpeg",
-"milanesa a caballo": "Milanesa a caballo.jpeg",
-"milanesa napolitana": "logo.jpeg",
-"tucumano+salchipapa": "tucumano+salchipapa.jpeg",
-"Combo6": "COMBO6.png", 
-"default": "https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=400&h=400&fit=crop"
+// ========== EFECTO FUEGO - Aparece a los 5s y se desvanece gradualmente ==========
+setTimeout(function(){
+const fireRing = document.getElementById('fireRing');
+if(fireRing){
+fireRing.classList.add('active');
+setTimeout(function(){
+fireRing.classList.add('fading');
+}, 0);
+}
+}, 5000);
+
+// ========== PARTÍCULAS ==========
+function createParticles(){
+const container = document.getElementById('particles');
+if(!container) return;
+for(let i = 0; i < 30; i++){
+const particle = document.createElement('div');
+particle.className = 'particle';
+particle.style.left = Math.random()*100 + '%';
+particle.style.animationDelay = Math.random()*20 + 's';
+particle.style.animationDuration = (20 + Math.random()*30) + 's';
+particle.style.width = particle.style.height = (3 + Math.random()*4) + 'px';
+container.appendChild(particle);
+}
+}
+createParticles();
+
+// ========== ESTADO DEL NEGOCIO ==========
+function checkStatus(){
+    const now = new Date();
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+    const day = now.getDay();
+    const currentMinutes = hours * 60 + minutes;
+    
+    const weekdayMorningOpen = 8 * 60;
+    const weekdayMorningClose = 12 * 60;
+    const weekdayAfternoonOpen = 14 * 60;
+    const weekdayAfternoonClose = 18 * 60;
+    
+    let isOpen = false;
+    
+    if(day >= 1 && day <= 5){
+        const morningOpen = currentMinutes >= weekdayMorningOpen && currentMinutes < weekdayMorningClose;
+        const afternoonOpen = currentMinutes >= weekdayAfternoonOpen && currentMinutes < weekdayAfternoonClose;
+        isOpen = morningOpen || afternoonOpen;
+    }
+    
+    const dotDesktop = document.getElementById('status-dot-desktop');
+    const textDesktop = document.getElementById('status-text-desktop');
+    const barMobile = document.getElementById('status-bar-mobile');
+    
+    if(isOpen){
+        dotDesktop.className = 'status-dot w-2 h-2 rounded-full mr-2.5 bg-primary-orange';
+        textDesktop.textContent = 'Abierto Ahora';
+        textDesktop.className = 'text-primary-orange font-semibold';
+        barMobile.className = 'md:hidden w-full py-2 text-center text-xs font-bold uppercase tracking-wide text-white bg-gradient-to-r from-primary-orange/20 to-orange-700/20 flex items-center justify-center gap-2';
+    } else {
+        dotDesktop.className = 'w-2 h-2 rounded-full mr-2.5 bg-gray-500';
+        textDesktop.textContent = 'Cerrado';
+        textDesktop.className = 'text-gray-400';
+        barMobile.className = 'md:hidden w-full py-2 text-center text-xs font-bold uppercase tracking-wide text-gray-300 bg-gray-900/80 flex items-center justify-center gap-2';
+    }
+}
+checkStatus();
+setInterval(checkStatus, 60000);
+
+// ========== ANIMACIÓN DE CONTADORES ==========
+function animateCounter(id, start, target, duration){
+const obj = document.getElementById(id);
+if(!obj) return;
+let startTimestamp = null;
+const step = function(timestamp){
+if(!startTimestamp) startTimestamp = timestamp;
+const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+const easeProgress = 1 - Math.pow(1 - progress, 3);
+const value = Math.floor(easeProgress * (target - start) + start);
+obj.textContent = value.toLocaleString('es-AR');
+if(progress < 1){
+window.requestAnimationFrame(step);
+} else {
+obj.textContent = target.toLocaleString('es-AR');
+}
 };
-
-// 🔹 Función para obtener URL de imagen válida
-function getImageUrl(productName, customImage) {
-if (customImage && customImage.startsWith('http')) return customImage;
-if (customImage && customImage in defaultImages) return defaultImages[customImage];
-const lowerName = productName.toLowerCase();
-if (lowerName.includes('bondiola')) return defaultImages.bondiola;
-if (lowerName.includes('milanesa')) return defaultImages.milanesa;
-if (lowerName.includes('lomito')) return defaultImages.lomito;
-if (lowerName.includes('hamburguesa')) return defaultImages.hamburguesa;
-if (lowerName.includes('pizza')) return defaultImages.pizza;
-if (lowerName.includes('tallarines') || lowerName.includes('ñoquis') || lowerName.includes('ravioles')) return defaultImages.pasta;
-if (lowerName.includes('fritas') || lowerName.includes('salchipapa')) return defaultImages.fritas;
-if (lowerName.includes('empanada')) return defaultImages.empanadas;
-if (lowerName.includes('flan') || lowerName.includes('postre')) return defaultImages.flan;
-return defaultImages.default;
+window.requestAnimationFrame(step);
 }
-
-const defaultProducts = [
-{ id: 1, category: "Sándwiches", name: "Bondiola", price: 13000 , description: "Delicioso sándwich de bondiola con tomate, lechuga, morron, cebolla caramelizada c/Fritas.", image: "bondiola", stock: 1000},
-{ id: 2, category: "Sándwiches", name: "Bondiola Especial", price: 13500, description: "Bondiola con queso, jamon y huevo c/Fritas.", image: "bondiola", stock: 1000 },
-{ id: 3, category: "Sándwiches", name: "Bondiola Premium", price: 14500, description: "Bondiola tomate, lechuga, morron, cebolla caramelizada, queso, huevo, jamon c/Fritas.", image: "bondiola", stock: 1000},
-{ id: 4, category: "Sándwiches", name: "Sandwich Milanesa ", price: 14000, description: "Milanesa con lechuga y tomate c/Fritas.", image: "milanesa", stock: 1000 },
-{ id: 5, category: "Sándwiches", name: "Sandwich Milanesa Especial", price: 14500, description: "Sandwich de Milanesa, queso, jamon,huevo frito c/Fritas.", image: "milanesa", stock: 1000 },
-{ id: 6, category: "Sándwiches", name: "Sandwich Milanesa Completa", price: 15500, description: "Sandwich de Milanesa completo, lechuga, tomate, queso, jamon, huevo frito c/Fritas.", image: "milanesa", stock: 1000 },
-{ id: 7, category: "Sándwiches", name: "Sandwich Milanesa Premium", price: 16500, description: "Sandwich Milanesa, lechuga, tomate, huevo, queso, jamon, cebolla caramelizada, morron c/Fritas.", image: "milanesa", stock: 1000 },
-{ id: 8, category: "Sándwiches", name: "Tucumano", price: 20000, description: "Sándwich de  Milanesa de 30 cm tucumano  c/Fritas Doble.", image: "tucumano", stock: 1000 },
-{ id: 9, category: "Sándwiches", name: "Lomito Simple", price: 14000, description: "Sandwich de Lomito jugoso con tomate y lechuga c/Fritas.", image: "lomito", stock: 0 },
-{ id: 10, category: "Sándwiches", name: "Lomito Especial", price: 14500, description: "Sandwich de Lomito con jamon, queso, huevo c/Fritas.", image: "lomito", stock: 0 },
-{ id: 11, category: "Sándwiches", name: "Lomito Premium", price: 15000, description: "Sandwich de Lomito premium con lechuga, tomate, huevo frito, jamon , queso c/Fritas.", image: "lomito", stock: 0 },
-{ id: 12, category: "Hamburguesas", name: "Hamburguesa c/Cheddar", price: 11000, description: "Medallon de Carne Con Cheddar, c/Fritas.", image: "hamburguesa completa", stock: 1000 },
-{ id: 13, category: "Hamburguesas", name: "Hamburguesa Completa", price: 11500, description: "Medallon de Carne Con lechuga, tomate, huevo frito c/Fritas.", image: "hamburguesa completa", stock: 1000 },
-{ id: 14, category: "Hamburguesas", name: "Hamburguesa Vegetariana", price: 11500, description: "Medallon (Lenteja,zanahoria,cebolla), lechuga, tomate, huevo frito c/Fritas.", image: "hamburguesa vegetariana", stock: 10000 },
-{ id: 15, category: "Hamburguesas", name: "Hamburguesa Doble", price: 13000, description: "Doble Medallon carne, cheddar, huevo frito, cebolla caramelizada  c/Fritas.", image: "hamburguesa doble", stock: 1000 },
-{ id: 16, category: "Hamburguesas", name: "Hamburguesa Zapping", price: 27000, description: "Hamburguesa Gigante Zapping, lechuga tomate, huevo frito c/Fritas Doble.", image: "hamburguesa zapping", stock: 0 },
-{ id: 17, category: "Pizzas", name: "Muzzarella", price: 13500, description: "Pizza clásica con queso muzzarella, oregano, aceitunas.", image: "pizza", stock: 1000 },
-{ id: 18, category: "Pizzas", name: "Fugaza", price: 14500, description: "Pizza fugaza tradicional.", image: "pizza fugaza", stock: 1000 },
-{ id: 19, category: "Pizzas", name: "Napolitana", price: 15000, description: "Pizza napolitana con tomate, ajo y oregano.", image: "pizza napolitana", stock: 1000 },
-{ id: 20, category: "Pizzas", name: "Especial", price: 15500, description: "Pizza especial con jamon, morrones y aceitunas.", image: "pizza especial", stock: 1000 },
-{ id: 21, category: "Pizzas", name: "Huevo", price: 14400, description: "Pizza de Huevo y especias y aceitunas.", image: "pizza huevo", stock: 1000 },
-{ id: 22, category: "Pizzas", name: "Palmitos", price: 19000, description: "Pizza de Palmitos,jamon,morron, salsa golf y aceitunas.", image: "pizza palmitos", stock: 1000 },
-{ id: 23, category: "Pizzas", name: "Salchichas", price: 15400, description: "Pizza de Salchichas y aceitunas.", image: "pizza salchichas", stock: 1000 },
-{ id: 24, category: "Pizzas", name: "Choclo", price: 14500, description: "Pizza de Huevo y especias y aceitunas.", image: "pizza choclo", stock: 1000 },
-{ id: 25, category: "Pizzas", name: "Americana", price: 18500, description: "Pizza de Huevo frito papas fritas y aceitunas.", image: "pizza americana", stock: 100 },
-{ id: 26, category: "Pizzas Individuales", name: "Muzzarella Individual", price: 7500, description: "Individual con queso muzzarella.", image: "muzzarella individual", stock: 1000 },
-{ id: 27, category: "Pizzas Individuales", name: "Fugaza Individual", price: 8000, description: "Individual fugaza tradicional.", image: "muzzarella individual", stock: 1000 },
-{ id: 28, category: "Pizzas Individuales", name: "Napolitana Individual", price: 8500, description: "Individual napolitana con tomate y ajo.", image: "napolitana individual", stock: 1000 },
-{ id: 29, category: "Pizzas Individuales", name: "Especial Individual", price: 9000, description: "Individual especial con jamon y morrones.", image: "piz", stock: 1000 },
-{ id: 30, category: "Pastas", name: "Tallarines con Bolognesa", price: 11500, description: "Pasta fresca con salsa bolognesa casera.", image: "pasta", stock: 1000},
-{ id: 31, category: "Pastas", name: "Ñoquis con Bolognesa", price: 12500, description: "Ñoquis frescos con salsa bolognesa.", image: "ñoquis con bolognesa", stock: 1000 },
-{ id: 32, category: "Pastas", name: "Ravioles con Bolognesa", price: 12500, description: "Ravioles de verdura con salsa bolognesa.", image: "ravioles con bolognesa", stock: 0 },
-{ id: 33, category: "Acompañamientos", name: "Porción de Fritas", price: 7000, description: "Porción grande de papas fritas.", image: "porcion de fritas", stock: 10000 },
-{ id: 34, category: "Acompañamientos", name: "Salchipapas", price: 10500, description: "Porción grande de Salchipapas.", image: "salchipapa", stock: 10000},
-{ id: 35, category: "Acompañamientos", name: "Cono de Fritas", price: 4000, description: "Cono mediano de papas fritas.", image: "cono de fritas", stock: 10000 },
-{ id: 36, category: "Empanadas", name: "Empanadas", price: 21000, description: "Empanadas de Carne caseras x 12 unidades.", image: "empanadas", stock: 0 },
-{ id: 37, category: "Empanadas", name: "Empanadas", price: 11000, description: "Empanadas de Carne caseras x 6 unidades.", image: "empanadas", stock: 0 },
-{ id: 38, category: "Postres", name: "Flan", price: 6500, description: "C/Crema).", image: "flan", stock: 1000 },
-{ id: 39, category: "Postres", name: "Torta Helada", price: 0, description: "Crema Americana con Dulce de Leche.", image: "torta helada", stock: 0},
-{ id: 40, category: "Postres", name: "Ensalada de Frutas", price: 0, description: "Variedades de Frutas Deliciosas.", image: "ensalada de fruta", stock: 0 },
-{ id: 41, category: "Al Plato", name: "Milanesa con Puré al Plato", price: 14000, description: "Milanesa acompañada de puré de papas + pan casero.", image: "milanesa con pure", stock: 1000 },
-{ id: 42, category: "Al Plato", name: "Milanesa a Caballo al Plato", price: 14500, description: "Milanesa con huevos frito por encima + pan casero.", image:"milanesa a caballo", stock: 1000 },
-{ id: 43, category: "Al Plato", name: "Milanesa Napolitana al Plato", price: 15500, description: "Milanesa con salsa de tomate, jamon, queso, tomate c/fritas + pan casero.", image: "Milanesa napolitana", stock: 1000 },
-{ id: 44, category: "Combos", name: "Combo (6)", price: 20000, description: "2 pastas a elección + pan casero.", image: "Combo6", stock: 1000 },
-{ id: 45, category: "Combos", name: "Combo (5) 1 Sandwich Tucumano + 1 Salchipapa", price: 27000, description: "Delicioso combo para compartir entre 3 personas.", image: "tucumano+salchipapa", stock: 1000 },    
-{ id: 46, category: "Combos", name: "Combo (4) Hamburguesa Zapping con Fritas + Pizza Especial", price: 39000, description: "Delicioso combo para compartir entre 6 personas.", image: "hamburguesa zapping", stock: 0 },
-{ id: 47, category: "Combos", name: "Combo (2) de 2 Hamburguesas", price: 20000, description: "Delicioso combo para compartir entre 2 personas.", image: "hamburguesa completa", stock: 1000 },
-{ id: 48, category: "Combos", name: "Combo (3) Pizza Muzzarella + 2 Hamburguesas Completas", price: 32000, description: "Delicioso combo para compartir entre 6 personas.", image: "pizza", stock: 1000 },
-{ id: 49, category: "Combos", name: "Combo (1) Pizza Especial + porcion de Fritas", price: 19500, description: "Delicioso combo para compartir.", image: "pizza especial", stock: 1000 }
-];
-
-const defaultOffers = [
-{ id: 1, day: "lunes", description: "Pastas 10% off los Lunes", discount: 10 },
-{ id: 2, day: "martes", description: "Hamburguesa Zapping 10% off los Martes", discount: 10 },
-{ id: 3, day: "miércoles", description: "Sándwich de Bondiola 10% off los Miércoles", discount: 10 }
-];
-
-let cart = [];
-let products = JSON.parse(localStorage.getItem("products")) || defaultProducts;
-let offers = JSON.parse(localStorage.getItem("offers")) || defaultOffers;
-let editingProductId = null;
-let userName = null;
-
-function saveData() {
-localStorage.setItem("products", JSON.stringify(products));
-localStorage.setItem("offers", JSON.stringify(offers));
+function startCounters(){
+const observer = new IntersectionObserver(function(entries){
+entries.forEach(function(entry){
+if(entry.isIntersecting){
+animateCounter('counter1', 0, 99, 1500);
+animateCounter('counter2', 0, 50, 1800);
+animateCounter('counter3', 0, 8000, 2000);
+observer.disconnect();
 }
+});
+}, {threshold: 0.3});
+const statsSection = document.querySelector('.grid.grid-cols-3');
+if(statsSection) observer.observe(statsSection);
+}
+startCounters();
 
-function checkAdminPassword() {
-const pass = document.getElementById("adminPassword").value;
-const hashed = CryptoJS.SHA256(pass).toString();
-const correctHash = CryptoJS.SHA256("0608").toString();
-if (hashed === correctHash) {
-document.getElementById("adminModal").style.display = "none";
-openAdmin();
+// ========== FORMULARIO FUNCIONAL ==========
+const form = document.getElementById('triageForm');
+const submitBtn = document.getElementById('submitBtn');
+
+const allFields = document.querySelectorAll('.field-input');
+allFields.forEach(function(field){
+field.addEventListener('input', function(){
+if(this.value.trim().length > 0){
+this.classList.add('has-value');
 } else {
-alert("Clave incorrecta. Intente nuevamente.");
-}
-document.getElementById("adminPassword").value = "";
-}
-
-function renderCategories() {
-const categoriesContainer = document.getElementById("categoriesContainer");
-const combosContainer = document.getElementById("combosContainer");
-categoriesContainer.innerHTML = "";
-combosContainer.innerHTML = "";
-const categories = [...new Set(products.map(p => p.category))];
-categories.forEach((category, index) => {
-if (category === 'Combos') {
-const comboProducts = products.filter(p => p.category === 'Combos');
-comboProducts.forEach((product, comboIndex) => {
-const comboDiv = document.createElement('div');
-comboDiv.className = "bg-white rounded-xl shadow-md p-6 transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:border-orange-400 border-2 border-transparent relative";
-comboDiv.setAttribute('data-scroll-reveal', '');
-comboDiv.setAttribute('data-delay', `${(comboIndex + 1) * 0.1}s`);
-let specialBadge = '';
-if (product.stock > 0 && product.stock <= 10) {
-specialBadge = `<div class="absolute -top-3 -right-3 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded-full">⚠️ Pocas unidades</div>`;
-} else if (product.stock === 0) {
-specialBadge = `<div class="absolute -top-3 -right-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">❌ Agotado</div>`;
-}
-comboDiv.innerHTML = `
-${specialBadge}
-<img src="${getImageUrl(product.name, product.image)}" alt="${product.name}" class="w-full h-40 object-cover rounded-lg mb-3" loading="lazy" onerror="this.src='${defaultImages.default}'">
-<h3 class="text-xl font-bold text-gray-800 mb-2">${product.name}</h3>
-<p class="text-gray-600 mb-2">${product.description}</p>
-<div class="flex justify-between items-center">
-<span class="text-2xl font-bold text-orange-500">$${product.price.toLocaleString('es-AR')}</span>
-${product.stock > 0 ?
-`<button class="add-to-cart bg-orange-500 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-300 hover:bg-orange-600 hover:brightness-110 group" data-id="${product.id}" data-name="${product.name}" data-price="${product.price}">
-Lo Quiero <span class="inline-block ml-2 transition-transform duration-300 group-hover:translate-x-1">→</span>
-</button>` :
-`<span class="text-gray-400 font-semibold">No disponible</span>`
-}
-</div>
-`;
-combosContainer.appendChild(comboDiv);
-});
-return;
-}
-const div = document.createElement("div");
-div.className = "category";
-div.innerHTML = `
-<div class="category-header">
-<h3>${category}</h3>
-<span class="category-arrow">▶</span>
-</div>
-<div class="products"></div>
-`;
-const header = div.querySelector(".category-header");
-const content = div.querySelector(".products");
-const arrow = div.querySelector(".category-arrow");
-header.addEventListener("click", () => {
-const isOpen = content.style.display === "block";
-document.querySelectorAll(".products").forEach(p => {
-p.style.display = "none";
-p.previousElementSibling.classList.remove("active");
-});
-if (!isOpen) {
-content.style.display = "block";
-header.classList.add("active");
+this.classList.remove('has-value');
 }
 });
-const filteredProducts = products.filter(p => p.category === category);
-filteredProducts.forEach(product => {
-const productDiv = document.createElement("div");
-productDiv.className = "product";
-let stockBadge = '';
-if (product.stock === 0) {
-stockBadge = '<span class="availability-badge out-stock">Agotado</span>';
-} else if (product.stock <= 10) {
-stockBadge = '<span class="availability-badge low-stock">Pocas unidades</span>';
+if(this.tagName === 'SELECT'){
+this.addEventListener('change', function(){
+if(this.value){
+this.classList.add('has-value');
 } else {
-stockBadge = '<span class="availability-badge in-stock">Disponible</span>';
-}
-productDiv.innerHTML = `
-<div class="product-info">
-<div class="product-name">${product.name} ${stockBadge}</div>
-<div class="product-description">${product.description}</div>
-${product.stock <= 10 && product.stock > 0 ? `<div class="stock-low">⚠️ Solo quedan ${product.stock} unidades</div>` : ''}
-</div>
-<div class="product-price">$${product.price.toLocaleString('es-AR')}</div>
-<img src="${getImageUrl(product.name, product.image)}" alt="${product.name}" class="product-image" loading="lazy" onerror="this.src='${defaultImages.default}'">
-${product.stock > 0 ?
-`<button class="add-to-cart" data-id="${product.id}" data-name="${product.name}" data-price="${product.price}">Añadir</button>` :
-`<button class="add-to-cart" disabled style="background-color:#ccc;cursor:not-allowed">Agotado</button>`
-}
-`;
-content.appendChild(productDiv);
-});
-categoriesContainer.appendChild(div);
-});
-const firstCategory = categoriesContainer.querySelector(".category");
-if (firstCategory) {
-firstCategory.querySelector(".products").style.display = "block";
-firstCategory.querySelector(".category-header").classList.add("active");
-}
-document.querySelectorAll("#menu .add-to-cart:not([disabled])").forEach(button => {
-button.addEventListener("click", () => {
-const id = button.getAttribute("data-id");
-const name = button.getAttribute("data-name");
-const price = parseInt(button.getAttribute("data-price"));
-addToCart(id, name, price);
-});
-});
-const scrollRevealElements = document.querySelectorAll('[data-scroll-reveal]');
-const observer = new IntersectionObserver((entries) => {
-entries.forEach(entry => {
-if (entry.isIntersecting) {
-entry.target.classList.add('opacity-100', 'translate-y-0');
-observer.unobserve(entry.target);
+this.classList.remove('has-value');
 }
 });
-}, { threshold: 0.1 });
-scrollRevealElements.forEach(el => {
-el.classList.add('opacity-0', 'translate-y-10', 'transition-all', 'duration-500');
-observer.observe(el);
-});
-const today = new Date().toLocaleString('es-AR', { weekday: 'long' }).toLowerCase();
-const todayOffer = offers.find(offer => offer.day === today);
-document.getElementById('offerText').textContent = todayOffer ? todayOffer.description : '¡Consulta nuestras ofertas semanales en el menú!';
 }
+});
 
-function addToCart(id, name, price) {
-const product = products.find(p => p.id === parseInt(id));
-if (!product) return;
-if (product.stock <= 0) {
-alert("Lo siento, este producto no está disponible en este momento. Contáctanos por WhatsApp para más información.");
-window.open("https://api.whatsapp.com/send?phone=543489358998&text=Hola%20Todo%20Casero!!%20No%20pude%20agregar%20" + encodeURIComponent(name) + "%20al%20carrito.", '_blank');
-return;
-}
-const existingItem = cart.find(item => item.id === id);
-if (existingItem) {
-if (product.stock < existingItem.quantity + 1) {
-alert("Lo siento, no hay suficiente disponibilidad para agregar más unidades de este producto.");
-return;
-}
-existingItem.quantity += 1;
-} else {
-if (product.stock < 1) {
-alert("Lo siento, este producto no está disponible en este momento.");
-return;
-}
-cart.push({ id, name, price, quantity: 1 });
-}
-updateCartDisplay();
-document.getElementById("cartModal").style.display = "flex";
-window.scrollTo({ top: 0, behavior: 'smooth' });
-const btn = event?.target;
-if (btn) {
-btn.textContent = "✓ Añadido";
-btn.style.backgroundColor = "#27ae60";
-setTimeout(() => {
-btn.textContent = "Añadir";
-btn.style.backgroundColor = "";
-}, 1500);
-}
-}
-
-function updateCartDisplay() {
-const cartItems = document.getElementById("cartItems");
-const cartTotal = document.getElementById("cartTotal");
-const cartCount = document.getElementById("cartCount");
-cartItems.innerHTML = "";
-let total = 0;
-if (cart.length === 0) {
-cartItems.innerHTML = "<p class='text-center text-gray-500 py-4'>Tu carrito está vacío 🛒</p>";
-} else {
-cart.forEach(item => {
-const itemTotal = item.price * item.quantity;
-total += itemTotal;
-const div = document.createElement("div");
-div.className = "cart-item";
-div.innerHTML = `
-<span>${item.name}</span>
-<div class="quantity-controls">
-<button class="quantity-btn" onclick="changeQuantity('${item.id}', -1)">-</button>
-<span class="quantity-display">${item.quantity}</span>
-<button class="quantity-btn" onclick="changeQuantity('${item.id}', 1)">+</button>
-</div>
-<span>$${itemTotal.toLocaleString('es-AR')}</span>
-<button onclick="removeFromCart('${item.id}')"><i class="fas fa-trash"></i></button>
-`;
-cartItems.appendChild(div);
-});
-}
-cartTotal.textContent = `Total: $${total.toLocaleString('es-AR')}`;
-cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
-}
-
-function changeQuantity(id, change) {
-const product = products.find(p => p.id === parseInt(id));
-const item = cart.find(item => item.id === id);
-if (item) {
-const newQuantity = item.quantity + change;
-if (newQuantity > product.stock) {
-alert("No hay suficiente stock disponible.");
-return;
-}
-if (newQuantity < 1) {
-removeFromCart(id);
-return;
-}
-item.quantity = newQuantity;
-updateCartDisplay();
-}
-}
-
-function removeFromCart(id) {
-cart = cart.filter(item => item.id !== id);
-updateCartDisplay();
-}
-
-function generatePDF() {
-if (!window.jspdf) {
-alert("Generando tu pedido...");
-return;
-}
-const { jsPDF } = window.jspdf;
-const doc = new jsPDF();
-doc.setFontSize(18);
-doc.text("🍔 Orden Todo Casero 🍔", 20, 20);
-doc.setFontSize(12);
-doc.text(`Fecha: ${new Date().toLocaleString('es-AR')}`, 20, 30);
-doc.text(`Cliente: ${document.getElementById("customerName").value.trim() || "Sin nombre"}`, 20, 40);
-doc.text(`Celular: ${document.getElementById("customerPhone").value.trim() || "Sin teléfono"}`, 20, 50);
-doc.text("📍 Campana, Buenos Aires", 20, 60);
-doc.text("📞 +54 348 9358998", 20, 70);
-let y = 90;
-doc.text("═══════════════════════════════", 20, y);
-y += 10;
-doc.text("Producto | Cantidad | Precio | Total", 20, y);
-y += 10;
-doc.text("───────────────────────────────", 20, y);
-y += 10;
-let total = 0;
-cart.forEach(item => {
-const itemTotal = item.price * item.quantity;
-total += itemTotal;
-const line = `${item.name.substring(0,15)}... | ${item.quantity} | $${item.price} | $${itemTotal}`;
-doc.text(line, 20, y);
-y += 10;
-});
-doc.text("───────────────────────────────", 20, y);
-y += 10;
-doc.setFontSize(14);
-doc.text(`💰 TOTAL: $${total.toLocaleString('es-AR')}`, 20, y);
-const payment = document.querySelector('input[name="payment"]:checked').value;
-y += 15;
-doc.setFontSize(12);
-doc.text(`💳 Pago: ${payment}`, 20, y);
-if (payment === "Transferencia") {
-y += 10;
-doc.text("Alias: Adri.roti", 20, y);
-y += 10;
-doc.text("Titular: Adriana Basilia Enrique", 20, y);
-}
-y += 20;
-doc.text("📌 Nota: Retirar en local en el horario acordado.", 20, y);
-doc.text("¡Gracias por elegir Todo Casero! ❤️", 20, y + 10);
-doc.save(`pedido-todocasero-${new Date().toISOString().slice(0,10)}.pdf`);
-}
-
-// ✅ FUNCIÓN MEJORADA: generateWhatsAppMessage con emojis organizados
-function generateWhatsAppMessage(customerName, customerPhone) {
-let message = `🍔 *PEDIDO - TODO CASERO* 🍔
-━━━━━━━━━━━━━━━━━━━━━\n`;
-message += `👤 *Cliente*: ${customerName}\n`;
-message += `📞 *Celular*: ${customerPhone}\n`;
-message += `📅 *Fecha*: ${new Date().toLocaleString('es-AR')}\n`;
-message += `━━━━━━━━━━━━━━━━━━━━━\n\n`;
-message += `📋 *DETALLE DEL PEDIDO:*\n`;
-cart.forEach(item => {
-message += `🔹 ${item.quantity}x ${item.name}\n`;
-message += `   💰 $${(item.price * item.quantity).toLocaleString('es-AR')}\n`;
-});
-const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-message += `\n━━━━━━━━━━━━━━━━━━━━━\n`;
-message += `💰 *TOTAL A PAGAR*: *$${total.toLocaleString('es-AR')}*\n`;
-message += `━━━━━━━━━━━━━━━━━━━━━\n\n`;
-const payment = document.querySelector('input[name="payment"]:checked').value;
-message += `💳 *Método de Pago*: ${payment}\n`;
-if (payment === "Transferencia") {
-message += `🏦 *Alias*: Adri.roti\n`;
-message += `👤 *Titular*: Adriana Basilia Enrique\n`;
-}
-message += `\n📍 *Retiro*: Campana, Buenos Aires\n`;
-message += `🕐 *Horario de Atención*: 19:30 - 23:45\n`;
-message += `\n✅ *Por favor confirmar mi pedido*. ¡Gracias! 🙏`;
-return encodeURIComponent(message);
-}
-
-function toggleChat() {
-const chatWidget = document.getElementById("chatWidget");
-const isVisible = chatWidget.style.display === "block";
-chatWidget.style.display = isVisible ? "none" : "block";
-if (!isVisible && !document.getElementById("chatBody").innerHTML) {
-const chatBody = document.getElementById("chatBody");
-const welcomeMessage = document.createElement("div");
-welcomeMessage.className = "chat-message bot";
-welcomeMessage.innerHTML = `¡Hola! 👋 Soy <strong>María</strong>, tu asistente de <strong>Todo Casero</strong>.<br><br>¿En qué puedo ayudarte hoy?<br><br>💡 <em>Puedo ayudarte con:</em><br>• Ver el menú y precios<br>• Hacer un pedido<br>• Consultar horarios<br>• Información de pagos`;
-chatBody.appendChild(welcomeMessage);
-chatBody.scrollTop = chatBody.scrollHeight;
-}
-}
-
-function sendChatMessage() {
-const input = document.getElementById("chatInput");
-const message = input.value.trim();
-if (!message) return;
-const chatBody = document.getElementById("chatBody");
-const userMessage = document.createElement("div");
-userMessage.className = "chat-message user";
-userMessage.textContent = message;
-chatBody.appendChild(userMessage);
-const nameMatch = message.match(/mi nombre es (\w+)/i) || message.match(/me llamo (\w+)/i);
-if (nameMatch) {
-userName = nameMatch[1].charAt(0).toUpperCase() + nameMatch[1].slice(1).toLowerCase();
-}
-const greeting = userName ? `¡Hola ${userName}! 👋` : "¡Hola! 👋";
-const closing = "¿En qué más puedo ayudarte? 😊";
-const paymentInfo = "💳 Aceptamos: Efectivo 💵 o Transferencia 🏦 (Alias: Adri.roti)";
-let response = `${greeting} Gracias por escribir a <strong>Todo Casero</strong>. `;
-const lowerMessage = message.toLowerCase();
-if (lowerMessage.includes("menú") || lowerMessage.includes("menu") || lowerMessage.includes("carta") || lowerMessage.includes("que tienen")) {
-response += "🍽️ Nuestro menú incluye:<br><br>";
-response += "🥪 <strong>Sándwiches:</strong> Bondiola, Milanesa, Lomito, Tucumano<br>";
-response += "🍔 <strong>Hamburguesas:</strong> Completa, Vegetariana, Doble, Zapping<br>";
-response += "🍕 <strong>Pizzas:</strong> Muzzarella, Fugaza, Napolitana, Especial<br>";
-response += "🍕 <strong>Pizzas Individuales</strong><br>";
-response += "🍝 <strong>Pastas:</strong> Tallarines, Ñoquis, Ravioles con Bolognesa<br>";
-response += "🍟 <strong>Acompañamientos:</strong> Fritas, Salchipapas, Cono<br>";
-response += "🥟 <strong>Empanadas</strong> x6 o x12<br>";
-response += "🍮 <strong>Postres:</strong> Flan, Torta Helada, Ensalada de Frutas<br><br>";
-response += "¿Te gustaría que te diga el precio de algún plato en particular? 😊";
-} else if (lowerMessage.includes("precio") || lowerMessage.includes("cuánto cuesta") || lowerMessage.includes("valor") || lowerMessage.includes("precio de")) {
-const productName = lowerMessage.replace(/precio de|cuánto cuesta|el precio de|qué precio tiene|valor de/gi, "").trim();
-const product = products.find(p => p.name.toLowerCase().includes(productName) || productName.includes(p.name.toLowerCase()));
-if (product) {
-const today = new Date().toLocaleString('es-AR', { weekday: 'long' }).toLowerCase();
-const todayOffer = offers.find(o => o.day === today && o.description.toLowerCase().includes(product.name.toLowerCase()));
-let finalPrice = product.price;
-let discountText = '';
-if (todayOffer) {
-finalPrice = Math.round(product.price * (1 - todayOffer.discount/100));
-discountText = ` <span style="color:#27ae60">✨ ¡Hoy tiene ${todayOffer.discount}% OFF!</span>`;
-}
-response += `💰 <strong>${product.name}</strong>: $${finalPrice.toLocaleString('es-AR')}${discountText}<br>`;
-response += `<em>${product.description}</em><br><br>`;
-response += product.stock > 0 ? `✅ Disponible (${product.stock} unidades)` : `❌ Agotado por el momento`;
-response += `<br><br>¿Quieres agregarlo a tu carrito? 🛒`;
-} else {
-response += "🔍 No encontré ese producto exacto. Los nombres en nuestro menú son:<br>";
-response += "<em>Bondiola, Milanesa, Lomito, Hamburguesa Completa, Muzzarella, Tallarines con Bolognesa, etc.</em><br><br>";
-response += "¿Puedes decirme el nombre exacto o preguntarme por una categoría? 😊";
-}
-} else if (lowerMessage.includes("pedido") || lowerMessage.includes("comprar") || lowerMessage.includes("quiero") || lowerMessage.includes("agregar") || lowerMessage.includes("añadir")) {
-response += "¡Perfecto! 🎉 Para hacer tu pedido tienes dos opciones:<br><br>";
-response += "1️⃣ <strong>Desde la web:</strong> Ve a la sección 'Menú', elige tus platos y agrégalos al carrito 🛒<br>";
-response += "2️⃣ <strong>Por WhatsApp:</strong> Escríbeme directamente al <strong>+54 348 9358998</strong><br><br>";
-response += "💡 Tip: Puedes decirme algo como <em>'quiero 2 bondiolas y fritas'</em> y te ayudo a armar el pedido. ¿Qué te gustaría ordenar?";
-} else if (lowerMessage.includes("horario") || lowerMessage.includes("hora") || lowerMessage.includes("abierto") || lowerMessage.includes("cierra")) {
-response += "🕐 Estamos abiertos <strong>todos los días</strong> de <strong>19:30 a 23:45 hs</strong>.<br><br>";
-response += "📍 Te esperamos en <strong>Campana, Buenos Aires</strong>.<br><br>";
-response += "¿Quieres hacer tu pedido para hoy? 😊";
-} else if (lowerMessage.includes("ubicación") || lowerMessage.includes("donde están") || lowerMessage.includes("dirección") || lowerMessage.includes("campana")) {
-response += "📍 Estamos ubicados en <strong>Campana, Buenos Aires</strong>.<br><br>";
-response += "🚗 El pedido se retira en nuestro local.<br>";
-response += "📞 Para más detalles, escríbenos al +54 348 9358998.<br><br>";
-response += "¿Te ayudo a armar tu pedido? 🍔";
-} else if (lowerMessage.includes("pago") || lowerMessage.includes("pagar") || lowerMessage.includes("efectivo") || lowerMessage.includes("transferencia") || lowerMessage.includes("alias")) {
-response += `${paymentInfo}<br><br>`;
-response += "💵 <strong>Efectivo:</strong> Pagas al momento de retirar tu pedido.<br>";
-response += "🏦 <strong>Transferencia:</strong><br>";
-response += "• Alias: <strong>Adri.roti</strong><br>";
-response += "• Titular: Adriana Basilia Enrique<br><br>";
-response += "¿Con qué método prefieres pagar? 😊";
-} else if (lowerMessage.includes("oferta") || lowerMessage.includes("promoción") || lowerMessage.includes("descuento") || lowerMessage.includes("descuentos")) {
-const today = new Date().toLocaleString('es-AR', { weekday: 'long' }).toLowerCase();
-const todayOffer = offers.find(o => o.day === today);
-if (todayOffer) {
-response += `🎉 ¡HOY ${today.toUpperCase()} TENEMOS OFERTA! ✨<br><br>`;
-response += `<strong>${todayOffer.description}</strong><br>`;
-response += `<span style="color:#e74c3c;font-weight:bold">${todayOffer.discount}% de descuento</span><br><br>`;
-response += "¿Te gustaría aprovechar esta promoción? 😊";
-} else {
-response += "📅 Nuestras ofertas semanales son:<br><br>";
-offers.forEach(offer => {
-response += `• <strong>${offer.day.charAt(0).toUpperCase()+offer.day.slice(1)}:</strong> ${offer.description}<br>`;
-});
-response += "<br>¿Quieres que te cuente más sobre alguna en particular?";
-}
-} else if (lowerMessage.includes("pdf") || lowerMessage.includes("resumen") || lowerMessage.includes("comprobante")) {
-if (cart.length > 0) {
-generatePDF();
-response += "📄 ¡Listo! He generado el resumen de tu pedido en PDF.<br><br>";
-response += "¿Quieres confirmar el pedido por WhatsApp ahora? 📲";
-} else {
-response += "🛒 Tu carrito está vacío.<br><br>";
-response += "Primero agrega productos desde el menú y luego podré generar tu resumen. ¿Quieres ver el menú? 😊";
-}
-} else if (lowerMessage.includes("cancelar") || lowerMessage.includes("borrar") || lowerMessage.includes("vaciar")) {
-if (cart.length > 0) {
-cart = [];
-updateCartDisplay();
-response += "🗑️ ¡Listo! He vaciado tu carrito.<br><br>";
-response += "¿Quieres empezar un nuevo pedido? 😊";
-} else {
-response += "Tu carrito ya está vacío. ¿Te gustaría ver nuestro menú para elegir algo rico? 🍽️";
-}
-} else if (lowerMessage.includes("hola") || lowerMessage.includes("buenas") || lowerMessage.includes("saludos")) {
-response += "¡Bienvenido a <strong>Todo Casero</strong>! 🍔❤️<br><br>";
-response += "Somos una rotisería con corazón casero en Campana.<br><br>";
-response += "¿En qué puedo ayudarte hoy?<br>";
-response += "• 📋 Ver menú y precios<br>";
-response += "• 🛒 Hacer un pedido<br>";
-response += "• 🕐 Consultar horarios<br>";
-response += "• 💳 Información de pagos";
-} else if (/\d+\s*[x×]\s*.+/i.test(lowerMessage) || /\d+\s+.+/.test(lowerMessage)) {
-const orderRegex = /(\d+)\s*[x×]?\s*([a-záéíóúñ\s]+)/gi;
-const matches = [...lowerMessage.matchAll(orderRegex)];
-if (matches.length > 0) {
-response += "🎯 Entendí que quieres:<br><br>";
-let addedCount = 0;
-let notFound = [];
-matches.forEach(match => {
-const qty = parseInt(match[1]);
-const nameSearch = match[2].trim();
-const product = products.find(p => p.name.toLowerCase().includes(nameSearch));
-if (product && product.stock >= qty) {
-const existing = cart.find(c => c.id === product.id);
-if (existing) {
-existing.quantity += qty;
-} else {
-cart.push({ id: product.id, name: product.name, price: product.price, quantity: qty });
-}
-addedCount++;
-response += `✅ ${qty}x ${product.name} - $${(product.price*qty).toLocaleString('es-AR')}<br>`;
-} else if (product) {
-notFound.push(`${nameSearch} (solo hay ${product.stock} disponibles)`);
-} else {
-notFound.push(nameSearch);
-}
-});
-if (addedCount > 0) {
-updateCartDisplay();
-response += `<br>🛒 ¡Agregado a tu carrito!`;
-if (notFound.length > 0) {
-response += `<br><br>⚠️ No pude agregar: ${notFound.join(', ')}. ¿Puedes verificar el nombre?`;
-}
-response += `<br><br>¿Quieres continuar con tu pedido o agregar algo más? 😊`;
-} else {
-response += `<br>⚠️ No encontré: ${notFound.join(', ')}.<br><br>`;
-response += "Los nombres exactos son: <em>Bondiola, Milanesa, Muzzarella, Tallarines con Bolognesa</em>, etc.<br><br>";
-response += "¿Puedes intentarlo de nuevo con el nombre exacto? 😊";
-}
-}
-} else {
-response += "Entiendo tu consulta. 😊 Para ayudarte mejor, puedo:<br><br>";
-response += "• 📋 Mostrarte el menú completo<br>";
-response += "• 💰 Decirte precios de productos<br>";
-response += "• 🛒 Ayudarte a armar un pedido<br>";
-response += "• 🕐 Informarte sobre horarios<br>";
-response += "• 💳 Explicarte métodos de pago<br><br>";
-response += "¿Qué necesitas? También puedes escribirme directamente al <strong>+54 348 9358998</strong>. 📲";
-}
-response += `<br><br><em>${closing}</em>`;
-const botMessage = document.createElement("div");
-botMessage.className = "chat-message bot";
-botMessage.innerHTML = response;
-chatBody.appendChild(botMessage);
-input.value = "";
-chatBody.scrollTop = chatBody.scrollHeight;
-}
-
-function openAdmin() {
-document.getElementById("adminPanel").style.display = "block";
-renderProductList();
-}
-function closeAdmin() {
-document.getElementById("adminPanel").style.display = "none";
-document.getElementById("productForm").reset();
-const preview = document.getElementById("previewImage");
-if (preview) preview.style.display = "none";
-document.getElementById("productImageUrl").value = "";
-editingProductId = null;
-}
-function renderProductList() {
-const productList = document.getElementById("productList");
-if (!productList) return;
-productList.innerHTML = "";
-products.forEach(product => {
-const div = document.createElement("div");
-div.className = "product-item";
-div.innerHTML = `
-<span><strong>${product.name}</strong> (${product.category}) - $${product.price.toLocaleString('es-AR')} ${product.stock <= 10 ? `<span class="stock-low">[Stock: ${product.stock}]</span>` : ''}</span>
-<div>
-<button class="btn" onclick="editProduct(${product.id})">✏️ Editar</button>
-<button class="btn" style="background-color: #e74c3c;" onclick="deleteProduct(${product.id})">🗑️ Eliminar</button>
-</div>
-`;
-productList.appendChild(div);
-});
-}
-function editProduct(id) {
-editingProductId = id;
-const product = products.find(p => p.id === id);
-if (!product) return;
-document.getElementById("categorySelect").value = product.category;
-document.getElementById("productName").value = product.name;
-document.getElementById("productPrice").value = product.price;
-document.getElementById("productDescription").value = product.description;
-document.getElementById("productImageUrl").value = product.image || "";
-const preview = document.getElementById("previewImage");
-if (preview && product.image) {
-preview.src = getImageUrl(product.name, product.image);
-preview.style.display = "block";
-}
-window.scrollTo({ top: document.getElementById("adminPanel").offsetTop, behavior: 'smooth' });
-}
-function deleteProduct(id) {
-if (confirm("⚠️ ¿Estás seguro de eliminar este producto? Esta acción no se puede deshacer.")) {
-products = products.filter(p => p.id !== id);
-saveData();
-renderProductList();
-renderCategories();
-alert("✅ Producto eliminado correctamente.");
-}
-}
-
-document.getElementById("viewCart").addEventListener("click", (e) => {
+if(form){
+form.addEventListener('submit', function(e){
 e.preventDefault();
-updateCartDisplay();
-document.getElementById("cartModal").style.display = "flex";
-});
 
-function closeCart() {
-document.getElementById("cartModal").style.display = "none";
+var vehicleTypeEl = document.getElementById('inputVehicleType');
+var vehicleType = vehicleTypeEl && vehicleTypeEl.value ? vehicleTypeEl.value : 'No especificado';
+
+var vehicle = document.getElementById('inputVehicle').value.trim() || 'No especificado';
+var km = document.getElementById('inputKm').value.trim() || 'No especificado';
+
+var fuelTypeEl = document.getElementById('inputFuelType');
+var fuelType = fuelTypeEl && fuelTypeEl.value ? fuelTypeEl.value : 'No especificado';
+
+var symptoms = document.getElementById('inputSymptoms').value.trim() || 'No especificado';
+
+var contextEl = document.getElementById('inputContext');
+var context = contextEl && contextEl.value ? contextEl.options[contextEl.selectedIndex].text : 'No especificado';
+
+var serviceEl = document.getElementById('inputService');
+var service = serviceEl && serviceEl.value ? serviceEl.options[serviceEl.selectedIndex].text : 'No especificado';
+
+var name = document.getElementById('inputName').value.trim() || 'Cliente';
+var phone = document.getElementById('inputPhone').value.trim() || 'No proporcionado';
+
+var message = '🚗 ¡Hola ROMERO MECÁNICA INTEGRAL! 👋\n';
+message += '*Cliente:* ' + name + '\n';
+message += '📱 *Contacto:* ' + phone + '\n';
+message += '🚘 *Tipo de Vehículo:* ' + vehicleType + '\n';
+message += '🚙 *Vehículo:* ' + vehicle + '\n';
+message += '🛣 *Kilometraje:* ' + km + ' km\n';
+message += '⛽ *Combustible:* ' + fuelType + '\n';
+message += '⚠️ *Síntomas reportados:*\n' + symptoms + '\n';
+message += '🔍 *Contexto:* ' + context + '\n';
+message += '🔧 *Servicio solicitado:* ' + service + '\n';
+message += '📍 *Ubicación: Paysandú, Uruguay*\n';
+message += '📅 *Solicito turno para diagnóstico profesional.* 💨';
+
+var originalBtnContent = submitBtn.innerHTML;
+submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Procesando solicitud...';
+submitBtn.classList.add('opacity-80', 'cursor-not-allowed');
+submitBtn.disabled = true;
+
+setTimeout(function(){
+var whatsappUrl = 'https://api.whatsapp.com/send?phone=59898680159&text=' + encodeURIComponent(message);
+window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+
+submitBtn.innerHTML = '<i class="fa-solid fa-circle-check"></i> ¡Solicitud Enviada! ✅';
+submitBtn.classList.add('bg-green-600');
+
+setTimeout(function(){
+submitBtn.innerHTML = originalBtnContent;
+submitBtn.classList.remove('opacity-80', 'cursor-not-allowed', 'bg-green-600');
+submitBtn.disabled = false;
+form.reset();
+allFields.forEach(function(el){
+el.classList.remove('has-value');
+});
+}, 3500);
+}, 1200);
+});
 }
 
-function showDessertModal() {
-const dessertOptionsDiv = document.getElementById("dessertOptions");
-dessertOptionsDiv.innerHTML = '';
-const desserts = products.filter(p => p.category === "Postres" && p.stock > 0);
-if (desserts.length > 0) {
-desserts.forEach(dessert => {
-const btn = document.createElement("button");
-btn.className = "dessert-btn";
-btn.innerHTML = `🍮 ${dessert.name} <span style="font-size:0.9em">- $${dessert.price.toLocaleString('es-AR')}</span>`;
-btn.onclick = () => {
-addToCart(dessert.id, dessert.name, dessert.price);
-document.getElementById("dessertModal").style.display = "none";
-sendOrderDirectly();
-};
-dessertOptionsDiv.appendChild(btn);
-});
-document.getElementById("dessertModal").style.display = "flex";
+// ========== PARALLAX ==========
+const parallaxImg = document.getElementById('parallax-img');
+if(parallaxImg){
+window.addEventListener('scroll', function(){
+const scrollY = window.scrollY;
+if(scrollY < window.innerHeight){
+parallaxImg.style.transform = 'translateY(' + (scrollY * 0.3) + 'px) scale(1.08)';
+}
+}, {passive: true});
+}
+
+// ========== NAVBAR SCROLL ==========
+const navbar = document.getElementById('navbar');
+if(navbar){
+window.addEventListener('scroll', function(){
+if(window.scrollY > 50){
+navbar.classList.add('shadow-lg', 'bg-gray-900/95');
+navbar.classList.remove('glass');
 } else {
-sendOrderDirectly();
+navbar.classList.remove('shadow-lg', 'bg-gray-900/95');
+navbar.classList.add('glass');
 }
-}
-
-function skipDessert() {
-document.getElementById("dessertModal").style.display = "none";
-sendOrderDirectly();
+}, {passive: true});
 }
 
-// ✅ FUNCIÓN MEJORADA: sendOrderDirectly con número WhatsApp correcto
-function sendOrderDirectly() {
-const customerName = document.getElementById("customerName").value.trim();
-const customerPhone = document.getElementById("customerPhone").value.trim();
-if (cart.length === 0) {
-alert("🛒 El carrito está vacío. Agrega productos antes de enviar.");
-return;
-}
-if (!customerName || !customerPhone) {
-alert("📝 Por favor completa tu nombre y celular.");
-return;
-}
-// Actualizar stock
-cart.forEach(item => {
-const product = products.find(p => p.id === parseInt(item.id));
-if (product) product.stock = Math.max(0, product.stock - item.quantity);
-});
-const phoneNumber = "543489358998"; // ✅ Número formateado para WhatsApp API
-const whatsappMessage = generateWhatsAppMessage(customerName, customerPhone);
-window.open(`https://api.whatsapp.com/send?phone=${phoneNumber}&text=${whatsappMessage}`, '_blank');
-// Generar PDF y limpiar
-generatePDF();
-cart = [];
-updateCartDisplay();
-renderCategories();
-saveData();
-closeCart();
-alert("✅ ¡Pedido enviado! Revisa WhatsApp para confirmar con María. 📲");
-}
-
-document.getElementById("sendOrder").addEventListener("click", () => {
-const hasDessertStock = products.some(p => p.category === "Postres" && p.stock > 0);
-if (hasDessertStock) {
-showDessertModal();
-} else {
-sendOrderDirectly();
-}
-});
-
-document.getElementById("adminLink").addEventListener("click", function(e) {
+// ========== SMOOTH SCROLL ==========
+document.querySelectorAll('a[href^="#"]').forEach(function(anchor){
+anchor.addEventListener('click', function(e){
 e.preventDefault();
-document.getElementById("adminModal").style.display = "flex";
+const targetId = this.getAttribute('href');
+if(targetId === '#') return;
+const targetElement = document.querySelector(targetId);
+if(targetElement){
+window.scrollTo({
+top: targetElement.offsetTop - 120,
+behavior: 'smooth'
+});
+}
+});
 });
 
-document.getElementById("productForm").addEventListener("submit", function(e) {
-e.preventDefault();
-const name = document.getElementById("productName").value.trim();
-const price = parseInt(document.getElementById("productPrice").value);
-const description = document.getElementById("productDescription").value.trim();
-const category = document.getElementById("categorySelect").value;
-const imageUrl = document.getElementById("productImageUrl").value.trim();
-if (!name || isNaN(price) || !category) {
-alert("⚠️ Por favor completa los campos obligatorios: Categoría, Nombre y Precio.");
-return;
-}
-const image = imageUrl || "default";
-if (editingProductId) {
-products = products.map(p => p.id === editingProductId ? { ...p, category, name, price, description, image, stock: p.stock } : p);
-} else {
-const id = products.length ? Math.max(...products.map(p => p.id)) + 1 : 1;
-products.push({ id, category, name, price, description, image, stock: 50 });
-}
-renderProductList();
-renderCategories();
-this.reset();
-editingProductId = null;
-saveData();
-alert("✅ Producto guardado correctamente.");
+// ========== FADE IN UP ==========
+document.querySelectorAll('.fade-in-up').forEach(function(el, i){
+el.style.animationDelay = (0.1 + i * 0.12) + 's';
 });
-
-document.getElementById("saveChanges").addEventListener("click", function() {
-saveData();
-alert("💾 ¡Todos los cambios han sido guardados exitosamente!");
-});
-
-// Inicialización
-document.addEventListener("DOMContentLoaded", function() {
-renderCategories();
-["cartModal", "adminModal", "dessertModal"].forEach(id => {
-const modal = document.getElementById(id);
-if (modal) {
-modal.addEventListener("click", function(e) {
-if (e.target === this) {
-if (id === "dessertModal") skipDessert();
-else this.style.display = "none";
-}
-});
-}
-});
-document.querySelectorAll('.animate-text').forEach((el, i) => {
-el.style.animationDelay = `${i * 0.2}s`;
-});
-const setupCarousel = (carouselId, prevBtnId, nextBtnId) => {
-const carousel = document.getElementById(carouselId);
-const prevBtn = document.getElementById(prevBtnId);
-const nextBtn = document.getElementById(nextBtnId);
-if (!carousel || !prevBtn || !nextBtn) return;
-let index = 0;
-const slides = carousel.children.length;
-const show = (i) => carousel.style.transform = `translateX(-${i * 100}%)`;
-prevBtn.onclick = () => { index = (index > 0) ? index - 1 : slides - 1; show(index); };
-nextBtn.onclick = () => { index = (index < slides - 1) ? index + 1 : 0; show(index); };
-setInterval(() => nextBtn.click(), 6000);
-};
-setupCarousel('carousel', 'prevBtn', 'nextBtn');
-setupCarousel('contactCarousel', 'prevBtnContact', 'nextBtnContact');
-const tooltip = document.getElementById('assistantTooltip');
-if (tooltip) {
-setTimeout(() => { tooltip.style.opacity = '1'; }, 4000);
-setTimeout(() => {
-tooltip.style.transition = 'opacity 0.5s';
-tooltip.style.opacity = '0';
-setTimeout(() => tooltip.style.display = 'none', 500);
-}, 10000);
-}
-document.querySelectorAll('nav a[href^="#"]').forEach(link => {
-link.addEventListener('click', function(e) {
-const target = document.querySelector(this.getAttribute('href'));
-if (target) {
-e.preventDefault();
-target.scrollIntoView({ behavior: 'smooth' });
-}
-});
-});
-console.log("✅ Todo Casero - Página cargada correctamente. Versión: " + currentVersion);
 });
 </script>
 </body>
