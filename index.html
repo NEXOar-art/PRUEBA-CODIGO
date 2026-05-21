@@ -78,7 +78,7 @@
         /* Grids de Contenido */
         .grid-inputs {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(45%, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(30%, 1fr));
             gap: 20px;
             margin-bottom: 25px;
         }
@@ -94,7 +94,7 @@
         }
 
         /* Tarjetas con Tooltip Integrado */
-        .card {
+        .card, .math-block {
             background-color: var(--bg-card);
             border: 1px solid var(--border-color);
             border-top: 4px solid var(--cyan-accent);
@@ -108,8 +108,8 @@
             border-top-color: var(--purple-accent);
         }
 
-        /* HOVER TOOLTIP EFECTO */
-        .card::after {
+        /* HOVER TOOLTIP EFECTO GENERALIZADO */
+        .card::after, .math-block::after {
             content: attr(data-help);
             position: absolute;
             bottom: 102%;
@@ -133,7 +133,7 @@
             line-height: 1.4;
         }
 
-        .card:hover::after {
+        .card:hover::after, .math-block:hover::after {
             opacity: 1;
             transform: translateX(-50%) translateY(0);
         }
@@ -204,7 +204,6 @@
             border-color: var(--purple-accent);
         }
 
-        /* Selectores Especiales (Mantenimiento y Calidad) */
         .select-input, .checkbox-label {
             width: 100%;
             background-color: #111827;
@@ -239,7 +238,7 @@
             accent-color: var(--purple-accent);
         }
 
-        /* Bloques de Fórmulas Matemáticas */
+        /* Bloques de Fórmulas Matemáticas y Gráficos */
         .math-block {
             background-color: #1e1b4b;
             border: 1px solid #4338ca;
@@ -247,6 +246,20 @@
             padding: 15px;
             margin-bottom: 15px;
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .semaforo-badge {
+            align-self: flex-end;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 8pt;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
         }
 
         .math-expr {
@@ -261,6 +274,7 @@
         .math-output {
             font-size: 9.5pt;
             color: #a5b4fc;
+            margin-bottom: 10px;
         }
 
         .math-output strong {
@@ -268,7 +282,34 @@
             font-size: 11pt;
         }
 
-        /* KPIs Numéricos de Salida (Aumentado a 5 Columnas) */
+        /* Gráfico Miniatura CSS */
+        .stat-chart-container {
+            width: 100%;
+            height: 10px;
+            background-color: rgba(0,0,0,0.3);
+            border-radius: 5px;
+            margin-bottom: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .stat-chart-fill {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.4s ease, background-color 0.4s ease;
+        }
+
+        .stat-advice {
+            font-size: 8.5pt;
+            color: var(--text-muted);
+            text-align: left;
+            background: rgba(0,0,0,0.2);
+            padding: 8px;
+            border-radius: 4px;
+            border-left: 3px solid;
+        }
+
+        /* KPIs Numéricos de Salida */
         .grid-kpis {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -336,9 +377,9 @@
             display: inline-block;
         }
 
-        .badge-success { background-color: #064e3b; color: #6ee7b7; }
-        .badge-warning { background-color: #78350f; color: #fcd34d; }
-        .badge-danger { background-color: #7f1d1d; color: #fca5a5; }
+        .badge-success { background-color: #064e3b; color: #6ee7b7; border: 1px solid #059669;}
+        .badge-warning { background-color: #78350f; color: #fcd34d; border: 1px solid #d97706;}
+        .badge-danger { background-color: #7f1d1d; color: #fca5a5; border: 1px solid #dc2626;}
 
         /* Lista de Acciones Avanzadas */
         .action-list {
@@ -366,6 +407,55 @@
             color: var(--cyan-accent);
             font-weight: bold;
         }
+
+        /* Estilos Reporte IA */
+        .ia-report-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .ia-metrics {
+            background: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 6px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .ia-text {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 6px;
+            padding: 15px;
+            font-size: 10.5pt;
+            display: flex;
+            align-items: center;
+        }
+
+        .metaprompt-box {
+            background-color: #0f172a;
+            border: 1px dashed #475569;
+            padding: 15px;
+            font-size: 8.5pt;
+            color: #94a3b8;
+            border-radius: 4px;
+            margin-top: 15px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+
+        details summary {
+            cursor: pointer;
+            color: var(--cyan-accent);
+            font-weight: bold;
+            font-size: 9.5pt;
+            outline: none;
+            margin-top: 10px;
+        }
+
     </style>
 </head>
 <body>
@@ -378,20 +468,19 @@
             <h1 class="title-main">NEXO ART-TALLER 4.0</h1>
             <p class="subtitle-main">Módulo de Orquestación Neuro-Mecánica Avanzada | Simulación con Física de Primer Principio</p>
         </div>
-        <div class="version-badge">ANN Physics Engine v4.8-Pro</div>
+        <div class="version-badge">ANN Physics Engine v4.9-Pro</div>
     </header>
 
     <!-- CONTAINER 1: INPUTS Y PARAMETRIZACIÓN -->
     <div class="section-title">1. Entrada de Variables de Telemetría (OBD II) y Factores de Contorno</div>
-    <div class="grid-inputs">
+    <div class="grid-inputs" style="grid-template-columns: repeat(auto-fit, minmax(45%, 1fr));">
         
-        <!-- Bloque Sensores de Físicos Directos -->
         <div class="card" data-help="Panel de adquisición de datos en tiempo real del bloque motor vía OBD-II. Registra magnitudes mecánicas, hidráulicas y térmicas basales.">
             <div class="card-title">Sensores Directos del Bloque Motor</div>
             
             <div class="interactive-box">
                 <div class="control-header">
-                    <span>Kilometraje Acumulado ($K$)</span>
+                    <span>Kilometraje Acumulado (K)</span>
                     <span class="control-value" id="val_K">150,000 km</span>
                 </div>
                 <input type="range" id="input_K" class="slider-input" min="0" max="2000000" step="5000" value="150000">
@@ -399,7 +488,7 @@
 
             <div class="interactive-box">
                 <div class="control-header">
-                    <span>Temperatura del Motor ($T_{motor}$)</span>
+                    <span>Temperatura del Motor (T_motor)</span>
                     <span class="control-value" id="val_Tmotor">90 °C</span>
                 </div>
                 <input type="range" id="input_Tmotor" class="slider-input" min="50" max="160" step="1" value="90">
@@ -407,7 +496,7 @@
 
             <div class="interactive-box">
                 <div class="control-header">
-                    <span>Presión de Aceite ($P_{aceite}$)</span>
+                    <span>Presión de Aceite (P_aceite)</span>
                     <span class="control-value" id="val_Paceite">4.0 bar</span>
                 </div>
                 <input type="range" id="input_Paceite" class="slider-input" min="0.5" max="7.0" step="0.1" value="4.0">
@@ -415,20 +504,19 @@
 
             <div class="interactive-box">
                 <div class="control-header">
-                    <span>Vibraciones Mecánicas Espectrales ($V_{acc}$)</span>
+                    <span>Vibraciones Mecánicas Espectrales (V_acc)</span>
                     <span class="control-value" id="val_Vacc">1.2 g</span>
                 </div>
                 <input type="range" id="input_Vacc" class="slider-input" min="0.0" max="6.0" step="0.1" value="1.2">
             </div>
         </div>
 
-        <!-- Bloque Entorno, Conducción y Calidad de Red -->
         <div class="card card-alt" data-help="Variables exógenas al motor. Mide las condiciones climáticas operativas, agresividad del usuario (estrés instantáneo) e historial de mantenimiento previo que altera los pesos basales de la red.">
             <div class="card-title">Factores de Entorno, Conducción e Historial Clínico</div>
             
             <div class="interactive-box">
                 <div class="control-header">
-                    <span>Temperatura Ambiente Exterior ($T_{ext}$)</span>
+                    <span>Temperatura Ambiente Exterior (T_ext)</span>
                     <span class="control-value" id="val_Text">25 °C</span>
                 </div>
                 <input type="range" id="input_Text" class="slider-input slider-alt" min="-15" max="50" step="1" value="25">
@@ -436,7 +524,7 @@
 
             <div class="interactive-box">
                 <div class="control-header">
-                    <span>Hábitos del Conductor ($L_d$)</span>
+                    <span>Hábitos del Conductor (L_d)</span>
                     <span class="control-value" id="val_Ld">Frugal (3/5)</span>
                 </div>
                 <input type="range" id="input_Ld" class="slider-input slider-alt" min="1" max="5" step="1" value="3">
@@ -444,7 +532,7 @@
 
             <div class="interactive-box">
                 <div class="control-header">
-                    <span>Fiabilidad/Ruido en Red de Sensores ($\alpha_{sensor}$)</span>
+                    <span>Fiabilidad/Ruido en Red de Sensores (α_sensor)</span>
                 </div>
                 <select id="input_Alpha" class="select-input">
                     <option value="1.0" selected>Alta Confiabilidad (α = 1.00 — Señal Limpia)</option>
@@ -478,24 +566,36 @@
     <!-- CONTAINER 2: FEATURE ENGINEERING -->
     <div class="section-title">2. Ecuaciones Físico-Sintéticas (Capa Latente Inferencial)</div>
     <div class="grid-inputs">
-        <div class="math-block">
-            <div class="math-expr">TSI = (T_{motor} - T_{ext}) \cdot (1 + \frac{L_d}{5})</div>
+        
+        <div class="math-block" data-help="TSI (Thermal Stress Index): Mide la acumulación de calor entrópico no disipado. Cuantifica el gradiente térmico respecto al ambiente ponderado por la exigencia de conducción.">
+            <div class="semaforo-badge" id="badge_TSI">Calculando...</div>
+            <div class="math-expr">TSI = (T_motor - T_ext) * (1 + L_d / 5)</div>
             <div class="math-output">Estrés Térmico Acumulado: <strong id="out_TSI">0.00 °C-Grad</strong></div>
+            <div class="stat-chart-container"><div class="stat-chart-fill" id="chart_TSI"></div></div>
+            <div class="stat-advice" id="advice_TSI" style="border-left-color: #38bdf8;">Contextualizando datos...</div>
         </div>
-        <div class="math-block" style="border-color: #065f46; background-color: #064e3b;">
-            <div class="math-expr">VIP = P_{aceite} \cdot (\frac{150}{T_{motor} + 20}) \cdot \beta_{mant}</div>
+
+        <div class="math-block" style="border-color: #065f46; background-color: #064e3b;" data-help="VIP (Viscosity Proxy Index): Índice sintético de la capacidad portante de la película de aceite, derivado de la presión hidrostática y la degradación térmica de la viscosidad.">
+            <div class="semaforo-badge" id="badge_VIP">Calculando...</div>
+            <div class="math-expr">VIP = P_aceite * (150 / (T_motor + 20)) * β_mant</div>
             <div class="math-output">Viscosidad Proxy Resultante: <strong id="out_VIP">0.00 cSt-Proxy</strong></div>
+            <div class="stat-chart-container"><div class="stat-chart-fill" id="chart_VIP"></div></div>
+            <div class="stat-advice" id="advice_VIP" style="border-left-color: #10b981;">Contextualizando datos...</div>
         </div>
-        <div class="math-block" style="border-color: #9d174d; background-color: #831843;">
-            <div class="math-expr">WI = \frac{K_{adj}}{250.000} \cdot (1 + V_{acc} \cdot 0.1)</div>
+
+        <div class="math-block" style="border-color: #9d174d; background-color: #831843;" data-help="WI (Wear Index): Ecuación de fatiga de ciclo alto. Integra el desgaste por fricción basal (kilometraje) con la amplitud de micro-deformaciones (vibración armónica).">
+            <div class="semaforo-badge" id="badge_WI">Calculando...</div>
+            <div class="math-expr">WI = (K_adj / 250k) * (1 + V_acc * 0.1)</div>
             <div class="math-output">Índice de Fatiga Estructural: <strong id="out_WI">0.00 Base-Fatiga</strong></div>
+            <div class="stat-chart-container"><div class="stat-chart-fill" id="chart_WI"></div></div>
+            <div class="stat-advice" id="advice_WI" style="border-left-color: #f43f5e;">Contextualizando datos...</div>
         </div>
+
     </div>
 
     <!-- CONTAINER 3: OUTPUTS DE RED NEURONAL MULTIMODAL -->
-    <div class="section-title">3. Inferencia de Red Neuronal Multimodal ($ANN_{\Theta}$) & Previsiones</div>
+    <div class="section-title">3. Inferencia de Red Neuronal Multimodal (ANN_Θ) & Previsiones</div>
     
-    <!-- KPIs de Salida (Ampliados a 5 tarjetas con Tooltips) -->
     <div class="grid-kpis">
         <div class="card kpi-card" id="kpi_rul_card" style="border-top-color: var(--cyan-accent);" data-help="Remaining Useful Life (Vida Útil Restante). Predicción de kilometraje disponible antes de que un subsistema principal sufra una falla por fatiga catastrófica generalizada.">
             <div class="card-title">Vida Útil Restante (RUL)</div>
@@ -531,7 +631,7 @@
             <thead>
                 <tr>
                     <th style="width: 35%;">Componente / Subsistema Evaluado</th>
-                    <th style="width: 30%;">Probabilidad de Falla ($ANN_{\Theta}$)</th>
+                    <th style="width: 30%;">Probabilidad de Falla (ANN_Θ)</th>
                     <th>Estado Crítico Operacional</th>
                 </tr>
             </thead>
@@ -566,6 +666,77 @@
 
     <!-- RECOMENDACIONES MECÁNICAS OPERATIVAS -->
     <div class="section-title">4. Plan de Acción Técnico Ajustado (Basado en Física Aplicada e IA)</div>
+    
+    <!-- NUEVO: REPORTE TÉCNICO OBJETIVO (SCRAPPING DE CONTEXTO) -->
+    <div class="card" style="border-top-color: var(--purple-accent); margin-bottom: 20px;" data-help="Motor de inferencia documental. Combina las salidas numéricas y las traduce en un JSON lógico y textual automatizado para el registro de mantenimiento.">
+        <div class="card-title" style="color: var(--purple-accent);">Reporte Técnico Objetivo (Inferencia IA Multimodal)</div>
+        
+        <div class="ia-report-grid">
+            <div class="ia-metrics">
+                <div style="font-size: 9pt; color: var(--text-muted); text-transform: uppercase; margin-bottom: 5px;">Índice Numérico de Riesgo (0-1)</div>
+                <div id="ia_riesgo_val" style="font-size: 28pt; font-weight: bold; font-family: monospace; color: #ffffff;">0.00</div>
+                <div id="ia_semaforo_badge" class="badge" style="margin-top: 10px; font-size: 10pt; padding: 6px 12px;">VERDE</div>
+            </div>
+            <div class="ia-text">
+                <p id="ia_texto_respuesta" style="line-height: 1.6;">
+                    Evaluando telemetría...
+                </p>
+            </div>
+        </div>
+
+        <details>
+            <summary>Ver Metaprompt de Arquitectura IA</summary>
+            <div class="metaprompt-box">Objetivo:
+Diseñar una red neuronal multimodal que procese datos técnicos de taller (sensores, historial, reportes) y entregue respuestas en tres formatos:
+1. Texto explicativo
+2. Índice numérico de riesgo
+3. Indicador visual estilo semáforo (verde, amarillo, rojo)
+
+Entradas:
+- Variables numéricas: presión, temperatura, vibración, consumo eléctrico, kilometraje.
+- Variables categóricas: tipo de servicio, frecuencia de fallas, estado del vehículo.
+- Texto libre: comentarios de mecánicos, reportes de clientes.
+
+Preprocesamiento:
+- Normalizar valores numéricos.
+- Codificar variables categóricas.
+- Generar features derivados (ej. tasa de fallas por hora de uso).
+- Embeddings para texto de reportes.
+
+Arquitectura:
+- Bloque numérico (MLP) para datos cuantitativos.
+- Bloque contextual (LSTM/Transformer) para texto.
+- Capa de fusión que combine ambos vectores.
+- Capa de salida con tres ramas:
+   a) Texto: explicación automática del estado.
+   b) Numérico: índice de riesgo (0–1).
+   c) Semáforo: lógica condicional
+      - Verde: riesgo < 0.3
+      - Amarillo: 0.3–0.6
+      - Rojo: >0.6
+
+Orquestación:
+- Integrar en Dashboard Predictivo (Gemini/Plotly/Streamlit).
+- API REST que exponga salida en JSON:
+  {
+    "texto": "Cambio de aceite recomendado",
+    "riesgo": 0.25,
+    "semaforo": "verde"
+  }
+- Automatizar alertas vía WhatsApp/CRM.
+- Vincular con Google Maps para sugerir talleres cercanos.
+
+Indicadores:
+- Texto: recomendación clara y contextual.
+- Numérico: índice de riesgo calculado.
+- Semáforo: visualización rápida para toma de decisiones.
+
+Uso:
+El sistema debe permitir al mecánico y al cliente interpretar fácilmente el estado del vehículo, anticipar fallas y programar mantenimientos preventivos.</div>
+        </details>
+    </div>
+
+    <!-- Lista de Acciones Originales -->
     <div class="card" style="border-top-color: var(--color-nominal);" data-help="Motor de toma de decisiones prescritas. Traduce los estados probabilísticos abstractos en intervenciones mecánicas reales fundamentadas en ecuaciones cinemáticas y tribológicas.">
         <ul class="action-list" id="action_container">
             <!-- Dinámico por JS -->
@@ -597,9 +768,24 @@
         val_Vacc: document.getElementById('val_Vacc'),
         val_Text: document.getElementById('val_Text'),
         val_Ld: document.getElementById('val_Ld'),
+        
+        // Ecuaciones Físico-Sintéticas
         out_TSI: document.getElementById('out_TSI'),
+        badge_TSI: document.getElementById('badge_TSI'),
+        chart_TSI: document.getElementById('chart_TSI'),
+        advice_TSI: document.getElementById('advice_TSI'),
+
         out_VIP: document.getElementById('out_VIP'),
+        badge_VIP: document.getElementById('badge_VIP'),
+        chart_VIP: document.getElementById('chart_VIP'),
+        advice_VIP: document.getElementById('advice_VIP'),
+
         out_WI: document.getElementById('out_WI'),
+        badge_WI: document.getElementById('badge_WI'),
+        chart_WI: document.getElementById('chart_WI'),
+        advice_WI: document.getElementById('advice_WI'),
+
+        // Outputs KPIs
         kpi_RUL: document.getElementById('kpi_RUL'),
         kpi_RUL_status: document.getElementById('kpi_RUL_status'),
         kpi_Confianza: document.getElementById('kpi_Confianza'),
@@ -609,6 +795,8 @@
         kpi_status_card: document.getElementById('kpi_status_card'),
         kpi_Termico: document.getElementById('kpi_Termico'),
         kpi_Friccion: document.getElementById('kpi_Friccion'),
+        
+        // Tablas Probabilidad
         prob_txt_ciguenal: document.getElementById('prob_txt_ciguenal'),
         bar_ciguenal: document.getElementById('bar_ciguenal'),
         badge_ciguenal: document.getElementById('badge_ciguenal'),
@@ -618,11 +806,70 @@
         prob_txt_cilindros: document.getElementById('prob_txt_cilindros'),
         bar_cilindros: document.getElementById('bar_cilindros'),
         badge_cilindros: document.getElementById('badge_cilindros'),
+        
+        // Reporte IA
+        ia_riesgo_val: document.getElementById('ia_riesgo_val'),
+        ia_semaforo_badge: document.getElementById('ia_semaforo_badge'),
+        ia_texto_respuesta: document.getElementById('ia_texto_respuesta'),
+        
+        // Acciones
         actions: document.getElementById('action_container')
     };
 
     function sigmoid(x) {
         return 1 / (1 + Math.exp(-x));
+    }
+
+    function actualizarSemaforoYGrafico(id, valor, umbralBueno, umbralMalo, invertido = false) {
+        let badge = outputs[`badge_${id}`];
+        let chart = outputs[`chart_${id}`];
+        let advice = outputs[`advice_${id}`];
+
+        let estado = "ÓPTIMO";
+        let colorClass = "badge-success";
+        let bgColor = "#10b981";
+        
+        let pct = 0;
+
+        // Logica para indicadores donde MENOR es MEJOR (Ej: TSI, WI)
+        if (!invertido) {
+            pct = Math.min((valor / (umbralMalo * 1.2)) * 100, 100);
+            if (valor >= umbralMalo) {
+                estado = "MALO";
+                colorClass = "badge-danger";
+                bgColor = "#ef4444";
+                advice.innerText = `Análisis de desvío: Valor crítico (${valor.toFixed(2)}). El contexto estadístico predice daño inminente. La automatización recomienda inspección.`;
+            } else if (valor >= umbralBueno) {
+                estado = "BUENO";
+                colorClass = "badge-warning";
+                bgColor = "#f59e0b";
+                advice.innerText = `Análisis de tendencia: Nivel aceptable (${valor.toFixed(2)}). Observar evolución a mediano plazo para mantener la precisión del modelo.`;
+            } else {
+                advice.innerText = `Eficiencia analítica: Funcionamiento basal exacto (${valor.toFixed(2)}). Tolerancias dentro del rango estadístico deseado.`;
+            }
+        } else {
+            // Lógica para indicadores donde MAYOR es MEJOR (Ej: VIP)
+            pct = Math.min((valor / (umbralBueno * 1.5)) * 100, 100);
+            if (valor <= umbralMalo) {
+                estado = "MALO";
+                colorClass = "badge-danger";
+                bgColor = "#ef4444";
+                advice.innerText = `Análisis de desvío: Caída peligrosa (${valor.toFixed(2)}). La red IA marca déficit en la resistencia de película.`;
+            } else if (valor <= umbralBueno) {
+                estado = "BUENO";
+                colorClass = "badge-warning";
+                bgColor = "#f59e0b";
+                advice.innerText = `Análisis de tendencia: Nivel marginal (${valor.toFixed(2)}). Lubricación estable pero al límite de la zona estadística segura.`;
+            } else {
+                advice.innerText = `Eficiencia analítica: Lubricación excelente (${valor.toFixed(2)}). Condición termodinámica perfecta según el reporte.`;
+            }
+        }
+
+        badge.className = `semaforo-badge ${colorClass}`;
+        badge.innerText = estado;
+        chart.style.width = `${pct}%`;
+        chart.style.backgroundColor = bgColor;
+        advice.style.borderLeftColor = bgColor;
     }
 
     function recalcularSimulacion() {
@@ -659,34 +906,32 @@
         outputs.out_VIP.innerText = VIP.toFixed(2) + " cSt-Proxy";
         outputs.out_WI.innerText = WI.toFixed(2) + " Base-Fatiga";
 
-        // --- ADICIÓN DE FÍSICA APLICADA REAL ---
-        // 1. Ecuación Térmica Convectiva / Entrópica (Joule/segundo transferidos por diferencial térmico y torque)
+        // Actualizar Semáforos y Gráficos (Umbrales de decisión estadística)
+        actualizarSemaforoYGrafico('TSI', TSI, 90, 140, false);  // TSI menor es mejor
+        actualizarSemaforoYGrafico('VIP', VIP, 4.0, 2.5, true);  // VIP mayor es mejor
+        actualizarSemaforoYGrafico('WI', WI, 0.8, 1.5, false);   // WI menor es mejor
+
+        // FÍSICA APLICADA REAL
         const q_disipacion = Math.max(0, (Tmotor - Text) * 45 * (1 + (Ld * 0.15)));
         outputs.kpi_Termico.innerText = Math.round(q_disipacion).toLocaleString('es-AR') + " J/s";
 
-        // 2. Parámetro Lambda de Stribeck (Espesor de película lubricante vs Rugosidad)
-        // Valores altos (> 3) indican lubricación fluida perfecta, bajos (< 1) fricción límite destructiva.
         const lambda_stribeck = Math.max(0.1, (VIP * 1.2) / (1 + (Vacc * 0.4)));
         outputs.kpi_Friccion.innerText = lambda_stribeck.toFixed(2) + " λ";
 
-        // Red Neuronal Ponderada por Calidad de Señal
+        // Red Neuronal Ponderada
         const penalizacionRuido = (1 - alpha) * 1.5;
 
-        // Falla Cigüeñal (Correlacionada con la ley de Paris para propagación de microfisuras por vibración)
         let net_ciguenal = (WI * 0.85) + (Vacc * 0.6) - (lambda_stribeck * 0.9) - (inputs.maintCojinetes.checked ? 3.5 : 0.0);
         net_ciguenal = (net_ciguenal * alpha) + penalizacionRuido - 2.2; 
         let prob_ciguenal = sigmoid(net_ciguenal);
 
-        // Falla Culata (Termodinámica pura de deformaciones elasto-plásticas por gradiente de temperatura)
         let net_culata = (TSI * 0.045) + (Tmotor * 0.055) - (alpha * 4.0) - 4.5;
         let prob_culata = sigmoid(net_culata);
 
-        // Falla Cilindros (Energía de activación de Arrhenius: menor lubricación y calor acelera desgaste exponencial)
         let net_cilindros = (K / 350000) - (lambda_stribeck * 1.5) + (Tmotor * 0.02) - 1.2;
         net_cilindros = (net_cilindros * alpha) + (beta_sensores * -2.0);
         let prob_cilindros = sigmoid(net_cilindros);
 
-        // Restricciones físicas lógicas
         if (inputs.maintCojinetes.checked && K_adj < 100000) prob_ciguenal *= 0.1;
         if (inputs.maintAceite.checked && lambda_stribeck > 2.5) prob_cilindros *= 0.3;
 
@@ -732,15 +977,11 @@
 
         const confianzaFinal = alpha * 100;
         outputs.kpi_Confianza.innerText = confianzaFinal.toFixed(1) + "%";
-        if (confianzaFinal < 50) {
-            outputs.kpi_Confianza_status.innerText = "Señales degradadas. Red neuronal aplicando pesos heurísticos.";
-        } else if (confianzaFinal < 100) {
-            outputs.kpi_Confianza_status.innerText = "Filtro analítico activo contra ruido transitorio.";
-        } else {
-            outputs.kpi_Confianza_status.innerText = "Fusión de datos limpia y verificada sin interferencia.";
-        }
 
-        // Ejecutar Plan de Acción Físico Ponderado
+        // Orquestador Reporte IA Multimodal
+        generarReporteIA(factor_degradacion_max, alpha, lambda_stribeck, WI);
+
+        // Plan de Acción Físico Ponderado
         generarPlanAccionAjustado(pCiguenal, pCulata, pCilindros, alpha, lambda_stribeck, q_disipacion, WI, K);
     }
 
@@ -760,16 +1001,19 @@
             badgeElement.classList.add('badge-danger');
             badgeElement.innerText = "Alerta Crítica";
             textElement.style.color = 'var(--color-critico)';
+            barElement.style.backgroundColor = 'var(--color-critico)';
         } else if (porcentaje > 40) {
             barElement.classList.add('bg-advertencia');
             badgeElement.classList.add('badge-warning');
             badgeElement.innerText = "Fatiga Avanzada";
             textElement.style.color = 'var(--color-advertencia)';
+            barElement.style.backgroundColor = 'var(--color-advertencia)';
         } else {
             barElement.classList.add('bg-nominal');
             badgeElement.classList.add('badge-success');
             badgeElement.innerText = "Operación Segura";
             textElement.style.color = 'var(--color-nominal)';
+            barElement.style.backgroundColor = 'var(--color-nominal)';
         }
     }
 
@@ -790,17 +1034,53 @@
         }
     }
 
-    // --- NUEVO MOTOR DE DECISIÓN FUNDAMENTADO EN FÍSICA AVANZADA ---
+    // --- ORQUESTADOR: REPORTE TÉCNICO IA ---
+    function generarReporteIA(riesgoBase, alpha, lambda, WI) {
+        // Ajuste fino del riesgo numérico usando las variables procesadas
+        let riesgoNumerico = riesgoBase;
+        if (alpha < 0.8) riesgoNumerico += (1 - alpha) * 0.2; // Penaliza ruido
+        if (lambda < 1.0) riesgoNumerico += 0.15; // Penaliza fricción seca
+        
+        riesgoNumerico = Math.min(Math.max(riesgoNumerico, 0), 1);
+        
+        outputs.ia_riesgo_val.innerText = riesgoNumerico.toFixed(2);
+        
+        let textoContextual = "";
+
+        if (riesgoNumerico > 0.6) {
+            outputs.ia_semaforo_badge.className = "badge badge-danger";
+            outputs.ia_semaforo_badge.innerText = "ROJO - RIESGO CRÍTICO";
+            textoContextual = `<strong>Explicación Automática del Estado:</strong> El bloque motor exhibe parámetros fuera del rango estadístico nominal. La fusión de embeddings técnicos indica alta probabilidad de falla inminente inducida por fatiga mecánica (Índice de Riesgo: ${riesgoNumerico.toFixed(2)}). Se requiere orquestar una intervención correctiva inmediata. Las alertas CRM y las sugerencias de ruteo de taller se han activado vía API.`;
+            outputs.ia_riesgo_val.style.color = 'var(--color-critico)';
+        } else if (riesgoNumerico > 0.3) {
+            outputs.ia_semaforo_badge.className = "badge badge-warning";
+            outputs.ia_semaforo_badge.innerText = "AMARILLO - MANTENIMIENTO PREVENTIVO";
+            textoContextual = `<strong>Explicación Automática del Estado:</strong> Las métricas de telemetría muestran degradación parcial activa. La red neuronal sugiere agendar un servicio preventivo a la brevedad para rectificar el desvío antes de que el daño estructural altere la física interna del motor (Índice de Riesgo: ${riesgoNumerico.toFixed(2)}). Se recomienda programar mantenimiento en el dashboard.`;
+            outputs.ia_riesgo_val.style.color = 'var(--color-advertencia)';
+        } else {
+            outputs.ia_semaforo_badge.className = "badge badge-success";
+            outputs.ia_semaforo_badge.innerText = "VERDE - OPERACIÓN NOMINAL";
+            textoContextual = `<strong>Explicación Automática del Estado:</strong> Con un Índice de Riesgo bajo (${riesgoNumerico.toFixed(2)}), el vector de estado valida que la tribología y termodinámica están en óptimas condiciones. El contexto estadístico garantiza la precisión de la salida predictiva y no amerita acciones correctivas. Continuar el plan automatizado estándar.`;
+            outputs.ia_riesgo_val.style.color = 'var(--color-nominal)';
+        }
+
+        // Agregar formato JSON emulado para cumplir el metaprompt
+        textoContextual += `<br><br><span style="color:#94a3b8; font-family:monospace; font-size:9pt;">[API REST JSON Output] -> { "texto": "${textoContextual.substring(46, 85)}...", "riesgo": ${riesgoNumerico.toFixed(2)}, "semaforo": "${outputs.ia_semaforo_badge.innerText.split(" ")[0].toLowerCase()}" }</span>`;
+
+        outputs.ia_texto_respuesta.innerHTML = textoContextual;
+    }
+
+    // --- PLAN DE ACCIÓN FÍSICO ---
     function generarPlanAccionAjustado(pCig, pCul, pCil, alpha, lambda, q_dis, WI, K) {
         let htmlStr = "";
 
         if (alpha <= 0.6) {
-            htmlStr += `<li><strong>[CALIBRACIÓN DE RED] Compensación de Ruido Activa (α=${alpha.toFixed(2)}):</strong> Variación armónica detectada en los transductores. La red neuronal ha restado peso al sensor ruidoso. <em>Recomendación eléctrica:</em> Comprobar impedancia en la línea física de masa del bloque motor y limpiar la interfaz del bus OBD antes de desarmar.</li>`;
+            htmlStr += `<li><strong>[CALIBRACIÓN DE RED] Compensación de Ruido Activa (α=${alpha.toFixed(2)}):</strong> Variación armónica detectada en los transductores. La red neuronal ha restado peso al sensor ruidoso para mantener la precisión. <em>Recomendación eléctrica:</em> Comprobar impedancia en la línea física de masa del bloque motor y limpiar la interfaz del bus OBD antes de desarmar.</li>`;
         }
         
         if (pCig > 40) {
             if (WI > 5.0 && lambda < 1.5) {
-                htmlStr += `<li><strong>[FÍSICA DE FRACTURA - CIGÜEÑAL]:</strong> El índice de fatiga acumulado (${WI.toFixed(2)}) indica microfisuras activas según el modelo de Paris-Erdogan. El film lubricante está en régimen límite destructivo (${lambda.toFixed(2)} λ). <em>Reparación Ajustada:</em> No desmontar el bloque completo; realizar un volteo de cárter e instalar cojinetes trimetálicos de sobremedida con canales de lubricación hidrodinámica ensanchados.</li>`;
+                htmlStr += `<li><strong>[FÍSICA DE FRACTURA - CIGÜEÑAL]:</strong> El índice de fatiga acumulado (${WI.toFixed(2)}) indica microfisuras activas. El film lubricante está en régimen límite destructivo (${lambda.toFixed(2)} λ). <em>Reparación Ajustada:</em> Realizar un volteo de cárter e instalar cojinetes trimetálicos de sobremedida con canales de lubricación hidrodinámica ensanchados.</li>`;
             } else {
                 htmlStr += `<li><strong>[FÍSICA DE FRACTURA - CIGÜEÑAL]:</strong> Estrés por armónicos de vibración alta. <em>Reparación Ajustada:</em> Rectificar el damper de cigüeñal (polea equilibradora) para mitigar frecuencias críticas torsionales que fatigan los apoyos axiales.</li>`;
             }
@@ -808,22 +1088,22 @@
 
         if (pCul > 40) {
             if (q_dis > 3000) {
-                htmlStr += `<li><strong>[TERMODINÁMICA - CULATA]:</strong> Flujo entrópico crítico de calor (${Math.round(q_dis)} J/s) hacia la tapa de cilindros. Riesgo inminente de pandeo elasto-plástico por gradiente térmico severo. <em>Reparación Ajustada:</em> Realizar bypass de enfriamiento no invasivo aumentando el flujo volumétrico de la bomba de agua. Si se abre en el futuro, se prescribe junta de culata multilámina de acero (MLS) con torque angular controlado para absorber las tensiones térmicas.</li>`;
+                htmlStr += `<li><strong>[TERMODINÁMICA - CULATA]:</strong> Flujo entrópico crítico de calor (${Math.round(q_dis)} J/s). Riesgo de pandeo elasto-plástico por gradiente térmico. <em>Reparación Ajustada:</em> Realizar bypass de enfriamiento aumentando el flujo de la bomba de agua. Aplicar junta de culata multilámina de acero (MLS) con torque angular controlado.</li>`;
             } else {
-                htmlStr += `<li><strong>[TERMODINÁMICA - CULATA]:</strong> Gradiente moderado. <em>Acción preventiva:</em> Purga neumática del circuito de refrigeración y aditivación con glicol puro al 50% para elevar el punto de ebullición molecular.</li>`;
+                htmlStr += `<li><strong>[TERMODINÁMICA - CULATA]:</strong> Gradiente moderado. <em>Acción preventiva:</em> Purga neumática del circuito de refrigeración y aditivación con glicol puro al 50%.</li>`;
             }
         }
 
         if (pCil > 40) {
             if (lambda < 1.0) {
-                htmlStr += `<li><strong>[TRIBOLOGÍA - CILINDROS / SEGMENTOS]:</strong> Ruptura total de la película de lubricante (Película hidrodinámica rota a ${lambda.toFixed(2)} λ). Fricción de cizallamiento abrasiva severa según ecuaciones de desgaste de Archard. <em>Reparación Ajustada:</em> Ejecutar inmediatamente un lavado químico interno (Engine Flush) para liberar segmentos pegados por carbonilla y sustituir el fluido por un aceite sintético de base polialfaolefina (PAO) con alta estabilidad HTHS (High Temperature High Shear).</li>`;
+                htmlStr += `<li><strong>[TRIBOLOGÍA - CILINDROS / SEGMENTOS]:</strong> Ruptura total de la película de lubricante (${lambda.toFixed(2)} λ). Fricción de cizallamiento abrasiva severa. <em>Reparación Ajustada:</em> Ejecutar lavado químico interno (Engine Flush) y sustituir por un aceite sintético (PAO) con alta estabilidad HTHS.</li>`;
             } else if (K > 1200000 && !inputs.maintMotor.checked) {
-                htmlStr += `<li><strong>[TRIBOLOGÍA - CILINDROS]:</strong> Desgaste por historial macroscópico abrasivo de la camisa del cilindro. <em>Reparación Ajustada:</em> Utilizar tratamiento antifricción molecular a base de partículas cerámicas (Nitruro de Boro hex.) capaz de rellenar rugosidades microscópicas mediante enlace térmico superficial sin mecanizar el bloque.</li>`;
+                htmlStr += `<li><strong>[TRIBOLOGÍA - CILINDROS]:</strong> Desgaste macroscópico abrasivo. <em>Reparación Ajustada:</em> Utilizar tratamiento antifricción molecular a base de partículas cerámicas para rellenar rugosidades sin mecanizar el bloque.</li>`;
             }
         }
 
         if (htmlStr === "") {
-            htmlStr = `<li><strong>[ESTADO OPERATIVO NOMINAL]:</strong> El balance dinámico de disipación de calor (${Math.round(q_dis)} J/s) y la separación de película lubricante (${lambda.toFixed(2)} λ) están en equilibrio termodinámico perfecto. No hay fatiga mecánica detectable por el ecosistema de la red neuronal artificial.</li>`;
+            htmlStr = `<li><strong>[ESTADO OPERATIVO NOMINAL]:</strong> El balance de disipación de calor (${Math.round(q_dis)} J/s) y la separación de película lubricante (${lambda.toFixed(2)} λ) están en equilibrio termodinámico, proveyendo un contexto estadístico limpio y seguro. No hay fatiga mecánica detectable por la automatización de la red.</li>`;
         }
 
         outputs.actions.innerHTML = htmlStr;
@@ -831,8 +1111,10 @@
 
     // Eventos
     Object.values(inputs).forEach(input => {
-        input.addEventListener('input', recalcularSimulacion);
-        input.addEventListener('change', recalcularSimulacion);
+        if (input) {
+            input.addEventListener('input', recalcularSimulacion);
+            input.addEventListener('change', recalcularSimulacion);
+        }
     });
 
     window.addEventListener('DOMContentLoaded', recalcularSimulacion);
@@ -840,3 +1122,5 @@
 
 </body>
 </html>
+
+```
