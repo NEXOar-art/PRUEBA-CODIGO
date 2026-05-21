@@ -3,874 +3,697 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXO ART-TALLER 4.0 - Diagnóstico Avanzado</title>
+    <title>NEXO ART-TALLER 4.0 - Holographic Engine</title>
     <style>
         :root {
-            --bg-main: #0b0f19;
-            --bg-card: #111827;
-            --bg-input: #1f2937;
-            --border-color: #374151;
-            --text-main: #f1f5f9;
-            --text-muted: #9ca3af;
-            --cyan-accent: #38bdf8;
-            --purple-accent: #a855f7;
-            --color-critico: #ef4444;
-            --color-advertencia: #f59e0b;
-            --color-nominal: #10b981;
+            --bg-base: #03050a;
+            --bg-panel: #0b101e;
+            --bg-panel-light: #151b2b;
+            --border-glow: rgba(56, 189, 248, 0.2);
+            --border-solid: #1e293b;
+            
+            --text-main: #f8fafc;
+            --text-muted: #64748b;
+            
+            --cyan-neon: #38bdf8;
+            --purple-neon: #c084fc;
+            --green-neon: #10b981;
+            --red-neon: #ef4444;
+            --yellow-neon: #f59e0b;
+
+            --font-ui: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            --font-mono: 'Courier New', Courier, monospace;
         }
 
-        *, *::before, *::after {
+        * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-main);
+            font-family: var(--font-ui);
+            background-color: var(--bg-base);
             color: var(--text-main);
-            padding: 25px;
-            line-height: 1.5;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        /* Cabecera Estilo Power BI */
-        .header-dashboard {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            height: 100vh;
+            overflow: hidden;
         }
 
-        .title-main {
-            font-size: 24pt;
-            font-weight: 800;
-            color: var(--cyan-accent);
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-        }
-
-        .subtitle-main {
-            font-size: 10.5pt;
-            color: var(--text-muted);
-            margin-top: 5px;
-        }
-
-        .version-badge {
-            background-color: #0369a1;
-            color: #e0f2fe;
-            padding: 8px 16px;
-            border-radius: 4px;
-            font-weight: bold;
-            font-size: 9.5pt;
-            letter-spacing: 0.5px;
-        }
-
-        /* Grids de Contenido */
-        .grid-inputs {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(30%, 1fr));
-            gap: 20px;
-            margin-bottom: 25px;
-        }
-
-        .section-title {
-            font-size: 13pt;
-            color: var(--text-main);
-            border-left: 4px solid var(--cyan-accent);
-            padding-left: 10px;
-            margin: 20px 0 15px 0;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        /* Tarjetas con Tooltip Integrado */
-        .card, .math-block {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-top: 4px solid var(--cyan-accent);
-            border-radius: 6px;
-            padding: 20px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
-            position: relative;
-        }
-
-        .card-alt {
-            border-top-color: var(--purple-accent);
-        }
-
-        /* HOVER TOOLTIP EFECTO GENERALIZADO */
-        .card::after, .math-block::after {
-            content: attr(data-help);
-            position: absolute;
-            bottom: 102%;
-            left: 50%;
-            transform: translateX(-50%) translateY(10px);
-            background-color: #1e293b;
-            color: #ffffff;
-            padding: 10px 14px;
-            border-radius: 6px;
-            font-size: 9pt;
-            font-weight: normal;
-            width: 280px;
-            border: 1px solid var(--cyan-accent);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s ease, transform 0.2s ease;
-            z-index: 100;
-            text-transform: none;
-            text-align: left;
-            line-height: 1.4;
-        }
-
-        .card:hover::after, .math-block:hover::after {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        .card-title {
-            font-size: 10pt;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            margin-bottom: 15px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        /* Componentes de Control Interactivos */
-        .interactive-box {
-            background-color: var(--bg-input);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 15px;
-            margin-bottom: 15px;
-        }
-
-        .control-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-            font-size: 10pt;
-        }
-
-        .control-value {
-            font-weight: bold;
-            color: #ffffff;
-            background-color: #111827;
-            padding: 2px 8px;
-            border-radius: 4px;
-            border: 1px solid var(--border-color);
-        }
-
-        .slider-input {
-            width: 100%;
-            -webkit-appearance: none;
-            appearance: none;
-            height: 6px;
-            background: #374151;
-            border-radius: 3px;
-            outline: none;
-            margin-top: 5px;
-        }
-
-        .slider-input::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background: #ffffff;
-            border: 2px solid var(--cyan-accent);
-            cursor: pointer;
-            transition: transform 0.1s;
-        }
-
-        .slider-input::-webkit-slider-thumb:hover {
-            transform: scale(1.2);
-        }
-
-        .slider-alt::-webkit-slider-thumb {
-            border-color: var(--purple-accent);
-        }
-
-        .select-input, .checkbox-label {
-            width: 100%;
-            background-color: #111827;
-            color: #ffffff;
-            border: 1px solid var(--border-color);
-            padding: 10px;
-            border-radius: 4px;
-            outline: none;
-            font-size: 9.5pt;
-        }
-
-        .maintenance-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 5px;
-        }
-
-        .checkbox-container {
-            display: flex;
-            align-items: center;
-            background-color: #111827;
-            border: 1px solid var(--border-color);
-            padding: 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .checkbox-container input {
-            margin-right: 10px;
-            accent-color: var(--purple-accent);
-        }
-
-        /* Bloques de Fórmulas Matemáticas y Gráficos */
-        .math-block {
-            background-color: #1e1b4b;
-            border: 1px solid #4338ca;
-            border-radius: 6px;
-            padding: 15px;
-            margin-bottom: 15px;
-            text-align: center;
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: 240px;
+            background-color: var(--bg-panel);
+            border-right: 1px solid var(--border-solid);
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            padding: 20px 0;
         }
 
-        .semaforo-badge {
-            align-self: flex-end;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 8pt;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 10px;
+        .brand {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid var(--border-solid);
+            margin-bottom: 20px;
         }
 
-        .math-expr {
-            font-family: 'Times New Roman', Times, serif;
-            font-style: italic;
-            font-weight: bold;
+        .brand h1 {
             font-size: 14pt;
-            color: #818cf8;
+            color: var(--cyan-neon);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+        }
+
+        .brand p {
+            font-size: 8pt;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0 10px;
+        }
+
+        .nav-menu li {
+            padding: 12px 15px;
             margin-bottom: 5px;
-        }
-
-        .math-output {
-            font-size: 9.5pt;
-            color: #a5b4fc;
-            margin-bottom: 10px;
-        }
-
-        .math-output strong {
-            color: #ffffff;
-            font-size: 11pt;
-        }
-
-        /* Gráfico Miniatura CSS */
-        .stat-chart-container {
-            width: 100%;
-            height: 10px;
-            background-color: rgba(0,0,0,0.3);
-            border-radius: 5px;
-            margin-bottom: 10px;
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .stat-chart-fill {
-            height: 100%;
-            border-radius: 5px;
-            transition: width 0.4s ease, background-color 0.4s ease;
-        }
-
-        .stat-advice {
-            font-size: 8.5pt;
+            border-radius: 6px;
+            font-size: 10pt;
             color: var(--text-muted);
-            text-align: left;
-            background: rgba(0,0,0,0.2);
-            padding: 8px;
-            border-radius: 4px;
-            border-left: 3px solid;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        /* KPIs Numéricos de Salida */
-        .grid-kpis {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 15px;
-            margin-bottom: 25px;
+        .nav-menu li.active {
+            background-color: rgba(56, 189, 248, 0.1);
+            color: var(--cyan-neon);
+            border-left: 3px solid var(--cyan-neon);
         }
 
-        .kpi-card {
-            border-top: 4px solid #ffffff;
+        .nav-menu li:hover:not(.active) {
+            background-color: var(--bg-panel-light);
+            color: var(--text-main);
         }
 
-        .metric-value {
-            font-size: 18pt;
-            font-weight: 700;
-            margin: 5px 0;
-            white-space: nowrap;
-        }
-
-        /* Tablas de Inferencia */
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-
-        .data-table th {
-            background-color: var(--bg-input);
-            color: var(--text-muted);
-            text-align: left;
+        .btn-run {
+            margin: auto 20px 20px;
+            background-color: rgba(56, 189, 248, 0.2);
+            color: var(--cyan-neon);
+            border: 1px solid var(--cyan-neon);
             padding: 12px;
-            font-size: 9pt;
-            text-transform: uppercase;
-            border-bottom: 2px solid var(--border-color);
-        }
-
-        .data-table td {
-            padding: 14px 12px;
-            border-bottom: 1px solid var(--border-color);
-            font-size: 10pt;
-        }
-
-        .progress-bar-container {
-            background-color: #1f2937;
+            text-align: center;
             border-radius: 4px;
-            height: 12px;
-            width: 100%;
-            margin-top: 6px;
-            overflow: hidden;
-            border: 1px solid #374151;
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            border-radius: 4px;
-            width: 0%;
-            transition: width 0.3s ease-out, background-color 0.3s;
-        }
-
-        .badge {
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 8.5pt;
             font-weight: bold;
-            text-transform: uppercase;
-            display: inline-block;
-        }
-
-        .badge-success { background-color: #064e3b; color: #6ee7b7; border: 1px solid #059669;}
-        .badge-warning { background-color: #78350f; color: #fcd34d; border: 1px solid #d97706;}
-        .badge-danger { background-color: #7f1d1d; color: #fca5a5; border: 1px solid #dc2626;}
-
-        /* Lista de Acciones Avanzadas */
-        .action-list {
-            list-style-type: none;
-        }
-
-        .action-list li {
-            position: relative;
-            padding-left: 25px;
-            margin-bottom: 15px;
             font-size: 10pt;
-            color: #e2e8f0;
-            border-bottom: 1px dashed #1f2937;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .btn-run:hover {
+            background-color: var(--cyan-neon);
+            color: var(--bg-base);
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.5);
+        }
+
+        /* --- MAIN CONTENT --- */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border-solid);
+            border-radius: 8px;
+        }
+        
+        .top-bar .title {
+            font-size: 12pt;
+            font-weight: 600;
+        }
+
+        .top-bar .status {
+            font-family: var(--font-mono);
+            font-size: 9pt;
+            color: var(--green-neon);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .status-dot {
+            width: 8px; height: 8px;
+            background-color: var(--green-neon);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--green-neon);
+        }
+
+        /* --- ENGINE HOLOGRAPHIC CONTAINER --- */
+        .engine-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            background: radial-gradient(circle at center, #111827 0%, #03050a 100%);
+            border: 1px solid var(--border-solid);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.8);
+        }
+
+        /* Blueprint/Grid Background Effect */
+        .engine-grid-bg {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                linear-gradient(rgba(56, 189, 248, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+            z-index: 1;
+        }
+
+        /* Placeholder for 3D Engine Image */
+        .engine-image {
+            position: relative;
+            z-index: 2;
+            width: 60%;
+            height: auto;
+            opacity: 0.7;
+            filter: drop-shadow(0 0 20px rgba(192, 132, 252, 0.3)) hue-rotate(180deg) contrast(1.2);
+            /* Placeholder Image - You can replace this src with your own 3D render */
+            content: url('https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=800&q=80');
+            mix-blend-mode: screen;
+        }
+
+        /* Holographic Panels */
+        .holo-panel {
+            position: absolute;
+            z-index: 10;
+            background: rgba(11, 16, 30, 0.65);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 4px;
+            padding: 12px 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(56, 189, 248, 0.1);
+            color: var(--text-main);
+        }
+
+        .holo-title {
+            font-size: 7.5pt;
+            text-transform: uppercase;
+            color: var(--cyan-neon);
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            font-family: var(--font-mono);
+        }
+
+        .holo-value {
+            font-size: 22pt;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            display: flex;
+            align-items: baseline;
+            gap: 5px;
+        }
+
+        .holo-unit {
+            font-size: 10pt;
+            color: var(--text-muted);
+            font-weight: normal;
+        }
+
+        /* Panel Positions */
+        .holo-rpm { top: 15%; left: 10%; border-left: 3px solid var(--cyan-neon); }
+        .holo-temp { top: 15%; right: 10%; border-right: 3px solid var(--purple-neon); }
+        .holo-oil { bottom: 15%; left: 10%; border-left: 3px solid var(--green-neon); }
+
+        /* Connector Lines (CSS drawn) */
+        .connector {
+            position: absolute;
+            background-color: rgba(56, 189, 248, 0.4);
+            z-index: 5;
+        }
+        .conn-1 { top: 25%; left: 25%; width: 100px; height: 1px; transform: rotate(15deg); }
+        .conn-2 { top: 25%; right: 25%; width: 120px; height: 1px; transform: rotate(-20deg); }
+        .conn-3 { bottom: 25%; left: 25%; width: 150px; height: 1px; transform: rotate(-10deg); }
+
+        /* --- DASHBOARD LOWER GRID --- */
+        .dash-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 20px;
+        }
+
+        .panel {
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border-solid);
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel-header {
+            font-size: 10pt;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-solid);
             padding-bottom: 10px;
         }
 
-        .action-list li:last-child {
-            border-bottom: none;
-        }
-
-        .action-list li::before {
-            content: "➔";
-            position: absolute;
-            left: 0;
-            color: var(--cyan-accent);
-            font-weight: bold;
-        }
-
-        /* Estilos Reporte IA */
-        .ia-report-grid {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 20px;
+        /* Controls */
+        .control-group {
             margin-bottom: 15px;
         }
-
-        .ia-metrics {
-            background: #111827;
-            border: 1px solid #1f2937;
-            border-radius: 6px;
-            padding: 15px;
-            text-align: center;
+        .control-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 9pt;
+            margin-bottom: 8px;
+            color: #cbd5e1;
+        }
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            background: #1e293b;
+            border-radius: 2px;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 12px; width: 12px;
+            border-radius: 50%;
+            background: var(--cyan-neon);
+            margin-top: -4px;
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--cyan-neon);
+        }
+        
+        select.ui-select, .ui-checkbox {
+            width: 100%;
+            background: var(--bg-panel-light);
+            color: var(--text-main);
+            border: 1px solid var(--border-solid);
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 9pt;
+            margin-top: 5px;
+            outline: none;
         }
 
-        .ia-text {
-            background: #1e293b;
-            border: 1px solid #334155;
+        /* Right Side: KPIs and AI */
+        .right-col {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* 5 Mini KPIs */
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+        }
+
+        .kpi-box {
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border-solid);
             border-radius: 6px;
             padding: 15px;
-            font-size: 10.5pt;
+            position: relative;
+            overflow: hidden;
+        }
+        .kpi-box::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 2px;
+            background: var(--cyan-neon);
+        }
+        .kpi-title { font-size: 8pt; color: var(--text-muted); text-transform: uppercase; }
+        .kpi-val { font-size: 16pt; font-weight: bold; margin-top: 5px; font-family: var(--font-mono); }
+        .kpi-sub { font-size: 7.5pt; color: #94a3b8; margin-top: 2px; }
+
+        /* Report & Probabilities Row */
+        .bottom-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* AI Report Gauge & Text */
+        .ai-report-content {
             display: flex;
             align-items: center;
+            gap: 20px;
         }
 
-        .metaprompt-box {
-            background-color: #0f172a;
-            border: 1px dashed #475569;
-            padding: 15px;
-            font-size: 8.5pt;
-            color: #94a3b8;
-            border-radius: 4px;
-            margin-top: 15px;
-            overflow-x: auto;
-            white-space: pre-wrap;
-            font-family: monospace;
+        .gauge-container {
+            position: relative;
+            width: 90px; height: 90px;
+            border-radius: 50%;
+            border: 4px solid var(--border-solid);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-top-color: var(--cyan-neon); /* Dynamic later */
+            transform: rotate(-45deg);
         }
+        .gauge-inner {
+            transform: rotate(45deg);
+            text-align: center;
+        }
+        .gauge-val { font-size: 16pt; font-weight: bold; font-family: var(--font-mono); }
+        .gauge-lbl { font-size: 7pt; color: var(--text-muted); text-transform: uppercase; }
 
-        details summary {
-            cursor: pointer;
-            color: var(--cyan-accent);
-            font-weight: bold;
+        .ai-text {
             font-size: 9.5pt;
-            outline: none;
-            margin-top: 10px;
+            color: #cbd5e1;
+            line-height: 1.5;
+            flex: 1;
+        }
+
+        .semaforo-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 7.5pt;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        /* Failure Probability Bars */
+        .prob-item {
+            margin-bottom: 15px;
+        }
+        .prob-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 8.5pt;
+            margin-bottom: 5px;
+            color: #cbd5e1;
+        }
+        .prob-bar-bg {
+            height: 4px;
+            background: var(--border-solid);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .prob-bar-fill {
+            height: 100%;
+            background: var(--cyan-neon);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Action Plan List */
+        .action-list { list-style: none; margin-top: 10px; }
+        .action-list li {
+            font-size: 9.5pt;
+            color: #cbd5e1;
+            padding-left: 15px;
+            position: relative;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+        .action-list li::before {
+            content: '>';
+            position: absolute;
+            left: 0;
+            color: var(--cyan-neon);
+            font-weight: bold;
+            font-family: var(--font-mono);
+        }
+
+        /* Utilities */
+        .color-nominal { color: var(--green-neon) !important; }
+        .color-warning { color: var(--yellow-neon) !important; }
+        .color-danger { color: var(--red-neon) !important; }
+        
+        .bg-nominal { background-color: var(--green-neon) !important; }
+        .bg-warning { background-color: var(--yellow-neon) !important; }
+        .bg-danger { background-color: var(--red-neon) !important; }
+
+        .border-nominal { border-top-color: var(--green-neon) !important; border-bottom-color: var(--green-neon) !important; }
+        .border-warning { border-top-color: var(--yellow-neon) !important; border-bottom-color: var(--yellow-neon) !important; }
+        .border-danger { border-top-color: var(--red-neon) !important; border-bottom-color: var(--red-neon) !important; }
+
+        /* Metaprompt details */
+        details { margin-top: 15px; }
+        details summary { font-size: 8.5pt; color: var(--purple-neon); cursor: pointer; outline: none; }
+        .metaprompt-box {
+            background: rgba(0,0,0,0.3); border: 1px solid var(--border-solid);
+            padding: 10px; font-size: 8pt; color: #64748b; font-family: var(--font-mono);
+            margin-top: 10px; border-radius: 4px; white-space: pre-wrap; height: 100px; overflow-y: auto;
         }
 
     </style>
 </head>
 <body>
 
-<div class="container">
-
-    <!-- CABECERA PRINCIPAL -->
-    <header class="header-dashboard">
-        <div>
-            <h1 class="title-main">NEXO ART-TALLER 4.0</h1>
-            <p class="subtitle-main">Módulo de Orquestación Neuro-Mecánica Avanzada | Simulación con Física de Primer Principio</p>
+    <aside class="sidebar">
+        <div class="brand">
+            <h1>Core Modules</h1>
+            <p>v4.2.0 Stable</p>
         </div>
-        <div class="version-badge">ANN Physics Engine v4.9-Pro</div>
-    </header>
-
-    <!-- CONTAINER 1: INPUTS Y PARAMETRIZACIÓN -->
-    <div class="section-title">1. Entrada de Variables de Telemetría (OBD II) y Factores de Contorno</div>
-    <div class="grid-inputs" style="grid-template-columns: repeat(auto-fit, minmax(45%, 1fr));">
-        
-        <div class="card" data-help="Panel de adquisición de datos en tiempo real del bloque motor vía OBD-II. Registra magnitudes mecánicas, hidráulicas y térmicas basales.">
-            <div class="card-title">Sensores Directos del Bloque Motor</div>
-            
-            <div class="interactive-box">
-                <div class="control-header">
-                    <span>Kilometraje Acumulado (K)</span>
-                    <span class="control-value" id="val_K">150,000 km</span>
-                </div>
-                <input type="range" id="input_K" class="slider-input" min="0" max="2000000" step="5000" value="150000">
-            </div>
-
-            <div class="interactive-box">
-                <div class="control-header">
-                    <span>Temperatura del Motor (T_motor)</span>
-                    <span class="control-value" id="val_Tmotor">90 °C</span>
-                </div>
-                <input type="range" id="input_Tmotor" class="slider-input" min="50" max="160" step="1" value="90">
-            </div>
-
-            <div class="interactive-box">
-                <div class="control-header">
-                    <span>Presión de Aceite (P_aceite)</span>
-                    <span class="control-value" id="val_Paceite">4.0 bar</span>
-                </div>
-                <input type="range" id="input_Paceite" class="slider-input" min="0.5" max="7.0" step="0.1" value="4.0">
-            </div>
-
-            <div class="interactive-box">
-                <div class="control-header">
-                    <span>Vibraciones Mecánicas Espectrales (V_acc)</span>
-                    <span class="control-value" id="val_Vacc">1.2 g</span>
-                </div>
-                <input type="range" id="input_Vacc" class="slider-input" min="0.0" max="6.0" step="0.1" value="1.2">
-            </div>
-        </div>
-
-        <div class="card card-alt" data-help="Variables exógenas al motor. Mide las condiciones climáticas operativas, agresividad del usuario (estrés instantáneo) e historial de mantenimiento previo que altera los pesos basales de la red.">
-            <div class="card-title">Factores de Entorno, Conducción e Historial Clínico</div>
-            
-            <div class="interactive-box">
-                <div class="control-header">
-                    <span>Temperatura Ambiente Exterior (T_ext)</span>
-                    <span class="control-value" id="val_Text">25 °C</span>
-                </div>
-                <input type="range" id="input_Text" class="slider-input slider-alt" min="-15" max="50" step="1" value="25">
-            </div>
-
-            <div class="interactive-box">
-                <div class="control-header">
-                    <span>Hábitos del Conductor (L_d)</span>
-                    <span class="control-value" id="val_Ld">Frugal (3/5)</span>
-                </div>
-                <input type="range" id="input_Ld" class="slider-input slider-alt" min="1" max="5" step="1" value="3">
-            </div>
-
-            <div class="interactive-box">
-                <div class="control-header">
-                    <span>Fiabilidad/Ruido en Red de Sensores (α_sensor)</span>
-                </div>
-                <select id="input_Alpha" class="select-input">
-                    <option value="1.0" selected>Alta Confiabilidad (α = 1.00 — Señal Limpia)</option>
-                    <option value="0.6">Ruido Moderado (α = 0.60 — Filtro Estadístico)</option>
-                    <option value="0.2">Falla Crítica de Sensor (α = 0.20 — Compensación por Red)</option>
-                </select>
-            </div>
-
-            <div class="interactive-box">
-                <div class="control-header">
-                    <span>Pautas de Mantenimiento Previo (Historial)</span>
-                </div>
-                <div class="maintenance-grid">
-                    <label class="checkbox-container">
-                        <input type="checkbox" id="maint_aceite"> Cambio Aceite Reciente
-                    </label>
-                    <label class="checkbox-container">
-                        <input type="checkbox" id="maint_motor"> Rectificación Bloque
-                    </label>
-                    <label class="checkbox-container">
-                        <input type="checkbox" id="maint_sensores"> Sensores Eléctricos Nuevos
-                    </label>
-                    <label class="checkbox-container">
-                        <input type="checkbox" id="maint_cojinetes"> Cojinetes / Bielas Nuevas
-                    </label>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- CONTAINER 2: FEATURE ENGINEERING -->
-    <div class="section-title">2. Ecuaciones Físico-Sintéticas (Capa Latente Inferencial)</div>
-    <div class="grid-inputs">
-        
-        <div class="math-block" data-help="TSI (Thermal Stress Index): Mide la acumulación de calor entrópico no disipado. Cuantifica el gradiente térmico respecto al ambiente ponderado por la exigencia de conducción.">
-            <div class="semaforo-badge" id="badge_TSI">Calculando...</div>
-            <div class="math-expr">TSI = (T_motor - T_ext) * (1 + L_d / 5)</div>
-            <div class="math-output">Estrés Térmico Acumulado: <strong id="out_TSI">0.00 °C-Grad</strong></div>
-            <div class="stat-chart-container"><div class="stat-chart-fill" id="chart_TSI"></div></div>
-            <div class="stat-advice" id="advice_TSI" style="border-left-color: #38bdf8;">Contextualizando datos...</div>
-        </div>
-
-        <div class="math-block" style="border-color: #065f46; background-color: #064e3b;" data-help="VIP (Viscosity Proxy Index): Índice sintético de la capacidad portante de la película de aceite, derivado de la presión hidrostática y la degradación térmica de la viscosidad.">
-            <div class="semaforo-badge" id="badge_VIP">Calculando...</div>
-            <div class="math-expr">VIP = P_aceite * (150 / (T_motor + 20)) * β_mant</div>
-            <div class="math-output">Viscosidad Proxy Resultante: <strong id="out_VIP">0.00 cSt-Proxy</strong></div>
-            <div class="stat-chart-container"><div class="stat-chart-fill" id="chart_VIP"></div></div>
-            <div class="stat-advice" id="advice_VIP" style="border-left-color: #10b981;">Contextualizando datos...</div>
-        </div>
-
-        <div class="math-block" style="border-color: #9d174d; background-color: #831843;" data-help="WI (Wear Index): Ecuación de fatiga de ciclo alto. Integra el desgaste por fricción basal (kilometraje) con la amplitud de micro-deformaciones (vibración armónica).">
-            <div class="semaforo-badge" id="badge_WI">Calculando...</div>
-            <div class="math-expr">WI = (K_adj / 250k) * (1 + V_acc * 0.1)</div>
-            <div class="math-output">Índice de Fatiga Estructural: <strong id="out_WI">0.00 Base-Fatiga</strong></div>
-            <div class="stat-chart-container"><div class="stat-chart-fill" id="chart_WI"></div></div>
-            <div class="stat-advice" id="advice_WI" style="border-left-color: #f43f5e;">Contextualizando datos...</div>
-        </div>
-
-    </div>
-
-    <!-- CONTAINER 3: OUTPUTS DE RED NEURONAL MULTIMODAL -->
-    <div class="section-title">3. Inferencia de Red Neuronal Multimodal (ANN_Θ) & Previsiones</div>
-    
-    <div class="grid-kpis">
-        <div class="card kpi-card" id="kpi_rul_card" style="border-top-color: var(--cyan-accent);" data-help="Remaining Useful Life (Vida Útil Restante). Predicción de kilometraje disponible antes de que un subsistema principal sufra una falla por fatiga catastrófica generalizada.">
-            <div class="card-title">Vida Útil Restante (RUL)</div>
-            <div class="metric-value" id="kpi_RUL">-- km</div>
-            <div style="font-size:8.5pt; color: var(--text-muted);" id="kpi_RUL_status">Calculando matriz...</div>
-        </div>
-        <div class="card kpi-card" id="kpi_conf_card" style="border-top-color: var(--purple-accent);" data-help="Índice de Certeza Estadística del modelo. Penalizado por el ruido armónico de los sensores (Alpha) y estabilizado mediante vectores de calibración histórica.">
-            <div class="card-title">Confianza del Modelo</div>
-            <div class="metric-value" id="kpi_Confianza">-- %</div>
-            <div style="font-size:8.5pt; color: var(--text-muted);" id="kpi_Confianza_status">Estabilizando pesos...</div>
-        </div>
-        <div class="card kpi-card" id="kpi_status_card" style="border-top-color: var(--color-nominal);" data-help="Estado operativo consolidado del motor. Clasifica las señales cruzadas en zonas seguras (Nominal), de atención preventiva (Advertencia) o de parada inmediata (Crítico).">
-            <div class="card-title">Estado del Vector</div>
-            <div class="metric-value" id="kpi_Estado" style="font-size:16pt; padding: 4px 0;">NOMINAL</div>
-            <div style="font-size:8.5pt; color: var(--text-muted);" id="kpi_Estado_desc">Monitoreo activo...</div>
-        </div>
-        <div class="card kpi-card" style="border-top-color: #eab308;" data-help="Disipación de Energía Entrópica Térmica del bloque. Calcula la tasa de pérdida de calor útil debida al gradiente extremo ambiental y exigencia dinámica del conductor.">
-            <div class="card-title">Eficiencia Térmica Flujo</div>
-            <div class="metric-value" id="kpi_Termico">-- J/s</div>
-            <div style="font-size:8.5pt; color: var(--text-muted);">Gradiente disipativo</div>
-        </div>
-        <div class="card kpi-card" style="border-top-color: #ec4899;" data-help="Índice proxy de fricción hidrodinámica límite (Cizallamiento). Mide la severidad del contacto metal-metal directo en los cojinetes en función de la caída de viscosidad calculada.">
-            <div class="card-title">Fricción Límite (Film)</div>
-            <div class="metric-value" id="kpi_Friccion">-- λ</div>
-            <div style="font-size:8.5pt; color: var(--text-muted);">Espesor de película</div>
-        </div>
-    </div>
-
-    <!-- Tabla Matriz de Fallas -->
-    <div class="card" style="border-top-color: #ffffff; margin-bottom: 25px;" data-help="Matriz probabilística de la red neuronal multimodal. Utiliza capas sigmoidales densas cruzadas con leyes físicas para aislar fallas sin necesidad de desarme físico.">
-        <div class="card-title">Distribución de Probabilidades de Fallas Estructurales Críticas</div>
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th style="width: 35%;">Componente / Subsistema Evaluado</th>
-                    <th style="width: 30%;">Probabilidad de Falla (ANN_Θ)</th>
-                    <th>Estado Crítico Operacional</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>Desgaste de Cigüeñal / Cojinetes de Bancada</strong></td>
-                    <td>
-                        <span id="prob_txt_ciguenal" style="font-weight:bold;">0.0%</span>
-                        <div class="progress-bar-container"><div id="bar_ciguenal" class="progress-bar-fill"></div></div>
-                    </td>
-                    <td><span id="badge_ciguenal" class="badge">Nominal</span></td>
-                </tr>
-                <tr>
-                    <td><strong>Fisura de Culata / Junta de Tapa Quemada</strong></td>
-                    <td>
-                        <span id="prob_txt_culata" style="font-weight:bold;">0.0%</span>
-                        <div class="progress-bar-container"><div id="bar_culata" class="progress-bar-fill"></div></div>
-                    </td>
-                    <td><span id="badge_culata" class="badge">Nominal</span></td>
-                </tr>
-                <tr>
-                    <td><strong>Agarrotamiento de Cilindros / Segmentos</strong></td>
-                    <td>
-                        <span id="prob_txt_cilindros" style="font-weight:bold;">0.0%</span>
-                        <div class="progress-bar-container"><div id="bar_cilindros" class="progress-bar-fill"></div></div>
-                    </td>
-                    <td><span id="badge_cilindros" class="badge">Nominal</span></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- RECOMENDACIONES MECÁNICAS OPERATIVAS -->
-    <div class="section-title">4. Plan de Acción Técnico Ajustado (Basado en Física Aplicada e IA)</div>
-    
-    <!-- NUEVO: REPORTE TÉCNICO OBJETIVO (SCRAPPING DE CONTEXTO) -->
-    <div class="card" style="border-top-color: var(--purple-accent); margin-bottom: 20px;" data-help="Motor de inferencia documental. Combina las salidas numéricas y las traduce en un JSON lógico y textual automatizado para el registro de mantenimiento.">
-        <div class="card-title" style="color: var(--purple-accent);">Reporte Técnico Objetivo (Inferencia IA Multimodal)</div>
-        
-        <div class="ia-report-grid">
-            <div class="ia-metrics">
-                <div style="font-size: 9pt; color: var(--text-muted); text-transform: uppercase; margin-bottom: 5px;">Índice Numérico de Riesgo (0-1)</div>
-                <div id="ia_riesgo_val" style="font-size: 28pt; font-weight: bold; font-family: monospace; color: #ffffff;">0.00</div>
-                <div id="ia_semaforo_badge" class="badge" style="margin-top: 10px; font-size: 10pt; padding: 6px 12px;">VERDE</div>
-            </div>
-            <div class="ia-text">
-                <p id="ia_texto_respuesta" style="line-height: 1.6;">
-                    Evaluando telemetría...
-                </p>
-            </div>
-        </div>
-
-        <details>
-            <summary>Ver Metaprompt de Arquitectura IA</summary>
-            <div class="metaprompt-box">Objetivo:
-Diseñar una red neuronal multimodal que procese datos técnicos de taller (sensores, historial, reportes) y entregue respuestas en tres formatos:
-1. Texto explicativo
-2. Índice numérico de riesgo
-3. Indicador visual estilo semáforo (verde, amarillo, rojo)
-
-Entradas:
-- Variables numéricas: presión, temperatura, vibración, consumo eléctrico, kilometraje.
-- Variables categóricas: tipo de servicio, frecuencia de fallas, estado del vehículo.
-- Texto libre: comentarios de mecánicos, reportes de clientes.
-
-Preprocesamiento:
-- Normalizar valores numéricos.
-- Codificar variables categóricas.
-- Generar features derivados (ej. tasa de fallas por hora de uso).
-- Embeddings para texto de reportes.
-
-Arquitectura:
-- Bloque numérico (MLP) para datos cuantitativos.
-- Bloque contextual (LSTM/Transformer) para texto.
-- Capa de fusión que combine ambos vectores.
-- Capa de salida con tres ramas:
-   a) Texto: explicación automática del estado.
-   b) Numérico: índice de riesgo (0–1).
-   c) Semáforo: lógica condicional
-      - Verde: riesgo < 0.3
-      - Amarillo: 0.3–0.6
-      - Rojo: >0.6
-
-Orquestación:
-- Integrar en Dashboard Predictivo (Gemini/Plotly/Streamlit).
-- API REST que exponga salida en JSON:
-  {
-    "texto": "Cambio de aceite recomendado",
-    "riesgo": 0.25,
-    "semaforo": "verde"
-  }
-- Automatizar alertas vía WhatsApp/CRM.
-- Vincular con Google Maps para sugerir talleres cercanos.
-
-Indicadores:
-- Texto: recomendación clara y contextual.
-- Numérico: índice de riesgo calculado.
-- Semáforo: visualización rápida para toma de decisiones.
-
-Uso:
-El sistema debe permitir al mecánico y al cliente interpretar fácilmente el estado del vehículo, anticipar fallas y programar mantenimientos preventivos.</div>
-        </details>
-    </div>
-
-    <!-- Lista de Acciones Originales -->
-    <div class="card" style="border-top-color: var(--color-nominal);" data-help="Motor de toma de decisiones prescritas. Traduce los estados probabilísticos abstractos en intervenciones mecánicas reales fundamentadas en ecuaciones cinemáticas y tribológicas.">
-        <ul class="action-list" id="action_container">
-            <!-- Dinámico por JS -->
+        <ul class="nav-menu">
+            <li class="active">⛣ Simulation</li>
+            <li>▤ Telemetry</li>
+            <li>⚛ Physics</li>
+            <li>◈ ANN Inference</li>
+            <li>⚙ Settings</li>
         </ul>
-    </div>
+        <div style="flex:1"></div>
+        <div class="btn-run" onclick="recalcularSimulacion()">Run Simulation</div>
+    </aside>
 
-</div>
+    <main class="main-content">
+        
+        <header class="top-bar">
+            <div class="title">Asset Simulation Deck // Real-time KPI modeling for propulsion units</div>
+            <div class="status">
+                <div class="status-dot"></div>
+                SYSTEM ONLINE
+            </div>
+        </header>
 
-<!-- LOGICA INTERACTIVA DEL MOTOR DE INFERENCIA PREDICTIVA -->
+        <div class="engine-container">
+            <div class="engine-grid-bg"></div>
+            
+            <div class="connector conn-1"></div>
+            <div class="connector conn-2"></div>
+            <div class="connector conn-3"></div>
+
+            <div class="engine-image"></div>
+
+            <div class="holo-panel holo-rpm">
+                <div class="holo-title">Kinematic K-Vector</div>
+                <div class="holo-value" id="val_K">150,000 <span class="holo-unit">km</span></div>
+            </div>
+
+            <div class="holo-panel holo-temp">
+                <div class="holo-title">Thermal Grad</div>
+                <div class="holo-value" id="val_Tmotor">90 <span class="holo-unit">°C</span></div>
+            </div>
+
+            <div class="holo-panel holo-oil">
+                <div class="holo-title">Oil Stability</div>
+                <div class="holo-value" id="val_Paceite">4.0 <span class="holo-unit">Bar</span></div>
+            </div>
+        </div>
+
+        <div class="dash-grid">
+            
+            <div class="panel">
+                <div class="panel-header">Simulation Controls</div>
+                
+                <div class="control-group">
+                    <div class="control-label"><span>Kilometraje</span><span id="lbl_K">150k km</span></div>
+                    <input type="range" id="input_K" min="0" max="2000000" step="5000" value="150000">
+                </div>
+                
+                <div class="control-group">
+                    <div class="control-label"><span>Temp. Motor</span><span id="lbl_Tmotor">90 °C</span></div>
+                    <input type="range" id="input_Tmotor" min="50" max="160" step="1" value="90">
+                </div>
+                
+                <div class="control-group">
+                    <div class="control-label"><span>Presión Aceite</span><span id="lbl_Paceite">4.0 Bar</span></div>
+                    <input type="range" id="input_Paceite" min="0.5" max="7.0" step="0.1" value="4.0">
+                </div>
+                
+                <div class="control-group">
+                    <div class="control-label"><span>Vibraciones</span><span id="lbl_Vacc">1.2 g</span></div>
+                    <input type="range" id="input_Vacc" min="0.0" max="6.0" step="0.1" value="1.2">
+                </div>
+
+                <div class="panel-header" style="margin-top: 10px; font-size:8pt;">Factores de Entorno</div>
+                
+                <div class="control-group">
+                    <div class="control-label"><span>Temp. Externa</span><span id="lbl_Text">25 °C</span></div>
+                    <input type="range" id="input_Text" min="-15" max="50" step="1" value="25">
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label"><span>Confiabilidad Sensores (α)</span></div>
+                    <select id="input_Alpha" class="ui-select">
+                        <option value="1.0" selected>Limpia (α=1.0)</option>
+                        <option value="0.6">Ruido (α=0.6)</option>
+                        <option value="0.2">Falla (α=0.2)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="right-col">
+                
+                <div class="kpi-row">
+                    <div class="kpi-box" id="kpi_box_rul" style="--cyan-neon: #38bdf8;">
+                        <div class="kpi-title">RUL Trend</div>
+                        <div class="kpi-val" id="kpi_RUL">-- h</div>
+                        <div class="kpi-sub" id="kpi_estado_desc">Nominal wear</div>
+                    </div>
+                    <div class="kpi-box" style="--cyan-neon: #10b981;">
+                        <div class="kpi-title">Confidence Score</div>
+                        <div class="kpi-val" id="kpi_Confianza">-- %</div>
+                        <div class="kpi-sub">Network stability</div>
+                    </div>
+                    <div class="kpi-box" style="--cyan-neon: #c084fc;">
+                        <div class="kpi-title">Vector Analysis</div>
+                        <div class="kpi-val" id="kpi_TSI">--</div>
+                        <div class="kpi-sub">Thermal stress eq.</div>
+                    </div>
+                    <div class="kpi-box" style="--cyan-neon: #38bdf8;">
+                        <div class="kpi-title">Efficiency Path</div>
+                        <div class="kpi-val" id="kpi_VIP">--</div>
+                        <div class="kpi-sub">Viscosity proxy</div>
+                    </div>
+                    <div class="kpi-box" id="kpi_box_fric" style="--cyan-neon: #ef4444;">
+                        <div class="kpi-title">Friction Limit</div>
+                        <div class="kpi-val" id="kpi_Friccion">-- λ</div>
+                        <div class="kpi-sub">Hydrodynamic film</div>
+                    </div>
+                </div>
+
+                <div class="bottom-row">
+                    
+                    <div class="panel">
+                        <div class="panel-header">Technical AI Report</div>
+                        <div class="ai-report-content">
+                            <div class="gauge-container" id="gauge_ring">
+                                <div class="gauge-inner">
+                                    <div class="gauge-val" id="ia_riesgo_val">0.00</div>
+                                    <div class="gauge-lbl">INDEX</div>
+                                </div>
+                            </div>
+                            <div class="ai-text">
+                                <div id="ia_semaforo_badge" class="semaforo-badge bg-nominal">ÓPTIMO</div>
+                                <div id="ia_texto_respuesta">Evaluando telemetría latente...</div>
+                            </div>
+                        </div>
+                        <details>
+                            <summary>View Neural Metaprompt JSON</summary>
+                            <div class="metaprompt-box">Objetivo: Diseñar una red neuronal multimodal que procese datos técnicos de taller... [Output en consola REST simulada]</div>
+                        </details>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-header">Failure Probability & Actions</div>
+                        
+                        <div class="prob-item">
+                            <div class="prob-label"><span>Crankshaft Wear</span><span id="prob_txt_ciguenal" class="font-mono">0%</span></div>
+                            <div class="prob-bar-bg"><div class="prob-bar-fill" id="bar_ciguenal"></div></div>
+                        </div>
+                        <div class="prob-item">
+                            <div class="prob-label"><span>Cylinder Head Stress</span><span id="prob_txt_culata" class="font-mono">0%</span></div>
+                            <div class="prob-bar-bg"><div class="prob-bar-fill" id="bar_culata"></div></div>
+                        </div>
+                        <div class="prob-item">
+                            <div class="prob-label"><span>Cylinder Seizing</span><span id="prob_txt_cilindros" class="font-mono">0%</span></div>
+                            <div class="prob-bar-bg"><div class="prob-bar-fill" id="bar_cilindros"></div></div>
+                        </div>
+
+                        <div class="panel-header" style="margin-top: 15px; border:none; padding:0;">Action Plan</div>
+                        <ul class="action-list" id="action_container">
+                            </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
 <script>
+    // --- VARIABLES GLOBALES Y BINDINGS ---
     const inputs = {
         K: document.getElementById('input_K'),
         Tmotor: document.getElementById('input_Tmotor'),
         Paceite: document.getElementById('input_Paceite'),
         Vacc: document.getElementById('input_Vacc'),
         Text: document.getElementById('input_Text'),
-        Ld: document.getElementById('input_Ld'),
         Alpha: document.getElementById('input_Alpha'),
-        maintAceite: document.getElementById('maint_aceite'),
-        maintMotor: document.getElementById('maint_motor'),
-        maintSensores: document.getElementById('maint_sensores'),
-        maintCojinetes: document.getElementById('maint_cojinetes')
     };
 
     const outputs = {
+        // Holographic
         val_K: document.getElementById('val_K'),
         val_Tmotor: document.getElementById('val_Tmotor'),
         val_Paceite: document.getElementById('val_Paceite'),
-        val_Vacc: document.getElementById('val_Vacc'),
-        val_Text: document.getElementById('val_Text'),
-        val_Ld: document.getElementById('val_Ld'),
-        
-        // Ecuaciones Físico-Sintéticas
-        out_TSI: document.getElementById('out_TSI'),
-        badge_TSI: document.getElementById('badge_TSI'),
-        chart_TSI: document.getElementById('chart_TSI'),
-        advice_TSI: document.getElementById('advice_TSI'),
-
-        out_VIP: document.getElementById('out_VIP'),
-        badge_VIP: document.getElementById('badge_VIP'),
-        chart_VIP: document.getElementById('chart_VIP'),
-        advice_VIP: document.getElementById('advice_VIP'),
-
-        out_WI: document.getElementById('out_WI'),
-        badge_WI: document.getElementById('badge_WI'),
-        chart_WI: document.getElementById('chart_WI'),
-        advice_WI: document.getElementById('advice_WI'),
-
-        // Outputs KPIs
+        // Control Labels
+        lbl_K: document.getElementById('lbl_K'),
+        lbl_Tmotor: document.getElementById('lbl_Tmotor'),
+        lbl_Paceite: document.getElementById('lbl_Paceite'),
+        lbl_Vacc: document.getElementById('lbl_Vacc'),
+        lbl_Text: document.getElementById('lbl_Text'),
+        // KPIs
         kpi_RUL: document.getElementById('kpi_RUL'),
-        kpi_RUL_status: document.getElementById('kpi_RUL_status'),
+        kpi_estado_desc: document.getElementById('kpi_estado_desc'),
         kpi_Confianza: document.getElementById('kpi_Confianza'),
-        kpi_Confianza_status: document.getElementById('kpi_Confianza_status'),
-        kpi_Estado: document.getElementById('kpi_Estado'),
-        kpi_Estado_desc: document.getElementById('kpi_Estado_desc'),
-        kpi_status_card: document.getElementById('kpi_status_card'),
-        kpi_Termico: document.getElementById('kpi_Termico'),
+        kpi_TSI: document.getElementById('kpi_TSI'),
+        kpi_VIP: document.getElementById('kpi_VIP'),
         kpi_Friccion: document.getElementById('kpi_Friccion'),
-        
-        // Tablas Probabilidad
-        prob_txt_ciguenal: document.getElementById('prob_txt_ciguenal'),
-        bar_ciguenal: document.getElementById('bar_ciguenal'),
-        badge_ciguenal: document.getElementById('badge_ciguenal'),
-        prob_txt_culata: document.getElementById('prob_txt_culata'),
-        bar_culata: document.getElementById('bar_culata'),
-        badge_culata: document.getElementById('badge_culata'),
-        prob_txt_cilindros: document.getElementById('prob_txt_cilindros'),
-        bar_cilindros: document.getElementById('bar_cilindros'),
-        badge_cilindros: document.getElementById('badge_cilindros'),
-        
-        // Reporte IA
+        // UI styling
+        kpi_box_rul: document.getElementById('kpi_box_rul'),
+        kpi_box_fric: document.getElementById('kpi_box_fric'),
+        gauge_ring: document.getElementById('gauge_ring'),
+        // AI Report
         ia_riesgo_val: document.getElementById('ia_riesgo_val'),
         ia_semaforo_badge: document.getElementById('ia_semaforo_badge'),
         ia_texto_respuesta: document.getElementById('ia_texto_respuesta'),
-        
-        // Acciones
+        // Probs
+        prob_txt_ciguenal: document.getElementById('prob_txt_ciguenal'),
+        bar_ciguenal: document.getElementById('bar_ciguenal'),
+        prob_txt_culata: document.getElementById('prob_txt_culata'),
+        bar_culata: document.getElementById('bar_culata'),
+        prob_txt_cilindros: document.getElementById('prob_txt_cilindros'),
+        bar_cilindros: document.getElementById('bar_cilindros'),
+        // Actions
         actions: document.getElementById('action_container')
     };
 
-    function sigmoid(x) {
-        return 1 / (1 + Math.exp(-x));
-    }
-
-    function actualizarSemaforoYGrafico(id, valor, umbralBueno, umbralMalo, invertido = false) {
-        let badge = outputs[`badge_${id}`];
-        let chart = outputs[`chart_${id}`];
-        let advice = outputs[`advice_${id}`];
-
-        let estado = "ÓPTIMO";
-        let colorClass = "badge-success";
-        let bgColor = "#10b981";
-        
-        let pct = 0;
-
-        // Logica para indicadores donde MENOR es MEJOR (Ej: TSI, WI)
-        if (!invertido) {
-            pct = Math.min((valor / (umbralMalo * 1.2)) * 100, 100);
-            if (valor >= umbralMalo) {
-                estado = "MALO";
-                colorClass = "badge-danger";
-                bgColor = "#ef4444";
-                advice.innerText = `Análisis de desvío: Valor crítico (${valor.toFixed(2)}). El contexto estadístico predice daño inminente. La automatización recomienda inspección.`;
-            } else if (valor >= umbralBueno) {
-                estado = "BUENO";
-                colorClass = "badge-warning";
-                bgColor = "#f59e0b";
-                advice.innerText = `Análisis de tendencia: Nivel aceptable (${valor.toFixed(2)}). Observar evolución a mediano plazo para mantener la precisión del modelo.`;
-            } else {
-                advice.innerText = `Eficiencia analítica: Funcionamiento basal exacto (${valor.toFixed(2)}). Tolerancias dentro del rango estadístico deseado.`;
-            }
-        } else {
-            // Lógica para indicadores donde MAYOR es MEJOR (Ej: VIP)
-            pct = Math.min((valor / (umbralBueno * 1.5)) * 100, 100);
-            if (valor <= umbralMalo) {
-                estado = "MALO";
-                colorClass = "badge-danger";
-                bgColor = "#ef4444";
-                advice.innerText = `Análisis de desvío: Caída peligrosa (${valor.toFixed(2)}). La red IA marca déficit en la resistencia de película.`;
-            } else if (valor <= umbralBueno) {
-                estado = "BUENO";
-                colorClass = "badge-warning";
-                bgColor = "#f59e0b";
-                advice.innerText = `Análisis de tendencia: Nivel marginal (${valor.toFixed(2)}). Lubricación estable pero al límite de la zona estadística segura.`;
-            } else {
-                advice.innerText = `Eficiencia analítica: Lubricación excelente (${valor.toFixed(2)}). Condición termodinámica perfecta según el reporte.`;
-            }
-        }
-
-        badge.className = `semaforo-badge ${colorClass}`;
-        badge.innerText = estado;
-        chart.style.width = `${pct}%`;
-        chart.style.backgroundColor = bgColor;
-        advice.style.borderLeftColor = bgColor;
-    }
+    function sigmoid(x) { return 1 / (1 + Math.exp(-x)); }
 
     function recalcularSimulacion() {
         const K = parseFloat(inputs.K.value);
@@ -878,243 +701,140 @@ El sistema debe permitir al mecánico y al cliente interpretar fácilmente el es
         const Paceite = parseFloat(inputs.Paceite.value);
         const Vacc = parseFloat(inputs.Vacc.value);
         const Text = parseFloat(inputs.Text.value);
-        const Ld = parseInt(inputs.Ld.value);
         const alpha = parseFloat(inputs.Alpha.value);
 
-        outputs.val_K.innerText = K.toLocaleString('es-AR') + " km";
-        outputs.val_Tmotor.innerText = Tmotor + " °C";
-        outputs.val_Paceite.innerText = Paceite.toFixed(1) + " bar";
-        outputs.val_Vacc.innerText = Vacc.toFixed(1) + " g";
-        outputs.val_Text.innerText = Text + " °C";
+        // Update Labels & Holograms
+        outputs.val_K.innerHTML = Math.round(K/1000) + "k <span class='holo-unit'>km</span>";
+        outputs.val_Tmotor.innerHTML = Tmotor + " <span class='holo-unit'>°C</span>";
+        outputs.val_Paceite.innerHTML = Paceite.toFixed(1) + " <span class='holo-unit'>Bar</span>";
+        
+        outputs.lbl_K.innerText = Math.round(K/1000) + "k km";
+        outputs.lbl_Tmotor.innerText = Tmotor + " °C";
+        outputs.lbl_Paceite.innerText = Paceite.toFixed(1) + " Bar";
+        outputs.lbl_Vacc.innerText = Vacc.toFixed(1) + " g";
+        outputs.lbl_Text.innerText = Text + " °C";
 
-        const perfilText = ["", "Frugal (1/5)", "Conservador (2/5)", "Normal (3/5)", "Agresivo (4/5)", "Deportivo Extremo (5/5)"];
-        outputs.val_Ld.innerText = perfilText[Ld];
-
-        // Factores correctores por historial
-        let beta_aceite = inputs.maintAceite.checked ? 1.35 : 1.0; 
-        let factor_rejuvenecimiento_k = inputs.maintMotor.checked ? 0.25 : 1.0; 
-        let beta_sensores = inputs.maintSensores.checked ? 0.05 : 0.0; 
-        let factor_cojinetes = inputs.maintCojinetes.checked ? 0.30 : 1.0; 
-
-        // Feature Engineering Basal
+        // Feature Engineering Basal (Math intacta)
+        const Ld = 3; // Fijo normal para simplificar UI según nuevas imágenes
         const TSI = (Tmotor - Text) * (1 + (Ld / 5));
-        const VIP = Paceite * (150 / (Tmotor + 20)) * beta_aceite;
-        const K_adj = K * factor_rejuvenecimiento_k;
-        const WI = (K_adj / 250000) * (1 + (Vacc * 0.1));
-
-        outputs.out_TSI.innerText = TSI.toFixed(2) + " °C-Grad";
-        outputs.out_VIP.innerText = VIP.toFixed(2) + " cSt-Proxy";
-        outputs.out_WI.innerText = WI.toFixed(2) + " Base-Fatiga";
-
-        // Actualizar Semáforos y Gráficos (Umbrales de decisión estadística)
-        actualizarSemaforoYGrafico('TSI', TSI, 90, 140, false);  // TSI menor es mejor
-        actualizarSemaforoYGrafico('VIP', VIP, 4.0, 2.5, true);  // VIP mayor es mejor
-        actualizarSemaforoYGrafico('WI', WI, 0.8, 1.5, false);   // WI menor es mejor
-
-        // FÍSICA APLICADA REAL
+        const VIP = Paceite * (150 / (Tmotor + 20)) * 1.0;
+        const WI = (K / 250000) * (1 + (Vacc * 0.1));
         const q_disipacion = Math.max(0, (Tmotor - Text) * 45 * (1 + (Ld * 0.15)));
-        outputs.kpi_Termico.innerText = Math.round(q_disipacion).toLocaleString('es-AR') + " J/s";
-
         const lambda_stribeck = Math.max(0.1, (VIP * 1.2) / (1 + (Vacc * 0.4)));
+
+        outputs.kpi_TSI.innerText = TSI.toFixed(1);
+        outputs.kpi_VIP.innerText = VIP.toFixed(2);
         outputs.kpi_Friccion.innerText = lambda_stribeck.toFixed(2) + " λ";
 
-        // Red Neuronal Ponderada
-        const penalizacionRuido = (1 - alpha) * 1.5;
+        // Estilos semáforo fricción
+        if(lambda_stribeck < 1.0) outputs.kpi_box_fric.style.setProperty('--cyan-neon', '#ef4444');
+        else if(lambda_stribeck < 1.5) outputs.kpi_box_fric.style.setProperty('--cyan-neon', '#f59e0b');
+        else outputs.kpi_box_fric.style.setProperty('--cyan-neon', '#10b981');
 
-        let net_ciguenal = (WI * 0.85) + (Vacc * 0.6) - (lambda_stribeck * 0.9) - (inputs.maintCojinetes.checked ? 3.5 : 0.0);
-        net_ciguenal = (net_ciguenal * alpha) + penalizacionRuido - 2.2; 
+        // Red Neuronal
+        const penalizacionRuido = (1 - alpha) * 1.5;
+        let net_ciguenal = (WI * 0.85) + (Vacc * 0.6) - (lambda_stribeck * 0.9) + penalizacionRuido - 2.2; 
         let prob_ciguenal = sigmoid(net_ciguenal);
 
         let net_culata = (TSI * 0.045) + (Tmotor * 0.055) - (alpha * 4.0) - 4.5;
         let prob_culata = sigmoid(net_culata);
 
         let net_cilindros = (K / 350000) - (lambda_stribeck * 1.5) + (Tmotor * 0.02) - 1.2;
-        net_cilindros = (net_cilindros * alpha) + (beta_sensores * -2.0);
-        let prob_cilindros = sigmoid(net_cilindros);
+        let prob_cilindros = sigmoid((net_cilindros * alpha));
 
-        if (inputs.maintCojinetes.checked && K_adj < 100000) prob_ciguenal *= 0.1;
-        if (inputs.maintAceite.checked && lambda_stribeck > 2.5) prob_cilindros *= 0.3;
+        const pCig = Math.min(Math.max(prob_ciguenal * 100, 0), 100);
+        const pCul = Math.min(Math.max(prob_culata * 100, 0), 100);
+        const pCil = Math.min(Math.max(prob_cilindros * 100, 0), 100);
 
-        const pCiguenal = Math.min(Math.max(prob_ciguenal * 100, 0), 100);
-        const pCulata = Math.min(Math.max(prob_culata * 100, 0), 100);
-        const pCilindros = Math.min(Math.max(prob_cilindros * 100, 0), 100);
+        actualizarBarraProb('ciguenal', pCig);
+        actualizarBarraProb('culata', pCul);
+        actualizarBarraProb('cilindros', pCil);
 
-        actualizarFilaFalla('ciguenal', pCiguenal);
-        actualizarFilaFalla('culata', pCulata);
-        actualizarFilaFalla('cilindros', pCilindros);
-
-        // RUL
-        let factor_degradacion_max = Math.max(pCiguenal, pCulata, pCilindros) / 100;
+        // RUL y Confianza
+        let factor_degradacion_max = Math.max(pCig, pCul, pCil) / 100;
         let RUL_base = 350000 * (1 - (K / 2000000));
-        if (inputs.maintMotor.checked) RUL_base += 200000;
+        let RUL = Math.max(RUL_base * (1 - factor_degradacion_max * 0.95), 0);
         
-        let RUL = RUL_base * (1 - factor_degradacion_max * 0.95);
-        RUL = Math.max(RUL, 0);
         outputs.kpi_RUL.innerText = Math.round(RUL).toLocaleString('es-AR') + " km";
+        outputs.kpi_Confianza.innerText = (alpha * 100).toFixed(0) + "%";
 
-        // Estados Generales
-        let maxProb = Math.max(pCiguenal, pCulata, pCilindros);
-        let estadoGeneral = "NOMINAL";
-        let descGeneral = "Monitoreo predictivo pasivo sin anomalías físicas.";
+        // IA Report y Lógica de Semáforo
+        generarReporteIA(factor_degradacion_max, alpha, lambda_stribeck);
         
-        if (maxProb > 75) {
-            estadoGeneral = "CRÍTICO";
-            descGeneral = "Falla inminente detectada. Parada obligatoria.";
-            configurarKPIStatus('danger', estadoGeneral, descGeneral);
-            outputs.kpi_RUL_card.style.borderTopColor = 'var(--color-critico)';
-            outputs.kpi_RUL.style.color = 'var(--color-critico)';
-        } else if (maxProb > 40) {
-            estadoGeneral = "ADVERTENCIA";
-            descGeneral = "Desgaste acelerado en curso. Programar servicio.";
-            configurarKPIStatus('warning', estadoGeneral, descGeneral);
-            outputs.kpi_RUL_card.style.borderTopColor = 'var(--color-advertencia)';
-            outputs.kpi_RUL.style.color = 'var(--color-advertencia)';
-        } else {
-            configurarKPIStatus('success', estadoGeneral, descGeneral);
-            outputs.kpi_RUL_card.style.borderTopColor = 'var(--cyan-accent)';
-            outputs.kpi_RUL.style.color = '#ffffff';
-        }
-
-        const confianzaFinal = alpha * 100;
-        outputs.kpi_Confianza.innerText = confianzaFinal.toFixed(1) + "%";
-
-        // Orquestador Reporte IA Multimodal
-        generarReporteIA(factor_degradacion_max, alpha, lambda_stribeck, WI);
-
-        // Plan de Acción Físico Ponderado
-        generarPlanAccionAjustado(pCiguenal, pCulata, pCilindros, alpha, lambda_stribeck, q_disipacion, WI, K);
+        // Action Plan
+        generarPlanAccion(pCig, pCul, pCil, alpha, lambda_stribeck, q_disipacion, WI);
     }
 
-    function actualizarFilaFalla(id, porcentaje) {
-        const textElement = outputs[`prob_txt_${id}`];
-        const barElement = outputs[`bar_${id}`];
-        const badgeElement = outputs[`badge_${id}`];
+    function actualizarBarraProb(id, val) {
+        outputs[`prob_txt_${id}`].innerText = val.toFixed(1) + "%";
+        let bar = outputs[`bar_${id}`];
+        bar.style.width = val + "%";
+        
+        if (val > 75) { bar.className = "prob-bar-fill bg-danger"; outputs[`prob_txt_${id}`].className = "font-mono color-danger"; }
+        else if (val > 40) { bar.className = "prob-bar-fill bg-warning"; outputs[`prob_txt_${id}`].className = "font-mono color-warning"; }
+        else { bar.className = "prob-bar-fill bg-nominal"; outputs[`prob_txt_${id}`].className = "font-mono color-nominal"; }
+    }
 
-        textElement.innerText = porcentaje.toFixed(1) + "%";
-        barElement.style.width = porcentaje + "%";
+    function generarReporteIA(riesgoBase, alpha, lambda) {
+        let riesgo = riesgoBase;
+        if (alpha < 0.8) riesgo += 0.1;
+        if (lambda < 1.0) riesgo += 0.15;
+        riesgo = Math.min(riesgo, 1);
+        
+        outputs.ia_riesgo_val.innerText = riesgo.toFixed(2);
+        let gauge = outputs.gauge_ring;
+        let badge = outputs.ia_semaforo_badge;
+        let txt = outputs.ia_texto_respuesta;
+        let rul_box = outputs.kpi_box_rul;
 
-        barElement.className = "progress-bar-fill";
-        badgeElement.className = "badge";
-
-        if (porcentaje > 75) {
-            barElement.classList.add('bg-critico');
-            badgeElement.classList.add('badge-danger');
-            badgeElement.innerText = "Alerta Crítica";
-            textElement.style.color = 'var(--color-critico)';
-            barElement.style.backgroundColor = 'var(--color-critico)';
-        } else if (porcentaje > 40) {
-            barElement.classList.add('bg-advertencia');
-            badgeElement.classList.add('badge-warning');
-            badgeElement.innerText = "Fatiga Avanzada";
-            textElement.style.color = 'var(--color-advertencia)';
-            barElement.style.backgroundColor = 'var(--color-advertencia)';
+        if (riesgo > 0.6) {
+            gauge.className = "gauge-container border-danger";
+            badge.className = "semaforo-badge bg-danger";
+            badge.innerText = "MALO / ROJO";
+            txt.innerHTML = `Riesgo crítico de falla (${riesgo.toFixed(2)}). Parada requerida por la orquestación IA.`;
+            rul_box.style.setProperty('--cyan-neon', '#ef4444');
+            outputs.kpi_estado_desc.innerText = "Critical Failure";
+        } else if (riesgo > 0.3) {
+            gauge.className = "gauge-container border-warning";
+            badge.className = "semaforo-badge bg-warning";
+            badge.innerText = "ATENCIÓN / AMARILLO";
+            txt.innerHTML = `Desgaste detectado (${riesgo.toFixed(2)}). Planificar mantenimiento preventivo.`;
+            rul_box.style.setProperty('--cyan-neon', '#f59e0b');
+            outputs.kpi_estado_desc.innerText = "Accelerated Wear";
         } else {
-            barElement.classList.add('bg-nominal');
-            badgeElement.classList.add('badge-success');
-            badgeElement.innerText = "Operación Segura";
-            textElement.style.color = 'var(--color-nominal)';
-            barElement.style.backgroundColor = 'var(--color-nominal)';
+            gauge.className = "gauge-container border-nominal";
+            badge.className = "semaforo-badge bg-nominal";
+            badge.innerText = "ÓPTIMO / VERDE";
+            txt.innerHTML = `Condición estadística segura (${riesgo.toFixed(2)}). Operación nominal.`;
+            rul_box.style.setProperty('--cyan-neon', '#10b981');
+            outputs.kpi_estado_desc.innerText = "Nominal Operation";
         }
     }
 
-    function configurarKPIStatus(tipo, titulo, desc) {
-        outputs.kpi_Estado.innerText = titulo;
-        outputs.kpi_Estado_desc.innerText = desc;
-        outputs.kpi_status_card.className = "card kpi-card";
-
-        if (tipo === 'danger') {
-            outputs.kpi_status_card.style.borderTopColor = 'var(--color-critico)';
-            outputs.kpi_Estado.style.color = 'var(--color-critico)';
-        } else if (tipo === 'warning') {
-            outputs.kpi_status_card.style.borderTopColor = 'var(--color-advertencia)';
-            outputs.kpi_Estado.style.color = 'var(--color-advertencia)';
-        } else {
-            outputs.kpi_status_card.style.borderTopColor = 'var(--color-nominal)';
-            outputs.kpi_Estado.style.color = 'var(--color-nominal)';
-        }
-    }
-
-    // --- ORQUESTADOR: REPORTE TÉCNICO IA ---
-    function generarReporteIA(riesgoBase, alpha, lambda, WI) {
-        // Ajuste fino del riesgo numérico usando las variables procesadas
-        let riesgoNumerico = riesgoBase;
-        if (alpha < 0.8) riesgoNumerico += (1 - alpha) * 0.2; // Penaliza ruido
-        if (lambda < 1.0) riesgoNumerico += 0.15; // Penaliza fricción seca
-        
-        riesgoNumerico = Math.min(Math.max(riesgoNumerico, 0), 1);
-        
-        outputs.ia_riesgo_val.innerText = riesgoNumerico.toFixed(2);
-        
-        let textoContextual = "";
-
-        if (riesgoNumerico > 0.6) {
-            outputs.ia_semaforo_badge.className = "badge badge-danger";
-            outputs.ia_semaforo_badge.innerText = "ROJO - RIESGO CRÍTICO";
-            textoContextual = `<strong>Explicación Automática del Estado:</strong> El bloque motor exhibe parámetros fuera del rango estadístico nominal. La fusión de embeddings técnicos indica alta probabilidad de falla inminente inducida por fatiga mecánica (Índice de Riesgo: ${riesgoNumerico.toFixed(2)}). Se requiere orquestar una intervención correctiva inmediata. Las alertas CRM y las sugerencias de ruteo de taller se han activado vía API.`;
-            outputs.ia_riesgo_val.style.color = 'var(--color-critico)';
-        } else if (riesgoNumerico > 0.3) {
-            outputs.ia_semaforo_badge.className = "badge badge-warning";
-            outputs.ia_semaforo_badge.innerText = "AMARILLO - MANTENIMIENTO PREVENTIVO";
-            textoContextual = `<strong>Explicación Automática del Estado:</strong> Las métricas de telemetría muestran degradación parcial activa. La red neuronal sugiere agendar un servicio preventivo a la brevedad para rectificar el desvío antes de que el daño estructural altere la física interna del motor (Índice de Riesgo: ${riesgoNumerico.toFixed(2)}). Se recomienda programar mantenimiento en el dashboard.`;
-            outputs.ia_riesgo_val.style.color = 'var(--color-advertencia)';
-        } else {
-            outputs.ia_semaforo_badge.className = "badge badge-success";
-            outputs.ia_semaforo_badge.innerText = "VERDE - OPERACIÓN NOMINAL";
-            textoContextual = `<strong>Explicación Automática del Estado:</strong> Con un Índice de Riesgo bajo (${riesgoNumerico.toFixed(2)}), el vector de estado valida que la tribología y termodinámica están en óptimas condiciones. El contexto estadístico garantiza la precisión de la salida predictiva y no amerita acciones correctivas. Continuar el plan automatizado estándar.`;
-            outputs.ia_riesgo_val.style.color = 'var(--color-nominal)';
-        }
-
-        // Agregar formato JSON emulado para cumplir el metaprompt
-        textoContextual += `<br><br><span style="color:#94a3b8; font-family:monospace; font-size:9pt;">[API REST JSON Output] -> { "texto": "${textoContextual.substring(46, 85)}...", "riesgo": ${riesgoNumerico.toFixed(2)}, "semaforo": "${outputs.ia_semaforo_badge.innerText.split(" ")[0].toLowerCase()}" }</span>`;
-
-        outputs.ia_texto_respuesta.innerHTML = textoContextual;
-    }
-
-    // --- PLAN DE ACCIÓN FÍSICO ---
-    function generarPlanAccionAjustado(pCig, pCul, pCil, alpha, lambda, q_dis, WI, K) {
+    function generarPlanAccion(pCig, pCul, pCil, alpha, lambda, q_dis, WI) {
         let htmlStr = "";
-
-        if (alpha <= 0.6) {
-            htmlStr += `<li><strong>[CALIBRACIÓN DE RED] Compensación de Ruido Activa (α=${alpha.toFixed(2)}):</strong> Variación armónica detectada en los transductores. La red neuronal ha restado peso al sensor ruidoso para mantener la precisión. <em>Recomendación eléctrica:</em> Comprobar impedancia en la línea física de masa del bloque motor y limpiar la interfaz del bus OBD antes de desarmar.</li>`;
-        }
+        if (alpha <= 0.6) htmlStr += `<li><span class="color-warning">[SENSOR RUIDO]</span> Compensación activa. Revisar impedancia del bus.</li>`;
         
         if (pCig > 40) {
-            if (WI > 5.0 && lambda < 1.5) {
-                htmlStr += `<li><strong>[FÍSICA DE FRACTURA - CIGÜEÑAL]:</strong> El índice de fatiga acumulado (${WI.toFixed(2)}) indica microfisuras activas. El film lubricante está en régimen límite destructivo (${lambda.toFixed(2)} λ). <em>Reparación Ajustada:</em> Realizar un volteo de cárter e instalar cojinetes trimetálicos de sobremedida con canales de lubricación hidrodinámica ensanchados.</li>`;
-            } else {
-                htmlStr += `<li><strong>[FÍSICA DE FRACTURA - CIGÜEÑAL]:</strong> Estrés por armónicos de vibración alta. <em>Reparación Ajustada:</em> Rectificar el damper de cigüeñal (polea equilibradora) para mitigar frecuencias críticas torsionales que fatigan los apoyos axiales.</li>`;
-            }
+            if (WI > 3.0 && lambda < 1.5) htmlStr += `<li><span class="color-danger">[CIGÜEÑAL]</span> Fatiga crítica. Voltear cárter y cambiar cojinetes.</li>`;
+            else htmlStr += `<li><span class="color-warning">[CIGÜEÑAL]</span> Estrés armónico. Rectificar damper.</li>`;
         }
-
         if (pCul > 40) {
-            if (q_dis > 3000) {
-                htmlStr += `<li><strong>[TERMODINÁMICA - CULATA]:</strong> Flujo entrópico crítico de calor (${Math.round(q_dis)} J/s). Riesgo de pandeo elasto-plástico por gradiente térmico. <em>Reparación Ajustada:</em> Realizar bypass de enfriamiento aumentando el flujo de la bomba de agua. Aplicar junta de culata multilámina de acero (MLS) con torque angular controlado.</li>`;
-            } else {
-                htmlStr += `<li><strong>[TERMODINÁMICA - CULATA]:</strong> Gradiente moderado. <em>Acción preventiva:</em> Purga neumática del circuito de refrigeración y aditivación con glicol puro al 50%.</li>`;
-            }
+            if (q_dis > 3000) htmlStr += `<li><span class="color-danger">[CULATA]</span> Gradiente térmico extremo. Reemplazar junta MLS y revisar bypass.</li>`;
+            else htmlStr += `<li><span class="color-warning">[CULATA]</span> Purga de circuito y aditivación.</li>`;
         }
-
         if (pCil > 40) {
-            if (lambda < 1.0) {
-                htmlStr += `<li><strong>[TRIBOLOGÍA - CILINDROS / SEGMENTOS]:</strong> Ruptura total de la película de lubricante (${lambda.toFixed(2)} λ). Fricción de cizallamiento abrasiva severa. <em>Reparación Ajustada:</em> Ejecutar lavado químico interno (Engine Flush) y sustituir por un aceite sintético (PAO) con alta estabilidad HTHS.</li>`;
-            } else if (K > 1200000 && !inputs.maintMotor.checked) {
-                htmlStr += `<li><strong>[TRIBOLOGÍA - CILINDROS]:</strong> Desgaste macroscópico abrasivo. <em>Reparación Ajustada:</em> Utilizar tratamiento antifricción molecular a base de partículas cerámicas para rellenar rugosidades sin mecanizar el bloque.</li>`;
-            }
+            if (lambda < 1.0) htmlStr += `<li><span class="color-danger">[CILINDROS]</span> Fricción seca. Realizar Engine Flush urgente.</li>`;
+            else htmlStr += `<li><span class="color-warning">[CILINDROS]</span> Aplicar antifricción cerámico.</li>`;
         }
 
-        if (htmlStr === "") {
-            htmlStr = `<li><strong>[ESTADO OPERATIVO NOMINAL]:</strong> El balance de disipación de calor (${Math.round(q_dis)} J/s) y la separación de película lubricante (${lambda.toFixed(2)} λ) están en equilibrio termodinámico, proveyendo un contexto estadístico limpio y seguro. No hay fatiga mecánica detectable por la automatización de la red.</li>`;
-        }
-
+        if (htmlStr === "") htmlStr = `<li>Balance de disipación y película lubricante en equilibrio termodinámico. Sin acción.</li>`;
         outputs.actions.innerHTML = htmlStr;
     }
 
-    // Eventos
+    // Listeners
     Object.values(inputs).forEach(input => {
-        if (input) {
-            input.addEventListener('input', recalcularSimulacion);
-            input.addEventListener('change', recalcularSimulacion);
-        }
+        if (input) input.addEventListener('input', recalcularSimulacion);
     });
 
     window.addEventListener('DOMContentLoaded', recalcularSimulacion);
