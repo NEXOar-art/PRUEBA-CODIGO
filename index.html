@@ -1,845 +1,1629 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXO ART-TALLER 4.0 - Holographic Engine</title>
-    <style>
-        :root {
-            --bg-base: #03050a;
-            --bg-panel: #0b101e;
-            --bg-panel-light: #151b2b;
-            --border-glow: rgba(56, 189, 248, 0.2);
-            --border-solid: #1e293b;
-            
-            --text-main: #f8fafc;
-            --text-muted: #64748b;
-            
-            --cyan-neon: #38bdf8;
-            --purple-neon: #c084fc;
-            --green-neon: #10b981;
-            --red-neon: #ef4444;
-            --yellow-neon: #f59e0b;
-
-            --font-ui: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            --font-mono: 'Courier New', Courier, monospace;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: var(--font-ui);
-            background-color: var(--bg-base);
-            color: var(--text-main);
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        /* --- SIDEBAR --- */
-        .sidebar {
-            width: 240px;
-            background-color: var(--bg-panel);
-            border-right: 1px solid var(--border-solid);
-            display: flex;
-            flex-direction: column;
-            padding: 20px 0;
-        }
-
-        .brand {
-            padding: 0 20px 20px;
-            border-bottom: 1px solid var(--border-solid);
-            margin-bottom: 20px;
-        }
-
-        .brand h1 {
-            font-size: 14pt;
-            color: var(--cyan-neon);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            text-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
-        }
-
-        .brand p {
-            font-size: 8pt;
-            color: var(--text-muted);
-            font-family: var(--font-mono);
-        }
-
-        .nav-menu {
-            list-style: none;
-            padding: 0 10px;
-        }
-
-        .nav-menu li {
-            padding: 12px 15px;
-            margin-bottom: 5px;
-            border-radius: 6px;
-            font-size: 10pt;
-            color: var(--text-muted);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .nav-menu li.active {
-            background-color: rgba(56, 189, 248, 0.1);
-            color: var(--cyan-neon);
-            border-left: 3px solid var(--cyan-neon);
-        }
-
-        .nav-menu li:hover:not(.active) {
-            background-color: var(--bg-panel-light);
-            color: var(--text-main);
-        }
-
-        .btn-run {
-            margin: auto 20px 20px;
-            background-color: rgba(56, 189, 248, 0.2);
-            color: var(--cyan-neon);
-            border: 1px solid var(--cyan-neon);
-            padding: 12px;
-            text-align: center;
-            border-radius: 4px;
-            font-weight: bold;
-            font-size: 10pt;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            cursor: pointer;
-            box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .btn-run:hover {
-            background-color: var(--cyan-neon);
-            color: var(--bg-base);
-            box-shadow: 0 0 25px rgba(56, 189, 248, 0.5);
-        }
-
-        /* --- MAIN CONTENT --- */
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-            padding: 20px;
-            gap: 20px;
-        }
-
-        /* Top Bar */
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            background-color: var(--bg-panel);
-            border: 1px solid var(--border-solid);
-            border-radius: 8px;
-        }
-        
-        .top-bar .title {
-            font-size: 12pt;
-            font-weight: 600;
-        }
-
-        .top-bar .status {
-            font-family: var(--font-mono);
-            font-size: 9pt;
-            color: var(--green-neon);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .status-dot {
-            width: 8px; height: 8px;
-            background-color: var(--green-neon);
-            border-radius: 50%;
-            box-shadow: 0 0 8px var(--green-neon);
-        }
-
-        /* --- ENGINE HOLOGRAPHIC CONTAINER --- */
-        .engine-container {
-            position: relative;
-            width: 100%;
-            height: 400px;
-            background: radial-gradient(circle at center, #111827 0%, #03050a 100%);
-            border: 1px solid var(--border-solid);
-            border-radius: 12px;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: inset 0 0 50px rgba(0,0,0,0.8);
-        }
-
-        /* Blueprint/Grid Background Effect */
-        .engine-grid-bg {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-image: 
-                linear-gradient(rgba(56, 189, 248, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
-            background-size: 30px 30px;
-            z-index: 1;
-        }
-
-        /* Placeholder for 3D Engine Image */
-        .engine-image {
-            position: relative;
-            z-index: 2;
-            width: 60%;
-            height: auto;
-            opacity: 0.7;
-            filter: drop-shadow(0 0 20px rgba(192, 132, 252, 0.3)) hue-rotate(180deg) contrast(1.2);
-            /* Placeholder Image - You can replace this src with your own 3D render */
-            content: url('https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=800&q=80');
-            mix-blend-mode: screen;
-        }
-
-        /* Holographic Panels */
-        .holo-panel {
-            position: absolute;
-            z-index: 10;
-            background: rgba(11, 16, 30, 0.65);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            border-radius: 4px;
-            padding: 12px 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(56, 189, 248, 0.1);
-            color: var(--text-main);
-        }
-
-        .holo-title {
-            font-size: 7.5pt;
-            text-transform: uppercase;
-            color: var(--cyan-neon);
-            letter-spacing: 1px;
-            margin-bottom: 5px;
-            font-family: var(--font-mono);
-        }
-
-        .holo-value {
-            font-size: 22pt;
-            font-weight: bold;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-            display: flex;
-            align-items: baseline;
-            gap: 5px;
-        }
-
-        .holo-unit {
-            font-size: 10pt;
-            color: var(--text-muted);
-            font-weight: normal;
-        }
-
-        /* Panel Positions */
-        .holo-rpm { top: 15%; left: 10%; border-left: 3px solid var(--cyan-neon); }
-        .holo-temp { top: 15%; right: 10%; border-right: 3px solid var(--purple-neon); }
-        .holo-oil { bottom: 15%; left: 10%; border-left: 3px solid var(--green-neon); }
-
-        /* Connector Lines (CSS drawn) */
-        .connector {
-            position: absolute;
-            background-color: rgba(56, 189, 248, 0.4);
-            z-index: 5;
-        }
-        .conn-1 { top: 25%; left: 25%; width: 100px; height: 1px; transform: rotate(15deg); }
-        .conn-2 { top: 25%; right: 25%; width: 120px; height: 1px; transform: rotate(-20deg); }
-        .conn-3 { bottom: 25%; left: 25%; width: 150px; height: 1px; transform: rotate(-10deg); }
-
-        /* --- DASHBOARD LOWER GRID --- */
-        .dash-grid {
-            display: grid;
-            grid-template-columns: 300px 1fr;
-            gap: 20px;
-        }
-
-        .panel {
-            background-color: var(--bg-panel);
-            border: 1px solid var(--border-solid);
-            border-radius: 8px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .panel-header {
-            font-size: 10pt;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-muted);
-            margin-bottom: 20px;
-            border-bottom: 1px solid var(--border-solid);
-            padding-bottom: 10px;
-        }
-
-        /* Controls */
-        .control-group {
-            margin-bottom: 15px;
-        }
-        .control-label {
-            display: flex;
-            justify-content: space-between;
-            font-size: 9pt;
-            margin-bottom: 8px;
-            color: #cbd5e1;
-        }
-        input[type=range] {
-            -webkit-appearance: none;
-            width: 100%;
-            background: transparent;
-        }
-        input[type=range]::-webkit-slider-runnable-track {
-            width: 100%;
-            height: 4px;
-            background: #1e293b;
-            border-radius: 2px;
-        }
-        input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            height: 12px; width: 12px;
-            border-radius: 50%;
-            background: var(--cyan-neon);
-            margin-top: -4px;
-            cursor: pointer;
-            box-shadow: 0 0 10px var(--cyan-neon);
-        }
-        
-        select.ui-select, .ui-checkbox {
-            width: 100%;
-            background: var(--bg-panel-light);
-            color: var(--text-main);
-            border: 1px solid var(--border-solid);
-            padding: 8px;
-            border-radius: 4px;
-            font-size: 9pt;
-            margin-top: 5px;
-            outline: none;
-        }
-
-        /* Right Side: KPIs and AI */
-        .right-col {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        /* 5 Mini KPIs */
-        .kpi-row {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 15px;
-        }
-
-        .kpi-box {
-            background-color: var(--bg-panel);
-            border: 1px solid var(--border-solid);
-            border-radius: 6px;
-            padding: 15px;
-            position: relative;
-            overflow: hidden;
-        }
-        .kpi-box::after {
-            content: '';
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            height: 2px;
-            background: var(--cyan-neon);
-        }
-        .kpi-title { font-size: 8pt; color: var(--text-muted); text-transform: uppercase; }
-        .kpi-val { font-size: 16pt; font-weight: bold; margin-top: 5px; font-family: var(--font-mono); }
-        .kpi-sub { font-size: 7.5pt; color: #94a3b8; margin-top: 2px; }
-
-        /* Report & Probabilities Row */
-        .bottom-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        /* AI Report Gauge & Text */
-        .ai-report-content {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .gauge-container {
-            position: relative;
-            width: 90px; height: 90px;
-            border-radius: 50%;
-            border: 4px solid var(--border-solid);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-top-color: var(--cyan-neon); /* Dynamic later */
-            transform: rotate(-45deg);
-        }
-        .gauge-inner {
-            transform: rotate(45deg);
-            text-align: center;
-        }
-        .gauge-val { font-size: 16pt; font-weight: bold; font-family: var(--font-mono); }
-        .gauge-lbl { font-size: 7pt; color: var(--text-muted); text-transform: uppercase; }
-
-        .ai-text {
-            font-size: 9.5pt;
-            color: #cbd5e1;
-            line-height: 1.5;
-            flex: 1;
-        }
-
-        .semaforo-badge {
-            display: inline-block;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 7.5pt;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        /* Failure Probability Bars */
-        .prob-item {
-            margin-bottom: 15px;
-        }
-        .prob-label {
-            display: flex;
-            justify-content: space-between;
-            font-size: 8.5pt;
-            margin-bottom: 5px;
-            color: #cbd5e1;
-        }
-        .prob-bar-bg {
-            height: 4px;
-            background: var(--border-solid);
-            border-radius: 2px;
-            overflow: hidden;
-        }
-        .prob-bar-fill {
-            height: 100%;
-            background: var(--cyan-neon);
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-
-        /* Action Plan List */
-        .action-list { list-style: none; margin-top: 10px; }
-        .action-list li {
-            font-size: 9.5pt;
-            color: #cbd5e1;
-            padding-left: 15px;
-            position: relative;
-            margin-bottom: 10px;
-            line-height: 1.4;
-        }
-        .action-list li::before {
-            content: '>';
-            position: absolute;
-            left: 0;
-            color: var(--cyan-neon);
-            font-weight: bold;
-            font-family: var(--font-mono);
-        }
-
-        /* Utilities */
-        .color-nominal { color: var(--green-neon) !important; }
-        .color-warning { color: var(--yellow-neon) !important; }
-        .color-danger { color: var(--red-neon) !important; }
-        
-        .bg-nominal { background-color: var(--green-neon) !important; }
-        .bg-warning { background-color: var(--yellow-neon) !important; }
-        .bg-danger { background-color: var(--red-neon) !important; }
-
-        .border-nominal { border-top-color: var(--green-neon) !important; border-bottom-color: var(--green-neon) !important; }
-        .border-warning { border-top-color: var(--yellow-neon) !important; border-bottom-color: var(--yellow-neon) !important; }
-        .border-danger { border-top-color: var(--red-neon) !important; border-bottom-color: var(--red-neon) !important; }
-
-        /* Metaprompt details */
-        details { margin-top: 15px; }
-        details summary { font-size: 8.5pt; color: var(--purple-neon); cursor: pointer; outline: none; }
-        .metaprompt-box {
-            background: rgba(0,0,0,0.3); border: 1px solid var(--border-solid);
-            padding: 10px; font-size: 8pt; color: #64748b; font-family: var(--font-mono);
-            margin-top: 10px; border-radius: 4px; white-space: pre-wrap; height: 100px; overflow-y: auto;
-        }
-
-    </style>
-</head>
-<body>
-
-    <aside class="sidebar">
-        <div class="brand">
-            <h1>Core Modules</h1>
-            <p>v4.2.0 Stable</p>
-        </div>
-        <ul class="nav-menu">
-            <li class="active">⛣ Simulation</li>
-            <li>▤ Telemetry</li>
-            <li>⚛ Physics</li>
-            <li>◈ ANN Inference</li>
-            <li>⚙ Settings</li>
-        </ul>
-        <div style="flex:1"></div>
-        <div class="btn-run" onclick="recalcularSimulacion()">Run Simulation</div>
-    </aside>
-
-    <main class="main-content">
-        
-        <header class="top-bar">
-            <div class="title">Asset Simulation Deck // Real-time KPI modeling for propulsion units</div>
-            <div class="status">
-                <div class="status-dot"></div>
-                SYSTEM ONLINE
-            </div>
-        </header>
-
-        <div class="engine-container">
-            <div class="engine-grid-bg"></div>
-            
-            <div class="connector conn-1"></div>
-            <div class="connector conn-2"></div>
-            <div class="connector conn-3"></div>
-
-            <div class="engine-image"></div>
-
-            <div class="holo-panel holo-rpm">
-                <div class="holo-title">Kinematic K-Vector</div>
-                <div class="holo-value" id="val_K">150,000 <span class="holo-unit">km</span></div>
-            </div>
-
-            <div class="holo-panel holo-temp">
-                <div class="holo-title">Thermal Grad</div>
-                <div class="holo-value" id="val_Tmotor">90 <span class="holo-unit">°C</span></div>
-            </div>
-
-            <div class="holo-panel holo-oil">
-                <div class="holo-title">Oil Stability</div>
-                <div class="holo-value" id="val_Paceite">4.0 <span class="holo-unit">Bar</span></div>
-            </div>
-        </div>
-
-        <div class="dash-grid">
-            
-            <div class="panel">
-                <div class="panel-header">Simulation Controls</div>
-                
-                <div class="control-group">
-                    <div class="control-label"><span>Kilometraje</span><span id="lbl_K">150k km</span></div>
-                    <input type="range" id="input_K" min="0" max="2000000" step="5000" value="150000">
-                </div>
-                
-                <div class="control-group">
-                    <div class="control-label"><span>Temp. Motor</span><span id="lbl_Tmotor">90 °C</span></div>
-                    <input type="range" id="input_Tmotor" min="50" max="160" step="1" value="90">
-                </div>
-                
-                <div class="control-group">
-                    <div class="control-label"><span>Presión Aceite</span><span id="lbl_Paceite">4.0 Bar</span></div>
-                    <input type="range" id="input_Paceite" min="0.5" max="7.0" step="0.1" value="4.0">
-                </div>
-                
-                <div class="control-group">
-                    <div class="control-label"><span>Vibraciones</span><span id="lbl_Vacc">1.2 g</span></div>
-                    <input type="range" id="input_Vacc" min="0.0" max="6.0" step="0.1" value="1.2">
-                </div>
-
-                <div class="panel-header" style="margin-top: 10px; font-size:8pt;">Factores de Entorno</div>
-                
-                <div class="control-group">
-                    <div class="control-label"><span>Temp. Externa</span><span id="lbl_Text">25 °C</span></div>
-                    <input type="range" id="input_Text" min="-15" max="50" step="1" value="25">
-                </div>
-
-                <div class="control-group">
-                    <div class="control-label"><span>Confiabilidad Sensores (α)</span></div>
-                    <select id="input_Alpha" class="ui-select">
-                        <option value="1.0" selected>Limpia (α=1.0)</option>
-                        <option value="0.6">Ruido (α=0.6)</option>
-                        <option value="0.2">Falla (α=0.2)</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="right-col">
-                
-                <div class="kpi-row">
-                    <div class="kpi-box" id="kpi_box_rul" style="--cyan-neon: #38bdf8;">
-                        <div class="kpi-title">RUL Trend</div>
-                        <div class="kpi-val" id="kpi_RUL">-- h</div>
-                        <div class="kpi-sub" id="kpi_estado_desc">Nominal wear</div>
-                    </div>
-                    <div class="kpi-box" style="--cyan-neon: #10b981;">
-                        <div class="kpi-title">Confidence Score</div>
-                        <div class="kpi-val" id="kpi_Confianza">-- %</div>
-                        <div class="kpi-sub">Network stability</div>
-                    </div>
-                    <div class="kpi-box" style="--cyan-neon: #c084fc;">
-                        <div class="kpi-title">Vector Analysis</div>
-                        <div class="kpi-val" id="kpi_TSI">--</div>
-                        <div class="kpi-sub">Thermal stress eq.</div>
-                    </div>
-                    <div class="kpi-box" style="--cyan-neon: #38bdf8;">
-                        <div class="kpi-title">Efficiency Path</div>
-                        <div class="kpi-val" id="kpi_VIP">--</div>
-                        <div class="kpi-sub">Viscosity proxy</div>
-                    </div>
-                    <div class="kpi-box" id="kpi_box_fric" style="--cyan-neon: #ef4444;">
-                        <div class="kpi-title">Friction Limit</div>
-                        <div class="kpi-val" id="kpi_Friccion">-- λ</div>
-                        <div class="kpi-sub">Hydrodynamic film</div>
-                    </div>
-                </div>
-
-                <div class="bottom-row">
-                    
-                    <div class="panel">
-                        <div class="panel-header">Technical AI Report</div>
-                        <div class="ai-report-content">
-                            <div class="gauge-container" id="gauge_ring">
-                                <div class="gauge-inner">
-                                    <div class="gauge-val" id="ia_riesgo_val">0.00</div>
-                                    <div class="gauge-lbl">INDEX</div>
-                                </div>
-                            </div>
-                            <div class="ai-text">
-                                <div id="ia_semaforo_badge" class="semaforo-badge bg-nominal">ÓPTIMO</div>
-                                <div id="ia_texto_respuesta">Evaluando telemetría latente...</div>
-                            </div>
-                        </div>
-                        <details>
-                            <summary>View Neural Metaprompt JSON</summary>
-                            <div class="metaprompt-box">Objetivo: Diseñar una red neuronal multimodal que procese datos técnicos de taller... [Output en consola REST simulada]</div>
-                        </details>
-                    </div>
-
-                    <div class="panel">
-                        <div class="panel-header">Failure Probability & Actions</div>
-                        
-                        <div class="prob-item">
-                            <div class="prob-label"><span>Crankshaft Wear</span><span id="prob_txt_ciguenal" class="font-mono">0%</span></div>
-                            <div class="prob-bar-bg"><div class="prob-bar-fill" id="bar_ciguenal"></div></div>
-                        </div>
-                        <div class="prob-item">
-                            <div class="prob-label"><span>Cylinder Head Stress</span><span id="prob_txt_culata" class="font-mono">0%</span></div>
-                            <div class="prob-bar-bg"><div class="prob-bar-fill" id="bar_culata"></div></div>
-                        </div>
-                        <div class="prob-item">
-                            <div class="prob-label"><span>Cylinder Seizing</span><span id="prob_txt_cilindros" class="font-mono">0%</span></div>
-                            <div class="prob-bar-bg"><div class="prob-bar-fill" id="bar_cilindros"></div></div>
-                        </div>
-
-                        <div class="panel-header" style="margin-top: 15px; border:none; padding:0;">Action Plan</div>
-                        <ul class="action-list" id="action_container">
-                            </ul>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </main>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Romero Mecánica Integral - Taller de reparación de automóviles con años de experiencia. Servicio de calidad, confiable y transparente en Paysandú, Uruguay.">
+<meta name="theme-color" content="#0A0A0A">
+<title>ROMERO MECÁNICA INTEGRAL | Taller Mecánico - Diagnóstico y Reparación Profesional</title>
+<!-- Preconnect para mejor rendimiento-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Tailwind CSS CDN + Supresor de warnings-->
 <script>
-    // --- VARIABLES GLOBALES Y BINDINGS ---
-    const inputs = {
-        K: document.getElementById('input_K'),
-        Tmotor: document.getElementById('input_Tmotor'),
-        Paceite: document.getElementById('input_Paceite'),
-        Vacc: document.getElementById('input_Vacc'),
-        Text: document.getElementById('input_Text'),
-        Alpha: document.getElementById('input_Alpha'),
-    };
-
-    const outputs = {
-        // Holographic
-        val_K: document.getElementById('val_K'),
-        val_Tmotor: document.getElementById('val_Tmotor'),
-        val_Paceite: document.getElementById('val_Paceite'),
-        // Control Labels
-        lbl_K: document.getElementById('lbl_K'),
-        lbl_Tmotor: document.getElementById('lbl_Tmotor'),
-        lbl_Paceite: document.getElementById('lbl_Paceite'),
-        lbl_Vacc: document.getElementById('lbl_Vacc'),
-        lbl_Text: document.getElementById('lbl_Text'),
-        // KPIs
-        kpi_RUL: document.getElementById('kpi_RUL'),
-        kpi_estado_desc: document.getElementById('kpi_estado_desc'),
-        kpi_Confianza: document.getElementById('kpi_Confianza'),
-        kpi_TSI: document.getElementById('kpi_TSI'),
-        kpi_VIP: document.getElementById('kpi_VIP'),
-        kpi_Friccion: document.getElementById('kpi_Friccion'),
-        // UI styling
-        kpi_box_rul: document.getElementById('kpi_box_rul'),
-        kpi_box_fric: document.getElementById('kpi_box_fric'),
-        gauge_ring: document.getElementById('gauge_ring'),
-        // AI Report
-        ia_riesgo_val: document.getElementById('ia_riesgo_val'),
-        ia_semaforo_badge: document.getElementById('ia_semaforo_badge'),
-        ia_texto_respuesta: document.getElementById('ia_texto_respuesta'),
-        // Probs
-        prob_txt_ciguenal: document.getElementById('prob_txt_ciguenal'),
-        bar_ciguenal: document.getElementById('bar_ciguenal'),
-        prob_txt_culata: document.getElementById('prob_txt_culata'),
-        bar_culata: document.getElementById('bar_culata'),
-        prob_txt_cilindros: document.getElementById('prob_txt_cilindros'),
-        bar_cilindros: document.getElementById('bar_cilindros'),
-        // Actions
-        actions: document.getElementById('action_container')
-    };
-
-    function sigmoid(x) { return 1 / (1 + Math.exp(-x)); }
-
-    function recalcularSimulacion() {
-        const K = parseFloat(inputs.K.value);
-        const Tmotor = parseFloat(inputs.Tmotor.value);
-        const Paceite = parseFloat(inputs.Paceite.value);
-        const Vacc = parseFloat(inputs.Vacc.value);
-        const Text = parseFloat(inputs.Text.value);
-        const alpha = parseFloat(inputs.Alpha.value);
-
-        // Update Labels & Holograms
-        outputs.val_K.innerHTML = Math.round(K/1000) + "k <span class='holo-unit'>km</span>";
-        outputs.val_Tmotor.innerHTML = Tmotor + " <span class='holo-unit'>°C</span>";
-        outputs.val_Paceite.innerHTML = Paceite.toFixed(1) + " <span class='holo-unit'>Bar</span>";
-        
-        outputs.lbl_K.innerText = Math.round(K/1000) + "k km";
-        outputs.lbl_Tmotor.innerText = Tmotor + " °C";
-        outputs.lbl_Paceite.innerText = Paceite.toFixed(1) + " Bar";
-        outputs.lbl_Vacc.innerText = Vacc.toFixed(1) + " g";
-        outputs.lbl_Text.innerText = Text + " °C";
-
-        // Feature Engineering Basal (Math intacta)
-        const Ld = 3; // Fijo normal para simplificar UI según nuevas imágenes
-        const TSI = (Tmotor - Text) * (1 + (Ld / 5));
-        const VIP = Paceite * (150 / (Tmotor + 20)) * 1.0;
-        const WI = (K / 250000) * (1 + (Vacc * 0.1));
-        const q_disipacion = Math.max(0, (Tmotor - Text) * 45 * (1 + (Ld * 0.15)));
-        const lambda_stribeck = Math.max(0.1, (VIP * 1.2) / (1 + (Vacc * 0.4)));
-
-        outputs.kpi_TSI.innerText = TSI.toFixed(1);
-        outputs.kpi_VIP.innerText = VIP.toFixed(2);
-        outputs.kpi_Friccion.innerText = lambda_stribeck.toFixed(2) + " λ";
-
-        // Estilos semáforo fricción
-        if(lambda_stribeck < 1.0) outputs.kpi_box_fric.style.setProperty('--cyan-neon', '#ef4444');
-        else if(lambda_stribeck < 1.5) outputs.kpi_box_fric.style.setProperty('--cyan-neon', '#f59e0b');
-        else outputs.kpi_box_fric.style.setProperty('--cyan-neon', '#10b981');
-
-        // Red Neuronal
-        const penalizacionRuido = (1 - alpha) * 1.5;
-        let net_ciguenal = (WI * 0.85) + (Vacc * 0.6) - (lambda_stribeck * 0.9) + penalizacionRuido - 2.2; 
-        let prob_ciguenal = sigmoid(net_ciguenal);
-
-        let net_culata = (TSI * 0.045) + (Tmotor * 0.055) - (alpha * 4.0) - 4.5;
-        let prob_culata = sigmoid(net_culata);
-
-        let net_cilindros = (K / 350000) - (lambda_stribeck * 1.5) + (Tmotor * 0.02) - 1.2;
-        let prob_cilindros = sigmoid((net_cilindros * alpha));
-
-        const pCig = Math.min(Math.max(prob_ciguenal * 100, 0), 100);
-        const pCul = Math.min(Math.max(prob_culata * 100, 0), 100);
-        const pCil = Math.min(Math.max(prob_cilindros * 100, 0), 100);
-
-        actualizarBarraProb('ciguenal', pCig);
-        actualizarBarraProb('culata', pCul);
-        actualizarBarraProb('cilindros', pCil);
-
-        // RUL y Confianza
-        let factor_degradacion_max = Math.max(pCig, pCul, pCil) / 100;
-        let RUL_base = 350000 * (1 - (K / 2000000));
-        let RUL = Math.max(RUL_base * (1 - factor_degradacion_max * 0.95), 0);
-        
-        outputs.kpi_RUL.innerText = Math.round(RUL).toLocaleString('es-AR') + " km";
-        outputs.kpi_Confianza.innerText = (alpha * 100).toFixed(0) + "%";
-
-        // IA Report y Lógica de Semáforo
-        generarReporteIA(factor_degradacion_max, alpha, lambda_stribeck);
-        
-        // Action Plan
-        generarPlanAccion(pCig, pCul, pCil, alpha, lambda_stribeck, q_disipacion, WI);
-    }
-
-    function actualizarBarraProb(id, val) {
-        outputs[`prob_txt_${id}`].innerText = val.toFixed(1) + "%";
-        let bar = outputs[`bar_${id}`];
-        bar.style.width = val + "%";
-        
-        if (val > 75) { bar.className = "prob-bar-fill bg-danger"; outputs[`prob_txt_${id}`].className = "font-mono color-danger"; }
-        else if (val > 40) { bar.className = "prob-bar-fill bg-warning"; outputs[`prob_txt_${id}`].className = "font-mono color-warning"; }
-        else { bar.className = "prob-bar-fill bg-nominal"; outputs[`prob_txt_${id}`].className = "font-mono color-nominal"; }
-    }
-
-    function generarReporteIA(riesgoBase, alpha, lambda) {
-        let riesgo = riesgoBase;
-        if (alpha < 0.8) riesgo += 0.1;
-        if (lambda < 1.0) riesgo += 0.15;
-        riesgo = Math.min(riesgo, 1);
-        
-        outputs.ia_riesgo_val.innerText = riesgo.toFixed(2);
-        let gauge = outputs.gauge_ring;
-        let badge = outputs.ia_semaforo_badge;
-        let txt = outputs.ia_texto_respuesta;
-        let rul_box = outputs.kpi_box_rul;
-
-        if (riesgo > 0.6) {
-            gauge.className = "gauge-container border-danger";
-            badge.className = "semaforo-badge bg-danger";
-            badge.innerText = "MALO / ROJO";
-            txt.innerHTML = `Riesgo crítico de falla (${riesgo.toFixed(2)}). Parada requerida por la orquestación IA.`;
-            rul_box.style.setProperty('--cyan-neon', '#ef4444');
-            outputs.kpi_estado_desc.innerText = "Critical Failure";
-        } else if (riesgo > 0.3) {
-            gauge.className = "gauge-container border-warning";
-            badge.className = "semaforo-badge bg-warning";
-            badge.innerText = "ATENCIÓN / AMARILLO";
-            txt.innerHTML = `Desgaste detectado (${riesgo.toFixed(2)}). Planificar mantenimiento preventivo.`;
-            rul_box.style.setProperty('--cyan-neon', '#f59e0b');
-            outputs.kpi_estado_desc.innerText = "Accelerated Wear";
-        } else {
-            gauge.className = "gauge-container border-nominal";
-            badge.className = "semaforo-badge bg-nominal";
-            badge.innerText = "ÓPTIMO / VERDE";
-            txt.innerHTML = `Condición estadística segura (${riesgo.toFixed(2)}). Operación nominal.`;
-            rul_box.style.setProperty('--cyan-neon', '#10b981');
-            outputs.kpi_estado_desc.innerText = "Nominal Operation";
-        }
-    }
-
-    function generarPlanAccion(pCig, pCul, pCil, alpha, lambda, q_dis, WI) {
-        let htmlStr = "";
-        if (alpha <= 0.6) htmlStr += `<li><span class="color-warning">[SENSOR RUIDO]</span> Compensación activa. Revisar impedancia del bus.</li>`;
-        
-        if (pCig > 40) {
-            if (WI > 3.0 && lambda < 1.5) htmlStr += `<li><span class="color-danger">[CIGÜEÑAL]</span> Fatiga crítica. Voltear cárter y cambiar cojinetes.</li>`;
-            else htmlStr += `<li><span class="color-warning">[CIGÜEÑAL]</span> Estrés armónico. Rectificar damper.</li>`;
-        }
-        if (pCul > 40) {
-            if (q_dis > 3000) htmlStr += `<li><span class="color-danger">[CULATA]</span> Gradiente térmico extremo. Reemplazar junta MLS y revisar bypass.</li>`;
-            else htmlStr += `<li><span class="color-warning">[CULATA]</span> Purga de circuito y aditivación.</li>`;
-        }
-        if (pCil > 40) {
-            if (lambda < 1.0) htmlStr += `<li><span class="color-danger">[CILINDROS]</span> Fricción seca. Realizar Engine Flush urgente.</li>`;
-            else htmlStr += `<li><span class="color-warning">[CILINDROS]</span> Aplicar antifricción cerámico.</li>`;
-        }
-
-        if (htmlStr === "") htmlStr = `<li>Balance de disipación y película lubricante en equilibrio termodinámico. Sin acción.</li>`;
-        outputs.actions.innerHTML = htmlStr;
-    }
-
-    // Listeners
-    Object.values(inputs).forEach(input => {
-        if (input) input.addEventListener('input', recalcularSimulacion);
-    });
-
-    window.addEventListener('DOMContentLoaded', recalcularSimulacion);
+(function(){
+const originalWarn= console.warn;
+console.warn= function(...args){
+if(typeof args[0]=== 'string' && args[0].includes('cdn.tailwindcss.com')) return;
+originalWarn.apply(console, args); }; })();
 </script>
+<script src="https://cdn.tailwindcss.com/3.4.14"></script>
+<!-- Font Awesome-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Google Fonts-->
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<script>
+tailwind.config ={
+theme:{
+extend:{
+fontFamily:{
+sans:['Manrope','sans-serif'],
+display:['Space Grotesk','sans-serif'],
+},
+colors:{
+primary:{
+orange:'#FF6B35',
+amber:'#F7931E',
+dark:'#0A0A0A',
+gray:'#1A1A1A',
+card:'#2D2D2D',
+metallic:'#C0C0C0',
+light:'#F1F5F9',
+cream:'#F5F1E8'
+}
+},
+boxShadow:{
+'neon':'0 0 25px rgba(255, 107, 53, 0.45)',
+'glow':'0 0 40px rgba(255, 107, 53, 0.25)',
+'card':'0 10px 40px-10px rgba(0, 0, 0, 0.5)',
+'soft':'0 4px 20px rgba(0, 0, 0, 0.15)',
+'premium':'0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(255, 107, 53, 0.15)',
+},
+screens:{
+'xs':'475px',
+'2xl':'1400px',
+},
+animation:{
+'float':'float 6s ease-in-out infinite',
+'pulse-slow':'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+'shimmer':'shimmer 2s linear infinite',
+'gradient':'gradient 8s ease infinite',
+'scroll-banner':'scroll-banner 50s linear infinite',
+},
+keyframes:{
+float:{
+'0%, 100%':{transform:'translateY(0)'},
+'50%':{transform:'translateY(-12px)'},
+},
+shimmer:{
+'0%':{backgroundPosition:'-1000px 0'},
+'100%':{backgroundPosition:'1000px 0'},
+},
+gradient:{
+'0%, 100%':{backgroundPosition:'0% 50%'},
+'50%':{backgroundPosition:'100% 50%'},
+},
+'scroll-banner':{
+'0%':{transform:'translateX(0)'},
+'100%':{transform:'translateX(-100%)'}
+}
+}
+}
+}
+}
+</script>
+<style>
+:root{
+--gradient-primary: linear-gradient(135deg,#FF6B35 0%,#F7931E 100%);
+--gradient-dark: linear-gradient(180deg,#0A0A0A 0%,#1A1A1A 100%);
+--gradient-metallic: linear-gradient(135deg,#E8E8E8 0%,#A8A8A8 50%,#E8E8E8 100%);
+--gradient-orange-glow: linear-gradient(135deg, rgba(255,107,53,0.3) 0%, rgba(247,147,30,0.1) 100%);
+--gradient-animated: linear-gradient(-45deg, #FF6B35, #F7931E, #FF8C42, #FF6B35);
+}
+*{
+-webkit-tap-highlight-color: transparent;
+}
+body{
+background: var(--gradient-dark);
+color:#E2E8F0;
+font-feature-settings:"cv02","cv03","cv04","cv11";
+overflow-x: hidden;
+position: relative;
+}
+body::before{
+content:'';
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-image: url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1920&q=80');
+background-size: cover;
+background-position: center;
+background-repeat: no-repeat;
+opacity: 0.25;
+z-index: -2;
+animation: backgroundMove 40s ease-in-out infinite;
+filter: brightness(0.7) contrast(1.2);
+}
+body::after{
+content:'';
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: var(--gradient-animated);
+background-size: 400% 400%;
+opacity: 0.03;
+z-index: -1;
+animation: gradient 15s ease infinite;
+pointer-events: none;
+}
+@keyframes backgroundMove{
+0%, 100%{transform: scale(1) translate(0, 0);}
+25%{transform: scale(1.08) translate(-2%, -2%);}
+50%{transform: scale(1) translate(0, -3%);}
+75%{transform: scale(1.08) translate(2%, -2%);}
+}
+.glass{
+background: rgba(26, 26, 26, 0.75);
+backdrop-filter: blur(20px) saturate(180%);
+-webkit-backdrop-filter: blur(20px) saturate(180%);
+border: 1px solid rgba(255, 107, 53, 0.2);
+box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+}
+.glass-card{
+background: linear-gradient(145deg, rgba(45, 45, 45, 0.85), rgba(26, 26, 26, 0.95));
+backdrop-filter: blur(20px) saturate(180%);
+border: 1px solid rgba(255, 255, 255, 0.08);
+border-radius: 24px;
+transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+position: relative;
+overflow: hidden;
+}
+.glass-card:hover{
+border-color: rgba(255, 107, 53, 0.4);
+transform: translateY(-4px);
+box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 30px rgba(255, 107, 53, 0.15);
+}
+.glow-text{
+text-shadow: 0 0 30px rgba(255, 107, 53, 0.7), 0 0 60px rgba(247, 147, 30, 0.4), 0 0 90px rgba(255, 107, 53, 0.2);
+letter-spacing:-0.02em;
+}
+.gradient-text{
+background: var(--gradient-primary);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+background-size: 200% auto;
+animation: shimmer 3s linear infinite;
+}
+.pulse-glow{
+animation: pulse-glow 3s ease-in-out infinite;
+}
+@keyframes pulse-glow{
+0%, 100%{opacity: 1; box-shadow: 0 0 20px rgba(255, 107, 53, 0.4);}
+50%{opacity: 0.85; box-shadow: 0 0 50px rgba(255, 107, 53, 0.8);}
+}
+.fade-in-up{
+opacity: 0;
+transform: translateY(40px);
+animation: fadeInUp 1s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+@keyframes fadeInUp{
+to{opacity: 1; transform: translateY(0);}
+}
+.parallax-image{
+transition: transform 0.5s ease-out;
+will-change: transform;
+filter: brightness(0.85) contrast(1.15);
+}
+.parallax-bg{
+animation: subtle-move 30s ease-in-out infinite alternate;
+}
+@keyframes subtle-move{
+0%{transform: translate(0, 0) scale(1.05);}
+50%{transform: translate(5%, 3%) scale(1.1);}
+100%{transform: translate(0, 0) scale(1.05);}
+}
+.input-modern{
+background: rgba(26, 26, 26, 0.85);
+border: 2px solid rgba(255, 255, 255, 0.12);
+border-radius: 16px;
+transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+color:#fff;
+position: relative;
+width: 100%;
+-webkit-appearance: none;
+appearance: none;
+font-family: 'Manrope', sans-serif;
+font-size: 0.9rem;
+}
+.input-modern:focus{
+border-color:#FF6B35;
+box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.2), 0 0 30px rgba(255, 107, 53, 0.2);
+outline: none;
+background: rgba(26, 26, 26, 0.95);
+}
+.input-modern::placeholder{
+color: rgba(226, 232, 240, 0.4);
+}
+.input-modern option{
+background: #1A1A1A;
+color: #E2E8F0;
+padding: 0.5rem;
+}
+.input-modern:focus::placeholder{
+color: rgba(255, 107, 53, 0.5);
+}
+.btn-primary{
+background: var(--gradient-primary);
+color:#fff;
+font-weight: 700;
+letter-spacing: 0.02em;
+position: relative;
+overflow: hidden;
+transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+border: none;
+cursor: pointer;
+}
+.btn-primary::before{
+content:'';
+position: absolute;
+top: 50%;
+left: 50%;
+width: 0;
+height: 0;
+border-radius: 50%;
+background: rgba(255,255,255,0.3);
+transform: translate(-50%, -50%);
+transition: width 0.6s, height 0.6s;
+pointer-events: none;
+}
+.btn-primary:hover::before{
+width: 300px;
+height: 300px;
+}
+.btn-primary:hover{
+transform: translateY(-4px) scale(1.02);
+box-shadow: 0 20px 50px rgba(255, 107, 53, 0.5), 0 0 40px rgba(255, 107, 53, 0.4);
+}
+.btn-outline{
+background: transparent;
+border: 2px solid rgba(255, 255, 255, 0.25);
+color:#fff;
+font-weight: 600;
+transition: all 0.4s ease;
+position: relative;
+overflow: hidden;
+}
+.btn-outline:hover{
+border-color:#FF6B35;
+background: rgba(255, 107, 53, 0.1);
+transform: translateY(-4px);
+box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+}
+.btn-review{
+background: linear-gradient(135deg,#FFD700 0%,#FFA500 50%,#FF8C00 100%);
+color:#0A0A0A;
+font-weight: 700;
+letter-spacing: 0.02em;
+position: relative;
+overflow: hidden;
+transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+border: none;
+cursor: pointer;
+}
+.btn-review:hover{
+transform: translateY(-4px) scale(1.02);
+box-shadow: 0 20px 50px rgba(255, 215, 0, 0.5), 0 0 40px rgba(255, 165, 0, 0.4);
+}
+::-webkit-scrollbar{width: 10px; height: 10px;}
+::-webkit-scrollbar-track{background: rgba(26, 26, 26, 0.6);border-radius: 8px;}
+::-webkit-scrollbar-thumb{background: linear-gradient(180deg,#FF6B35,#F7931E);border-radius: 8px;border: 2px solid transparent;background-clip: content-box;}
+@media(max-width: 640px){
+.text-5xl{font-size: 2.25rem; line-height: 1.15;}
+.text-7xl{font-size: 2.75rem; line-height: 1.1;}
+h1{font-size: 2.3rem;}
+.container{padding-left: 1.25rem; padding-right: 1.25rem;}
+}
+@media(max-width: 475px){
+.text-3xl{font-size: 1.75rem;}
+.py-24{padding-top: 3.5rem; padding-bottom: 3.5rem;}
+.glass-card{border-radius: 18px;}
+}
+.status-dot{position: relative;}
+.status-dot::after{
+content:'';position: absolute;top:-2px; left:-2px; right:-2px; bottom:-2px;
+border-radius: 50%;background: inherit;filter: blur(6px);opacity: 0.7;animation: pulse 2s infinite;
+}
+.particles{
+position: absolute;top: 0; left: 0; right: 0; bottom: 0;
+pointer-events: none;overflow: hidden;z-index: 0;
+}
+.particle{
+position: absolute;width: 4px; height: 4px;
+background: rgba(255, 107, 53, 0.7);border-radius: 50%;
+animation: float-particle 20s infinite linear;opacity: 0.6;
+box-shadow: 0 0 10px rgba(255, 107, 53, 0.5);
+}
+@keyframes float-particle{
+0%{transform: translateY(100vh) translateX(0); opacity: 0;}
+10%{opacity: 0.8;}
+90%{opacity: 0.8;}
+100%{transform: translateY(-20px) translateX(100px); opacity: 0;}
+}
+.label-below{
+display: block;
+margin-top: 0.5rem;
+margin-left: 0.25rem;
+font-size: 0.75rem;
+font-weight: 600;
+color: #FF6B35;
+text-transform: uppercase;
+letter-spacing: 0.08em;
+}
+.navbar-logo{
+height: 70px;
+width: 70px;
+object-fit: cover;
+border-radius: 50%;
+border: 3px solid #FF6B35;
+box-shadow: 0 0 25px rgba(255, 107, 53, 0.6), inset 0 0 20px rgba(255, 107, 53, 0.2);
+transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+position: relative;
+}
+.navbar-logo:hover{
+transform: scale(1.15);
+box-shadow: 0 0 40px rgba(255, 107, 53, 0.9), inset 0 0 30px rgba(255, 107, 53, 0.3);
+}
 
+/* ============================== */
+/* HERO LOGO - EFECTO FUEGO GRADUAL */
+/* ============================== */
+.hero-logo{
+height: 12rem;
+width: 12rem;
+object-fit: cover;
+border-radius: 50%;
+border: 5px solid #FF6B35;
+box-shadow: 0 0 40px rgba(255, 107, 53, 0.5), 0 0 80px rgba(255, 107, 53, 0.3), inset 0 0 30px rgba(255, 107, 53, 0.15);
+transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+display: block;
+margin: 0 auto;
+position: relative;
+overflow: hidden;
+background: #0A0A0A;
+}
+.hero-logo::before{
+content:'';
+position: absolute;
+top: 0;left: 0;right: 0;
+height: 55%;
+background: linear-gradient(180deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.15) 25%, rgba(255,255,255,0.03) 50%, transparent 100%);
+border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%;
+opacity: 0.7;
+pointer-events: none;
+z-index: 2;
+}
+.hero-logo::after{
+content:'';
+position: absolute;
+inset: -8px;
+border-radius: 50%;
+border: 2px solid rgba(255, 107, 53, 0.25);
+animation: rotate 10s linear infinite;
+pointer-events: none;
+z-index: 3;
+}
+.hero-logo .shine-effect{
+position: absolute;
+top: 0;left: -100%;
+width: 100%;height: 100%;
+background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.35) 50%, transparent 100%);
+transition: left 0.8s ease;
+pointer-events: none;
+z-index: 4;
+}
+.hero-logo:hover .shine-effect{
+left: 100%;
+}
+
+/* EFECTO FUEGO CON DESVANECIMIENTO GRADUAL */
+.fire-ring{
+position: absolute;
+inset: -14px;
+border-radius: 50%;
+pointer-events: none;
+z-index: 1;
+opacity: 0;
+transition: opacity 1s ease;
+}
+.fire-ring.active{
+opacity: 1;
+}
+.fire-ring.fading{
+animation: fade-fire 5s ease-out forwards;
+}
+@keyframes fade-fire{
+0%{opacity: 1;}
+20%{opacity: 0.8;}
+40%{opacity: 0.6;}
+60%{opacity: 0.4;}
+80%{opacity: 0.2;}
+100%{opacity: 0;}
+}
+/* Llamas ascendentes */
+.fire-ring .flame{
+position: absolute;
+bottom: -4px;
+width: 100%;
+height: 100%;
+pointer-events: none;
+}
+.fire-ring .flame::before{
+content: '';
+position: absolute;
+bottom: -12px;
+left: 50%;
+transform: translateX(-50%);
+width: 85%;
+height: 70%;
+background: radial-gradient(ellipse at center bottom, 
+  rgba(255,215,0,0.9) 0%, 
+  rgba(255,107,53,0.8) 25%, 
+  rgba(255,69,0,0.6) 50%, 
+  rgba(255,0,0,0.3) 75%, 
+  transparent 100%);
+filter: blur(6px);
+animation: flames-rise 1.5s ease-in-out infinite alternate;
+border-radius: 50% 50% 30% 30%;
+}
+.fire-ring .flame::after{
+content: '';
+position: absolute;
+bottom: -8px;
+left: 50%;
+transform: translateX(-50%);
+width: 90%;
+height: 55%;
+background: radial-gradient(ellipse at center bottom,
+  rgba(255,255,200,0.95) 0%,
+  rgba(255,200,50,0.7) 20%,
+  rgba(255,107,53,0.5) 50%,
+  transparent 80%);
+filter: blur(4px);
+animation: flames-rise 1s ease-in-out infinite alternate-reverse;
+border-radius: 50% 50% 30% 30%;
+}
+/* Partículas de chispas */
+.fire-ring .spark{
+position: absolute;
+width: 3px;
+height: 3px;
+background: #FFD700;
+border-radius: 50%;
+box-shadow: 0 0 6px 2px rgba(255,165,0,0.8);
+opacity: 0;
+}
+.fire-ring.active .spark{
+animation: spark-rise 2s ease-out infinite;
+}
+.fire-ring .spark:nth-child(1){ left: 20%; animation-delay: 0s; }
+.fire-ring .spark:nth-child(2){ left: 40%; animation-delay: 0.4s; }
+.fire-ring .spark:nth-child(3){ left: 60%; animation-delay: 0.8s; }
+.fire-ring .spark:nth-child(4){ left: 80%; animation-delay: 1.2s; }
+.fire-ring .spark:nth-child(5){ left: 30%; animation-delay: 0.6s; }
+.fire-ring .spark:nth-child(6){ left: 50%; animation-delay: 1s; }
+.fire-ring .spark:nth-child(7){ left: 70%; animation-delay: 1.4s; }
+.fire-ring .spark:nth-child(8){ left: 15%; animation-delay: 0.3s; }
+
+@keyframes flames-rise{
+0%{transform: translateX(-50%) scaleY(1); opacity: 0.8;}
+100%{transform: translateX(-50%) scaleY(1.3); opacity: 1;}
+}
+@keyframes spark-rise{
+0%{
+bottom: 0;
+opacity: 0;
+transform: translateX(0) scale(1);
+}
+20%{
+opacity: 1;
+}
+100%{
+bottom: 160px;
+opacity: 0;
+transform: translateX(calc((var(--spark-x, 0)) * 1px)) scale(0.2);
+}
+}
+/* Efecto de resplandor pulsante */
+.fire-ring .glow-pulse{
+position: absolute;
+inset: -20px;
+border-radius: 50%;
+background: radial-gradient(circle, rgba(255,69,0,0.3) 0%, rgba(255,107,53,0.1) 40%, transparent 70%);
+animation: glow-pulse 2s ease-in-out infinite;
+pointer-events: none;
+}
+@keyframes glow-pulse{
+0%, 100%{transform: scale(1); opacity: 0.6;}
+50%{transform: scale(1.15); opacity: 1;}
+}
+
+.hero-logo:hover{
+transform: scale(1.08);
+box-shadow: 0 0 80px rgba(255, 107, 53, 0.8), 0 0 120px rgba(255, 107, 53, 0.5), inset 0 0 50px rgba(255, 107, 53, 0.3);
+}
+
+.hero-logo-wrapper{
+display: flex;
+justify-content: center;
+align-items: center;
+width: fit-content;
+margin: 0 auto;
+padding: 0.75rem;
+position: relative;
+z-index: 10;
+}
+.hero-logo-inner{
+position: relative;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+@keyframes rotate{
+from{transform: rotate(0deg);}
+to{transform: rotate(360deg);}
+}
+@media(max-width: 768px){
+.navbar-logo{height: 55px; width: 55px;}
+.hero-logo{height: 8rem; width: 8rem;}
+.hero-logo-wrapper{padding: 0.5rem;}
+}
+.navbar-clock{
+font-family: 'Space Grotesk', monospace;
+font-weight: 700;
+font-size: 1.15rem;
+color: #FF6B35;
+text-shadow: 0 0 15px rgba(255, 107, 53, 0.7), 0 0 30px rgba(255, 107, 53, 0.4);
+letter-spacing: 0.1em;
+background: rgba(255, 107, 53, 0.1);
+border: 2px solid rgba(255, 107, 53, 0.35);
+padding: 0.3rem 0.9rem;
+border-radius: 10px;
+backdrop-filter: blur(10px);
+box-shadow: 0 0 20px rgba(255, 107, 53, 0.25), inset 0 0 15px rgba(255, 107, 53, 0.08);
+animation: clock-pulse 2s ease-in-out infinite;
+white-space: nowrap;
+display: flex;
+align-items: center;
+gap: 0.4rem;
+}
+.navbar-clock i{font-size: 0.95rem;}
+@keyframes clock-pulse{
+0%, 100%{box-shadow: 0 0 20px rgba(255, 107, 53, 0.25), inset 0 0 15px rgba(255, 107, 53, 0.08);}
+50%{box-shadow: 0 0 35px rgba(255, 107, 53, 0.45), inset 0 0 25px rgba(255, 107, 53, 0.15);}
+}
+@media(max-width: 768px){
+.navbar-clock{font-size: 0.95rem; padding: 0.25rem 0.7rem;}
+}
+.social-btn{
+display: inline-flex;align-items: center;justify-content: center;
+width: 50px;height: 50px;border-radius: 50%;
+background: rgba(255, 255, 255, 0.05);border: 2px solid rgba(255, 255, 255, 0.15);
+color: #fff;font-size: 1.4rem;
+transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);position: relative;overflow: hidden;
+}
+.social-btn:hover{
+transform: translateY(-5px) scale(1.1);box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+.social-btn.whatsapp:hover{background: #25D366;border-color: transparent;}
+.badge-animated{position: relative;animation: badge-pulse 2s ease-in-out infinite;}
+@keyframes badge-pulse{0%, 100%{transform: scale(1);}50%{transform: scale(1.05);}}
+
+/* Select wrapper para flecha personalizada */
+.select-wrapper{position: relative;}
+.select-wrapper::after{
+content:'';position: absolute;right: 1rem;top: 50%;transform: translateY(-50%);
+width: 0;height: 0;border-left: 5px solid transparent;border-right: 5px solid transparent;
+border-top: 6px solid #FF6B35;pointer-events: none;z-index: 5;
+}
+.select-wrapper select{padding-right: 2.5rem;}
+
+/* Estilos para el formulario - inputs funcionales */
+.form-field{
+position: relative;
+margin-bottom: 0;
+}
+.form-field .field-label{
+display: block;
+font-size: 0.7rem;
+font-weight: 700;
+color: #FF6B35;
+text-transform: uppercase;
+letter-spacing: 0.1em;
+margin-bottom: 0.4rem;
+}
+.form-field .field-input{
+width: 100%;
+background: rgba(26, 26, 26, 0.85);
+border: 2px solid rgba(255, 255, 255, 0.12);
+border-radius: 14px;
+padding: 0.9rem 1rem;
+color: #E2E8F0;
+font-size: 0.9rem;
+font-family: 'Manrope', sans-serif;
+transition: all 0.3s ease;
+outline: none;
+-webkit-appearance: none;
+appearance: none;
+}
+.form-field .field-input::placeholder{
+color: rgba(226, 232, 240, 0.35);
+}
+.form-field .field-input:focus{
+border-color: #FF6B35;
+box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.15), 0 0 20px rgba(255, 107, 53, 0.1);
+background: rgba(26, 26, 26, 0.95);
+}
+.form-field .field-input:focus::placeholder{
+color: rgba(255, 107, 53, 0.4);
+}
+.form-field select.field-input{
+cursor: pointer;
+background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23FF6B35' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+background-repeat: no-repeat;
+background-position: right 1rem center;
+background-size: 12px;
+padding-right: 2.5rem;
+}
+.form-field select.field-input option{
+background: #1A1A1A;
+color: #E2E8F0;
+padding: 0.5rem;
+}
+.form-field textarea.field-input{
+resize: vertical;
+min-height: 80px;
+}
+.form-field .field-input.has-value{
+border-color: rgba(255, 107, 53, 0.5);
+}
+
+/* ✅ Banner Automático Taller - VELOCIDAD REDUCIDA */
+.banner {
+  width: 100%;
+  background: #111;
+  color: #fff;
+  font-size: 1.2em;
+  font-weight: bold;
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 12px 0;
+  border-top: 3px solid #FF6B35;
+  border-bottom: 3px solid #FF6B35;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
+.banner-track {
+  display: inline-block;
+  padding-left: 100%;
+  animation: scroll-banner 50s linear infinite;
+}
+.banner-track span {
+  margin: 0 50px;
+}
+@keyframes scroll-banner {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+@media(max-width: 640px){
+  .banner { font-size: 0.9em; padding: 10px 0; }
+  .banner-track span { margin: 0 25px; }
+}
+
+/* 🔥 HOVER TEXT PARA BOTONES FLOTANTES */
+@media(min-width: 768px){
+  .floating-btn-label{
+    display: none;
+    opacity: 0;
+    transform: translateX(8px);
+    transition: all 0.25s ease;
+    font-weight: 600;
+    white-space: nowrap;
+    font-size: 0.85rem;
+  }
+  .group:hover .floating-btn-label{
+    display: inline;
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* 📸 MICROEFECTO PERSUASIVO PARA INSTAGRAM */
+@keyframes instagram-glow{
+0%, 100%{box-shadow: 0 4px 20px rgba(220, 39, 67, 0.35), 0 0 25px rgba(245, 101, 101, 0.2);}
+50%{box-shadow: 0 6px 28px rgba(220, 39, 67, 0.55), 0 0 45px rgba(245, 101, 101, 0.4), 0 0 70px rgba(131, 58, 196, 0.25);}
+}
+.btn-instagram-pulse{
+animation: instagram-glow 3.5s ease-in-out infinite;
+}
+</style>
+</head>
+<body class="antialiased relative">
+
+<!-- ✅ Banner Automático Taller -->
+<div class="banner">
+  <div class="banner-track">
+    <span>🧼 Limpieza de inyectores cada 6 meses = motor más eficiente</span>
+    <span>🛢️ Aceite de calidad cada 10.000 km = vida útil prolongada</span>
+    <span>⛽ Usar nafta premium = más potencia, menos desgaste</span>
+    <span>✅ Tres simples hábitos = menos consumo, menos fallas, más años de motor</span>
+    <span>📲 ¡Sacá un turno, no lo dejes pasar! WhatsApp +59898680159</span>
+    <!-- Duplicado para loop continuo -->
+    <span>🧼 Limpieza de inyectores cada 6 meses = motor más eficiente</span>
+    <span>🛢️ Aceite de calidad cada 10.000 km = vida útil prolongada</span>
+    <span>⛽ Usar nafta premium = más potencia, menos desgaste</span>
+    <span>✅ Tres simples hábitos = menos consumo, menos fallas, más años de motor</span>
+    <span>📲 ¡Sacá un turno, no lo dejes pasar! WhatsApp +59898680159</span>
+  </div>
+</div>
+
+<!-- Partículas decorativas de fondo-->
+<div class="particles" id="particles"></div>
+
+<!-- NAVBAR - POSICIONADO DEBAJO DEL BANNER PARA NO SUPERPONERSE -->
+<nav class="fixed w-full z-50 top-[52px] glass border-b border-white/10 transition-all duration-300" id="navbar">
+<div class="container mx-auto px-4 h-16 md:h-20 flex items-center relative">
+<a href="#" class="flex items-center md:absolute md:left-4 md:translate-x-0">
+<img src="LOGOROMERO.png" alt="Romero Mecánica Integral Logo" class="navbar-logo">
+</a>
+<a href="#" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:static md:translate-x-0 md:translate-y-0 md:ml-auto md:mr-auto font-display font-bold text-lg sm:text-xl md:text-2xl gradient-text tracking-tight uppercase text-center md:text-left drop-shadow-lg">
+ROMERO MECÁNICA INTEGRAL
+</a>
+<div id="navbarClock" class="hidden md:flex items-center ml-4">
+<div class="navbar-clock">
+<i class="fa-regular fa-clock"></i>
+<span id="navbarClockTime">00:00:00</span>
+</div>
+</div>
+<div class="ml-auto flex items-center gap-3 md:gap-5">
+<div id="status-badge-desktop" class="hidden md:flex items-center px-3 py-1.5 md:px-4 md:py-2 rounded-full text-xs font-semibold uppercase tracking-wide bg-white/5 border border-white/10 hover:border-primary-orange/40 transition-all">
+<span id="status-dot-desktop" class="status-dot w-2 h-2 rounded-full mr-2.5 bg-gray-500"></span>
+<span id="status-text-desktop" class="text-gray-300">Verificando...</span>
+</div>
+<div class="hidden md:flex items-center gap-3 lg:gap-5">
+<a href="#asesoramiento" class="text-gray-300 hover:text-primary-orange transition text-sm lg:text-base font-medium relative group">
+Asesoramiento
+<span class="absolute bottom-1 left-0 w-0 h-0.5 bg-primary-orange transition-all group-hover:w-full"></span>
+</a>
+<a href="#diagnostico" class="btn-primary px-4 lg:px-6 py-2 lg:py-2.5 rounded-xl font-bold transition shadow-neon uppercase text-xs lg:text-sm tracking-wide">
+Pre-Diagnóstico
+</a>
+</div>
+</div>
+</div>
+<div id="status-bar-mobile" class="md:hidden w-full py-2 text-center text-xs font-bold uppercase bg-gray-900/80 border-t border-white/10 flex items-center justify-center gap-2">
+<span id="navbarClockTimeMobile" style="font-family:'Space Grotesk',monospace;color:#FF6B35;text-shadow:0 0 10px rgba(255,107,53,0.6);">00:00:00</span>
+<span>|</span>
+<span>Verificando estado...</span>
+</div>
+</nav>
+
+<!-- Botones flotantes premium -->
+<div class="fixed bottom-24 md:bottom-8 right-4 z-50 animate-float flex flex-col gap-3">
+<a href="https://api.whatsapp.com/send?phone=59898680159" target="_blank" rel="noopener noreferrer"
+class="bg-[#25D366] hover:bg-[#128C7E] text-white p-3.5 md:p-4 rounded-full shadow-lg transition-all hover:scale-110 flex items-center justify-center gap-2 group"
+title="Chat directo por WhatsApp" style="animation: float 6s ease-in-out infinite;">
+<i class="fa-brands fa-whatsapp text-2xl md:text-3xl"></i>
+<span class="hidden lg:inline text-xs font-bold whitespace-nowrap">Chat</span>
+</a>
+<a href="#diagnostico" class="btn-primary px-5 py-3 md:px-7 md:py-3.5 rounded-2xl shadow-neon transition flex items-center gap-2.5 hover:shadow-glow text-sm font-semibold group">
+<i class="fa-solid fa-calendar-check text-lg"></i>
+<span class="floating-btn-label">Pedir Turno</span>
+<i class="fa-solid fa-arrow-right ml-1 group-hover:translate-x-1 transition-transform"></i>
+</a>
+<a href="https://maps.app.goo.gl/yiAsXENC2p94CAsE9" target="_blank" rel="noopener noreferrer" class="btn-review px-4 py-2.5 md:px-5 md:py-3 rounded-xl shadow-lg transition flex items-center gap-2 text-xs md:text-sm font-semibold group animate-float" style="animation-delay: 0.5s;">
+<i class="fa-solid fa-star text-lg"></i>
+<span class="floating-btn-label">Deja tu Reseña</span>
+</a>
+<a href="https://www.instagram.com/romero_taller/" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-[#f09433] via-[#dc2743] to-[#bc1888] hover:from-[#d6822a] hover:via-[#c4223d] hover:to-[#a8167a] text-white p-3.5 md:p-4 rounded-full shadow-lg transition-all hover:scale-110 flex items-center justify-center gap-2 group animate-float btn-instagram-pulse" style="animation-delay: 1s;" title="Síguenos en Instagram">
+<i class="fa-brands fa-instagram text-2xl md:text-3xl"></i>
+<span class="floating-btn-label">Instagram</span>
+</a>
+</div>
+
+<!-- HERO SECTION - PADDING AJUSTADO PARA SEPARAR LOGO DEL BANNER (SIN REDUCIR TAMAÑO DEL LOGO) -->
+<header class="relative pt-48 md:pt-56 lg:pt-60 pb-20 md:pt-60 md:pb-32 lg:pt-64 lg:pb-40 min-h-screen flex items-center overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-br from-primary-dark via-[#0D0D0D] to-[#0A0A0A]">
+<div class="absolute inset-0 opacity-40" style="background-image: radial-gradient(circle at 20% 35%, rgba(255,107,53, 0.2) 0%, transparent 40%), radial-gradient(circle at 80% 70%, rgba(247,147,30, 0.15) 0%, transparent 45%)"></div>
+</div>
+<div id="parallax-container" class="absolute inset-0 overflow-hidden">
+<img id="parallax-img" src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1974&auto=format&fit=crop" alt="Taller mecánico profesional" class="parallax-image w-full h-full object-cover opacity-70 parallax-bg">
+<div class="absolute inset-0 bg-gradient-to-t from-primary-dark via-primary-dark/70 to-transparent"></div>
+</div>
+<div class="container mx-auto px-4 md:px-6 relative z-10">
+<div class="max-w-4xl mx-auto text-center space-y-6 md:space-y-8">
+<div class="fade-in-up badge-animated" style="animation-delay: 0.1s;">
+<div class="inline-flex items-center gap-2 bg-primary-orange/20 border border-primary-orange/40 text-primary-orange px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider backdrop-blur-sm shadow-lg">
+<i class="fa-solid fa-microchip"></i> <span>Diagnóstico de Precisión</span>
+</div>
+</div>
+<h1 class="font-display font-black text-4xl md:text-5xl lg:text-7xl leading-tight glow-text main-title fade-in-up" style="animation-delay: 0.2s;">
+ROMERO MECÁNICA<br><span class="gradient-text">INTEGRAL</span>
+</h1>
+<!-- LOGO CIRCULAR INFERIOR -->
+<div class="hero-logo-wrapper fade-in-up" style="animation-delay: 0.25s;">
+<div class="hero-logo-inner">
+<img src="LOGOROMERO.png" alt="Romero Mecánica Integral Logo" class="hero-logo" id="heroLogo">
+<div class="shine-effect"></div>
+<!-- EFECTO FUEGO -->
+<div class="fire-ring" id="fireRing">
+<div class="glow-pulse"></div>
+<div class="flame"></div>
+<div class="spark" style="--spark-x: -20;"></div>
+<div class="spark" style="--spark-x: 15;"></div>
+<div class="spark" style="--spark-x: -10;"></div>
+<div class="spark" style="--spark-x: 25;"></div>
+<div class="spark" style="--spark-x: 5;"></div>
+<div class="spark" style="--spark-x: -30;"></div>
+<div class="spark" style="--spark-x: 20;"></div>
+<div class="spark" style="--spark-x: -5;"></div>
+</div>
+</div>
+</div>
+<p class="text-gray-300/90 text-base md:text-lg max-w-3xl mx-auto description-text fade-in-up leading-relaxed" style="animation-delay: 0.3s;">
+En Romero Mecánica Integral, entendemos que tu auto es una inversión importante y tu seguridad es primordial. Somos un taller de reparación de automóviles con años de experiencia en Paysandú, Uruguay, dedicados a brindarte un servicio de calidad, confiable y transparente. Nos especializamos en mantener tu vehículo en óptimas condiciones para que disfrutes de cada viaje con total tranquilidad.
+</p>
+<div class="grid grid-cols-3 gap-3 md:gap-5 pt-2 md:pt-4 fade-in-up" style="animation-delay: 0.5s;">
+<div class="text-center p-4 rounded-2xl bg-white/5 border border-white/10 transition">
+<span class="block text-2xl md:text-3xl font-bold gradient-text"><span id="counter1" data-target="99">0</span>%</span>
+<span class="text-xs text-gray-400 mt-1 block">Precisión</span>
+</div>
+<div class="text-center p-4 rounded-2xl bg-white/5 border border-white/10 transition">
+<span class="block text-2xl md:text-3xl font-bold gradient-text"><span id="counter2" data-target="50">0</span>min</span>
+<span class="text-xs text-gray-400 mt-1 block">Ahorro</span>
+</div>
+<div class="text-center p-4 rounded-2xl bg-white/5 border border-white/10 transition">
+<span class="block text-2xl md:text-3xl font-bold gradient-text"><span id="counter3" data-target="8000">0</span>+</span>
+<span class="text-xs text-gray-400 mt-1 block">Vehículos</span>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row gap-3.5 pt-2 justify-center fade-in-up" style="animation-delay: 0.6s;">
+<a href="#diagnostico" class="btn-primary px-6 py-3.5 rounded-xl uppercase tracking-wide flex items-center justify-center gap-2.5 group text-sm font-semibold shadow-neon">
+<span>Iniciar Diagnóstico</span> <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+</a>
+<a href="#asesoramiento" class="btn-outline px-6 py-3.5 rounded-xl uppercase tracking-wide flex items-center justify-center gap-2 text-sm font-semibold">
+<i class="fa-solid fa-book-open text-primary-orange"></i> <span>Guías Técnicas</span>
+</a>
+</div>
+</div>
+</div>
+</header>
+
+<!-- SECCIÓN: CENTRO DE ASESORAMIENTO -->
+<section id="asesoramiento" class="py-16 md:py-24 bg-[#0D0D0D] relative">
+<div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(255,107,53,0.1),_transparent_60%)]"></div>
+<div class="container mx-auto px-4 relative z-10">
+<div class="text-center mb-14 md:mb-20 max-w-3xl mx-auto">
+<div class="inline-block bg-primary-orange/15 border border-primary-orange/30 text-primary-orange px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-5">
+<i class="fa-solid fa-lightbulb mr-1.5"></i> <span>Conocimiento Técnico</span>
+</div>
+<h2 class="font-display font-bold text-4xl md:text-5xl gradient-text uppercase mb-5 glow-text tracking-tight">Centro de Asesoramiento</h2>
+<p class="text-gray-400/90 max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
+Detecta fallas en etapas tempranas y evita reparaciones costosas. Aprende a identificar las señales clave de tu vehículo.
+</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-7">
+<div class="glass-card">
+<div class="relative h-44 md:h-48 overflow-hidden rounded-t-2xl">
+<img src="https://placehold.co/600x400/FF6B35/0A0A0A?text=FRENOS" alt="Sistema de frenos" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+<div class="absolute inset-0 bg-gradient-to-t from-primary-dark/90 to-transparent"></div>
+<div class="absolute bottom-3 left-4">
+<span class="text-xs font-bold text-primary-orange uppercase tracking-wider">Predictivo</span>
+</div>
+</div>
+<div class="p-5 md:p-6">
+<h3 class="font-bold text-lg md:text-xl text-white mb-2.5">Señales en Frenos</h3>
+<p class="text-gray-400/90 text-sm mb-4 leading-relaxed">Chillidos, vibración en pedal o recorrido excesivo: indicadores de desgaste en pastillas o aire en el circuito.</p>
+<a href="#diagnostico" class="text-primary-orange hover:text-orange-300 font-semibold text-sm flex items-center gap-1.5 group">
+<span>Analizar ahora</span>
+<i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+</a>
+</div>
+</div>
+<div class="glass-card">
+<div class="relative h-44 md:h-48 overflow-hidden rounded-t-2xl">
+<img src="https://placehold.co/600x400/2D2D2D/FF6B35?text=BATERIA" alt="Sistema eléctrico" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+<div class="absolute inset-0 bg-gradient-to-t from-primary-dark/90 to-transparent"></div>
+<div class="absolute bottom-3 left-4">
+<span class="text-xs font-bold text-primary-orange uppercase tracking-wider">Preventivo</span>
+</div>
+</div>
+<div class="p-5 md:p-6">
+<h3 class="font-bold text-lg md:text-xl text-white mb-2.5">Batería y Alternador</h3>
+<p class="text-gray-400/90 text-sm mb-4 leading-relaxed">Arranque lento, luces tenues o parpadeantes: verifica voltaje y estado de carga antes de una falla total.</p>
+<a href="#diagnostico" class="text-primary-orange hover:text-orange-300 font-semibold text-sm flex items-center gap-1.5 group">
+<span>Verificar sistema</span>
+<i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+</a>
+</div>
+</div>
+<div class="glass-card">
+<div class="relative h-44 md:h-48 overflow-hidden rounded-t-2xl">
+<img src="https://placehold.co/600x400/F7931E/0A0A0A?text=FLUIDOS" alt="Fluidos críticos" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+<div class="absolute inset-0 bg-gradient-to-t from-primary-dark/90 to-transparent"></div>
+<div class="absolute bottom-3 left-4">
+<span class="text-xs font-bold text-primary-orange uppercase tracking-wider">Mantenimiento</span>
+</div>
+</div>
+<div class="p-5 md:p-6">
+<h3 class="font-bold text-lg md:text-xl text-white mb-2.5">Fluidos Críticos</h3>
+<p class="text-gray-400/90 text-sm mb-4 leading-relaxed">Aceite, refrigerante y líquido de frenos: niveles bajos o cambios de color indican urgencia de revisión.</p>
+<a href="#diagnostico" class="text-primary-orange hover:text-orange-300 font-semibold text-sm flex items-center gap-1.5 group">
+<span>Revisar niveles</span>
+<i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+</a>
+</div>
+</div>
+</div>
+<div class="text-center mt-10 md:mt-14">
+<a href="#diagnostico" class="inline-flex items-center gap-2.5 bg-white/5 hover:bg-white/10 border border-white/15 hover:border-primary-orange/40 text-white font-bold py-3.5 px-7 md:px-9 rounded-2xl transition-all uppercase tracking-wide text-sm shadow-soft hover:shadow-neon">
+<i class="fa-solid fa-hand-pointer text-primary-orange"></i> <span>Iniciar Pre-Diagnóstico Ahora</span>
+</a>
+</div>
+</div>
+</section>
+
+<!-- SECCIÓN: SERVICIOS INTEGRALES -->
+<section class="py-16 md:py-24 bg-primary-dark relative">
+<div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 10% 20%, rgba(255,107,53, 0.08) 0%, transparent 25%), radial-gradient(circle at 90% 80%, rgba(247,147,30, 0.08) 0%, transparent 25%)"></div>
+<div class="container mx-auto px-4 relative z-10">
+<div class="text-center mb-14 md:mb-20">
+<div class="inline-block bg-primary-orange/15 border border-primary-orange/30 text-primary-orange px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-5">
+<i class="fa-solid fa-screwdriver-wrench mr-1.5"></i> <span>Soluciones Profesionales</span>
+</div>
+<h2 class="font-display font-bold text-4xl md:text-5xl text-white uppercase mb-4 glow-text tracking-tight"><span>Servicios</span><span class="gradient-text">Integrales</span></h2>
+<p class="text-gray-400/90 max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
+Tecnología avanzada y expertise técnico para mantener tu vehículo en condiciones óptimas de seguridad y rendimiento.
+</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+<div class="glass-card p-6 md:p-7 group">
+<div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-orange/20 to-primary-orange/20 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+<i class="fa-solid fa-laptop-code text-2xl md:text-3xl text-primary-orange"></i>
+</div>
+<h3 class="font-bold text-xl text-white mb-2.5">Diagnóstico Computarizado</h3>
+<p class="text-gray-400/90 text-sm leading-relaxed">Escaneo avanzado de ECU, sensores y sistemas electrónicos con equipos de última generación.</p>
+</div>
+<div class="glass-card p-6 md:p-7 group">
+<div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-orange/20 to-primary-orange/20 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+<i class="fa-solid fa-circle-stop text-2xl md:text-3xl text-primary-orange"></i>
+</div>
+<h3 class="font-bold text-xl text-white mb-2.5">Sistema de Frenos</h3>
+<p class="text-gray-400/90 text-sm leading-relaxed">Revisión integral de ABS, pastillas, discos y líquido de frenos para máxima seguridad.</p>
+</div>
+<div class="glass-card p-6 md:p-7 group">
+<div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-orange/20 to-primary-orange/20 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+<i class="fa-solid fa-car-burst text-2xl md:text-3xl text-primary-orange"></i>
+</div>
+<h3 class="font-bold text-xl text-white mb-2.5">Suspensión y Dirección</h3>
+<p class="text-gray-400/90 text-sm leading-relaxed">Amortiguadores, rótulas, alineación y balanceo para confort y estabilidad en ruta.</p>
+</div>
+<div class="glass-card p-6 md:p-7 group">
+<div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-orange/20 to-primary-orange/20 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+<i class="fa-solid fa-bolt text-2xl md:text-3xl text-primary-orange"></i>
+</div>
+<h3 class="font-bold text-xl text-white mb-2.5">Electricidad Automotriz</h3>
+<p class="text-gray-400/90 text-sm leading-relaxed">Diagnóstico de fallas eléctricas, baterías, alternadores y sistemas de iluminación.</p>
+</div>
+<div class="glass-card p-6 md:p-7 group">
+<div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-orange/20 to-primary-orange/20 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+<i class="fa-solid fa-wrench text-2xl md:text-3xl text-primary-orange"></i>
+</div>
+<h3 class="font-bold text-xl text-white mb-2.5">Mecánica Integral</h3>
+<p class="text-gray-400/90 text-sm leading-relaxed">Reparaciones completas de motor, transmisión y sistemas mecánicos con garantía de calidad.</p>
+</div>
+<!-- TARJETA: CAJA DE CAMBIO -->
+<div class="glass-card p-6 md:p-7 group">
+<div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-orange/20 to-primary-orange/20 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+<i class="fa-solid fa-gears text-2xl md:text-3xl text-primary-orange"></i>
+</div>
+<h3 class="font-bold text-xl text-white mb-2.5">Caja de Cambio</h3>
+<p class="text-gray-400/90 text-sm leading-relaxed">Reparación y mantenimiento de cajas manuales y automáticas. Diagnóstico de embrague y transmisión.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SECCIÓN: TESTIMONIOS -->
+<section class="py-16 md:py-24 bg-[#0D0D0D] border-t border-white/5">
+<div class="container mx-auto px-4">
+<div class="text-center mb-10 md:mb-14">
+<div class="inline-block bg-primary-orange/15 border border-primary-orange/30 text-primary-orange px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-5">
+<i class="fa-solid fa-comments mr-1.5"></i> <span>Experiencias Reales</span>
+</div>
+<h2 class="font-display font-bold text-4xl md:text-5xl text-white uppercase glow-text tracking-tight">La Voz de Nuestros Clientes</h2>
+<p class="text-gray-400/90 max-w-2xl mx-auto mt-4 text-base md:text-lg leading-relaxed">
+Confianza construida sobre resultados verificables y atención profesional en Paysandú, Uruguay.
+</p>
+</div>
+<div class="testimonial-carousel flex gap-5 md:gap-6 overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide mx-2 px-2">
+<div class="testimonial-card glass-card p-6 md:p-7 rounded-2xl border-t-4 border-primary-orange transition flex-shrink-0 w-[85%] md:w-1/3 snap-center">
+<div class="flex justify-between items-start mb-4">
+<div class="flex text-yellow-400 text-lg">
+<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+</div>
+<i class="fa-solid fa-quote-right text-3xl text-gray-700/70"></i>
+</div>
+<p class="text-gray-300/95 italic mb-5 leading-relaxed text-sm">"Excelente servicio en Romero Mecánica Integral. Diagnóstico preciso y rápido. Me explicaron todo con claridad y profesionalismo. Totalmente recomendado."</p>
+<div class="flex items-center pt-3 border-t border-white/10">
+<div class="w-11 h-11 rounded-full bg-gradient-to-br from-primary-orange to-orange-700 flex items-center justify-center text-white font-bold mr-3.5 flex-shrink-0">MP</div>
+<div>
+<p class="font-bold text-white text-sm">Martín P.</p>
+<p class="text-xs text-gray-500">Paysandú - Chevrolet Tracker 2023</p>
+</div>
+</div>
+</div>
+<div class="testimonial-card glass-card p-6 md:p-7 rounded-2xl border-t-4 border-primary-orange transition flex-shrink-0 w-[85%] md:w-1/3 snap-center">
+<div class="flex justify-between items-start mb-4">
+<div class="flex text-yellow-400 text-lg">
+<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+</div>
+<i class="fa-solid fa-quote-right text-3xl text-gray-700/70"></i>
+</div>
+<p class="text-gray-300/95 italic mb-5 leading-relaxed text-sm">"El mejor taller de Paysandú. Proceso transparente y rápido. El pre-diagnóstico online me ahorró tiempo y dinero. Volveré sin dudas a Romero Mecánica Integral."</p>
+<div class="flex items-center pt-3 border-t border-white/10">
+<div class="w-11 h-11 rounded-full bg-gradient-to-br from-primary-orange to-orange-700 flex items-center justify-center text-white font-bold mr-3.5 flex-shrink-0">AR</div>
+<div>
+<p class="font-bold text-white text-sm">Alejandra R.</p>
+<p class="text-xs text-gray-500">Paysandú - Renault Fluence</p>
+</div>
+</div>
+</div>
+<div class="testimonial-card glass-card p-6 md:p-7 rounded-2xl border-t-4 border-primary-orange transition flex-shrink-0 w-[85%] md:w-1/3 snap-center">
+<div class="flex justify-between items-start mb-4">
+<div class="flex text-yellow-400 text-lg">
+<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+</div>
+<i class="fa-solid fa-quote-right text-3xl text-gray-700/70"></i>
+</div>
+<p class="text-gray-300/95 italic mb-5 leading-relaxed text-sm">"Llevo mi flota de utilitarios a Romero Mecánica Integral. Reportes detallados, atención personalizada y precios justos. Un taller de confianza."</p>
+<div class="flex items-center pt-3 border-t border-white/10">
+<div class="w-11 h-11 rounded-full bg-gradient-to-br from-primary-orange to-orange-700 flex items-center justify-center text-white font-bold mr-3.5 flex-shrink-0">EC</div>
+<div>
+<p class="font-bold text-white text-sm">Esteban C.</p>
+<p class="text-xs text-gray-500">Paysandú - Flota Utilitarios</p>
+</div>
+</div>
+</div>
+</div>
+<p class="text-center text-gray-500 mt-5 text-sm flex items-center justify-center gap-1.5">
+<i class="fa-solid fa-arrow-right text-primary-orange"></i> <span>Desliza para más opiniones</span>
+</p>
+</div>
+</section>
+
+<!-- SECCIÓN: FORMULARIO DE DIAGNÓSTICO - COMPLETAMENTE FUNCIONAL -->
+<section id="diagnostico" class="py-16 md:py-24 bg-gradient-to-b from-primary-dark to-[#080808] relative overflow-hidden">
+<div class="absolute inset-0 bg-[radial-gradient(circle_at_60%_40%,rgba(255,107,53,0.1),transparent_55%)]"></div>
+<div class="container mx-auto px-4 relative z-10">
+<div class="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
+<!-- Columna informativa -->
+<div class="lg:w-1/3 space-y-6">
+<h2 class="font-display font-bold text-4xl md:text-5xl text-white mb-2 glow-text tracking-tight">
+ACELERADOR DE<br><span class="gradient-text">DIAGNÓSTICO</span>
+</h2>
+<p class="text-gray-400/90 mb-6 text-base leading-relaxed">
+Completa el formulario y nuestros técnicos prepararán el análisis previo antes de tu llegada. Optimizamos tu tiempo y recursos.
+</p>
+<div class="space-y-5 pt-2">
+<div class="flex items-start gap-4">
+<div class="bg-gradient-to-br from-primary-orange/20 to-primary-orange/20 p-3.5 rounded-xl text-primary-orange flex-shrink-0">
+<i class="fa-solid fa-stopwatch text-xl"></i>
+</div>
+<div>
+<h4 class="font-bold text-white text-base mb-1">Ahorro de Tiempo</h4>
+<p class="text-gray-400/90 text-sm">Evita esperas innecesarias. Tu caso ya estará en análisis al llegar.</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<div class="bg-gradient-to-br from-primary-orange/20 to-primary-orange/20 p-3.5 rounded-xl text-primary-orange flex-shrink-0">
+<i class="fa-solid fa-file-waveform text-xl"></i>
+</div>
+<div>
+<h4 class="font-bold text-white text-base mb-1">Análisis Previo</h4>
+<p class="text-gray-400/90 text-sm">Preparamos herramientas y repuestos específicos para tu caso.</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<div class="bg-gradient-to-br from-primary-orange/20 to-primary-orange/20 p-3.5 rounded-xl text-primary-orange flex-shrink-0">
+<i class="fa-solid fa-shield-halved text-xl"></i>
+</div>
+<div>
+<h4 class="font-bold text-white text-base mb-1">Transparencia Total</h4>
+<p class="text-gray-400/90 text-sm">Recibirás un informe detallado con opciones de reparación y costos.</p>
+</div>
+</div>
+</div>
+<div class="glass-card p-4 rounded-xl mt-4 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-orange-500/20 flex items-center justify-center flex-shrink-0">
+<i class="fa-solid fa-check text-orange-400"></i>
+</div>
+<div>
+<p class="text-sm font-semibold text-white">Datos 100% seguros</p>
+<p class="text-xs text-gray-500">Tu información está protegida</p>
+</div>
+</div>
+</div>
+<!-- Formulario FUNCIONAL -->
+<div class="lg:w-2/3 glass-card rounded-3xl shadow-card p-6 md:p-8 w-full">
+<form id="triageForm" novalidate>
+<!-- Sección 1: Vehículo -->
+<div class="border-b border-white/10 pb-6 mb-6">
+<h3 class="text-lg font-bold text-white mb-6 flex items-center gap-3">
+<span class="bg-gradient-to-r from-primary-orange to-orange-700 text-white w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">1</span>
+<span>Datos del Vehículo</span>
+</h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+<!-- Tipo de Vehículo -->
+<div class="form-field select-wrapper">
+<label for="inputVehicleType" class="field-label">Tipo de Vehículo</label>
+<select id="inputVehicleType" class="field-input">
+<option value="" disabled selected>Seleccionar tipo...</option>
+<option value="Auto">🚗 Auto</option>
+<option value="Moto">🏍️ Moto</option>
+<option value="Cuatriciclo">🏎️ Cuatriciclo</option>
+</select>
+</div>
+<!-- Marca y Modelo -->
+<div class="form-field">
+<label for="inputVehicle" class="field-label">Marca y Modelo</label>
+<input type="text" id="inputVehicle" class="field-input" placeholder="Ej: Toyota Corolla 2020" autocomplete="off">
+</div>
+<!-- Kilometraje -->
+<div class="form-field">
+<label for="inputKm" class="field-label">Kilometraje</label>
+<input type="number" id="inputKm" class="field-input" placeholder="Ej: 85000" autocomplete="off">
+</div>
+</div>
+<!-- Combustible -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-5 mt-5">
+<div class="form-field select-wrapper">
+<label for="inputFuelType" class="field-label">Combustible</label>
+<select id="inputFuelType" class="field-input">
+<option value="" disabled selected>Seleccionar...</option>
+<option value="Naftero">⛽ Nafta / Gasolina</option>
+<option value="Diesel">🛢️ Diesel</option>
+<option value="Híbrido">🔋 Híbrido</option>
+<option value="Eléctrico">⚡ Eléctrico</option>
+</select>
+</div>
+</div>
+</div>
+<!-- Sección 2: Síntomas -->
+<div class="border-b border-white/10 pb-6 mb-6">
+<h3 class="text-lg font-bold text-white mb-6 flex items-center gap-3">
+<span class="bg-gradient-to-r from-primary-orange to-orange-700 text-white w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">2</span>
+<span>Descripción de Fallas</span>
+</h3>
+<!-- Síntomas -->
+<div class="form-field mb-5">
+<label for="inputSymptoms" class="field-label">Síntomas</label>
+<textarea id="inputSymptoms" class="field-input" rows="4" placeholder="Describe ruidos, olores, vibraciones, luces de alerta..."></textarea>
+</div>
+<!-- Contexto de la falla -->
+<div class="form-field select-wrapper">
+<label for="inputContext" class="field-label">Contexto de la falla</label>
+<select id="inputContext" class="field-input">
+<option value="" disabled selected>Seleccionar contexto...</option>
+<optgroup label="🔋 ARRANQUE Y ENERGÍA" class="font-bold">
+<option value="no_arranca_gira">Gira pero no arranca</option>
+<option value="no_arranca_nada">No da contacto</option>
+<option value="arranca_lento">Arranque lento o difícil</option>
+</optgroup>
+<optgroup label="⚙️ RENDIMIENTO" class="font-bold">
+<option value="falla_ralenti">Inestabilidad en ralentí</option>
+<option value="pierde_potencia">Pérdida de potencia</option>
+<option value="consumo_excesivo">Consumo excesivo de combustible</option>
+<option value="humo_escape">Humo en escape (color)</option>
+</optgroup>
+<optgroup label="🔊 RUIDOS Y VIBRACIONES" class="font-bold">
+<option value="ruido_frenar">Ruido al frenar</option>
+<option value="ruido_direccion">Ruido al girar dirección</option>
+<option value="vibracion_alta">Vibración en alta velocidad</option>
+<option value="ruido_motor">Ruido anormal en motor</option>
+</optgroup>
+<optgroup label="🌡️ TEMPERATURA Y FLUIDOS" class="font-bold">
+<option value="levanta_temp">Se calienta el motor</option>
+<option value="perdida_fluido">Pérdida de fluido visible</option>
+</optgroup>
+<option value="falla_frio">Solo falla en frío</option>
+<option value="falla_caliente">Solo falla en caliente</option>
+<option value="falla_intermitente">Falla intermitente</option>
+</select>
+</div>
+</div>
+<!-- Sección 3: Servicio Integral -->
+<div class="border-b border-white/10 pb-6 mb-6">
+<h3 class="text-lg font-bold text-white mb-6 flex items-center gap-3">
+<span class="bg-gradient-to-r from-primary-orange to-orange-700 text-white w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">3</span>
+<span>Servicio Integral</span>
+</h3>
+<div class="form-field select-wrapper">
+<label for="inputService" class="field-label">Servicio Requerido</label>
+<select id="inputService" class="field-input">
+<option value="" disabled selected>Selecciona un servicio...</option>
+<option value="diagnostico">🔍 Diagnóstico Computarizado</option>
+<option value="frenos">🛑 Sistema de Frenos</option>
+<option value="suspension">🔩 Suspensión</option>
+<option value="direccion">🔄 Dirección</option>
+<option value="electricidad">⚡ Electricidad Automotriz</option>
+<option value="mecanica_integral">🛠️ Mecánica Integral</option>
+<option value="caja_cambio">⚙️ Caja de Cambio</option>
+</select>
+</div>
+</div>
+<!-- Sección 4: Contacto -->
+<div class="mb-6">
+<h3 class="text-lg font-bold text-white mb-6 flex items-center gap-3">
+<span class="bg-gradient-to-r from-primary-orange to-orange-700 text-white w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">4</span>
+<span>Datos de Contacto</span>
+</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+<div class="form-field">
+<label for="inputName" class="field-label">Nombre</label>
+<input type="text" id="inputName" class="field-input" placeholder="Tu nombre completo" autocomplete="name">
+</div>
+<div class="form-field">
+<label for="inputPhone" class="field-label">WhatsApp</label>
+<input type="tel" id="inputPhone" class="field-input" placeholder="Tu número de WhatsApp" autocomplete="tel">
+</div>
+</div>
+<p class="text-xs text-gray-500 mt-4 flex items-center gap-1.5">
+<i class="fa-solid fa-lock text-primary-orange"></i> <span>Tus datos se usarán únicamente para coordinar tu turno</span>
+</p>
+</div>
+<!-- Botón de envío -->
+<button type="submit" id="submitBtn" class="btn-primary w-full font-bold uppercase text-base py-5 rounded-2xl hover:shadow-neon transition flex items-center justify-center gap-3">
+<i class="fa-brands fa-whatsapp text-2xl"></i> <span>Enviar Solicitud a ROMERO MECÁNICA INTEGRAL</span>
+</button>
+<p class="text-center text-xs text-gray-500 pt-3">
+<span>Al enviar, aceptas nuestros</span> <a href="#" class="text-primary-orange hover:underline">términos de servicio</a>
+</p>
+</form>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SECCIÓN: UBICACIÓN Y CONFIANZA -->
+<section class="py-14 md:py-20 bg-[#0D0D0D] border-t border-white/5">
+<div class="container mx-auto px-4 text-center">
+<div class="flex flex-wrap justify-center gap-8 md:gap-12 opacity-70 grayscale hover:grayscale-0 transition-all duration-500 mb-12 md:mb-16">
+<i class="fa-brands fa-toyota text-4xl md:text-5xl hover:text-white transition-colors"></i>
+<i class="fa-solid fa-car text-4xl md:text-5xl hover:text-white transition-colors"></i>
+<i class="fa-brands fa-honda text-4xl md:text-5xl hover:text-white transition-colors"></i>
+<i class="fa-brands fa-ford text-4xl md:text-5xl hover:text-white transition-colors"></i>
+<i class="fa-brands fa-volkswagen text-4xl md:text-5xl hover:text-white transition-colors"></i>
+<i class="fa-solid fa-truck-pickup text-4xl md:text-5xl hover:text-white transition-colors"></i>
+</div>
+<div class="glass-card rounded-3xl p-6 md:p-10 max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8">
+<div class="text-left max-w-md">
+<h3 class="font-display font-bold text-2xl md:text-3xl text-white mb-2">¿Dónde estamos?</h3>
+<p class="text-gray-400/90 mb-4 text-base">Visítanos para validación final y reparaciones especializadas.</p>
+<div class="flex items-start gap-3 text-gray-300/90 text-sm mb-2">
+<i class="fa-regular fa-location-dot text-primary-orange text-xl mt-0.5 flex-shrink-0"></i>
+<div>
+<p class="font-medium">Dirección:</p>
+<p>AV. SORIANO 2127 ENTRE DE 4 Y 5, PAYSANDÚ</p>
+</div>
+</div>
+<div class="flex items-start gap-3 text-gray-300/90 text-sm mb-2">
+<i class="fa-brands fa-whatsapp text-primary-orange text-xl mt-0.5 flex-shrink-0"></i>
+<div>
+<p class="font-medium">WhatsApp:</p>
+<p dir="ltr">+598 98 680 159</p>
+</div>
+</div>
+<div class="flex items-start gap-3 text-gray-300/90 text-sm mb-2">
+<i class="fa-solid fa-envelope text-primary-orange text-xl mt-0.5 flex-shrink-0"></i>
+<div>
+<p class="font-medium">E-mail:</p>
+<p>romeromecanica@email.com</p>
+</div>
+</div>
+<div class="flex items-start gap-3 text-gray-300/90 text-sm">
+<i class="fa-regular fa-clock text-primary-orange text-xl mt-0.5 flex-shrink-0"></i>
+<div>
+<p class="font-medium">Horarios de atención:</p>
+<p>Lunes a Viernes: 08:00 - 12:00 y 14:00 - 18:00 hs</p>
+<p>Sábados y Domingos: Cerrado</p>
+</div>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row gap-3">
+<a href="https://maps.app.goo.gl/yiAsXENC2p94CAsE9" target="_blank" rel="noopener noreferrer" class="btn-primary px-6 py-3.5 md:px-8 md:py-4 rounded-2xl font-bold hover:shadow-neon transition flex items-center gap-3 text-sm md:text-base whitespace-nowrap shadow-soft">
+<i class="fa-solid fa-map-location-dot text-lg"></i> <span>Ver en Google Maps</span>
+</a>
+<a href="https://maps.app.goo.gl/yiAsXENC2p94CAsE9" target="_blank" rel="noopener noreferrer" class="btn-review px-6 py-3.5 md:px-8 md:py-4 rounded-2xl font-bold hover:shadow-neon transition flex items-center gap-3 text-sm md:text-base whitespace-nowrap shadow-soft">
+<i class="fa-solid fa-star text-lg"></i> <span>Deja tu Reseña</span>
+</a>
+</div>
+</div>
+<div class="mt-10 inline-flex items-center gap-3 bg-white/5 border border-white/10 px-5 py-3 rounded-full">
+<i class="fa-solid fa-certificate text-primary-orange text-lg"></i>
+<span class="text-sm font-medium text-gray-300">Garantía en todos nuestros servicios</span>
+</div>
+</div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-primary-dark/95 text-gray-500 py-10 md:py-14 border-t border-white/10">
+<div class="container mx-auto px-4">
+<div class="flex flex-col md:flex-row items-center justify-between gap-6">
+<div class="text-center md:text-left">
+<p class="mb-2 text-white font-display font-bold text-xl md:text-2xl glow-text tracking-tight">ROMERO MECÁNICA INTEGRAL</p>
+<p class="text-sm">Paysandú, Uruguay</p>
+</div>
+<div class="flex items-center gap-4">
+<a href="https://maps.app.goo.gl/yiAsXENC2p94CAsE9" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-primary-orange hover:text-yellow-400 transition text-sm font-semibold group">
+<i class="fa-solid fa-star group-hover:scale-110 transition-transform"></i>
+<span>Deja tu Reseña</span>
+</a>
+</div>
+</div>
+<div class="border-t border-white/10 mt-6 pt-4 text-center">
+<a href="https://nexoar-art.github.io/NEXO-art/" target="_blank" rel="noopener noreferrer"
+class="inline-flex items-center gap-1.5 text-xs text-gray-600 hover:text-primary-orange transition font-medium group">
+<i class="fa-solid fa-pen-nib group-hover:scale-110 transition-transform"></i>
+Diseño: NEXO-Art
+</a>
+<p class="text-gray-600 mt-2 text-xs">Sitio web desarrollado con tecnología moderna</p>
+</div>
+</div>
+</footer>
+
+<!-- STICKY MOBILE CTA -->
+<div class="fixed bottom-0 left-0 w-full bg-gray-900/95 backdrop-blur-sm border-t border-white/10 p-4 md:hidden z-50 flex gap-3">
+<a href="#asesoramiento" class="flex-1 bg-white/5 text-white font-semibold py-3.5 rounded-xl text-center border border-white/10 hover:border-primary-orange/40 transition text-sm flex items-center justify-center gap-2">
+<i class="fa-solid fa-book-open text-primary-orange"></i><span>Guías</span>
+</a>
+<a href="#diagnostico" class="flex-[2] btn-primary font-bold py-3.5 rounded-xl text-center uppercase shadow-neon text-sm flex items-center justify-center gap-2">
+<i class="fa-solid fa-microchip"></i> <span>Diagnóstico</span>
+</a>
+</div>
+
+<!-- JAVASCRIPT FUNCIONAL -->
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+// ========== RELOJ DIGITAL ==========
+function updateClock(){
+const now = new Date();
+const hours = String(now.getHours()).padStart(2,'0');
+const minutes = String(now.getMinutes()).padStart(2,'0');
+const seconds = String(now.getSeconds()).padStart(2,'0');
+const timeString = hours + ':' + minutes + ':' + seconds;
+const clockElement = document.getElementById('navbarClockTime');
+if(clockElement) clockElement.textContent = timeString;
+const clockMobile = document.getElementById('navbarClockTimeMobile');
+if(clockMobile) clockMobile.textContent = timeString;
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+// ========== EFECTO FUEGO - Aparece a los 5s y se desvanece gradualmente ==========
+setTimeout(function(){
+const fireRing = document.getElementById('fireRing');
+if(fireRing){
+fireRing.classList.add('active');
+setTimeout(function(){
+fireRing.classList.add('fading');
+}, 0);
+}
+}, 5000);
+
+// ========== PARTÍCULAS ==========
+function createParticles(){
+const container = document.getElementById('particles');
+if(!container) return;
+for(let i = 0; i < 30; i++){
+const particle = document.createElement('div');
+particle.className = 'particle';
+particle.style.left = Math.random()*100 + '%';
+particle.style.animationDelay = Math.random()*20 + 's';
+particle.style.animationDuration = (20 + Math.random()*30) + 's';
+particle.style.width = particle.style.height = (3 + Math.random()*4) + 'px';
+container.appendChild(particle);
+}
+}
+createParticles();
+
+// ========== ESTADO DEL NEGOCIO ==========
+function checkStatus(){
+    const now = new Date();
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+    const day = now.getDay();
+    const currentMinutes = hours * 60 + minutes;
+    
+    const weekdayMorningOpen = 8 * 60;
+    const weekdayMorningClose = 12 * 60;
+    const weekdayAfternoonOpen = 14 * 60;
+    const weekdayAfternoonClose = 18 * 60;
+    
+    let isOpen = false;
+    
+    if(day >= 1 && day <= 5){
+        const morningOpen = currentMinutes >= weekdayMorningOpen && currentMinutes < weekdayMorningClose;
+        const afternoonOpen = currentMinutes >= weekdayAfternoonOpen && currentMinutes < weekdayAfternoonClose;
+        isOpen = morningOpen || afternoonOpen;
+    }
+    
+    const dotDesktop = document.getElementById('status-dot-desktop');
+    const textDesktop = document.getElementById('status-text-desktop');
+    const barMobile = document.getElementById('status-bar-mobile');
+    
+    if(isOpen){
+        dotDesktop.className = 'status-dot w-2 h-2 rounded-full mr-2.5 bg-primary-orange';
+        textDesktop.textContent = 'Abierto Ahora';
+        textDesktop.className = 'text-primary-orange font-semibold';
+        barMobile.className = 'md:hidden w-full py-2 text-center text-xs font-bold uppercase tracking-wide text-white bg-gradient-to-r from-primary-orange/20 to-orange-700/20 flex items-center justify-center gap-2';
+    } else {
+        dotDesktop.className = 'w-2 h-2 rounded-full mr-2.5 bg-gray-500';
+        textDesktop.textContent = 'Cerrado';
+        textDesktop.className = 'text-gray-400';
+        barMobile.className = 'md:hidden w-full py-2 text-center text-xs font-bold uppercase tracking-wide text-gray-300 bg-gray-900/80 flex items-center justify-center gap-2';
+    }
+}
+checkStatus();
+setInterval(checkStatus, 60000);
+
+// ========== ANIMACIÓN DE CONTADORES ==========
+function animateCounter(id, start, target, duration){
+const obj = document.getElementById(id);
+if(!obj) return;
+let startTimestamp = null;
+const step = function(timestamp){
+if(!startTimestamp) startTimestamp = timestamp;
+const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+const easeProgress = 1 - Math.pow(1 - progress, 3);
+const value = Math.floor(easeProgress * (target - start) + start);
+obj.textContent = value.toLocaleString('es-AR');
+if(progress < 1){
+window.requestAnimationFrame(step);
+} else {
+obj.textContent = target.toLocaleString('es-AR');
+}
+};
+window.requestAnimationFrame(step);
+}
+function startCounters(){
+const observer = new IntersectionObserver(function(entries){
+entries.forEach(function(entry){
+if(entry.isIntersecting){
+animateCounter('counter1', 0, 99, 1500);
+animateCounter('counter2', 0, 50, 1800);
+animateCounter('counter3', 0, 8000, 2000);
+observer.disconnect();
+}
+});
+}, {threshold: 0.3});
+const statsSection = document.querySelector('.grid.grid-cols-3');
+if(statsSection) observer.observe(statsSection);
+}
+startCounters();
+
+// ========== FORMULARIO FUNCIONAL ==========
+const form = document.getElementById('triageForm');
+const submitBtn = document.getElementById('submitBtn');
+
+const allFields = document.querySelectorAll('.field-input');
+allFields.forEach(function(field){
+field.addEventListener('input', function(){
+if(this.value.trim().length > 0){
+this.classList.add('has-value');
+} else {
+this.classList.remove('has-value');
+}
+});
+if(this.tagName === 'SELECT'){
+this.addEventListener('change', function(){
+if(this.value){
+this.classList.add('has-value');
+} else {
+this.classList.remove('has-value');
+}
+});
+}
+});
+
+if(form){
+form.addEventListener('submit', function(e){
+e.preventDefault();
+
+var vehicleTypeEl = document.getElementById('inputVehicleType');
+var vehicleType = vehicleTypeEl && vehicleTypeEl.value ? vehicleTypeEl.value : 'No especificado';
+
+var vehicle = document.getElementById('inputVehicle').value.trim() || 'No especificado';
+var km = document.getElementById('inputKm').value.trim() || 'No especificado';
+
+var fuelTypeEl = document.getElementById('inputFuelType');
+var fuelType = fuelTypeEl && fuelTypeEl.value ? fuelTypeEl.value : 'No especificado';
+
+var symptoms = document.getElementById('inputSymptoms').value.trim() || 'No especificado';
+
+var contextEl = document.getElementById('inputContext');
+var context = contextEl && contextEl.value ? contextEl.options[contextEl.selectedIndex].text : 'No especificado';
+
+var serviceEl = document.getElementById('inputService');
+var service = serviceEl && serviceEl.value ? serviceEl.options[serviceEl.selectedIndex].text : 'No especificado';
+
+var name = document.getElementById('inputName').value.trim() || 'Cliente';
+var phone = document.getElementById('inputPhone').value.trim() || 'No proporcionado';
+
+var message = '🚗 ¡Hola ROMERO MECÁNICA INTEGRAL! 👋\n';
+message += '*Cliente:* ' + name + '\n';
+message += '📱 *Contacto:* ' + phone + '\n';
+message += '🚘 *Tipo de Vehículo:* ' + vehicleType + '\n';
+message += '🚙 *Vehículo:* ' + vehicle + '\n';
+message += '🛣 *Kilometraje:* ' + km + ' km\n';
+message += '⛽ *Combustible:* ' + fuelType + '\n';
+message += '⚠️ *Síntomas reportados:*\n' + symptoms + '\n';
+message += '🔍 *Contexto:* ' + context + '\n';
+message += '🔧 *Servicio solicitado:* ' + service + '\n';
+message += '📍 *Ubicación: Paysandú, Uruguay*\n';
+message += '📅 *Solicito turno para diagnóstico profesional.* 💨';
+
+var originalBtnContent = submitBtn.innerHTML;
+submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Procesando solicitud...';
+submitBtn.classList.add('opacity-80', 'cursor-not-allowed');
+submitBtn.disabled = true;
+
+setTimeout(function(){
+var whatsappUrl = 'https://api.whatsapp.com/send?phone=59898680159&text=' + encodeURIComponent(message);
+window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+
+submitBtn.innerHTML = '<i class="fa-solid fa-circle-check"></i> ¡Solicitud Enviada! ✅';
+submitBtn.classList.add('bg-green-600');
+
+setTimeout(function(){
+submitBtn.innerHTML = originalBtnContent;
+submitBtn.classList.remove('opacity-80', 'cursor-not-allowed', 'bg-green-600');
+submitBtn.disabled = false;
+form.reset();
+allFields.forEach(function(el){
+el.classList.remove('has-value');
+});
+}, 3500);
+}, 1200);
+});
+}
+
+// ========== PARALLAX ==========
+const parallaxImg = document.getElementById('parallax-img');
+if(parallaxImg){
+window.addEventListener('scroll', function(){
+const scrollY = window.scrollY;
+if(scrollY < window.innerHeight){
+parallaxImg.style.transform = 'translateY(' + (scrollY * 0.3) + 'px) scale(1.08)';
+}
+}, {passive: true});
+}
+
+// ========== NAVBAR SCROLL ==========
+const navbar = document.getElementById('navbar');
+if(navbar){
+window.addEventListener('scroll', function(){
+if(window.scrollY > 50){
+navbar.classList.add('shadow-lg', 'bg-gray-900/95');
+navbar.classList.remove('glass');
+} else {
+navbar.classList.remove('shadow-lg', 'bg-gray-900/95');
+navbar.classList.add('glass');
+}
+}, {passive: true});
+}
+
+// ========== SMOOTH SCROLL ==========
+document.querySelectorAll('a[href^="#"]').forEach(function(anchor){
+anchor.addEventListener('click', function(e){
+e.preventDefault();
+const targetId = this.getAttribute('href');
+if(targetId === '#') return;
+const targetElement = document.querySelector(targetId);
+if(targetElement){
+window.scrollTo({
+top: targetElement.offsetTop - 120,
+behavior: 'smooth'
+});
+}
+});
+});
+
+// ========== FADE IN UP ==========
+document.querySelectorAll('.fade-in-up').forEach(function(el, i){
+el.style.animationDelay = (0.1 + i * 0.12) + 's';
+});
+});
+</script>
 </body>
 </html>
 
