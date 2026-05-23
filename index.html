@@ -1,1630 +1,540 @@
-<!DOCTYPE html>
-<html lang="es" class="scroll-smooth">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Romero Mecánica Integral - Taller de reparación de automóviles con años de experiencia. Servicio de calidad, confiable y transparente en Paysandú, Uruguay.">
-<meta name="theme-color" content="#0A0A0A">
-<title>ROMERO MECÁNICA INTEGRAL | Taller Mecánico - Diagnóstico y Reparación Profesional</title>
-<!-- Preconnect para mejor rendimiento-->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- Tailwind CSS CDN + Supresor de warnings-->
-<script>
-(function(){
-const originalWarn= console.warn;
-console.warn= function(...args){
-if(typeof args[0]=== 'string' && args[0].includes('cdn.tailwindcss.com')) return;
-originalWarn.apply(console, args); }; })();
-</script>
-<script src="https://cdn.tailwindcss.com/3.4.14"></script>
-<!-- Font Awesome-->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<!-- Google Fonts-->
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-<script>
-tailwind.config ={
-theme:{
-extend:{
-fontFamily:{
-sans:['Manrope','sans-serif'],
-display:['Space Grotesk','sans-serif'],
-},
-colors:{
-primary:{
-orange:'#FF6B35',
-amber:'#F7931E',
-dark:'#0A0A0A',
-gray:'#1A1A1A',
-card:'#2D2D2D',
-metallic:'#C0C0C0',
-light:'#F1F5F9',
-cream:'#F5F1E8'
-}
-},
-boxShadow:{
-'neon':'0 0 25px rgba(255, 107, 53, 0.45)',
-'glow':'0 0 40px rgba(255, 107, 53, 0.25)',
-'card':'0 10px 40px-10px rgba(0, 0, 0, 0.5)',
-'soft':'0 4px 20px rgba(0, 0, 0, 0.15)',
-'premium':'0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(255, 107, 53, 0.15)',
-},
-screens:{
-'xs':'475px',
-'2xl':'1400px',
-},
-animation:{
-'float':'float 6s ease-in-out infinite',
-'pulse-slow':'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-'shimmer':'shimmer 2s linear infinite',
-'gradient':'gradient 8s ease infinite',
-'scroll-banner':'scroll-banner 50s linear infinite',
-},
-keyframes:{
-float:{
-'0%, 100%':{transform:'translateY(0)'},
-'50%':{transform:'translateY(-12px)'},
-},
-shimmer:{
-'0%':{backgroundPosition:'-1000px 0'},
-'100%':{backgroundPosition:'1000px 0'},
-},
-gradient:{
-'0%, 100%':{backgroundPosition:'0% 50%'},
-'50%':{backgroundPosition:'100% 50%'},
-},
-'scroll-banner':{
-'0%':{transform:'translateX(0)'},
-'100%':{transform:'translateX(-100%)'}
-}
-}
-}
-}
-}
-</script>
+<!DOCTYPE html><html class="dark" lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>TALLER 4.0 | Command Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&amp;family=JetBrains+Mono:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#03050a",
+                        "surface-container-high": "rgba(39, 42, 49, 0.4)",
+                        "outline": "#859399",
+                        "on-background": "#e0e2eb",
+                        "electric-cyan": "#00D1FF",
+                        "background": "#03050a",
+                        "primary": "#a4e6ff",
+                        "secondary": "#ffb95f",
+                        "safety-amber": "#F59E0B",
+                        "alert-crimson": "#EF4444",
+                        "carbon-black": "#03050A",
+                        "interface-navy": "#0B101E"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.5rem",
+                        "xl": "1rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "label-caps": ["JetBrains Mono"],
+                        "headline-lg": ["Inter", "sans-serif"],
+                        "headline-md": ["Inter", "sans-serif"],
+                        "data-display": ["JetBrains Mono"]
+                    }
+                },
+            },
+        }
+    </script>
 <style>
-:root{
---gradient-primary: linear-gradient(135deg,#FF6B35 0%,#F7931E 100%);
---gradient-dark: linear-gradient(180deg,#0A0A0A 0%,#1A1A1A 100%);
---gradient-metallic: linear-gradient(135deg,#E8E8E8 0%,#A8A8A8 50%,#E8E8E8 100%);
---gradient-orange-glow: linear-gradient(135deg, rgba(255,107,53,0.3) 0%, rgba(247,147,30,0.1) 100%);
---gradient-animated: linear-gradient(-45deg, #FF6B35, #F7931E, #FF8C42, #FF6B35);
-}
-*{
--webkit-tap-highlight-color: transparent;
-}
-body{
-background: var(--gradient-dark);
-color:#E2E8F0;
-font-feature-settings:"cv02","cv03","cv04","cv11";
-overflow-x: hidden;
-position: relative;
-}
-body::before{
-content:'';
-position: fixed;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-background-image: url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1920&q=80');
-background-size: cover;
-background-position: center;
-background-repeat: no-repeat;
-opacity: 0.25;
-z-index: -2;
-animation: backgroundMove 40s ease-in-out infinite;
-filter: brightness(0.7) contrast(1.2);
-}
-body::after{
-content:'';
-position: fixed;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-background: var(--gradient-animated);
-background-size: 400% 400%;
-opacity: 0.03;
-z-index: -1;
-animation: gradient 15s ease infinite;
-pointer-events: none;
-}
-@keyframes backgroundMove{
-0%, 100%{transform: scale(1) translate(0, 0);}
-25%{transform: scale(1.08) translate(-2%, -2%);}
-50%{transform: scale(1) translate(0, -3%);}
-75%{transform: scale(1.08) translate(2%, -2%);}
-}
-.glass{
-background: rgba(26, 26, 26, 0.75);
-backdrop-filter: blur(20px) saturate(180%);
--webkit-backdrop-filter: blur(20px) saturate(180%);
-border: 1px solid rgba(255, 107, 53, 0.2);
-box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.1);
-}
-.glass-card{
-background: linear-gradient(145deg, rgba(45, 45, 45, 0.85), rgba(26, 26, 26, 0.95));
-backdrop-filter: blur(20px) saturate(180%);
-border: 1px solid rgba(255, 255, 255, 0.08);
-border-radius: 24px;
-transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-position: relative;
-overflow: hidden;
-}
-.glass-card:hover{
-border-color: rgba(255, 107, 53, 0.4);
-transform: translateY(-4px);
-box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 30px rgba(255, 107, 53, 0.15);
-}
-.glow-text{
-text-shadow: 0 0 30px rgba(255, 107, 53, 0.7), 0 0 60px rgba(247, 147, 30, 0.4), 0 0 90px rgba(255, 107, 53, 0.2);
-letter-spacing:-0.02em;
-}
-.gradient-text{
-background: var(--gradient-primary);
--webkit-background-clip: text;
--webkit-text-fill-color: transparent;
-background-clip: text;
-background-size: 200% auto;
-animation: shimmer 3s linear infinite;
-}
-.pulse-glow{
-animation: pulse-glow 3s ease-in-out infinite;
-}
-@keyframes pulse-glow{
-0%, 100%{opacity: 1; box-shadow: 0 0 20px rgba(255, 107, 53, 0.4);}
-50%{opacity: 0.85; box-shadow: 0 0 50px rgba(255, 107, 53, 0.8);}
-}
-.fade-in-up{
-opacity: 0;
-transform: translateY(40px);
-animation: fadeInUp 1s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
-}
-@keyframes fadeInUp{
-to{opacity: 1; transform: translateY(0);}
-}
-.parallax-image{
-transition: transform 0.5s ease-out;
-will-change: transform;
-filter: brightness(0.85) contrast(1.15);
-}
-.parallax-bg{
-animation: subtle-move 30s ease-in-out infinite alternate;
-}
-@keyframes subtle-move{
-0%{transform: translate(0, 0) scale(1.05);}
-50%{transform: translate(5%, 3%) scale(1.1);}
-100%{transform: translate(0, 0) scale(1.05);}
-}
-.input-modern{
-background: rgba(26, 26, 26, 0.85);
-border: 2px solid rgba(255, 255, 255, 0.12);
-border-radius: 16px;
-transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-color:#fff;
-position: relative;
-width: 100%;
--webkit-appearance: none;
-appearance: none;
-font-family: 'Manrope', sans-serif;
-font-size: 0.9rem;
-}
-.input-modern:focus{
-border-color:#FF6B35;
-box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.2), 0 0 30px rgba(255, 107, 53, 0.2);
-outline: none;
-background: rgba(26, 26, 26, 0.95);
-}
-.input-modern::placeholder{
-color: rgba(226, 232, 240, 0.4);
-}
-.input-modern option{
-background: #1A1A1A;
-color: #E2E8F0;
-padding: 0.5rem;
-}
-.input-modern:focus::placeholder{
-color: rgba(255, 107, 53, 0.5);
-}
-.btn-primary{
-background: var(--gradient-primary);
-color:#fff;
-font-weight: 700;
-letter-spacing: 0.02em;
-position: relative;
-overflow: hidden;
-transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
-border: none;
-cursor: pointer;
-}
-.btn-primary::before{
-content:'';
-position: absolute;
-top: 50%;
-left: 50%;
-width: 0;
-height: 0;
-border-radius: 50%;
-background: rgba(255,255,255,0.3);
-transform: translate(-50%, -50%);
-transition: width 0.6s, height 0.6s;
-pointer-events: none;
-}
-.btn-primary:hover::before{
-width: 300px;
-height: 300px;
-}
-.btn-primary:hover{
-transform: translateY(-4px) scale(1.02);
-box-shadow: 0 20px 50px rgba(255, 107, 53, 0.5), 0 0 40px rgba(255, 107, 53, 0.4);
-}
-.btn-outline{
-background: transparent;
-border: 2px solid rgba(255, 255, 255, 0.25);
-color:#fff;
-font-weight: 600;
-transition: all 0.4s ease;
-position: relative;
-overflow: hidden;
-}
-.btn-outline:hover{
-border-color:#FF6B35;
-background: rgba(255, 107, 53, 0.1);
-transform: translateY(-4px);
-box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
-}
-.btn-review{
-background: linear-gradient(135deg,#FFD700 0%,#FFA500 50%,#FF8C00 100%);
-color:#0A0A0A;
-font-weight: 700;
-letter-spacing: 0.02em;
-position: relative;
-overflow: hidden;
-transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
-border: none;
-cursor: pointer;
-}
-.btn-review:hover{
-transform: translateY(-4px) scale(1.02);
-box-shadow: 0 20px 50px rgba(255, 215, 0, 0.5), 0 0 40px rgba(255, 165, 0, 0.4);
-}
-::-webkit-scrollbar{width: 10px; height: 10px;}
-::-webkit-scrollbar-track{background: rgba(26, 26, 26, 0.6);border-radius: 8px;}
-::-webkit-scrollbar-thumb{background: linear-gradient(180deg,#FF6B35,#F7931E);border-radius: 8px;border: 2px solid transparent;background-clip: content-box;}
-@media(max-width: 640px){
-.text-5xl{font-size: 2.25rem; line-height: 1.15;}
-.text-7xl{font-size: 2.75rem; line-height: 1.1;}
-h1{font-size: 2.3rem;}
-.container{padding-left: 1.25rem; padding-right: 1.25rem;}
-}
-@media(max-width: 475px){
-.text-3xl{font-size: 1.75rem;}
-.py-24{padding-top: 3.5rem; padding-bottom: 3.5rem;}
-.glass-card{border-radius: 18px;}
-}
-.status-dot{position: relative;}
-.status-dot::after{
-content:'';position: absolute;top:-2px; left:-2px; right:-2px; bottom:-2px;
-border-radius: 50%;background: inherit;filter: blur(6px);opacity: 0.7;animation: pulse 2s infinite;
-}
-.particles{
-position: absolute;top: 0; left: 0; right: 0; bottom: 0;
-pointer-events: none;overflow: hidden;z-index: 0;
-}
-.particle{
-position: absolute;width: 4px; height: 4px;
-background: rgba(255, 107, 53, 0.7);border-radius: 50%;
-animation: float-particle 20s infinite linear;opacity: 0.6;
-box-shadow: 0 0 10px rgba(255, 107, 53, 0.5);
-}
-@keyframes float-particle{
-0%{transform: translateY(100vh) translateX(0); opacity: 0;}
-10%{opacity: 0.8;}
-90%{opacity: 0.8;}
-100%{transform: translateY(-20px) translateX(100px); opacity: 0;}
-}
-.label-below{
-display: block;
-margin-top: 0.5rem;
-margin-left: 0.25rem;
-font-size: 0.75rem;
-font-weight: 600;
-color: #FF6B35;
-text-transform: uppercase;
-letter-spacing: 0.08em;
-}
-.navbar-logo{
-height: 70px;
-width: 70px;
-object-fit: cover;
-border-radius: 50%;
-border: 3px solid #FF6B35;
-box-shadow: 0 0 25px rgba(255, 107, 53, 0.6), inset 0 0 20px rgba(255, 107, 53, 0.2);
-transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-position: relative;
-}
-.navbar-logo:hover{
-transform: scale(1.15);
-box-shadow: 0 0 40px rgba(255, 107, 53, 0.9), inset 0 0 30px rgba(255, 107, 53, 0.3);
-}
+        body { 
+            background-color: #03050A; 
+            color: #e0e2eb; 
+            -webkit-font-smoothing: antialiased; 
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(0, 209, 255, 0.05) 0%, transparent 70%),
+                linear-gradient(rgba(0, 209, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 209, 255, 0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 40px 40px, 40px 40px;
+        }
+        
+        .glass-panel { 
+            background: rgba(11, 16, 30, 0.4); 
+            backdrop-filter: blur(24px); 
+            border: 1px solid rgba(0, 209, 255, 0.1);
+            box-shadow: inset 0 0 20px rgba(0, 209, 255, 0.05);
+        }
 
-/* ============================== */
-/* HERO LOGO - EFECTO FUEGO GRADUAL */
-/* ============================== */
-.hero-logo{
-height: 12rem;
-width: 12rem;
-object-fit: cover;
-border-radius: 50%;
-border: 5px solid #FF6B35;
-box-shadow: 0 0 40px rgba(255, 107, 53, 0.5), 0 0 80px rgba(255, 107, 53, 0.3), inset 0 0 30px rgba(255, 107, 53, 0.15);
-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
-display: block;
-margin: 0 auto;
-position: relative;
-overflow: hidden;
-background: #0A0A0A;
-}
-.hero-logo::before{
-content:'';
-position: absolute;
-top: 0;left: 0;right: 0;
-height: 55%;
-background: linear-gradient(180deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.15) 25%, rgba(255,255,255,0.03) 50%, transparent 100%);
-border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%;
-opacity: 0.7;
-pointer-events: none;
-z-index: 2;
-}
-.hero-logo::after{
-content:'';
-position: absolute;
-inset: -8px;
-border-radius: 50%;
-border: 2px solid rgba(255, 107, 53, 0.25);
-animation: rotate 10s linear infinite;
-pointer-events: none;
-z-index: 3;
-}
-.hero-logo .shine-effect{
-position: absolute;
-top: 0;left: -100%;
-width: 100%;height: 100%;
-background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.35) 50%, transparent 100%);
-transition: left 0.8s ease;
-pointer-events: none;
-z-index: 4;
-}
-.hero-logo:hover .shine-effect{
-left: 100%;
-}
+        .energy-border {
+            position: relative;
+            border: 1px solid rgba(0, 209, 255, 0.3);
+        }
+        .energy-border::after {
+            content: '';
+            position: absolute;
+            top: -1px; left: -1px; right: -1px; bottom: -1px;
+            border: 1px solid transparent;
+            border-top-color: #00D1FF;
+            border-left-color: #00D1FF;
+            pointer-events: none;
+            box-shadow: 0 0 10px rgba(0, 209, 255, 0.4);
+        }
 
-/* EFECTO FUEGO CON DESVANECIMIENTO GRADUAL */
-.fire-ring{
-position: absolute;
-inset: -14px;
-border-radius: 50%;
-pointer-events: none;
-z-index: 1;
-opacity: 0;
-transition: opacity 1s ease;
-}
-.fire-ring.active{
-opacity: 1;
-}
-.fire-ring.fading{
-animation: fade-fire 5s ease-out forwards;
-}
-@keyframes fade-fire{
-0%{opacity: 1;}
-20%{opacity: 0.8;}
-40%{opacity: 0.6;}
-60%{opacity: 0.4;}
-80%{opacity: 0.2;}
-100%{opacity: 0;}
-}
-/* Llamas ascendentes */
-.fire-ring .flame{
-position: absolute;
-bottom: -4px;
-width: 100%;
-height: 100%;
-pointer-events: none;
-}
-.fire-ring .flame::before{
-content: '';
-position: absolute;
-bottom: -12px;
-left: 50%;
-transform: translateX(-50%);
-width: 85%;
-height: 70%;
-background: radial-gradient(ellipse at center bottom, 
-  rgba(255,215,0,0.9) 0%, 
-  rgba(255,107,53,0.8) 25%, 
-  rgba(255,69,0,0.6) 50%, 
-  rgba(255,0,0,0.3) 75%, 
-  transparent 100%);
-filter: blur(6px);
-animation: flames-rise 1.5s ease-in-out infinite alternate;
-border-radius: 50% 50% 30% 30%;
-}
-.fire-ring .flame::after{
-content: '';
-position: absolute;
-bottom: -8px;
-left: 50%;
-transform: translateX(-50%);
-width: 90%;
-height: 55%;
-background: radial-gradient(ellipse at center bottom,
-  rgba(255,255,200,0.95) 0%,
-  rgba(255,200,50,0.7) 20%,
-  rgba(255,107,53,0.5) 50%,
-  transparent 80%);
-filter: blur(4px);
-animation: flames-rise 1s ease-in-out infinite alternate-reverse;
-border-radius: 50% 50% 30% 30%;
-}
-/* Partículas de chispas */
-.fire-ring .spark{
-position: absolute;
-width: 3px;
-height: 3px;
-background: #FFD700;
-border-radius: 50%;
-box-shadow: 0 0 6px 2px rgba(255,165,0,0.8);
-opacity: 0;
-}
-.fire-ring.active .spark{
-animation: spark-rise 2s ease-out infinite;
-}
-.fire-ring .spark:nth-child(1){ left: 20%; animation-delay: 0s; }
-.fire-ring .spark:nth-child(2){ left: 40%; animation-delay: 0.4s; }
-.fire-ring .spark:nth-child(3){ left: 60%; animation-delay: 0.8s; }
-.fire-ring .spark:nth-child(4){ left: 80%; animation-delay: 1.2s; }
-.fire-ring .spark:nth-child(5){ left: 30%; animation-delay: 0.6s; }
-.fire-ring .spark:nth-child(6){ left: 50%; animation-delay: 1s; }
-.fire-ring .spark:nth-child(7){ left: 70%; animation-delay: 1.4s; }
-.fire-ring .spark:nth-child(8){ left: 15%; animation-delay: 0.3s; }
+        .radial-gauge-container {
+            position: relative;
+            width: 500px;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-@keyframes flames-rise{
-0%{transform: translateX(-50%) scaleY(1); opacity: 0.8;}
-100%{transform: translateX(-50%) scaleY(1.3); opacity: 1;}
-}
-@keyframes spark-rise{
-0%{
-bottom: 0;
-opacity: 0;
-transform: translateX(0) scale(1);
-}
-20%{
-opacity: 1;
-}
-100%{
-bottom: 160px;
-opacity: 0;
-transform: translateX(calc((var(--spark-x, 0)) * 1px)) scale(0.2);
-}
-}
-/* Efecto de resplandor pulsante */
-.fire-ring .glow-pulse{
-position: absolute;
-inset: -20px;
-border-radius: 50%;
-background: radial-gradient(circle, rgba(255,69,0,0.3) 0%, rgba(255,107,53,0.1) 40%, transparent 70%);
-animation: glow-pulse 2s ease-in-out infinite;
-pointer-events: none;
-}
-@keyframes glow-pulse{
-0%, 100%{transform: scale(1); opacity: 0.6;}
-50%{transform: scale(1.15); opacity: 1;}
-}
+        .containment-field {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid rgba(0, 209, 255, 0.1);
+            box-shadow: 0 0 60px rgba(0, 209, 255, 0.1), inset 0 0 40px rgba(0, 209, 255, 0.05);
+            animation: pulse-field 4s ease-in-out infinite;
+        }
 
-.hero-logo:hover{
-transform: scale(1.08);
-box-shadow: 0 0 80px rgba(255, 107, 53, 0.8), 0 0 120px rgba(255, 107, 53, 0.5), inset 0 0 50px rgba(255, 107, 53, 0.3);
-}
+        @keyframes pulse-field {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.02); opacity: 0.8; }
+        }
 
-.hero-logo-wrapper{
-display: flex;
-justify-content: center;
-align-items: center;
-width: fit-content;
-margin: 0 auto;
-padding: 0.75rem;
-position: relative;
-z-index: 10;
-}
-.hero-logo-inner{
-position: relative;
-display: flex;
-justify-content: center;
-align-items: center;
-}
-@keyframes rotate{
-from{transform: rotate(0deg);}
-to{transform: rotate(360deg);}
-}
-@media(max-width: 768px){
-.navbar-logo{height: 55px; width: 55px;}
-.hero-logo{height: 8rem; width: 8rem;}
-.hero-logo-wrapper{padding: 0.5rem;}
-}
-.navbar-clock{
-font-family: 'Space Grotesk', monospace;
-font-weight: 700;
-font-size: 1.15rem;
-color: #FF6B35;
-text-shadow: 0 0 15px rgba(255, 107, 53, 0.7), 0 0 30px rgba(255, 107, 53, 0.4);
-letter-spacing: 0.1em;
-background: rgba(255, 107, 53, 0.1);
-border: 2px solid rgba(255, 107, 53, 0.35);
-padding: 0.3rem 0.9rem;
-border-radius: 10px;
-backdrop-filter: blur(10px);
-box-shadow: 0 0 20px rgba(255, 107, 53, 0.25), inset 0 0 15px rgba(255, 107, 53, 0.08);
-animation: clock-pulse 2s ease-in-out infinite;
-white-space: nowrap;
-display: flex;
-align-items: center;
-gap: 0.4rem;
-}
-.navbar-clock i{font-size: 0.95rem;}
-@keyframes clock-pulse{
-0%, 100%{box-shadow: 0 0 20px rgba(255, 107, 53, 0.25), inset 0 0 15px rgba(255, 107, 53, 0.08);}
-50%{box-shadow: 0 0 35px rgba(255, 107, 53, 0.45), inset 0 0 25px rgba(255, 107, 53, 0.15);}
-}
-@media(max-width: 768px){
-.navbar-clock{font-size: 0.95rem; padding: 0.25rem 0.7rem;}
-}
-.social-btn{
-display: inline-flex;align-items: center;justify-content: center;
-width: 50px;height: 50px;border-radius: 50%;
-background: rgba(255, 255, 255, 0.05);border: 2px solid rgba(255, 255, 255, 0.15);
-color: #fff;font-size: 1.4rem;
-transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);position: relative;overflow: hidden;
-}
-.social-btn:hover{
-transform: translateY(-5px) scale(1.1);box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-}
-.social-btn.whatsapp:hover{background: #25D366;border-color: transparent;}
-.badge-animated{position: relative;animation: badge-pulse 2s ease-in-out infinite;}
-@keyframes badge-pulse{0%, 100%{transform: scale(1);}50%{transform: scale(1.05);}}
+        .dial {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #1c2026, #0b0e15);
+            border: 2px solid #3c494e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.5), -2px -2px 5px rgba(255,255,255,0.05);
+        }
+        .dial:active { transform: scale(0.95); }
+        .dial-knob {
+            width: 4px;
+            height: 20px;
+            background: #00D1FF;
+            border-radius: 2px;
+            transform-origin: bottom center;
+            margin-bottom: 20px;
+            box-shadow: 0 0 10px #00D1FF;
+        }
 
-/* Select wrapper para flecha personalizada */
-.select-wrapper{position: relative;}
-.select-wrapper::after{
-content:'';position: absolute;right: 1rem;top: 50%;transform: translateY(-50%);
-width: 0;height: 0;border-left: 5px solid transparent;border-right: 5px solid transparent;
-border-top: 6px solid #FF6B35;pointer-events: none;z-index: 5;
-}
-.select-wrapper select{padding-right: 2.5rem;}
+        .data-stream {
+            position: absolute;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: rgba(0, 209, 255, 0.3);
+            white-space: nowrap;
+            pointer-events: none;
+            user-select: none;
+        }
 
-/* Estilos para el formulario - inputs funcionales */
-.form-field{
-position: relative;
-margin-bottom: 0;
-}
-.form-field .field-label{
-display: block;
-font-size: 0.7rem;
-font-weight: 700;
-color: #FF6B35;
-text-transform: uppercase;
-letter-spacing: 0.1em;
-margin-bottom: 0.4rem;
-}
-.form-field .field-input{
-width: 100%;
-background: rgba(26, 26, 26, 0.85);
-border: 2px solid rgba(255, 255, 255, 0.12);
-border-radius: 14px;
-padding: 0.9rem 1rem;
-color: #E2E8F0;
-font-size: 0.9rem;
-font-family: 'Manrope', sans-serif;
-transition: all 0.3s ease;
-outline: none;
--webkit-appearance: none;
-appearance: none;
-}
-.form-field .field-input::placeholder{
-color: rgba(226, 232, 240, 0.35);
-}
-.form-field .field-input:focus{
-border-color: #FF6B35;
-box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.15), 0 0 20px rgba(255, 107, 53, 0.1);
-background: rgba(26, 26, 26, 0.95);
-}
-.form-field .field-input:focus::placeholder{
-color: rgba(255, 107, 53, 0.4);
-}
-.form-field select.field-input{
-cursor: pointer;
-background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23FF6B35' stroke-width='2' fill='none'/%3E%3C/svg%3E");
-background-repeat: no-repeat;
-background-position: right 1rem center;
-background-size: 12px;
-padding-right: 2.5rem;
-}
-.form-field select.field-input option{
-background: #1A1A1A;
-color: #E2E8F0;
-padding: 0.5rem;
-}
-.form-field textarea.field-input{
-resize: vertical;
-min-height: 80px;
-}
-.form-field .field-input.has-value{
-border-color: rgba(255, 107, 53, 0.5);
-}
+        .health-ring {
+            transform: rotate(-90deg);
+            transition: stroke-dashoffset 0.5s ease;
+        }
 
-/* ✅ Banner Automático Taller - VELOCIDAD REDUCIDA */
-.banner {
-  width: 100%;
-  background: #111;
-  color: #fff;
-  font-size: 1.2em;
-  font-weight: bold;
-  overflow: hidden;
-  white-space: nowrap;
-  padding: 12px 0;
-  border-top: 3px solid #FF6B35;
-  border-bottom: 3px solid #FF6B35;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 100;
-}
-.banner-track {
-  display: inline-block;
-  padding-left: 100%;
-  animation: scroll-banner 50s linear infinite;
-}
-.banner-track span {
-  margin: 0 50px;
-}
-@keyframes scroll-banner {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-100%); }
-}
-@media(max-width: 640px){
-  .banner { font-size: 0.9em; padding: 10px 0; }
-  .banner-track span { margin: 0 25px; }
-}
+        #engine-canvas-container { 
+            position: absolute; 
+            width: 320px;
+            height: 320px;
+            z-index: 10; 
+            overflow: hidden; 
+            border-radius: 50%;
+        }
 
-/* 🔥 HOVER TEXT PARA BOTONES FLOTANTES */
-@media(min-width: 768px){
-  .floating-btn-label{
-    display: none;
-    opacity: 0;
-    transform: translateX(8px);
-    transition: all 0.25s ease;
-    font-weight: 600;
-    white-space: nowrap;
-    font-size: 0.85rem;
-  }
-  .group:hover .floating-btn-label{
-    display: inline;
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-/* 📸 MICROEFECTO PERSUASIVO PARA INSTAGRAM */
-@keyframes instagram-glow{
-0%, 100%{box-shadow: 0 4px 20px rgba(220, 39, 67, 0.35), 0 0 25px rgba(245, 101, 101, 0.2);}
-50%{box-shadow: 0 6px 28px rgba(220, 39, 67, 0.55), 0 0 45px rgba(245, 101, 101, 0.4), 0 0 70px rgba(131, 58, 196, 0.25);}
-}
-.btn-instagram-pulse{
-animation: instagram-glow 3.5s ease-in-out infinite;
-}
-</style>
+        .tactile-knob-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+    </style>
 </head>
-<body class="antialiased relative">
-
-<!-- ✅ Banner Automático Taller -->
-<div class="banner">
-  <div class="banner-track">
-    <span>🧼 Limpieza de inyectores cada 6 meses = motor más eficiente</span>
-    <span>🛢️ Aceite de calidad cada 10.000 km = vida útil prolongada</span>
-    <span>⛽ Usar nafta premium = más potencia, menos desgaste</span>
-    <span>✅ Tres simples hábitos = menos consumo, menos fallas, más años de motor</span>
-    <span>📲 ¡Sacá un turno, no lo dejes pasar! WhatsApp +59898680159</span>
-    <!-- Duplicado para loop continuo -->
-    <span>🧼 Limpieza de inyectores cada 6 meses = motor más eficiente</span>
-    <span>🛢️ Aceite de calidad cada 10.000 km = vida útil prolongada</span>
-    <span>⛽ Usar nafta premium = más potencia, menos desgaste</span>
-    <span>✅ Tres simples hábitos = menos consumo, menos fallas, más años de motor</span>
-    <span>📲 ¡Sacá un turno, no lo dejes pasar! WhatsApp +59898680159</span>
-  </div>
-</div>
-
-<!-- Partículas decorativas de fondo-->
-<div class="particles" id="particles"></div>
-
-<!-- NAVBAR - POSICIONADO DEBAJO DEL BANNER PARA NO SUPERPONERSE -->
-<nav class="fixed w-full z-50 top-[52px] glass border-b border-white/10 transition-all duration-300" id="navbar">
-<div class="container mx-auto px-4 h-16 md:h-20 flex items-center relative">
-<a href="#" class="flex items-center md:absolute md:left-4 md:translate-x-0">
-<img src="LOGOROMERO.png" alt="Romero Mecánica Integral Logo" class="navbar-logo">
-</a>
-<a href="#" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:static md:translate-x-0 md:translate-y-0 md:ml-auto md:mr-auto font-display font-bold text-lg sm:text-xl md:text-2xl gradient-text tracking-tight uppercase text-center md:text-left drop-shadow-lg">
-ROMERO MECÁNICA INTEGRAL
-</a>
-<div id="navbarClock" class="hidden md:flex items-center ml-4">
-<div class="navbar-clock">
-<i class="fa-regular fa-clock"></i>
-<span id="navbarClockTime">00:00:00</span>
+<body class="font-body-md">
+<!-- Background Particle Canvas (Simulated) -->
+<div class="fixed inset-0 pointer-events-none z-0" id="particles"></div>
+<nav class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-10 h-20 bg-black/40 backdrop-blur-md border-b border-white/5">
+<div class="flex items-center gap-6">
+<span class="font-headline-lg text-2xl font-black text-electric-cyan tracking-tighter italic">TALLER 4.0</span>
+<div class="h-6 w-[1px] bg-white/20"></div>
+<div class="flex gap-6">
+<a class="font-label-caps text-[11px] text-electric-cyan" href="#">SIMULATOR</a>
+<a class="font-label-caps text-[11px] text-outline hover:text-white" href="#">DIAGNOSIS</a>
+<a class="font-label-caps text-[11px] text-outline hover:text-white" href="#">SYSTEM_LOGS</a>
 </div>
 </div>
-<div class="ml-auto flex items-center gap-3 md:gap-5">
-<div id="status-badge-desktop" class="hidden md:flex items-center px-3 py-1.5 md:px-4 md:py-2 rounded-full text-xs font-semibold uppercase tracking-wide bg-white/5 border border-white/10 hover:border-primary-orange/40 transition-all">
-<span id="status-dot-desktop" class="status-dot w-2 h-2 rounded-full mr-2.5 bg-gray-500"></span>
-<span id="status-text-desktop" class="text-gray-300">Verificando...</span>
+<button id="lang-toggle" class="flex items-center gap-2 px-3 py-1.5 glass-panel rounded-full border border-electric-cyan/30 hover:border-electric-cyan/60 transition-all active:scale-95 group">
+    <span class="material-symbols-outlined text-[14px] text-electric-cyan group-hover:rotate-180 transition-transform duration-500">language</span>
+    <span id="lang-label" class="font-label-caps text-[10px] text-electric-cyan tracking-wider">ESPAÑOL</span>
+</button><div class="flex items-center gap-4">
+<div class="text-right mr-4">
+<p class="font-label-caps text-[10px] text-outline">STATION_ID</p>
+<p class="font-data-display text-sm text-electric-cyan">CMD-ALPHA-01</p>
 </div>
-<div class="hidden md:flex items-center gap-3 lg:gap-5">
-<a href="#asesoramiento" class="text-gray-300 hover:text-primary-orange transition text-sm lg:text-base font-medium relative group">
-Asesoramiento
-<span class="absolute bottom-1 left-0 w-0 h-0.5 bg-primary-orange transition-all group-hover:w-full"></span>
-</a>
-<a href="#diagnostico" class="btn-primary px-4 lg:px-6 py-2 lg:py-2.5 rounded-xl font-bold transition shadow-neon uppercase text-xs lg:text-sm tracking-wide">
-Pre-Diagnóstico
-</a>
+<div class="w-10 h-10 rounded-full border-2 border-electric-cyan/50 p-[2px]">
+<img alt="User" class="w-full h-full rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEYTdUSeamMPpovz7M75cOhDiRQRCtXzWRbGFdWEmEGKdNBHyyxm0KnuLlCP2WBvme0hd-AfwH5cgFarl-fBTjpoxtuU8DcUFugvnQpjFxGHUsCs_Z_cInW9TXClrC5-IFxMBRVNRpKjtickZZTS6gEqutz1zDDmzLLTidjezesEOmnafFN9m9aqhyNaaTlr3LuZ6mZABI0Bs0b0gTUYB8hoOQzJBW-qtiTN42_KBLfN_sWv2O5fhYOL-HooRHFxgGw6dQy4Se">
 </div>
-</div>
-</div>
-<div id="status-bar-mobile" class="md:hidden w-full py-2 text-center text-xs font-bold uppercase bg-gray-900/80 border-t border-white/10 flex items-center justify-center gap-2">
-<span id="navbarClockTimeMobile" style="font-family:'Space Grotesk',monospace;color:#FF6B35;text-shadow:0 0 10px rgba(255,107,53,0.6);">00:00:00</span>
-<span>|</span>
-<span>Verificando estado...</span>
 </div>
 </nav>
-
-<!-- Botones flotantes premium -->
-<div class="fixed bottom-24 md:bottom-8 right-4 z-50 animate-float flex flex-col gap-3">
-<a href="https://api.whatsapp.com/send?phone=59898680159" target="_blank" rel="noopener noreferrer"
-class="bg-[#25D366] hover:bg-[#128C7E] text-white p-3.5 md:p-4 rounded-full shadow-lg transition-all hover:scale-110 flex items-center justify-center gap-2 group"
-title="Chat directo por WhatsApp" style="animation: float 6s ease-in-out infinite;">
-<i class="fa-brands fa-whatsapp text-2xl md:text-3xl"></i>
-<span class="hidden lg:inline text-xs font-bold whitespace-nowrap">Chat</span>
-</a>
-<a href="#diagnostico" class="btn-primary px-5 py-3 md:px-7 md:py-3.5 rounded-2xl shadow-neon transition flex items-center gap-2.5 hover:shadow-glow text-sm font-semibold group">
-<i class="fa-solid fa-calendar-check text-lg"></i>
-<span class="floating-btn-label">Pedir Turno</span>
-<i class="fa-solid fa-arrow-right ml-1 group-hover:translate-x-1 transition-transform"></i>
-</a>
-<a href="https://maps.app.goo.gl/yiAsXENC2p94CAsE9" target="_blank" rel="noopener noreferrer" class="btn-review px-4 py-2.5 md:px-5 md:py-3 rounded-xl shadow-lg transition flex items-center gap-2 text-xs md:text-sm font-semibold group animate-float" style="animation-delay: 0.5s;">
-<i class="fa-solid fa-star text-lg"></i>
-<span class="floating-btn-label">Deja tu Reseña</span>
-</a>
-<a href="https://www.instagram.com/romero_taller/" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-[#f09433] via-[#dc2743] to-[#bc1888] hover:from-[#d6822a] hover:via-[#c4223d] hover:to-[#a8167a] text-white p-3.5 md:p-4 rounded-full shadow-lg transition-all hover:scale-110 flex items-center justify-center gap-2 group animate-float btn-instagram-pulse" style="animation-delay: 1s;" title="Síguenos en Instagram">
-<i class="fa-brands fa-instagram text-2xl md:text-3xl"></i>
-<span class="floating-btn-label">Instagram</span>
-</a>
-</div>
-
-<!-- HERO SECTION - PADDING AJUSTADO PARA SEPARAR LOGO DEL BANNER (SIN REDUCIR TAMAÑO DEL LOGO) -->
-<header class="relative pt-48 md:pt-56 lg:pt-60 pb-20 md:pt-60 md:pb-32 lg:pt-64 lg:pb-40 min-h-screen flex items-center overflow-hidden">
-<div class="absolute inset-0 bg-gradient-to-br from-primary-dark via-[#0D0D0D] to-[#0A0A0A]">
-<div class="absolute inset-0 opacity-40" style="background-image: radial-gradient(circle at 20% 35%, rgba(255,107,53, 0.2) 0%, transparent 40%), radial-gradient(circle at 80% 70%, rgba(247,147,30, 0.15) 0%, transparent 45%)"></div>
-</div>
-<div id="parallax-container" class="absolute inset-0 overflow-hidden">
-<img id="parallax-img" src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1974&auto=format&fit=crop" alt="Taller mecánico profesional" class="parallax-image w-full h-full object-cover opacity-70 parallax-bg">
-<div class="absolute inset-0 bg-gradient-to-t from-primary-dark via-primary-dark/70 to-transparent"></div>
-</div>
-<div class="container mx-auto px-4 md:px-6 relative z-10">
-<div class="max-w-4xl mx-auto text-center space-y-6 md:space-y-8">
-<div class="fade-in-up badge-animated" style="animation-delay: 0.1s;">
-<div class="inline-flex items-center gap-2 bg-primary-orange/20 border border-primary-orange/40 text-primary-orange px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider backdrop-blur-sm shadow-lg">
-<i class="fa-solid fa-microchip"></i> <span>Diagnóstico de Precisión</span>
-</div>
-</div>
-<h1 class="font-display font-black text-4xl md:text-5xl lg:text-7xl leading-tight glow-text main-title fade-in-up" style="animation-delay: 0.2s;">
-ROMERO MECÁNICA<br><span class="gradient-text">INTEGRAL</span>
-</h1>
-<!-- LOGO CIRCULAR INFERIOR -->
-<div class="hero-logo-wrapper fade-in-up" style="animation-delay: 0.25s;">
-<div class="hero-logo-inner">
-<img src="LOGOROMERO.png" alt="Romero Mecánica Integral Logo" class="hero-logo" id="heroLogo">
-<div class="shine-effect"></div>
-<!-- EFECTO FUEGO -->
-<div class="fire-ring" id="fireRing">
-<div class="glow-pulse"></div>
-<div class="flame"></div>
-<div class="spark" style="--spark-x: -20;"></div>
-<div class="spark" style="--spark-x: 15;"></div>
-<div class="spark" style="--spark-x: -10;"></div>
-<div class="spark" style="--spark-x: 25;"></div>
-<div class="spark" style="--spark-x: 5;"></div>
-<div class="spark" style="--spark-x: -30;"></div>
-<div class="spark" style="--spark-x: 20;"></div>
-<div class="spark" style="--spark-x: -5;"></div>
-</div>
-</div>
-</div>
-<p class="text-gray-300/90 text-base md:text-lg max-w-3xl mx-auto description-text fade-in-up leading-relaxed" style="animation-delay: 0.3s;">
-En Romero Mecánica Integral, entendemos que tu auto es una inversión importante y tu seguridad es primordial. Somos un taller de reparación de automóviles con años de experiencia en Paysandú, Uruguay, dedicados a brindarte un servicio de calidad, confiable y transparente. Nos especializamos en mantener tu vehículo en óptimas condiciones para que disfrutes de cada viaje con total tranquilidad.
-</p>
-<div class="grid grid-cols-3 gap-3 md:gap-5 pt-2 md:pt-4 fade-in-up" style="animation-delay: 0.5s;">
-<div class="text-center p-4 rounded-2xl bg-white/5 border border-white/10 transition">
-<span class="block text-2xl md:text-3xl font-bold gradient-text"><span id="counter1" data-target="99">0</span>%</span>
-<span class="text-xs text-gray-400 mt-1 block">Precisión</span>
-</div>
-<div class="text-center p-4 rounded-2xl bg-white/5 border border-white/10 transition">
-<span class="block text-2xl md:text-3xl font-bold gradient-text"><span id="counter2" data-target="50">0</span>min</span>
-<span class="text-xs text-gray-400 mt-1 block">Ahorro</span>
-</div>
-<div class="text-center p-4 rounded-2xl bg-white/5 border border-white/10 transition">
-<span class="block text-2xl md:text-3xl font-bold gradient-text"><span id="counter3" data-target="8000">0</span>+</span>
-<span class="text-xs text-gray-400 mt-1 block">Vehículos</span>
-</div>
-</div>
-<div class="flex flex-col sm:flex-row gap-3.5 pt-2 justify-center fade-in-up" style="animation-delay: 0.6s;">
-<a href="#diagnostico" class="btn-primary px-6 py-3.5 rounded-xl uppercase tracking-wide flex items-center justify-center gap-2.5 group text-sm font-semibold shadow-neon">
-<span>Iniciar Diagnóstico</span> <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
-</a>
-<a href="#asesoramiento" class="btn-outline px-6 py-3.5 rounded-xl uppercase tracking-wide flex items-center justify-center gap-2 text-sm font-semibold">
-<i class="fa-solid fa-book-open text-primary-orange"></i> <span>Guías Técnicas</span>
-</a>
-</div>
-</div>
-</div>
-</header>
-
-<!-- SECCIÓN: CENTRO DE ASESORAMIENTO -->
-<section id="asesoramiento" class="py-16 md:py-24 bg-[#0D0D0D] relative">
-<div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(255,107,53,0.1),_transparent_60%)]"></div>
-<div class="container mx-auto px-4 relative z-10">
-<div class="text-center mb-14 md:mb-20 max-w-3xl mx-auto">
-<div class="inline-block bg-primary-orange/15 border border-primary-orange/30 text-primary-orange px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-5">
-<i class="fa-solid fa-lightbulb mr-1.5"></i> <span>Conocimiento Técnico</span>
-</div>
-<h2 class="font-display font-bold text-4xl md:text-5xl gradient-text uppercase mb-5 glow-text tracking-tight">Centro de Asesoramiento</h2>
-<p class="text-gray-400/90 max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
-Detecta fallas en etapas tempranas y evita reparaciones costosas. Aprende a identificar las señales clave de tu vehículo.
-</p>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-7">
-<div class="glass-card">
-<div class="relative h-44 md:h-48 overflow-hidden rounded-t-2xl">
-<img src="https://placehold.co/600x400/FF6B35/0A0A0A?text=FRENOS" alt="Sistema de frenos" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
-<div class="absolute inset-0 bg-gradient-to-t from-primary-dark/90 to-transparent"></div>
-<div class="absolute bottom-3 left-4">
-<span class="text-xs font-bold text-primary-orange uppercase tracking-wider">Predictivo</span>
-</div>
-</div>
-<div class="p-5 md:p-6">
-<h3 class="font-bold text-lg md:text-xl text-white mb-2.5">Señales en Frenos</h3>
-<p class="text-gray-400/90 text-sm mb-4 leading-relaxed">Chillidos, vibración en pedal o recorrido excesivo: indicadores de desgaste en pastillas o aire en el circuito.</p>
-<a href="#diagnostico" class="text-primary-orange hover:text-orange-300 font-semibold text-sm flex items-center gap-1.5 group">
-<span>Analizar ahora</span>
-<i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
-</a>
-</div>
-</div>
-<div class="glass-card">
-<div class="relative h-44 md:h-48 overflow-hidden rounded-t-2xl">
-<img src="https://placehold.co/600x400/2D2D2D/FF6B35?text=BATERIA" alt="Sistema eléctrico" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
-<div class="absolute inset-0 bg-gradient-to-t from-primary-dark/90 to-transparent"></div>
-<div class="absolute bottom-3 left-4">
-<span class="text-xs font-bold text-primary-orange uppercase tracking-wider">Preventivo</span>
-</div>
-</div>
-<div class="p-5 md:p-6">
-<h3 class="font-bold text-lg md:text-xl text-white mb-2.5">Batería y Alternador</h3>
-<p class="text-gray-400/90 text-sm mb-4 leading-relaxed">Arranque lento, luces tenues o parpadeantes: verifica voltaje y estado de carga antes de una falla total.</p>
-<a href="#diagnostico" class="text-primary-orange hover:text-orange-300 font-semibold text-sm flex items-center gap-1.5 group">
-<span>Verificar sistema</span>
-<i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
-</a>
-</div>
-</div>
-<div class="glass-card">
-<div class="relative h-44 md:h-48 overflow-hidden rounded-t-2xl">
-<img src="https://placehold.co/600x400/F7931E/0A0A0A?text=FLUIDOS" alt="Fluidos críticos" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
-<div class="absolute inset-0 bg-gradient-to-t from-primary-dark/90 to-transparent"></div>
-<div class="absolute bottom-3 left-4">
-<span class="text-xs font-bold text-primary-orange uppercase tracking-wider">Mantenimiento</span>
-</div>
-</div>
-<div class="p-5 md:p-6">
-<h3 class="font-bold text-lg md:text-xl text-white mb-2.5">Fluidos Críticos</h3>
-<p class="text-gray-400/90 text-sm mb-4 leading-relaxed">Aceite, refrigerante y líquido de frenos: niveles bajos o cambios de color indican urgencia de revisión.</p>
-<a href="#diagnostico" class="text-primary-orange hover:text-orange-300 font-semibold text-sm flex items-center gap-1.5 group">
-<span>Revisar niveles</span>
-<i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
-</a>
-</div>
-</div>
-</div>
-<div class="text-center mt-10 md:mt-14">
-<a href="#diagnostico" class="inline-flex items-center gap-2.5 bg-white/5 hover:bg-white/10 border border-white/15 hover:border-primary-orange/40 text-white font-bold py-3.5 px-7 md:px-9 rounded-2xl transition-all uppercase tracking-wide text-sm shadow-soft hover:shadow-neon">
-<i class="fa-solid fa-hand-pointer text-primary-orange"></i> <span>Iniciar Pre-Diagnóstico Ahora</span>
-</a>
-</div>
-</div>
-</section>
-
-<!-- SECCIÓN: SERVICIOS INTEGRALES -->
-<section class="py-16 md:py-24 bg-primary-dark relative">
-<div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 10% 20%, rgba(255,107,53, 0.08) 0%, transparent 25%), radial-gradient(circle at 90% 80%, rgba(247,147,30, 0.08) 0%, transparent 25%)"></div>
-<div class="container mx-auto px-4 relative z-10">
-<div class="text-center mb-14 md:mb-20">
-<div class="inline-block bg-primary-orange/15 border border-primary-orange/30 text-primary-orange px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-5">
-<i class="fa-solid fa-screwdriver-wrench mr-1.5"></i> <span>Soluciones Profesionales</span>
-</div>
-<h2 class="font-display font-bold text-4xl md:text-5xl text-white uppercase mb-4 glow-text tracking-tight"><span>Servicios</span><span class="gradient-text">Integrales</span></h2>
-<p class="text-gray-400/90 max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
-Tecnología avanzada y expertise técnico para mantener tu vehículo en condiciones óptimas de seguridad y rendimiento.
-</p>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
-<div class="glass-card p-6 md:p-7 group">
-<div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-orange/20 to-primary-orange/20 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
-<i class="fa-solid fa-laptop-code text-2xl md:text-3xl text-primary-orange"></i>
-</div>
-<h3 class="font-bold text-xl text-white mb-2.5">Diagnóstico Computarizado</h3>
-<p class="text-gray-400/90 text-sm leading-relaxed">Escaneo avanzado de ECU, sensores y sistemas electrónicos con equipos de última generación.</p>
-</div>
-<div class="glass-card p-6 md:p-7 group">
-<div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-orange/20 to-primary-orange/20 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
-<i class="fa-solid fa-circle-stop text-2xl md:text-3xl text-primary-orange"></i>
-</div>
-<h3 class="font-bold text-xl text-white mb-2.5">Sistema de Frenos</h3>
-<p class="text-gray-400/90 text-sm leading-relaxed">Revisión integral de ABS, pastillas, discos y líquido de frenos para máxima seguridad.</p>
-</div>
-<div class="glass-card p-6 md:p-7 group">
-<div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-orange/20 to-primary-orange/20 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
-<i class="fa-solid fa-car-burst text-2xl md:text-3xl text-primary-orange"></i>
-</div>
-<h3 class="font-bold text-xl text-white mb-2.5">Suspensión y Dirección</h3>
-<p class="text-gray-400/90 text-sm leading-relaxed">Amortiguadores, rótulas, alineación y balanceo para confort y estabilidad en ruta.</p>
-</div>
-<div class="glass-card p-6 md:p-7 group">
-<div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-orange/20 to-primary-orange/20 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
-<i class="fa-solid fa-bolt text-2xl md:text-3xl text-primary-orange"></i>
-</div>
-<h3 class="font-bold text-xl text-white mb-2.5">Electricidad Automotriz</h3>
-<p class="text-gray-400/90 text-sm leading-relaxed">Diagnóstico de fallas eléctricas, baterías, alternadores y sistemas de iluminación.</p>
-</div>
-<div class="glass-card p-6 md:p-7 group">
-<div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-orange/20 to-primary-orange/20 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
-<i class="fa-solid fa-wrench text-2xl md:text-3xl text-primary-orange"></i>
-</div>
-<h3 class="font-bold text-xl text-white mb-2.5">Mecánica Integral</h3>
-<p class="text-gray-400/90 text-sm leading-relaxed">Reparaciones completas de motor, transmisión y sistemas mecánicos con garantía de calidad.</p>
-</div>
-<!-- TARJETA: CAJA DE CAMBIO -->
-<div class="glass-card p-6 md:p-7 group">
-<div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-orange/20 to-primary-orange/20 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
-<i class="fa-solid fa-gears text-2xl md:text-3xl text-primary-orange"></i>
-</div>
-<h3 class="font-bold text-xl text-white mb-2.5">Caja de Cambio</h3>
-<p class="text-gray-400/90 text-sm leading-relaxed">Reparación y mantenimiento de cajas manuales y automáticas. Diagnóstico de embrague y transmisión.</p>
-</div>
-</div>
-</div>
-</section>
-
-<!-- SECCIÓN: TESTIMONIOS -->
-<section class="py-16 md:py-24 bg-[#0D0D0D] border-t border-white/5">
-<div class="container mx-auto px-4">
-<div class="text-center mb-10 md:mb-14">
-<div class="inline-block bg-primary-orange/15 border border-primary-orange/30 text-primary-orange px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-5">
-<i class="fa-solid fa-comments mr-1.5"></i> <span>Experiencias Reales</span>
-</div>
-<h2 class="font-display font-bold text-4xl md:text-5xl text-white uppercase glow-text tracking-tight">La Voz de Nuestros Clientes</h2>
-<p class="text-gray-400/90 max-w-2xl mx-auto mt-4 text-base md:text-lg leading-relaxed">
-Confianza construida sobre resultados verificables y atención profesional en Paysandú, Uruguay.
-</p>
-</div>
-<div class="testimonial-carousel flex gap-5 md:gap-6 overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide mx-2 px-2">
-<div class="testimonial-card glass-card p-6 md:p-7 rounded-2xl border-t-4 border-primary-orange transition flex-shrink-0 w-[85%] md:w-1/3 snap-center">
-<div class="flex justify-between items-start mb-4">
-<div class="flex text-yellow-400 text-lg">
-<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-</div>
-<i class="fa-solid fa-quote-right text-3xl text-gray-700/70"></i>
-</div>
-<p class="text-gray-300/95 italic mb-5 leading-relaxed text-sm">"Excelente servicio en Romero Mecánica Integral. Diagnóstico preciso y rápido. Me explicaron todo con claridad y profesionalismo. Totalmente recomendado."</p>
-<div class="flex items-center pt-3 border-t border-white/10">
-<div class="w-11 h-11 rounded-full bg-gradient-to-br from-primary-orange to-orange-700 flex items-center justify-center text-white font-bold mr-3.5 flex-shrink-0">MP</div>
-<div>
-<p class="font-bold text-white text-sm">Martín P.</p>
-<p class="text-xs text-gray-500">Paysandú - Chevrolet Tracker 2023</p>
-</div>
-</div>
-</div>
-<div class="testimonial-card glass-card p-6 md:p-7 rounded-2xl border-t-4 border-primary-orange transition flex-shrink-0 w-[85%] md:w-1/3 snap-center">
-<div class="flex justify-between items-start mb-4">
-<div class="flex text-yellow-400 text-lg">
-<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
-</div>
-<i class="fa-solid fa-quote-right text-3xl text-gray-700/70"></i>
-</div>
-<p class="text-gray-300/95 italic mb-5 leading-relaxed text-sm">"El mejor taller de Paysandú. Proceso transparente y rápido. El pre-diagnóstico online me ahorró tiempo y dinero. Volveré sin dudas a Romero Mecánica Integral."</p>
-<div class="flex items-center pt-3 border-t border-white/10">
-<div class="w-11 h-11 rounded-full bg-gradient-to-br from-primary-orange to-orange-700 flex items-center justify-center text-white font-bold mr-3.5 flex-shrink-0">AR</div>
-<div>
-<p class="font-bold text-white text-sm">Alejandra R.</p>
-<p class="text-xs text-gray-500">Paysandú - Renault Fluence</p>
-</div>
-</div>
-</div>
-<div class="testimonial-card glass-card p-6 md:p-7 rounded-2xl border-t-4 border-primary-orange transition flex-shrink-0 w-[85%] md:w-1/3 snap-center">
-<div class="flex justify-between items-start mb-4">
-<div class="flex text-yellow-400 text-lg">
-<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-</div>
-<i class="fa-solid fa-quote-right text-3xl text-gray-700/70"></i>
-</div>
-<p class="text-gray-300/95 italic mb-5 leading-relaxed text-sm">"Llevo mi flota de utilitarios a Romero Mecánica Integral. Reportes detallados, atención personalizada y precios justos. Un taller de confianza."</p>
-<div class="flex items-center pt-3 border-t border-white/10">
-<div class="w-11 h-11 rounded-full bg-gradient-to-br from-primary-orange to-orange-700 flex items-center justify-center text-white font-bold mr-3.5 flex-shrink-0">EC</div>
-<div>
-<p class="font-bold text-white text-sm">Esteban C.</p>
-<p class="text-xs text-gray-500">Paysandú - Flota Utilitarios</p>
-</div>
-</div>
-</div>
-</div>
-<p class="text-center text-gray-500 mt-5 text-sm flex items-center justify-center gap-1.5">
-<i class="fa-solid fa-arrow-right text-primary-orange"></i> <span>Desliza para más opiniones</span>
-</p>
-</div>
-</section>
-
-<!-- SECCIÓN: FORMULARIO DE DIAGNÓSTICO - COMPLETAMENTE FUNCIONAL -->
-<section id="diagnostico" class="py-16 md:py-24 bg-gradient-to-b from-primary-dark to-[#080808] relative overflow-hidden">
-<div class="absolute inset-0 bg-[radial-gradient(circle_at_60%_40%,rgba(255,107,53,0.1),transparent_55%)]"></div>
-<div class="container mx-auto px-4 relative z-10">
-<div class="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
-<!-- Columna informativa -->
-<div class="lg:w-1/3 space-y-6">
-<h2 class="font-display font-bold text-4xl md:text-5xl text-white mb-2 glow-text tracking-tight">
-ACELERADOR DE<br><span class="gradient-text">DIAGNÓSTICO</span>
-</h2>
-<p class="text-gray-400/90 mb-6 text-base leading-relaxed">
-Completa el formulario y nuestros técnicos prepararán el análisis previo antes de tu llegada. Optimizamos tu tiempo y recursos.
-</p>
-<div class="space-y-5 pt-2">
-<div class="flex items-start gap-4">
-<div class="bg-gradient-to-br from-primary-orange/20 to-primary-orange/20 p-3.5 rounded-xl text-primary-orange flex-shrink-0">
-<i class="fa-solid fa-stopwatch text-xl"></i>
-</div>
-<div>
-<h4 class="font-bold text-white text-base mb-1">Ahorro de Tiempo</h4>
-<p class="text-gray-400/90 text-sm">Evita esperas innecesarias. Tu caso ya estará en análisis al llegar.</p>
-</div>
-</div>
-<div class="flex items-start gap-4">
-<div class="bg-gradient-to-br from-primary-orange/20 to-primary-orange/20 p-3.5 rounded-xl text-primary-orange flex-shrink-0">
-<i class="fa-solid fa-file-waveform text-xl"></i>
-</div>
-<div>
-<h4 class="font-bold text-white text-base mb-1">Análisis Previo</h4>
-<p class="text-gray-400/90 text-sm">Preparamos herramientas y repuestos específicos para tu caso.</p>
-</div>
-</div>
-<div class="flex items-start gap-4">
-<div class="bg-gradient-to-br from-primary-orange/20 to-primary-orange/20 p-3.5 rounded-xl text-primary-orange flex-shrink-0">
-<i class="fa-solid fa-shield-halved text-xl"></i>
-</div>
-<div>
-<h4 class="font-bold text-white text-base mb-1">Transparencia Total</h4>
-<p class="text-gray-400/90 text-sm">Recibirás un informe detallado con opciones de reparación y costos.</p>
-</div>
-</div>
-</div>
-<div class="glass-card p-4 rounded-xl mt-4 flex items-center gap-3">
-<div class="w-10 h-10 rounded-full bg-orange-500/20 flex items-center justify-center flex-shrink-0">
-<i class="fa-solid fa-check text-orange-400"></i>
-</div>
-<div>
-<p class="text-sm font-semibold text-white">Datos 100% seguros</p>
-<p class="text-xs text-gray-500">Tu información está protegida</p>
-</div>
-</div>
-</div>
-<!-- Formulario FUNCIONAL -->
-<div class="lg:w-2/3 glass-card rounded-3xl shadow-card p-6 md:p-8 w-full">
-<form id="triageForm" novalidate>
-<!-- Sección 1: Vehículo -->
-<div class="border-b border-white/10 pb-6 mb-6">
-<h3 class="text-lg font-bold text-white mb-6 flex items-center gap-3">
-<span class="bg-gradient-to-r from-primary-orange to-orange-700 text-white w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">1</span>
-<span>Datos del Vehículo</span>
-</h3>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-<!-- Tipo de Vehículo -->
-<div class="form-field select-wrapper">
-<label for="inputVehicleType" class="field-label">Tipo de Vehículo</label>
-<select id="inputVehicleType" class="field-input">
-<option value="" disabled selected>Seleccionar tipo...</option>
-<option value="Auto">🚗 Auto</option>
-<option value="Moto">🏍️ Moto</option>
-<option value="Cuatriciclo">🏎️ Cuatriciclo</option>
-</select>
-</div>
-<!-- Marca y Modelo -->
-<div class="form-field">
-<label for="inputVehicle" class="field-label">Marca y Modelo</label>
-<input type="text" id="inputVehicle" class="field-input" placeholder="Ej: Toyota Corolla 2020" autocomplete="off">
-</div>
-<!-- Kilometraje -->
-<div class="form-field">
-<label for="inputKm" class="field-label">Kilometraje</label>
-<input type="number" id="inputKm" class="field-input" placeholder="Ej: 85000" autocomplete="off">
-</div>
-</div>
-<!-- Combustible -->
-<div class="grid grid-cols-1 md:grid-cols-3 gap-5 mt-5">
-<div class="form-field select-wrapper">
-<label for="inputFuelType" class="field-label">Combustible</label>
-<select id="inputFuelType" class="field-input">
-<option value="" disabled selected>Seleccionar...</option>
-<option value="Naftero">⛽ Nafta / Gasolina</option>
-<option value="Diesel">🛢️ Diesel</option>
-<option value="Híbrido">🔋 Híbrido</option>
-<option value="Eléctrico">⚡ Eléctrico</option>
-</select>
-</div>
-</div>
-</div>
-<!-- Sección 2: Síntomas -->
-<div class="border-b border-white/10 pb-6 mb-6">
-<h3 class="text-lg font-bold text-white mb-6 flex items-center gap-3">
-<span class="bg-gradient-to-r from-primary-orange to-orange-700 text-white w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">2</span>
-<span>Descripción de Fallas</span>
-</h3>
-<!-- Síntomas -->
-<div class="form-field mb-5">
-<label for="inputSymptoms" class="field-label">Síntomas</label>
-<textarea id="inputSymptoms" class="field-input" rows="4" placeholder="Describe ruidos, olores, vibraciones, luces de alerta..."></textarea>
-</div>
-<!-- Contexto de la falla -->
-<div class="form-field select-wrapper">
-<label for="inputContext" class="field-label">Contexto de la falla</label>
-<select id="inputContext" class="field-input">
-<option value="" disabled selected>Seleccionar contexto...</option>
-<optgroup label="🔋 ARRANQUE Y ENERGÍA" class="font-bold">
-<option value="no_arranca_gira">Gira pero no arranca</option>
-<option value="no_arranca_nada">No da contacto</option>
-<option value="arranca_lento">Arranque lento o difícil</option>
-</optgroup>
-<optgroup label="⚙️ RENDIMIENTO" class="font-bold">
-<option value="falla_ralenti">Inestabilidad en ralentí</option>
-<option value="pierde_potencia">Pérdida de potencia</option>
-<option value="consumo_excesivo">Consumo excesivo de combustible</option>
-<option value="humo_escape">Humo en escape (color)</option>
-</optgroup>
-<optgroup label="🔊 RUIDOS Y VIBRACIONES" class="font-bold">
-<option value="ruido_frenar">Ruido al frenar</option>
-<option value="ruido_direccion">Ruido al girar dirección</option>
-<option value="vibracion_alta">Vibración en alta velocidad</option>
-<option value="ruido_motor">Ruido anormal en motor</option>
-</optgroup>
-<optgroup label="🌡️ TEMPERATURA Y FLUIDOS" class="font-bold">
-<option value="levanta_temp">Se calienta el motor</option>
-<option value="perdida_fluido">Pérdida de fluido visible</option>
-</optgroup>
-<option value="falla_frio">Solo falla en frío</option>
-<option value="falla_caliente">Solo falla en caliente</option>
-<option value="falla_intermitente">Falla intermitente</option>
-</select>
-</div>
-</div>
-<!-- Sección 3: Servicio Integral -->
-<div class="border-b border-white/10 pb-6 mb-6">
-<h3 class="text-lg font-bold text-white mb-6 flex items-center gap-3">
-<span class="bg-gradient-to-r from-primary-orange to-orange-700 text-white w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">3</span>
-<span>Servicio Integral</span>
-</h3>
-<div class="form-field select-wrapper">
-<label for="inputService" class="field-label">Servicio Requerido</label>
-<select id="inputService" class="field-input">
-<option value="" disabled selected>Selecciona un servicio...</option>
-<option value="diagnostico">🔍 Diagnóstico Computarizado</option>
-<option value="frenos">🛑 Sistema de Frenos</option>
-<option value="suspension">🔩 Suspensión</option>
-<option value="direccion">🔄 Dirección</option>
-<option value="electricidad">⚡ Electricidad Automotriz</option>
-<option value="mecanica_integral">🛠️ Mecánica Integral</option>
-<option value="caja_cambio">⚙️ Caja de Cambio</option>
-</select>
-</div>
-</div>
-<!-- Sección 4: Contacto -->
-<div class="mb-6">
-<h3 class="text-lg font-bold text-white mb-6 flex items-center gap-3">
-<span class="bg-gradient-to-r from-primary-orange to-orange-700 text-white w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">4</span>
-<span>Datos de Contacto</span>
-</h3>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-<div class="form-field">
-<label for="inputName" class="field-label">Nombre</label>
-<input type="text" id="inputName" class="field-input" placeholder="Tu nombre completo" autocomplete="name">
-</div>
-<div class="form-field">
-<label for="inputPhone" class="field-label">WhatsApp</label>
-<input type="tel" id="inputPhone" class="field-input" placeholder="Tu número de WhatsApp" autocomplete="tel">
-</div>
-</div>
-<p class="text-xs text-gray-500 mt-4 flex items-center gap-1.5">
-<i class="fa-solid fa-lock text-primary-orange"></i> <span>Tus datos se usarán únicamente para coordinar tu turno</span>
-</p>
-</div>
-<!-- Botón de envío -->
-<button type="submit" id="submitBtn" class="btn-primary w-full font-bold uppercase text-base py-5 rounded-2xl hover:shadow-neon transition flex items-center justify-center gap-3">
-<i class="fa-brands fa-whatsapp text-2xl"></i> <span>Enviar Solicitud a ROMERO MECÁNICA INTEGRAL</span>
+<main class="relative pt-24 px-10 min-h-screen flex flex-col items-center">
+<!-- Central Radial Core -->
+<section class="mt-8 mb-16 radial-gauge-container">
+<div class="containment-field"></div>
+<!-- Health Ring / KPI Container -->
+<svg class="absolute w-[460px] height-[460px]" viewBox="0 0 100 100">
+<circle cx="50" cy="50" fill="transparent" r="48" stroke="rgba(255,255,255,0.05)" stroke-width="1.5"></circle>
+<circle class="health-ring" cx="50" cy="50" fill="transparent" id="main-health-ring" r="48" stroke="#00D1FF" stroke-dasharray="301.6" stroke-dashoffset="39" stroke-linecap="round" stroke-width="2.5"></circle>
+</svg>
+<!-- Engine Viewport -->
+<div class="glass-panel w-[340px] h-[340px] rounded-full flex items-center justify-center relative overflow-hidden energy-border">
+<div id="engine-canvas-container"><canvas data-engine="three.js r160" width="432" height="432" style="display: block; width: 320px; height: 320px;"></canvas></div>
+<div class="absolute inset-0 bg-gradient-to-t from-electric-cyan/10 to-transparent pointer-events-none"></div>
+<div class="absolute bottom-10 z-20 text-center">
+<span class="font-label-caps text-[10px] text-electric-cyan block opacity-60">CORE_SYNC</span>
+<span class="font-data-display text-4xl text-white" id="health-pct">87%</span>
+</div>
+</div>
+<!-- Floating Data Orbitals -->
+<div class="absolute -top-12 left-1/2 -translate-x-1/2 glass-panel px-6 py-2 rounded-full border-t-2 border-electric-cyan">
+<span class="font-label-caps text-[10px] text-outline mr-3">SYSTEM_STATUS:</span>
+<span class="font-label-caps text-electric-cyan animate-pulse">OPTIMIZED</span>
+</div>
+<!-- Lateral Tactile Controls (Circular Dials) -->
+<div class="absolute -left-48 top-1/2 -translate-y-1/2 flex flex-col gap-12">
+<div class="tactile-knob-container">
+<div class="dial" id="dial-km" style="transform: rotate(45deg);">
+<div class="dial-knob"></div>
+</div>
+<div class="text-center">
+<p class="font-label-caps text-[9px] text-outline">MILEAGE_PROJ</p>
+<p class="font-data-display text-electric-cyan text-sm">+<span id="val-km" class="">50,000</span>km</p>
+</div>
+</div>
+<div class="tactile-knob-container">
+<div class="dial" id="dial-temp" style="transform: rotate(120deg);">
+<div class="dial-knob"></div>
+</div>
+<div class="text-center">
+<p class="font-label-caps text-[9px] text-outline">TEMP_PEAK</p>
+<p class="font-data-display text-electric-cyan text-sm"><span id="val-temp" class="">105</span>°C</p>
+</div>
+</div>
+</div>
+<div class="absolute -right-48 top-1/2 -translate-y-1/2 flex flex-col gap-12">
+<div class="tactile-knob-container">
+<div class="dial" id="dial-oil" style="transform: rotate(-30deg);">
+<div class="dial-knob"></div>
+</div>
+<div class="text-center">
+<p class="font-label-caps text-[9px] text-outline">OIL_PRESSURE</p>
+<p class="font-data-display text-electric-cyan text-sm">4.2 BAR</p>
+</div>
+</div>
+<div class="tactile-knob-container">
+<button class="w-20 h-20 rounded-full bg-alert-crimson/10 border-2 border-alert-crimson/40 flex items-center justify-center group hover:bg-alert-crimson/20 transition-all">
+<span class="material-symbols-outlined text-alert-crimson text-3xl group-active:scale-90" data-icon="rocket_launch">rocket_launch</span>
 </button>
-<p class="text-center text-xs text-gray-500 pt-3">
-<span>Al enviar, aceptas nuestros</span> <a href="#" class="text-primary-orange hover:underline">términos de servicio</a>
-</p>
-</form>
+<div class="text-center">
+<p class="font-label-caps text-[9px] text-outline">ENGAGE_SIM</p>
 </div>
 </div>
 </div>
 </section>
-
-<!-- SECCIÓN: UBICACIÓN Y CONFIANZA -->
-<section class="py-14 md:py-20 bg-[#0D0D0D] border-t border-white/5">
-<div class="container mx-auto px-4 text-center">
-<div class="flex flex-wrap justify-center gap-8 md:gap-12 opacity-70 grayscale hover:grayscale-0 transition-all duration-500 mb-12 md:mb-16">
-<i class="fa-brands fa-toyota text-4xl md:text-5xl hover:text-white transition-colors"></i>
-<i class="fa-solid fa-car text-4xl md:text-5xl hover:text-white transition-colors"></i>
-<i class="fa-brands fa-honda text-4xl md:text-5xl hover:text-white transition-colors"></i>
-<i class="fa-brands fa-ford text-4xl md:text-5xl hover:text-white transition-colors"></i>
-<i class="fa-brands fa-volkswagen text-4xl md:text-5xl hover:text-white transition-colors"></i>
-<i class="fa-solid fa-truck-pickup text-4xl md:text-5xl hover:text-white transition-colors"></i>
+<!-- UI Grid -->
+<div class="w-full max-w-7xl grid grid-cols-12 gap-6 mb-20">
+<!-- Telemetry Cards -->
+<div class="col-span-12 lg:col-span-4 space-y-6">
+<div class="glass-panel p-6 rounded-xl energy-border">
+<div class="flex justify-between items-start mb-4">
+<h3 class="font-label-caps text-xs text-outline tracking-widest">REALTIME_TELEMETRY</h3>
+<span class="w-2 h-2 rounded-full bg-electric-cyan animate-ping"></span>
 </div>
-<div class="glass-card rounded-3xl p-6 md:p-10 max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8">
-<div class="text-left max-w-md">
-<h3 class="font-display font-bold text-2xl md:text-3xl text-white mb-2">¿Dónde estamos?</h3>
-<p class="text-gray-400/90 mb-4 text-base">Visítanos para validación final y reparaciones especializadas.</p>
-<div class="flex items-start gap-3 text-gray-300/90 text-sm mb-2">
-<i class="fa-regular fa-location-dot text-primary-orange text-xl mt-0.5 flex-shrink-0"></i>
+<div class="space-y-4">
+<div class="flex justify-between items-end border-b border-white/5 pb-2">
+<span class="text-xs text-on-background">OIL_TEMP</span>
+<span class="font-data-display text-xl text-safety-amber">92°C</span>
+</div>
+<div class="flex justify-between items-end border-b border-white/5 pb-2">
+<span class="text-xs text-on-background">VIBRATION</span>
+<span class="font-data-display text-xl text-electric-cyan">1.8mm/s</span>
+</div>
+<div class="flex justify-between items-end border-b border-white/5 pb-2">
+<span class="text-xs text-on-background">LOAD_FACTOR</span>
+<span class="font-data-display text-xl text-white">64%</span>
+</div>
+</div>
+</div>
+<div class="glass-panel p-6 rounded-xl energy-border bg-alert-crimson/5 border-alert-crimson/20">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-alert-crimson" data-icon="report_problem">report_problem</span>
+<h3 class="font-label-caps text-xs text-alert-crimson tracking-widest">CRITICAL_VECTORS</h3>
+</div>
+<div class="p-3 bg-black/40 rounded border border-alert-crimson/20">
+<div class="flex justify-between items-center mb-1">
+<span class="text-[10px] text-white">FAILURE_PROBABILITY</span>
+<span class="text-alert-crimson font-bold text-xs">34%</span>
+</div>
+<div class="w-full bg-white/5 h-1">
+<div class="bg-alert-crimson h-full" style="width: 34%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Central Visualization -->
+<div class="col-span-12 lg:col-span-8 glass-panel rounded-xl p-8 energy-border">
+<div class="flex justify-between items-center mb-8">
 <div>
-<p class="font-medium">Dirección:</p>
-<p>AV. SORIANO 2127 ENTRE DE 4 Y 5, PAYSANDÚ</p>
+<h2 class="font-headline-md text-xl font-bold text-white italic">PREDICTIVE_DEGRADATION_LOG</h2>
+<p class="font-label-caps text-[10px] text-outline mt-1">SINTETIC_DATA_PROJECTION // RNN_MODEL_V4</p>
+</div>
+<div class="flex gap-2">
+<button class="px-4 py-1 text-[10px] font-bold font-label-caps bg-electric-cyan/20 border border-electric-cyan text-electric-cyan">LINEAR</button>
+<button class="px-4 py-1 text-[10px] font-bold font-label-caps text-outline hover:text-white">LOGARITHMIC</button>
 </div>
 </div>
-<div class="flex items-start gap-3 text-gray-300/90 text-sm mb-2">
-<i class="fa-brands fa-whatsapp text-primary-orange text-xl mt-0.5 flex-shrink-0"></i>
+<div class="h-64 relative flex items-end gap-3 px-4">
+<div class="flex-1 bg-electric-cyan/10 border-t border-electric-cyan/40 h-[20%] relative group">
+<div class="absolute inset-0 bg-electric-cyan/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</div>
+<div class="flex-1 bg-electric-cyan/15 border-t border-electric-cyan/50 h-[30%]"></div>
+<div class="flex-1 bg-electric-cyan/20 border-t border-electric-cyan/60 h-[25%]"></div>
+<div class="flex-1 bg-electric-cyan/25 border-t border-electric-cyan/70 h-[45%]"></div>
+<div class="flex-1 bg-electric-cyan/30 border-t border-electric-cyan/80 h-[55%] animate-pulse"></div>
+<div class="flex-1 bg-safety-amber/20 border-t border-safety-amber/40 h-[70%] border-dashed"></div>
+<div class="flex-1 bg-alert-crimson/20 border-t border-alert-crimson/40 h-[85%] border-dashed"></div>
+</div>
+<div class="flex justify-between mt-4 font-label-caps text-[9px] text-outline px-4">
+<span class="">ENTRY_POINT</span>
+<span class="">+50K_KM</span>
+<span class="">+100K_KM</span>
+<span class="">CRITICAL_LIMIT</span>
+</div>
+</div>
+<!-- AI Agent Recommendations -->
+<div class="col-span-12 glass-panel rounded-xl p-8 bg-gradient-to-r from-interface-navy/80 to-transparent border-l-4 border-l-electric-cyan">
+<div class="flex items-center gap-4 mb-8">
+<div class="w-12 h-12 rounded-lg bg-electric-cyan/10 flex items-center justify-center border border-electric-cyan/20">
+<span class="material-symbols-outlined text-electric-cyan" data-icon="neurology">neurology</span>
+</div>
 <div>
-<p class="font-medium">WhatsApp:</p>
-<p dir="ltr">+598 98 680 159</p>
+<h2 class="font-headline-md text-xl font-bold text-white">NEURAL_ADVISOR_DIRECTIVES</h2>
+<p class="text-xs text-outline">Actionable insights from AI Command</p>
 </div>
 </div>
-<div class="flex items-start gap-3 text-gray-300/90 text-sm mb-2">
-<i class="fa-solid fa-envelope text-primary-orange text-xl mt-0.5 flex-shrink-0"></i>
-<div>
-<p class="font-medium">E-mail:</p>
-<p>romeromecanica@email.com</p>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="relative pl-6 border-l border-white/10">
+<h4 class="font-label-caps text-[11px] text-electric-cyan mb-2">FLUID_DYNAMICS</h4>
+<p class="text-xs text-on-background leading-relaxed">Viscosity drop projected at +42K. Auto-scheduling lubricant upgrade to SAE 10W-60 recommended.</p>
+</div>
+<div class="relative pl-6 border-l border-white/10">
+<h4 class="font-label-caps text-[11px] text-safety-amber mb-2">STRUCTURAL_INTEGRITY</h4>
+<p class="text-xs text-on-background leading-relaxed">Vibration harmonics detected at 1.8mm/s. High probability of elastomer degradation in motor mounts.</p>
+</div>
+<div class="relative pl-6 border-l border-white/10">
+<h4 class="font-label-caps text-[11px] text-outline mb-2">THERMAL_MANAGEMENT</h4>
+<p class="text-xs text-on-background leading-relaxed">Cylinder 4 hotspots detected in Racing load profile. Intercooler bypass efficiency check required.</p>
 </div>
 </div>
-<div class="flex items-start gap-3 text-gray-300/90 text-sm">
-<i class="fa-regular fa-clock text-primary-orange text-xl mt-0.5 flex-shrink-0"></i>
-<div>
-<p class="font-medium">Horarios de atención:</p>
-<p>Lunes a Viernes: 08:00 - 12:00 y 14:00 - 18:00 hs</p>
-<p>Sábados y Domingos: Cerrado</p>
 </div>
 </div>
-</div>
-<div class="flex flex-col sm:flex-row gap-3">
-<a href="https://maps.app.goo.gl/yiAsXENC2p94CAsE9" target="_blank" rel="noopener noreferrer" class="btn-primary px-6 py-3.5 md:px-8 md:py-4 rounded-2xl font-bold hover:shadow-neon transition flex items-center gap-3 text-sm md:text-base whitespace-nowrap shadow-soft">
-<i class="fa-solid fa-map-location-dot text-lg"></i> <span>Ver en Google Maps</span>
-</a>
-<a href="https://maps.app.goo.gl/yiAsXENC2p94CAsE9" target="_blank" rel="noopener noreferrer" class="btn-review px-6 py-3.5 md:px-8 md:py-4 rounded-2xl font-bold hover:shadow-neon transition flex items-center gap-3 text-sm md:text-base whitespace-nowrap shadow-soft">
-<i class="fa-solid fa-star text-lg"></i> <span>Deja tu Reseña</span>
-</a>
-</div>
-</div>
-<div class="mt-10 inline-flex items-center gap-3 bg-white/5 border border-white/10 px-5 py-3 rounded-full">
-<i class="fa-solid fa-certificate text-primary-orange text-lg"></i>
-<span class="text-sm font-medium text-gray-300">Garantía en todos nuestros servicios</span>
-</div>
-</div>
-</section>
-
-<!-- FOOTER -->
-<footer class="bg-primary-dark/95 text-gray-500 py-10 md:py-14 border-t border-white/10">
-<div class="container mx-auto px-4">
-<div class="flex flex-col md:flex-row items-center justify-between gap-6">
-<div class="text-center md:text-left">
-<p class="mb-2 text-white font-display font-bold text-xl md:text-2xl glow-text tracking-tight">ROMERO MECÁNICA INTEGRAL</p>
-<p class="text-sm">Paysandú, Uruguay</p>
-</div>
-<div class="flex items-center gap-4">
-<a href="https://maps.app.goo.gl/yiAsXENC2p94CAsE9" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-primary-orange hover:text-yellow-400 transition text-sm font-semibold group">
-<i class="fa-solid fa-star group-hover:scale-110 transition-transform"></i>
-<span>Deja tu Reseña</span>
-</a>
-</div>
-</div>
-<div class="border-t border-white/10 mt-6 pt-4 text-center">
-<a href="https://nexoar-art.github.io/NEXO-art/" target="_blank" rel="noopener noreferrer"
-class="inline-flex items-center gap-1.5 text-xs text-gray-600 hover:text-primary-orange transition font-medium group">
-<i class="fa-solid fa-pen-nib group-hover:scale-110 transition-transform"></i>
-Diseño: NEXO-Art
-</a>
-<p class="text-gray-600 mt-2 text-xs">Sitio web desarrollado con tecnología moderna</p>
-</div>
-</div>
+</main>
+<footer class="py-12 border-t border-white/5 text-center relative overflow-hidden">
+<p class="font-label-caps text-[10px] text-outline/40 tracking-[0.8em]">TALLER 4.0 // DEEP SPACE DIAGNOSTICS // PROTOCOL_842</p>
+<!-- Background code bits -->
+<div class="data-stream" style="top: 10%; left: 5%;">0x84 0x22 0x11 ENGINE_SYNC</div>
+<div class="data-stream" style="top: 40%; right: 8%;">[PROJECTION_ACTIVE]</div>
+<div class="data-stream" style="bottom: 20%; left: 12%;">WEIBULL_DIST_LOAD_99</div>
 </footer>
+<script type="module">
+    import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.module.min.js';
 
-<!-- STICKY MOBILE CTA -->
-<div class="fixed bottom-0 left-0 w-full bg-gray-900/95 backdrop-blur-sm border-t border-white/10 p-4 md:hidden z-50 flex gap-3">
-<a href="#asesoramiento" class="flex-1 bg-white/5 text-white font-semibold py-3.5 rounded-xl text-center border border-white/10 hover:border-primary-orange/40 transition text-sm flex items-center justify-center gap-2">
-<i class="fa-solid fa-book-open text-primary-orange"></i><span>Guías</span>
-</a>
-<a href="#diagnostico" class="flex-[2] btn-primary font-bold py-3.5 rounded-xl text-center uppercase shadow-neon text-sm flex items-center justify-center gap-2">
-<i class="fa-solid fa-microchip"></i> <span>Diagnóstico</span>
-</a>
-</div>
+    // 3D Scene Variables
+    let scene, camera, renderer, engineGroup, cylinders = [];
+    const container = document.getElementById('engine-canvas-container');
 
-<!-- JAVASCRIPT FUNCIONAL -->
-<script>
-document.addEventListener('DOMContentLoaded', function(){
-// ========== RELOJ DIGITAL ==========
-function updateClock(){
-const now = new Date();
-const hours = String(now.getHours()).padStart(2,'0');
-const minutes = String(now.getMinutes()).padStart(2,'0');
-const seconds = String(now.getSeconds()).padStart(2,'0');
-const timeString = hours + ':' + minutes + ':' + seconds;
-const clockElement = document.getElementById('navbarClockTime');
-if(clockElement) clockElement.textContent = timeString;
-const clockMobile = document.getElementById('navbarClockTimeMobile');
-if(clockMobile) clockMobile.textContent = timeString;
-}
-updateClock();
-setInterval(updateClock, 1000);
+    function init() {
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(45, container.offsetWidth / container.offsetHeight, 0.1, 1000);
+        camera.position.z = 7;
 
-// ========== EFECTO FUEGO - Aparece a los 5s y se desvanece gradualmente ==========
-setTimeout(function(){
-const fireRing = document.getElementById('fireRing');
-if(fireRing){
-fireRing.classList.add('active');
-setTimeout(function(){
-fireRing.classList.add('fading');
-}, 0);
-}
-}, 5000);
+        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(container.offsetWidth, container.offsetHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        container.appendChild(renderer.domElement);
 
-// ========== PARTÍCULAS ==========
-function createParticles(){
-const container = document.getElementById('particles');
-if(!container) return;
-for(let i = 0; i < 30; i++){
-const particle = document.createElement('div');
-particle.className = 'particle';
-particle.style.left = Math.random()*100 + '%';
-particle.style.animationDelay = Math.random()*20 + 's';
-particle.style.animationDuration = (20 + Math.random()*30) + 's';
-particle.style.width = particle.style.height = (3 + Math.random()*4) + 'px';
-container.appendChild(particle);
-}
-}
-createParticles();
+        engineGroup = new THREE.Group();
+        scene.add(engineGroup);
 
-// ========== ESTADO DEL NEGOCIO ==========
-function checkStatus(){
-    const now = new Date();
-    const hours = now.getHours();
-    const minutes = now.getMinutes();
-    const day = now.getDay();
-    const currentMinutes = hours * 60 + minutes;
-    
-    const weekdayMorningOpen = 8 * 60;
-    const weekdayMorningClose = 12 * 60;
-    const weekdayAfternoonOpen = 14 * 60;
-    const weekdayAfternoonClose = 18 * 60;
-    
-    let isOpen = false;
-    
-    if(day >= 1 && day <= 5){
-        const morningOpen = currentMinutes >= weekdayMorningOpen && currentMinutes < weekdayMorningClose;
-        const afternoonOpen = currentMinutes >= weekdayAfternoonOpen && currentMinutes < weekdayAfternoonClose;
-        isOpen = morningOpen || afternoonOpen;
+        const cyanColor = 0x00d1ff;
+        const solidMaterial = new THREE.MeshPhongMaterial({ color: 0x1c2026, specular: 0x444444, shininess: 30 });
+        const wireMaterial = new THREE.MeshBasicMaterial({ color: cyanColor, wireframe: true, transparent: true, opacity: 0.1 });
+
+        // Core Block
+        const blockGeo = new THREE.BoxGeometry(3, 1.2, 1.5);
+        const block = new THREE.Mesh(blockGeo, solidMaterial);
+        engineGroup.add(block);
+
+        // Pistons
+        const cylGeo = new THREE.CylinderGeometry(0.3, 0.3, 1.5, 12);
+        for (let i = 0; i < 4; i++) {
+            const material = new THREE.MeshPhongMaterial({ color: 0x1c2026, emissive: cyanColor, emissiveIntensity: 0.1 });
+            const cyl = new THREE.Mesh(cylGeo, material);
+            cyl.position.x = (i - 1.5) * 0.8;
+            cyl.position.y = 0.4;
+            engineGroup.add(cyl);
+            cylinders.push(cyl);
+
+            const wire = new THREE.Mesh(cylGeo, wireMaterial);
+            wire.position.copy(cyl.position);
+            engineGroup.add(wire);
+        }
+
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+
+        const spotLight = new THREE.SpotLight(cyanColor, 50);
+        spotLight.position.set(5, 5, 5);
+        scene.add(spotLight);
+
+        animate();
     }
-    
-    const dotDesktop = document.getElementById('status-dot-desktop');
-    const textDesktop = document.getElementById('status-text-desktop');
-    const barMobile = document.getElementById('status-bar-mobile');
-    
-    if(isOpen){
-        dotDesktop.className = 'status-dot w-2 h-2 rounded-full mr-2.5 bg-primary-orange';
-        textDesktop.textContent = 'Abierto Ahora';
-        textDesktop.className = 'text-primary-orange font-semibold';
-        barMobile.className = 'md:hidden w-full py-2 text-center text-xs font-bold uppercase tracking-wide text-white bg-gradient-to-r from-primary-orange/20 to-orange-700/20 flex items-center justify-center gap-2';
-    } else {
-        dotDesktop.className = 'w-2 h-2 rounded-full mr-2.5 bg-gray-500';
-        textDesktop.textContent = 'Cerrado';
-        textDesktop.className = 'text-gray-400';
-        barMobile.className = 'md:hidden w-full py-2 text-center text-xs font-bold uppercase tracking-wide text-gray-300 bg-gray-900/80 flex items-center justify-center gap-2';
+
+    function animate() {
+        requestAnimationFrame(animate);
+        engineGroup.rotation.y += 0.005;
+        engineGroup.rotation.x = Math.sin(Date.now() * 0.0005) * 0.2;
+        
+        cylinders.forEach((cyl, i) => {
+            cyl.position.y = 0.4 + Math.sin(Date.now() * 0.004 + i) * 0.3;
+        });
+
+        renderer.render(scene, camera);
     }
-}
-checkStatus();
-setInterval(checkStatus, 60000);
 
-// ========== ANIMACIÓN DE CONTADORES ==========
-function animateCounter(id, start, target, duration){
-const obj = document.getElementById(id);
-if(!obj) return;
-let startTimestamp = null;
-const step = function(timestamp){
-if(!startTimestamp) startTimestamp = timestamp;
-const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-const easeProgress = 1 - Math.pow(1 - progress, 3);
-const value = Math.floor(easeProgress * (target - start) + start);
-obj.textContent = value.toLocaleString('es-AR');
-if(progress < 1){
-window.requestAnimationFrame(step);
-} else {
-obj.textContent = target.toLocaleString('es-AR');
-}
-};
-window.requestAnimationFrame(step);
-}
-function startCounters(){
-const observer = new IntersectionObserver(function(entries){
-entries.forEach(function(entry){
-if(entry.isIntersecting){
-animateCounter('counter1', 0, 99, 1500);
-animateCounter('counter2', 0, 50, 1800);
-animateCounter('counter3', 0, 8000, 2000);
-observer.disconnect();
-}
-});
-}, {threshold: 0.3});
-const statsSection = document.querySelector('.grid.grid-cols-3');
-if(statsSection) observer.observe(statsSection);
-}
-startCounters();
+    init();
 
-// ========== FORMULARIO FUNCIONAL ==========
-const form = document.getElementById('triageForm');
-const submitBtn = document.getElementById('submitBtn');
+    // Radial Controls Implementation
+    function setupDial(id, valId, min, max, unit = "") {
+        const dial = document.getElementById(id);
+        const valText = document.getElementById(valId);
+        let rotation = 45; 
+        
+        dial.addEventListener('mousedown', (e) => {
+            const startX = e.clientX;
+            const onMouseMove = (moveEvent) => {
+                const delta = moveEvent.clientX - startX;
+                rotation += delta * 0.5;
+                rotation = Math.min(Math.max(rotation, 0), 270);
+                dial.style.transform = `rotate(${rotation}deg)`;
+                
+                const pct = rotation / 270;
+                const finalVal = Math.round(min + (pct * (max - min)));
+                valText.innerText = finalVal.toLocaleString();
 
-const allFields = document.querySelectorAll('.field-input');
-allFields.forEach(function(field){
-field.addEventListener('input', function(){
-if(this.value.trim().length > 0){
-this.classList.add('has-value');
-} else {
-this.classList.remove('has-value');
-}
-});
-if(this.tagName === 'SELECT'){
-this.addEventListener('change', function(){
-if(this.value){
-this.classList.add('has-value');
-} else {
-this.classList.remove('has-value');
-}
-});
-}
-});
+                // Update Health Ring UI
+                const healthRing = document.getElementById('main-health-ring');
+                const offset = 301.6 - (301.6 * (0.9 - (pct * 0.3)));
+                healthRing.style.strokeDashoffset = offset;
+                document.getElementById('health-pct').innerText = Math.round((0.9 - (pct * 0.3)) * 100) + "%";
+            };
+            
+            const onMouseUp = () => {
+                window.removeEventListener('mousemove', onMouseMove);
+                window.removeEventListener('mouseup', onMouseUp);
+            };
+            
+            window.addEventListener('mousemove', onMouseMove);
+            window.addEventListener('mouseup', onMouseUp);
+        });
+    }
 
-if(form){
-form.addEventListener('submit', function(e){
-e.preventDefault();
+    setupDial('dial-km', 'val-km', 0, 200000, "km");
+    setupDial('dial-temp', 'val-temp', 90, 140, "°C");
 
-var vehicleTypeEl = document.getElementById('inputVehicleType');
-var vehicleType = vehicleTypeEl && vehicleTypeEl.value ? vehicleTypeEl.value : 'No especificado';
+    // Dynamic Code Streams
+    function createStream() {
+        const el = document.createElement('div');
+        el.className = 'data-stream';
+        el.innerText = (Math.random().toString(16).substring(2, 10)).toUpperCase() + "_DATA_FLOW";
+        el.style.left = Math.random() * 90 + '%';
+        el.style.top = Math.random() * 90 + '%';
+        el.style.opacity = '0';
+        document.body.appendChild(el);
 
-var vehicle = document.getElementById('inputVehicle').value.trim() || 'No especificado';
-var km = document.getElementById('inputKm').value.trim() || 'No especificado';
+        setTimeout(() => {
+            el.style.transition = 'opacity 2s';
+            el.style.opacity = '0.3';
+            setTimeout(() => {
+                el.style.opacity = '0';
+                setTimeout(() => el.remove(), 2000);
+            }, 3000);
+        }, 100);
+    }
+    setInterval(createStream, 5000);
 
-var fuelTypeEl = document.getElementById('inputFuelType');
-var fuelType = fuelTypeEl && fuelTypeEl.value ? fuelTypeEl.value : 'No especificado';
-
-var symptoms = document.getElementById('inputSymptoms').value.trim() || 'No especificado';
-
-var contextEl = document.getElementById('inputContext');
-var context = contextEl && contextEl.value ? contextEl.options[contextEl.selectedIndex].text : 'No especificado';
-
-var serviceEl = document.getElementById('inputService');
-var service = serviceEl && serviceEl.value ? serviceEl.options[serviceEl.selectedIndex].text : 'No especificado';
-
-var name = document.getElementById('inputName').value.trim() || 'Cliente';
-var phone = document.getElementById('inputPhone').value.trim() || 'No proporcionado';
-
-var message = '🚗 ¡Hola ROMERO MECÁNICA INTEGRAL! 👋\n';
-message += '*Cliente:* ' + name + '\n';
-message += '📱 *Contacto:* ' + phone + '\n';
-message += '🚘 *Tipo de Vehículo:* ' + vehicleType + '\n';
-message += '🚙 *Vehículo:* ' + vehicle + '\n';
-message += '🛣 *Kilometraje:* ' + km + ' km\n';
-message += '⛽ *Combustible:* ' + fuelType + '\n';
-message += '⚠️ *Síntomas reportados:*\n' + symptoms + '\n';
-message += '🔍 *Contexto:* ' + context + '\n';
-message += '🔧 *Servicio solicitado:* ' + service + '\n';
-message += '📍 *Ubicación: Paysandú, Uruguay*\n';
-message += '📅 *Solicito turno para diagnóstico profesional.* 💨';
-
-var originalBtnContent = submitBtn.innerHTML;
-submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Procesando solicitud...';
-submitBtn.classList.add('opacity-80', 'cursor-not-allowed');
-submitBtn.disabled = true;
-
-setTimeout(function(){
-var whatsappUrl = 'https://api.whatsapp.com/send?phone=59898680159&text=' + encodeURIComponent(message);
-window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
-
-submitBtn.innerHTML = '<i class="fa-solid fa-circle-check"></i> ¡Solicitud Enviada! ✅';
-submitBtn.classList.add('bg-green-600');
-
-setTimeout(function(){
-submitBtn.innerHTML = originalBtnContent;
-submitBtn.classList.remove('opacity-80', 'cursor-not-allowed', 'bg-green-600');
-submitBtn.disabled = false;
-form.reset();
-allFields.forEach(function(el){
-el.classList.remove('has-value');
-});
-}, 3500);
-}, 1200);
-});
-}
-
-// ========== PARALLAX ==========
-const parallaxImg = document.getElementById('parallax-img');
-if(parallaxImg){
-window.addEventListener('scroll', function(){
-const scrollY = window.scrollY;
-if(scrollY < window.innerHeight){
-parallaxImg.style.transform = 'translateY(' + (scrollY * 0.3) + 'px) scale(1.08)';
-}
-}, {passive: true});
-}
-
-// ========== NAVBAR SCROLL ==========
-const navbar = document.getElementById('navbar');
-if(navbar){
-window.addEventListener('scroll', function(){
-if(window.scrollY > 50){
-navbar.classList.add('shadow-lg', 'bg-gray-900/95');
-navbar.classList.remove('glass');
-} else {
-navbar.classList.remove('shadow-lg', 'bg-gray-900/95');
-navbar.classList.add('glass');
-}
-}, {passive: true});
-}
-
-// ========== SMOOTH SCROLL ==========
-document.querySelectorAll('a[href^="#"]').forEach(function(anchor){
-anchor.addEventListener('click', function(e){
-e.preventDefault();
-const targetId = this.getAttribute('href');
-if(targetId === '#') return;
-const targetElement = document.querySelector(targetId);
-if(targetElement){
-window.scrollTo({
-top: targetElement.offsetTop - 120,
-behavior: 'smooth'
-});
-}
-});
-});
-
-// ========== FADE IN UP ==========
-document.querySelectorAll('.fade-in-up').forEach(function(el, i){
-el.style.animationDelay = (0.1 + i * 0.12) + 's';
-});
-});
 </script>
-</body>
-</html>
 
-```
+
+<div class="data-stream" style="left: 24.4962%; top: 10.2555%; opacity: 0.3; transition: opacity 2s;">399BEE4A_DATA_FLOW</div><script>
+    const translations = {
+        'en': {
+            'simulator': 'SIMULATOR',
+            'diagnosis': 'DIAGNOSIS',
+            'logs': 'SYSTEM_LOGS',
+            'status_label': 'SYSTEM_STATUS:',
+            'status_val': 'OPTIMIZED',
+            'telemetry_h': 'REALTIME_TELEMETRY',
+            'vectors_h': 'CRITICAL_VECTORS',
+            'degradation_h': 'PREDICTIVE_DEGRADATION_LOG',
+            'advisor_h': 'NEURAL_ADVISOR_DIRECTIVES',
+            'advisor_sub': 'Actionable insights from AI Command',
+            'lang_btn': 'ENGLISH'
+        },
+        'es': {
+            'simulator': 'SIMULADOR',
+            'diagnosis': 'DIAGNÓSTICO',
+            'logs': 'REGISTROS_SISTEMA',
+            'status_label': 'ESTADO_SISTEMA:',
+            'status_val': 'OPTIMIZADO',
+            'telemetry_h': 'TELEMETRÍA_TIEMPO_REAL',
+            'vectors_h': 'VECTORES_CRÍTICOS',
+            'degradation_h': 'REGISTRO_DEGRADACIÓN_PREDICTIVA',
+            'advisor_h': 'DIRECTIVAS_ASESOR_NEURAL',
+            'advisor_sub': 'Información accionable de IA Command',
+            'lang_btn': 'ESPAÑOL'
+        }
+    };
+
+    let currentLang = 'es';
+
+    document.getElementById('lang-toggle').addEventListener('click', () => {
+        currentLang = currentLang === 'es' ? 'en' : 'es';
+        const t = translations[currentLang];
+
+        document.getElementById('lang-label').innerText = t.lang_btn;
+
+        // Nav items
+        const navLinks = document.querySelectorAll('nav a');
+        navLinks[0].innerText = t.simulator;
+        navLinks[1].innerText = t.diagnosis;
+        navLinks[2].innerText = t.logs;
+
+        // System Status
+        const statusSection = document.querySelector('section.radial-gauge-container .glass-panel.px-6.py-2');
+        statusSection.querySelector('span:nth-child(1)').innerText = t.status_label;
+        statusSection.querySelector('span:nth-child(2)').innerText = t.status_val;
+
+        // Headers
+        document.querySelector('h3.font-label-caps.text-xs.text-outline').innerText = t.telemetry_h;
+        document.querySelector('h3.font-label-caps.text-alert-crimson').innerText = t.vectors_h;
+        document.querySelector('h2.font-headline-md.text-xl.font-bold.italic').innerText = t.degradation_h;
+        document.querySelector('.col-span-12.glass-panel h2.font-headline-md').innerText = t.advisor_h;
+        document.querySelector('.col-span-12.glass-panel p.text-xs.text-outline').innerText = t.advisor_sub;
+    });
+</script></body></html>
