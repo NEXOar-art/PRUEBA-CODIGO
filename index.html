@@ -1,540 +1,881 @@
-<!DOCTYPE html><html class="dark" lang="es"><head>
-<meta charset="utf-8">
-<meta content="width=device-width, initial-scale=1.0" name="viewport">
-<title>TALLER 4.0 | Command Center</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&amp;family=JetBrains+Mono:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "surface": "#03050a",
-                        "surface-container-high": "rgba(39, 42, 49, 0.4)",
-                        "outline": "#859399",
-                        "on-background": "#e0e2eb",
-                        "electric-cyan": "#00D1FF",
-                        "background": "#03050a",
-                        "primary": "#a4e6ff",
-                        "secondary": "#ffb95f",
-                        "safety-amber": "#F59E0B",
-                        "alert-crimson": "#EF4444",
-                        "carbon-black": "#03050A",
-                        "interface-navy": "#0B101E"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "0.125rem",
-                        "lg": "0.5rem",
-                        "xl": "1rem",
-                        "full": "9999px"
-                    },
-                    "fontFamily": {
-                        "body-md": ["Inter"],
-                        "label-caps": ["JetBrains Mono"],
-                        "headline-lg": ["Inter", "sans-serif"],
-                        "headline-md": ["Inter", "sans-serif"],
-                        "data-display": ["JetBrains Mono"]
-                    }
-                },
-            },
-        }
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Currículum Vitae de Gastón Roberto Giménez - Operador de Planta">
+    <meta name="keywords" content="Gastón Giménez, operador de planta, operador de reactores, Power BI, producción industrial, diseño web responsivo">
+    <meta name="author" content="Gastón Roberto Giménez">
+    <title>Gastón Roberto Giménez - CV</title>
+    <script>
+        // Suppress Tailwind CDN warning
+        const originalWarn = console.warn;
+        console.warn = (...args) => {
+            if (args[0].includes('cdn.tailwindcss.com should not be used in production')) return;
+            originalWarn(...args);
+        };
     </script>
-<style>
-        body { 
-            background-color: #03050A; 
-            color: #e0e2eb; 
-            -webkit-font-smoothing: antialiased; 
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <style>
+        body {
+            background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
             overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 50% 50%, rgba(0, 209, 255, 0.05) 0%, transparent 70%),
-                linear-gradient(rgba(0, 209, 255, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 209, 255, 0.02) 1px, transparent 1px);
-            background-size: 100% 100%, 40px 40px, 40px 40px;
-        }
-        
-        .glass-panel { 
-            background: rgba(11, 16, 30, 0.4); 
-            backdrop-filter: blur(24px); 
-            border: 1px solid rgba(0, 209, 255, 0.1);
-            box-shadow: inset 0 0 20px rgba(0, 209, 255, 0.05);
-        }
-
-        .energy-border {
             position: relative;
-            border: 1px solid rgba(0, 209, 255, 0.3);
+            margin: 0;
         }
-        .energy-border::after {
-            content: '';
-            position: absolute;
-            top: -1px; left: -1px; right: -1px; bottom: -1px;
-            border: 1px solid transparent;
-            border-top-color: #00D1FF;
-            border-left-color: #00D1FF;
-            pointer-events: none;
-            box-shadow: 0 0 10px rgba(0, 209, 255, 0.4);
-        }
-
-        .radial-gauge-container {
-            position: relative;
-            width: 500px;
-            height: 500px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .containment-field {
-            position: absolute;
+        canvas#gridCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            border-radius: 50%;
-            border: 2px solid rgba(0, 209, 255, 0.1);
-            box-shadow: 0 0 60px rgba(0, 209, 255, 0.1), inset 0 0 40px rgba(0, 209, 255, 0.05);
-            animation: pulse-field 4s ease-in-out infinite;
+            z-index: 0;
+            opacity: 0.2;
         }
-
-        @keyframes pulse-field {
-            0%, 100% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.02); opacity: 0.8; }
-        }
-
-        .dial {
-            width: 80px;
-            height: 80px;
+        .twinkle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #00ff88;
             border-radius: 50%;
-            background: linear-gradient(145deg, #1c2026, #0b0e15);
-            border: 2px solid #3c494e;
+            animation: twinkle 2s infinite ease-in-out;
+        }
+        @keyframes twinkle {
+            0% { opacity: 0; }
+            50% { opacity: 0.9; }
+            100% { opacity: 0; }
+        }
+        .section-hero {
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 5px 5px 15px rgba(0,0,0,0.5), -2px -2px 5px rgba(255,255,255,0.05);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            background: linear-gradient(to bottom, #1e3a8a 0%, #000000 100%);
+            background-image: url('https://images.unsplash.com/photo-1557683316-973673baf926?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
+            background-color: rgba(0, 0, 0, 0.3);
         }
-        .dial:active { transform: scale(0.95); }
-        .dial-knob {
-            width: 4px;
-            height: 20px;
-            background: #00D1FF;
-            border-radius: 2px;
-            transform-origin: bottom center;
-            margin-bottom: 20px;
-            box-shadow: 0 0 10px #00D1FF;
+        .parallax-bg {
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
         }
-
-        .data-stream {
+        .highlight-text {
+            background: linear-gradient(90deg, #60a5fa, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        }
+        .section {
+            padding: 4rem 2rem;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.6s ease-out;
+            position: relative;
+            z-index: 1;
+        }
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .section h2 {
+            position: relative;
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 8px rgba(0, 255, 136, 0.4);
+        }
+        .section h2::before {
+            content: '';
             position: absolute;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 10px;
-            color: rgba(0, 209, 255, 0.3);
-            white-space: nowrap;
-            pointer-events: none;
-            user-select: none;
+            bottom: 0;
+            left: 0;
+            width: 100px;
+            height: 4px;
+            background: #00ff88;
+            border-radius: 2px;
         }
-
-        .health-ring {
-            transform: rotate(-90deg);
-            transition: stroke-dashoffset 0.5s ease;
+        .timeline-item {
+            position: relative;
+            padding-left: 2.5rem;
+            margin-bottom: 2rem;
         }
-
-        #engine-canvas-container { 
-            position: absolute; 
-            width: 320px;
-            height: 320px;
-            z-index: 10; 
-            overflow: hidden; 
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: #00ff88;
+        }
+        .timeline-item .dot {
+            position: absolute;
+            left: -8px;
+            top: 0;
+            width: 16px;
+            height: 16px;
+            background: #00ff88;
             border-radius: 50%;
         }
-
-        .tactile-knob-container {
-            display: flex;
-            flex-direction: column;
+        .card {
+            background: #1c1c1c;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-left: 4px solid #00ff88;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5), 0 0 5px rgba(0, 255, 136, 0.2) inset;
+            transform: perspective(500px) translateZ(0);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: perspective(500px) translateZ(10px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7), 0 0 8px rgba(0, 255, 136, 0.4) inset;
+        }
+        .icon {
+            width: 24px;
+            height: 24px;
+            fill: #00ff88;
+            transition: transform 0.3s ease;
+        }
+        .icon:hover {
+            transform: scale(1.2) rotate(5deg);
+        }
+        .btn-3d {
+            position: relative;
+            display: inline-flex;
             align-items: center;
-            gap: 12px;
+            justify-content: center;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            background: #00ff88;
+            color: #000000;
+            font-weight: 600;
+            text-transform: uppercase;
+            transform: perspective(500px) translateZ(0);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 255, 136, 0.4);
+            font-size: 0.875rem;
+            text-align: center;
+            width: 100px; /* Fixed width to ensure buttons align well */
+        }
+        .btn-3d:hover {
+            transform: perspective(500px) translateZ(10px);
+            box-shadow: 0 6px 20px rgba(0, 255, 136, 0.6);
+        }
+        .btn-3d::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .btn-3d:hover::after {
+            opacity: 1;
+        }
+        .whatsapp-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem;
+            border-radius: 50%;
+            background: #00ff88;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 255, 136, 0.4);
+            position: relative;
+        }
+        .whatsapp-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 255, 136, 0.6);
+        }
+        .whatsapp-btn span.whatsapp-tooltip {
+            position: absolute;
+            left: calc(100% + 0.5rem);
+            top: 50%;
+            transform: translateY(-50%) translateX(-10px);
+            background: rgba(0, 0, 0, 0.8);
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            pointer-events: none;
+        }
+        .whatsapp-btn:hover span.whatsapp-tooltip {
+            opacity: 1;
+            transform: translateY(-50%) translateX(0);
+        }
+        .whatsapp-btn span:not(.whatsapp-tooltip) {
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: #000000;
+            margin-left: 0.25rem;
+        }
+        .whatsapp-logo, .download-img {
+            width: 24px;
+            height: 24px;
+        }
+        /* LinkedIn button styles */
+        .linkedin-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem;
+            border-radius: 50%;
+            background: #0077b5;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 119, 181, 0.4);
+            position: relative;
+        }
+        .linkedin-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 119, 181, 0.6);
+        }
+        .linkedin-btn span.linkedin-tooltip {
+            position: absolute;
+            left: calc(100% + 0.5rem);
+            top: 50%;
+            transform: translateY(-50%) translateX(-10px);
+            background: rgba(0, 0, 0, 0.8);
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            pointer-events: none;
+        }
+        .linkedin-btn:hover span.linkedin-tooltip {
+            opacity: 1;
+            transform: translateY(-50%) translateX(0);
+        }
+        .linkedin-logo {
+            width: 24px;
+            height: 24px;
+            fill: #ffffff;
+        }
+        /* Dropdown styles for Vibe Coding card */
+        .dropdown-container {
+            position: relative;
+            margin-top: 1rem;
+        }
+        .dropdown-toggle {
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            background: #00ff88;
+            color: #000000;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: background 0.3s ease;
+        }
+        .dropdown-toggle:hover {
+            background: #00cc70;
+        }
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1c1c1c;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            padding: 0.5rem;
+            z-index: 10;
+            min-width: 150px; /* Increased min-width for better structure */
+            flex-direction: column;
+        }
+        .dropdown-menu.active {
+            display: flex;
+        }
+        .dropdown-menu .btn-3d {
+            justify-content: center;
+        }
+        @media (max-width: 768px) {
+            .section-hero {
+                min-height: 80vh;
+                text-align: center;
+            }
+            .section-hero .flex {
+                flex-direction: column;
+                align-items: center;
+            }
+            .section {
+                padding: 2rem 1rem;
+            }
+            .text-5xl {
+                font-size: 2.5rem;
+            }
+            .text-7xl {
+                font-size: 3.5rem;
+            }
+            .section h2::before {
+                width: 60px;
+            }
+            .whatsapp-btn span.whatsapp-tooltip,
+            .linkedin-btn span.linkedin-tooltip {
+                font-size: 0.65rem;
+                padding: 0.2rem 0.4rem;
+            }
+            .btn-3d {
+                font-size: 0.75rem;
+                padding: 0.5rem 0.75rem;
+                width: 90px; /* Adjusted for smaller screens */
+            }
+            .dropdown-menu {
+                min-width: 120px;
+            }
         }
     </style>
 </head>
-<body class="font-body-md">
-<!-- Background Particle Canvas (Simulated) -->
-<div class="fixed inset-0 pointer-events-none z-0" id="particles"></div>
-<nav class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-10 h-20 bg-black/40 backdrop-blur-md border-b border-white/5">
-<div class="flex items-center gap-6">
-<span class="font-headline-lg text-2xl font-black text-electric-cyan tracking-tighter italic">TALLER 4.0</span>
-<div class="h-6 w-[1px] bg-white/20"></div>
-<div class="flex gap-6">
-<a class="font-label-caps text-[11px] text-electric-cyan" href="#">SIMULATOR</a>
-<a class="font-label-caps text-[11px] text-outline hover:text-white" href="#">DIAGNOSIS</a>
-<a class="font-label-caps text-[11px] text-outline hover:text-white" href="#">SYSTEM_LOGS</a>
-</div>
-</div>
-<button id="lang-toggle" class="flex items-center gap-2 px-3 py-1.5 glass-panel rounded-full border border-electric-cyan/30 hover:border-electric-cyan/60 transition-all active:scale-95 group">
-    <span class="material-symbols-outlined text-[14px] text-electric-cyan group-hover:rotate-180 transition-transform duration-500">language</span>
-    <span id="lang-label" class="font-label-caps text-[10px] text-electric-cyan tracking-wider">ESPAÑOL</span>
-</button><div class="flex items-center gap-4">
-<div class="text-right mr-4">
-<p class="font-label-caps text-[10px] text-outline">STATION_ID</p>
-<p class="font-data-display text-sm text-electric-cyan">CMD-ALPHA-01</p>
-</div>
-<div class="w-10 h-10 rounded-full border-2 border-electric-cyan/50 p-[2px]">
-<img alt="User" class="w-full h-full rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEYTdUSeamMPpovz7M75cOhDiRQRCtXzWRbGFdWEmEGKdNBHyyxm0KnuLlCP2WBvme0hd-AfwH5cgFarl-fBTjpoxtuU8DcUFugvnQpjFxGHUsCs_Z_cInW9TXClrC5-IFxMBRVNRpKjtickZZTS6gEqutz1zDDmzLLTidjezesEOmnafFN9m9aqhyNaaTlr3LuZ6mZABI0Bs0b0gTUYB8hoOQzJBW-qtiTN42_KBLfN_sWv2O5fhYOL-HooRHFxgGw6dQy4Se">
-</div>
-</div>
-</nav>
-<main class="relative pt-24 px-10 min-h-screen flex flex-col items-center">
-<!-- Central Radial Core -->
-<section class="mt-8 mb-16 radial-gauge-container">
-<div class="containment-field"></div>
-<!-- Health Ring / KPI Container -->
-<svg class="absolute w-[460px] height-[460px]" viewBox="0 0 100 100">
-<circle cx="50" cy="50" fill="transparent" r="48" stroke="rgba(255,255,255,0.05)" stroke-width="1.5"></circle>
-<circle class="health-ring" cx="50" cy="50" fill="transparent" id="main-health-ring" r="48" stroke="#00D1FF" stroke-dasharray="301.6" stroke-dashoffset="39" stroke-linecap="round" stroke-width="2.5"></circle>
-</svg>
-<!-- Engine Viewport -->
-<div class="glass-panel w-[340px] h-[340px] rounded-full flex items-center justify-center relative overflow-hidden energy-border">
-<div id="engine-canvas-container"><canvas data-engine="three.js r160" width="432" height="432" style="display: block; width: 320px; height: 320px;"></canvas></div>
-<div class="absolute inset-0 bg-gradient-to-t from-electric-cyan/10 to-transparent pointer-events-none"></div>
-<div class="absolute bottom-10 z-20 text-center">
-<span class="font-label-caps text-[10px] text-electric-cyan block opacity-60">CORE_SYNC</span>
-<span class="font-data-display text-4xl text-white" id="health-pct">87%</span>
-</div>
-</div>
-<!-- Floating Data Orbitals -->
-<div class="absolute -top-12 left-1/2 -translate-x-1/2 glass-panel px-6 py-2 rounded-full border-t-2 border-electric-cyan">
-<span class="font-label-caps text-[10px] text-outline mr-3">SYSTEM_STATUS:</span>
-<span class="font-label-caps text-electric-cyan animate-pulse">OPTIMIZED</span>
-</div>
-<!-- Lateral Tactile Controls (Circular Dials) -->
-<div class="absolute -left-48 top-1/2 -translate-y-1/2 flex flex-col gap-12">
-<div class="tactile-knob-container">
-<div class="dial" id="dial-km" style="transform: rotate(45deg);">
-<div class="dial-knob"></div>
-</div>
-<div class="text-center">
-<p class="font-label-caps text-[9px] text-outline">MILEAGE_PROJ</p>
-<p class="font-data-display text-electric-cyan text-sm">+<span id="val-km" class="">50,000</span>km</p>
-</div>
-</div>
-<div class="tactile-knob-container">
-<div class="dial" id="dial-temp" style="transform: rotate(120deg);">
-<div class="dial-knob"></div>
-</div>
-<div class="text-center">
-<p class="font-label-caps text-[9px] text-outline">TEMP_PEAK</p>
-<p class="font-data-display text-electric-cyan text-sm"><span id="val-temp" class="">105</span>°C</p>
-</div>
-</div>
-</div>
-<div class="absolute -right-48 top-1/2 -translate-y-1/2 flex flex-col gap-12">
-<div class="tactile-knob-container">
-<div class="dial" id="dial-oil" style="transform: rotate(-30deg);">
-<div class="dial-knob"></div>
-</div>
-<div class="text-center">
-<p class="font-label-caps text-[9px] text-outline">OIL_PRESSURE</p>
-<p class="font-data-display text-electric-cyan text-sm">4.2 BAR</p>
-</div>
-</div>
-<div class="tactile-knob-container">
-<button class="w-20 h-20 rounded-full bg-alert-crimson/10 border-2 border-alert-crimson/40 flex items-center justify-center group hover:bg-alert-crimson/20 transition-all">
-<span class="material-symbols-outlined text-alert-crimson text-3xl group-active:scale-90" data-icon="rocket_launch">rocket_launch</span>
-</button>
-<div class="text-center">
-<p class="font-label-caps text-[9px] text-outline">ENGAGE_SIM</p>
-</div>
-</div>
-</div>
-</section>
-<!-- UI Grid -->
-<div class="w-full max-w-7xl grid grid-cols-12 gap-6 mb-20">
-<!-- Telemetry Cards -->
-<div class="col-span-12 lg:col-span-4 space-y-6">
-<div class="glass-panel p-6 rounded-xl energy-border">
-<div class="flex justify-between items-start mb-4">
-<h3 class="font-label-caps text-xs text-outline tracking-widest">REALTIME_TELEMETRY</h3>
-<span class="w-2 h-2 rounded-full bg-electric-cyan animate-ping"></span>
-</div>
-<div class="space-y-4">
-<div class="flex justify-between items-end border-b border-white/5 pb-2">
-<span class="text-xs text-on-background">OIL_TEMP</span>
-<span class="font-data-display text-xl text-safety-amber">92°C</span>
-</div>
-<div class="flex justify-between items-end border-b border-white/5 pb-2">
-<span class="text-xs text-on-background">VIBRATION</span>
-<span class="font-data-display text-xl text-electric-cyan">1.8mm/s</span>
-</div>
-<div class="flex justify-between items-end border-b border-white/5 pb-2">
-<span class="text-xs text-on-background">LOAD_FACTOR</span>
-<span class="font-data-display text-xl text-white">64%</span>
-</div>
-</div>
-</div>
-<div class="glass-panel p-6 rounded-xl energy-border bg-alert-crimson/5 border-alert-crimson/20">
-<div class="flex items-center gap-3 mb-4">
-<span class="material-symbols-outlined text-alert-crimson" data-icon="report_problem">report_problem</span>
-<h3 class="font-label-caps text-xs text-alert-crimson tracking-widest">CRITICAL_VECTORS</h3>
-</div>
-<div class="p-3 bg-black/40 rounded border border-alert-crimson/20">
-<div class="flex justify-between items-center mb-1">
-<span class="text-[10px] text-white">FAILURE_PROBABILITY</span>
-<span class="text-alert-crimson font-bold text-xs">34%</span>
-</div>
-<div class="w-full bg-white/5 h-1">
-<div class="bg-alert-crimson h-full" style="width: 34%"></div>
-</div>
-</div>
-</div>
-</div>
-<!-- Central Visualization -->
-<div class="col-span-12 lg:col-span-8 glass-panel rounded-xl p-8 energy-border">
-<div class="flex justify-between items-center mb-8">
-<div>
-<h2 class="font-headline-md text-xl font-bold text-white italic">PREDICTIVE_DEGRADATION_LOG</h2>
-<p class="font-label-caps text-[10px] text-outline mt-1">SINTETIC_DATA_PROJECTION // RNN_MODEL_V4</p>
-</div>
-<div class="flex gap-2">
-<button class="px-4 py-1 text-[10px] font-bold font-label-caps bg-electric-cyan/20 border border-electric-cyan text-electric-cyan">LINEAR</button>
-<button class="px-4 py-1 text-[10px] font-bold font-label-caps text-outline hover:text-white">LOGARITHMIC</button>
-</div>
-</div>
-<div class="h-64 relative flex items-end gap-3 px-4">
-<div class="flex-1 bg-electric-cyan/10 border-t border-electric-cyan/40 h-[20%] relative group">
-<div class="absolute inset-0 bg-electric-cyan/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-</div>
-<div class="flex-1 bg-electric-cyan/15 border-t border-electric-cyan/50 h-[30%]"></div>
-<div class="flex-1 bg-electric-cyan/20 border-t border-electric-cyan/60 h-[25%]"></div>
-<div class="flex-1 bg-electric-cyan/25 border-t border-electric-cyan/70 h-[45%]"></div>
-<div class="flex-1 bg-electric-cyan/30 border-t border-electric-cyan/80 h-[55%] animate-pulse"></div>
-<div class="flex-1 bg-safety-amber/20 border-t border-safety-amber/40 h-[70%] border-dashed"></div>
-<div class="flex-1 bg-alert-crimson/20 border-t border-alert-crimson/40 h-[85%] border-dashed"></div>
-</div>
-<div class="flex justify-between mt-4 font-label-caps text-[9px] text-outline px-4">
-<span class="">ENTRY_POINT</span>
-<span class="">+50K_KM</span>
-<span class="">+100K_KM</span>
-<span class="">CRITICAL_LIMIT</span>
-</div>
-</div>
-<!-- AI Agent Recommendations -->
-<div class="col-span-12 glass-panel rounded-xl p-8 bg-gradient-to-r from-interface-navy/80 to-transparent border-l-4 border-l-electric-cyan">
-<div class="flex items-center gap-4 mb-8">
-<div class="w-12 h-12 rounded-lg bg-electric-cyan/10 flex items-center justify-center border border-electric-cyan/20">
-<span class="material-symbols-outlined text-electric-cyan" data-icon="neurology">neurology</span>
-</div>
-<div>
-<h2 class="font-headline-md text-xl font-bold text-white">NEURAL_ADVISOR_DIRECTIVES</h2>
-<p class="text-xs text-outline">Actionable insights from AI Command</p>
-</div>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-<div class="relative pl-6 border-l border-white/10">
-<h4 class="font-label-caps text-[11px] text-electric-cyan mb-2">FLUID_DYNAMICS</h4>
-<p class="text-xs text-on-background leading-relaxed">Viscosity drop projected at +42K. Auto-scheduling lubricant upgrade to SAE 10W-60 recommended.</p>
-</div>
-<div class="relative pl-6 border-l border-white/10">
-<h4 class="font-label-caps text-[11px] text-safety-amber mb-2">STRUCTURAL_INTEGRITY</h4>
-<p class="text-xs text-on-background leading-relaxed">Vibration harmonics detected at 1.8mm/s. High probability of elastomer degradation in motor mounts.</p>
-</div>
-<div class="relative pl-6 border-l border-white/10">
-<h4 class="font-label-caps text-[11px] text-outline mb-2">THERMAL_MANAGEMENT</h4>
-<p class="text-xs text-on-background leading-relaxed">Cylinder 4 hotspots detected in Racing load profile. Intercooler bypass efficiency check required.</p>
-</div>
-</div>
-</div>
-</div>
-</main>
-<footer class="py-12 border-t border-white/5 text-center relative overflow-hidden">
-<p class="font-label-caps text-[10px] text-outline/40 tracking-[0.8em]">TALLER 4.0 // DEEP SPACE DIAGNOSTICS // PROTOCOL_842</p>
-<!-- Background code bits -->
-<div class="data-stream" style="top: 10%; left: 5%;">0x84 0x22 0x11 ENGINE_SYNC</div>
-<div class="data-stream" style="top: 40%; right: 8%;">[PROJECTION_ACTIVE]</div>
-<div class="data-stream" style="bottom: 20%; left: 12%;">WEIBULL_DIST_LOAD_99</div>
-</footer>
-<script type="module">
-    import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.module.min.js';
+<body>
+    <!-- Animated Grid Background -->
+    <canvas id="gridCanvas"></canvas>
+    <script>
+        const canvas = document.getElementById('gridCanvas');
+        const ctx = canvas.getContext('2d');
 
-    // 3D Scene Variables
-    let scene, camera, renderer, engineGroup, cylinders = [];
-    const container = document.getElementById('engine-canvas-container');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
-    function init() {
-        scene = new THREE.Scene();
-        camera = new THREE.PerspectiveCamera(45, container.offsetWidth / container.offsetHeight, 0.1, 1000);
-        camera.position.z = 7;
+        const gridSize = 50;
+        const lineColor = '#00ff88';
+        let offset = 0;
 
-        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        renderer.setSize(container.offsetWidth, container.offsetHeight);
-        renderer.setPixelRatio(window.devicePixelRatio);
-        container.appendChild(renderer.domElement);
+        function drawGrid() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = lineColor;
+            ctx.lineWidth = 0.5;
+            ctx.globalAlpha = 0.2;
 
-        engineGroup = new THREE.Group();
-        scene.add(engineGroup);
+            offset += 0.2;
+            if (offset >= gridSize) offset = 0;
 
-        const cyanColor = 0x00d1ff;
-        const solidMaterial = new THREE.MeshPhongMaterial({ color: 0x1c2026, specular: 0x444444, shininess: 30 });
-        const wireMaterial = new THREE.MeshBasicMaterial({ color: cyanColor, wireframe: true, transparent: true, opacity: 0.1 });
-
-        // Core Block
-        const blockGeo = new THREE.BoxGeometry(3, 1.2, 1.5);
-        const block = new THREE.Mesh(blockGeo, solidMaterial);
-        engineGroup.add(block);
-
-        // Pistons
-        const cylGeo = new THREE.CylinderGeometry(0.3, 0.3, 1.5, 12);
-        for (let i = 0; i < 4; i++) {
-            const material = new THREE.MeshPhongMaterial({ color: 0x1c2026, emissive: cyanColor, emissiveIntensity: 0.1 });
-            const cyl = new THREE.Mesh(cylGeo, material);
-            cyl.position.x = (i - 1.5) * 0.8;
-            cyl.position.y = 0.4;
-            engineGroup.add(cyl);
-            cylinders.push(cyl);
-
-            const wire = new THREE.Mesh(cylGeo, wireMaterial);
-            wire.position.copy(cyl.position);
-            engineGroup.add(wire);
+            for (let x = -offset; x < canvas.width; x += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+            }
+            for (let y = -offset; y < canvas.height; y += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+            }
         }
 
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-        scene.add(ambientLight);
-
-        const spotLight = new THREE.SpotLight(cyanColor, 50);
-        spotLight.position.set(5, 5, 5);
-        scene.add(spotLight);
-
-        animate();
-    }
-
-    function animate() {
-        requestAnimationFrame(animate);
-        engineGroup.rotation.y += 0.005;
-        engineGroup.rotation.x = Math.sin(Date.now() * 0.0005) * 0.2;
-        
-        cylinders.forEach((cyl, i) => {
-            cyl.position.y = 0.4 + Math.sin(Date.now() * 0.004 + i) * 0.3;
-        });
-
-        renderer.render(scene, camera);
-    }
-
-    init();
-
-    // Radial Controls Implementation
-    function setupDial(id, valId, min, max, unit = "") {
-        const dial = document.getElementById(id);
-        const valText = document.getElementById(valId);
-        let rotation = 45; 
-        
-        dial.addEventListener('mousedown', (e) => {
-            const startX = e.clientX;
-            const onMouseMove = (moveEvent) => {
-                const delta = moveEvent.clientX - startX;
-                rotation += delta * 0.5;
-                rotation = Math.min(Math.max(rotation, 0), 270);
-                dial.style.transform = `rotate(${rotation}deg)`;
-                
-                const pct = rotation / 270;
-                const finalVal = Math.round(min + (pct * (max - min)));
-                valText.innerText = finalVal.toLocaleString();
-
-                // Update Health Ring UI
-                const healthRing = document.getElementById('main-health-ring');
-                const offset = 301.6 - (301.6 * (0.9 - (pct * 0.3)));
-                healthRing.style.strokeDashoffset = offset;
-                document.getElementById('health-pct').innerText = Math.round((0.9 - (pct * 0.3)) * 100) + "%";
-            };
-            
-            const onMouseUp = () => {
-                window.removeEventListener('mousemove', onMouseMove);
-                window.removeEventListener('mouseup', onMouseUp);
-            };
-            
-            window.addEventListener('mousemove', onMouseMove);
-            window.addEventListener('mouseup', onMouseUp);
-        });
-    }
-
-    setupDial('dial-km', 'val-km', 0, 200000, "km");
-    setupDial('dial-temp', 'val-temp', 90, 140, "°C");
-
-    // Dynamic Code Streams
-    function createStream() {
-        const el = document.createElement('div');
-        el.className = 'data-stream';
-        el.innerText = (Math.random().toString(16).substring(2, 10)).toUpperCase() + "_DATA_FLOW";
-        el.style.left = Math.random() * 90 + '%';
-        el.style.top = Math.random() * 90 + '%';
-        el.style.opacity = '0';
-        document.body.appendChild(el);
-
-        setTimeout(() => {
-            el.style.transition = 'opacity 2s';
-            el.style.opacity = '0.3';
-            setTimeout(() => {
-                el.style.opacity = '0';
-                setTimeout(() => el.remove(), 2000);
-            }, 3000);
-        }, 100);
-    }
-    setInterval(createStream, 5000);
-
-</script>
-
-
-<div class="data-stream" style="left: 24.4962%; top: 10.2555%; opacity: 0.3; transition: opacity 2s;">399BEE4A_DATA_FLOW</div><script>
-    const translations = {
-        'en': {
-            'simulator': 'SIMULATOR',
-            'diagnosis': 'DIAGNOSIS',
-            'logs': 'SYSTEM_LOGS',
-            'status_label': 'SYSTEM_STATUS:',
-            'status_val': 'OPTIMIZED',
-            'telemetry_h': 'REALTIME_TELEMETRY',
-            'vectors_h': 'CRITICAL_VECTORS',
-            'degradation_h': 'PREDICTIVE_DEGRADATION_LOG',
-            'advisor_h': 'NEURAL_ADVISOR_DIRECTIVES',
-            'advisor_sub': 'Actionable insights from AI Command',
-            'lang_btn': 'ENGLISH'
-        },
-        'es': {
-            'simulator': 'SIMULADOR',
-            'diagnosis': 'DIAGNÓSTICO',
-            'logs': 'REGISTROS_SISTEMA',
-            'status_label': 'ESTADO_SISTEMA:',
-            'status_val': 'OPTIMIZADO',
-            'telemetry_h': 'TELEMETRÍA_TIEMPO_REAL',
-            'vectors_h': 'VECTORES_CRÍTICOS',
-            'degradation_h': 'REGISTRO_DEGRADACIÓN_PREDICTIVA',
-            'advisor_h': 'DIRECTIVAS_ASESOR_NEURAL',
-            'advisor_sub': 'Información accionable de IA Command',
-            'lang_btn': 'ESPAÑOL'
+        function animateGrid() {
+            drawGrid();
+            requestAnimationFrame(animateGrid);
         }
-    };
 
-    let currentLang = 'es';
+        animateGrid();
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
 
-    document.getElementById('lang-toggle').addEventListener('click', () => {
-        currentLang = currentLang === 'es' ? 'en' : 'es';
-        const t = translations[currentLang];
+        // Twinkle Effect
+        function createTwinkles(count) {
+            for (let i = 0; i < count; i++) {
+                const twinkle = document.createElement('div');
+                twinkle.className = 'twinkle';
+                twinkle.style.left = `${Math.random() * 100}vw`;
+                twinkle.style.top = `${Math.random() * 100}vh`;
+                twinkle.style.animationDelay = `${Math.random() * 2}s`;
+                document.body.appendChild(twinkle);
+            }
+        }
+        createTwinkles(50);
 
-        document.getElementById('lang-label').innerText = t.lang_btn;
+        // Dynamic text color adjustment
+        function adjustTextColor() {
+            const hero = document.querySelector('.section-hero');
+            const computeStyle = getComputedStyle(hero || document.body);
+            const bgColor = computeStyle.backgroundColor;
+            const rgb = bgColor.match(/\d+/g)?.map(Number) || [30, 58, 138];
+            const brightness = (rgb[0] * 299 + rgb[1] * 587 + rgb[2] * 114) / 1000;
+            if (brightness > 128) {
+                document.body.style.color = '#000000';
+                document.querySelectorAll('.section h2').forEach(el => {
+                    el.style.color = '#00ff88';
+                });
+                document.querySelectorAll('.text-gray-300, .text-gray-400').forEach(el => {
+                    el.style.color = '#333333';
+                });
+                document.querySelectorAll('.text-blue-400').forEach(el => {
+                    el.style.color = '#00ff88';
+                });
+            } else {
+                document.body.style.color = '#ffffff';
+                document.querySelectorAll('.section h2').forEach(el => {
+                    el.style.color = '#00ff88';
+                });
+                document.querySelectorAll('.text-gray-300, .text-gray-400').forEach(el => {
+                    el.style.color = '#cccccc';
+                });
+                document.querySelectorAll('.text-blue-400').forEach(el => {
+                    el.style.color = '#00ff88';
+                });
+            }
+        }
+        setInterval(adjustTextColor, 100);
+        adjustTextColor();
+    </script>
 
-        // Nav items
-        const navLinks = document.querySelectorAll('nav a');
-        navLinks[0].innerText = t.simulator;
-        navLinks[1].innerText = t.diagnosis;
-        navLinks[2].innerText = t.logs;
+    <!-- Hero Section -->
+    <section class="section-hero parallax-bg">
+        <div class="container mx-auto px-4 z-10 flex items-center gap-6">
+            <img src="FOTO NUEVA.png" alt="Profile Picture" class="w-24 h-24 rounded-full object-cover border-2 border-[#00ff88]">
+            <div>
+                <h1 id="name" class="text-5xl md:text-7xl font-bold highlight-text mb-4">Gastón Roberto Giménez</h1>
+                <p id="title" class="text-2xl md:text-3xl text-gray-300 mb-6">Operador de Planta</p>
+                <p class="text-lg text-gray-400 max-w-2xl">Profesional con experiencia en producción industrial, impulsando la eficiencia operativa y la innovación en entornos dinámicos.</p>
+                <div class="flex items-center gap-4 mt-6">
+                    <a href="https://api.whatsapp.com/send?phone=+543489686939&text=Quiero%20saber%20mas%20de%20tu%20perfil!!!%20">
+                        <svg class="whatsapp-logo icon" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12c0 1.88.52 3.64 1.43 5.17L2 22l4.83-1.43C8.36 21.48 10.12 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm3.79 15.57c-.45.67-1.32 1.05-2.18 1.05-1.02 0-1.98-.43-2.7-1.19-.72-.76-1.29-1.73-1.67-2.83-.38-1.1-.58-2.27-.58-3.45 0-1.18.2-2.35.58-3.45.38-1.1.95-2.07 1.67-2.83.72-.76 1.68-1.19 2.7-1.19.86 0 1.73.38 2.18 1.05.45.67.67 1.54.67 2.4 0 .86-.22 1.73-.67 2.4-.45.67-1.32 1.05-2.18 1.05-.86 0-1.73-.38-2.18-1.05-.45-.67-.67-1.54-.67-2.4 0-.86.22-1.73.67-2.4.45-.67 1.32-1.05 2.18-1.05.86 0 1.73.38 2.18 1.05.45.67.67 1.54.67 2.4 0 .86-.22 1.73-.67 2.4z"/>
+                        </svg>
+                        <span class="whatsapp-tooltip">Escríbeme al WhatsApp</span>
+                    </a>
+                    <a href="https://www.linkedin.com/messaging/thread/2-MmY0OTIzOGEtYzQzYS00YmQ3LTkzMTMtMDQzZDdkMzM4YzIxXzAxMw==/" target="_blank" class="linkedin-btn">
+                        <svg class="linkedin-logo" viewBox="0 0 24 24">
+                            <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
+                        </svg>
+                        <span class="linkedin-tooltip">Contáctame por LinkedIn</span>
+                    </a>
+                    <a id="download-btn" href="https://drive.google.com/file/d/1XOoSzN1lsqVqLIv93Fy3FjpJF9XQVuJn/view?usp=sharing" target="_blank" class="whatsapp-btn">
+                        <img src="https://img.icons8.com/?size=100&id=86388&format=png&color=000000" alt="Download Icon" class="download-img">
+                        <span class="whatsapp-tooltip">Descargar CV</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        // System Status
-        const statusSection = document.querySelector('section.radial-gauge-container .glass-panel.px-6.py-2');
-        statusSection.querySelector('span:nth-child(1)').innerText = t.status_label;
-        statusSection.querySelector('span:nth-child(2)').innerText = t.status_val;
+    <!-- Resumen Laboral -->
+    <section id="resumen" class="section bg-[#1c1c1c]">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-blue-400 mb-6">Resumen Laboral</h2>
+            <div class="card">
+                <p class="text-lg text-gray-300 leading-relaxed">
+                    Más de 15 años de experiencia en producción industrial, trabajando en empresas líderes como Cervecería y Maltería Quilmes, Papelera del Plata (Softly) y Cabot Argentina. En Cabot, como Operador de Planta y Reactores, logré un rendimiento del 98% en la producción de negro de humo mediante controles de calidad y operación eficiente en sistemas DeltaV. Mi enfoque en la productividad, resolución de problemas y adaptabilidad me permite destacar en entornos de alta exigencia.
+                </p>
+            </div>
+        </div>
+    </section>
 
-        // Headers
-        document.querySelector('h3.font-label-caps.text-xs.text-outline').innerText = t.telemetry_h;
-        document.querySelector('h3.font-label-caps.text-alert-crimson').innerText = t.vectors_h;
-        document.querySelector('h2.font-headline-md.text-xl.font-bold.italic').innerText = t.degradation_h;
-        document.querySelector('.col-span-12.glass-panel h2.font-headline-md').innerText = t.advisor_h;
-        document.querySelector('.col-span-12.glass-panel p.text-xs.text-outline').innerText = t.advisor_sub;
-    });
-</script></body></html>
+    <!-- Experiencia Laboral -->
+    <section id="experiencia" class="section bg-[#1c1c1c]">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-blue-400 mb-6">Experiencia Laboral</h2>
+            <div class="grid grid-cols-1 gap-4">
+                <div class="timeline-item card">
+                    <div class="dot"></div>
+                    <h3 class="text-2xl font-bold text-white">KM 74 AUTO SPA - Encargado</h3>
+                    <p class="text-gray-400 text-base">2014 - 2021</p>
+                    <p class="text-gray-300 text-base">Mantenimiento general (Automotor) - LAVADO, DESINFECCIÓN, ASPIRADO, PULIDO, DETAILING. CLIENTES: (TOYOTA TSUSHO CORPORATION, ASPEN FORD MOTORS, PETROMINIG, PÚBLICO EN GENERAL).</p>
+                </div>
+                <div class="timeline-item card">
+                    <div class="dot"></div>
+                    <h3 class="text-2xl font-bold text-white">Operador de Planta y Operador de Reactores - Cabot Argentina</h3>
+                    <p class="text-gray-400 text-base">2000 - 2013</p>
+                    <p class="text-gray-300 text-base">Optimización de procesos productivos, logrando un rendimiento del 92% en la producción de negro de humo mediante controles de calidad y operación eficiente en control distribuido DeltaV.</p>
+                </div>
+                <div class="timeline-item card">
+                    <div class="dot"></div>
+                    <h3 class="text-2xl font-bold text-white">Operador de Planta - Papelera del Plata (Softly)</h3>
+                    <p class="text-gray-400 text-base">1999 - 2000</p>
+                    <p class="text-gray-300 text-base">Gestión de líneas de producción, garantizando cumplimiento de normativas y estándares de seguridad.</p>
+                </div>
+                <div class="timeline-item card">
+                    <div class="dot"></div>
+                    <h3 class="text-2xl font-bold text-white">Operador - Cervecería y Maltería Quilmes</h3>
+                    <p class="text-gray-400 text-base">1995 - 1998</p>
+                    <p class="text-gray-300 text-base">Operación de maquinaria industrial alimenticia y mantenimiento preventivo, contribuyendo a la continuidad operativa en líneas de transporte en sector envasado.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Educación -->
+    <section id="educacion" class="section bg-[#1c1c1c]">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-blue-400 mb-6">Educación</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="card">
+                    <svg class="icon mb-2" viewBox="0 0 24 24">
+                        <path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 11-6-11-6z"/>
+                    </svg>
+                    <h3 class="text-xl font-semibold text-white">Lic. en Comercio Internacional</h3>
+                    <p class="text-gray-400">Universidad de Luján | 2019 - 2022</p>
+                </div>
+                <div class="card">
+                    <svg class="icon mb-2" viewBox="0 0 24 24">
+                        <path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 11-6-11-6z"/>
+                    </svg>
+                    <h3 class="text-xl font-semibold text-white">Técnico Químico</h3>
+                    <p class="text-gray-400">Técnica Luciano Reyes | 1989 - 1995</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Habilidades -->
+    <section id="habilidades" class="section bg-[#1c1c1c]">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-blue-400 mb-6">Habilidades</h2>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div class="card text-center">
+                    <svg class="icon mb-2" viewBox="0 0 24 24">
+                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14h-4v-2h4v2zm4-4h-8v-2h8v2zm0-4h-8v-2h8v2z"/>
+                    </svg>
+                    <p class="text-white">Paquete Office</p>
+                </div>
+                <div class="card text-center">
+                    <svg class="icon mb-2" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                    </svg>
+                    <p class="text-white">Python Básico</p>
+                </div>
+                <div class="card text-center">
+                    <svg class="icon mb-2" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                    </svg>
+                    <p class="text-white">Google Colab</p>
+                </div>
+                <div class="card text-center">
+                    <svg class="icon mb-2" viewBox="0 0 24 24">
+                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14h-4v-2h4v2zm4-4h-8v-2h8v2zm0-4h-8v-2h8v2z"/>
+                    </svg>
+                    <p class="text-white">Visual Studio Code</p>
+                </div>
+                <div class="card text-center">
+                    <svg class="icon mb-2" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                    </svg>
+                    <p class="text-white">Power BI</p>
+                </div>
+                <div class="card text-center">
+                    <svg class="icon mb-2" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                    </svg>
+                    <p class="text-white">Canva</p>
+                </div>
+                <div class="card text-center">
+                    <svg class="icon mb-2" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                    </svg>
+                    <p class="text-white">Foguista</p>
+                </div>
+                <div class="card text-center">
+                    <svg class="icon mb-2" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                    </svg>
+                    <p class="text-white">Operador DeltaV EMERSON</p>
+                </div>
+                <div class="card text-center">
+                    <svg class="icon mb-2" viewBox="0 0 24 24">
+                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14h-4v-2h4v2zm4-4h-8v-2h8v2zm0-4h-8v-2h8v2z"/>
+                    </svg>
+                    <p class="text-white">Vibe Coding</p>
+                    <div class="dropdown-container">
+                        <div class="dropdown-toggle">Proyectos</div>
+                        <div class="dropdown-menu">
+                            <a href="https://nexoar-art.github.io/ROTISERIA-MALVINAS/" target="_blank" class="btn-3d flex items-center justify-center">
+                                <svg class="icon mr-1" viewBox="0 0 24 24">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                                </svg>
+                                <span class="text-center w-full">Rotisería</span>
+                            </a>
+                            <a href="https://ai.studio/apps/drive/1UsOLdbpYY956clHjic9-OH0qkh-jZfMY" target="_blank" class="btn-3d flex items-center justify-center">
+                                <svg class="icon mr-1" viewBox="0 0 24 24">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                                </svg>
+                                <span class="text-center w-full">AI Studio</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card text-center">
+                    <svg class="icon mb-2" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                    </svg>
+                    <p class="text-white">Manipulación de Alimentos</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Certificaciones -->
+    <section id="certificaciones" class="section bg-[#1c1c1c]">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-blue-400 mb-6">Certificaciones</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="card">
+                    <svg class="icon mb-2" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                    </svg>
+                    <p class="text-lg text-gray-300">Data Analytics | CoderHouse | 2022</p>
+                    <a href="https://drive.google.com/file/d/1l6vE-dfvottpnd0VTNnJAY9IfpdSnPJg/view?usp=sharing" target="_blank" class="whatsapp-btn mt-4">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                        </svg>
+                        <span class="whatsapp-tooltip">Ver certificado</span>
+                    </a>
+                </div>
+                <div class="card">
+                    <svg class="icon mb-2" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                    </svg>
+                    <p class="text-lg text-gray-300">Data Science | CoderHouse | 2023</p>
+                    <a href="https://drive.google.com/file/d/1vkYyO_uz4rypz--DoCgxPrz-zR-KCggj/view?usp=sharing" target="_blank" class="whatsapp-btn mt-4">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                        </svg>
+                        <span class="whatsapp-tooltip">Ver certificado</span>
+                    </a>
+                </div>
+                <div class="card">
+                    <svg class="icon mb-2" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                    </svg>
+                    <p class="text-lg text-gray-300">Visualización de Datos | Coursera | 2024</p>
+                    <a href="https://drive.google.com/file/d/1yd1DbOuXUKI1yLXvl0C5EqaHusQRggny/view?usp=sharing" target="_blank" class="whatsapp-btn mt-4">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                        </svg>
+                        <span class="whatsapp-tooltip">Ver certificado</span>
+                    </a>
+                </div>
+                <div class="card">
+                    <svg class="icon mb-2" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                    </svg>
+                    <p class="text-lg text-gray-300">Evaluación de Perfil Laboral</p>
+                    <a href="https://drive.google.com/file/d/1_e1aALydAUILvZ9l_-s6nRZ8E67nMrn8/view?usp=sharing" target="_blank" class="whatsapp-btn mt-4">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                        </svg>
+                        <span class="whatsapp-tooltip">Evaluación de Perfil Laboral</span>
+                    </a>
+                </div>
+                <div class="card">
+                    <svg class="icon mb-2" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                    </svg>
+                    <p class="text-lg text-gray-300">Flujos y herramientas de trabajo con IA</p>
+                    <a href="https://drive.google.com/file/d/1LfJC9cLFws3vUiFAO6a6p6UbRXWzCW0v/view?usp=sharing" target="_blank" class="whatsapp-btn mt-4">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                        </svg>
+                        <span class="whatsapp-tooltip">Ver certificado</span>
+                    </a>
+                </div>
+                <!-- NUEVA TARJETA GOOGLE ADS -->
+                <div class="card">
+                    <svg class="icon mb-2" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                    </svg>
+                    <p class="text-lg text-gray-300">GOOGLE ADS | LinkedIn Learning</p>
+                    <a href="https://www.linkedin.com/learning/certificates/bedba684f7a6c2123bd5c1a2ab659419577fbdd9b03a6532f9c4f5aad92e5386?trk=share_certificate" target="_blank" class="whatsapp-btn mt-4">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                        </svg>
+                        <span class="whatsapp-tooltip">Ver certificado</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Idiomas -->
+    <section id="idiomas" class="section bg-[#1c1c1c]">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-blue-400 mb-6">Idiomas</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="card">
+                    <svg class="icon mb-2" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                    </svg>
+                    <p class="text-lg text-gray-300">Español: Nativo</p>
+                </div>
+                <div class="card">
+                    <svg class="icon mb-2" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                    </svg>
+                    <p class="text-lg text-gray-300">Inglés: Básico</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contacto -->
+    <section id="contacto" class="section bg-[#1c1c1c]">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-blue-400 mb-6">Contacto</h2>
+            <div class="card">
+                <p class="text-lg text-gray-400 mt-4">Email: gastonrobertogimenez@gmail.com</p>
+                <p class="text-lg text-gray-400 mt-2">LinkedIn: <a href="https://www.linkedin.com/in/gaston-roberto-gimenez/" target="_blank" class="text-blue-400 hover:underline">linkedin.com/in/gastongimenez</a></p>
+                <a href="https://www.linkedin.com/in/gaston-roberto-gimenez/" target="_blank" class="mt-4 btn-3d">
+                    <svg class="icon mr-2" viewBox="0 0 24 24">
+                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM8 17H6V9h2v8zm6 0h-2v-4h2v4zm2 0h-2v-8h2v8zm-8-9H6V7h2v1z"/>
+                    </svg>
+                    Visitar Perfil de LinkedIn
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Botón de Descarga PDF (Inferior) -->
+    <section id="download-section" class="section bg-[#1c1c1c] text-center">
+        <div class="container mx-auto px-4">
+            <a id="download-btn-footer" href="https://drive.google.com/file/d/1XOoSzN1lsqVqLIv93Fy3FjpJF9XQVuJn/view?usp=sharing" target="_blank" class="whatsapp-btn">
+                <span>PDF</span>
+                <span class="whatsapp-tooltip">Baja el CV</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black py-6 text-center text-gray-400">
+        <p>© 2025 Gastón Roberto Giménez. Todos los derechos reservados.</p>
+        <p class="mt-2">
+            <a href="#" class="text-blue-400 hover:underline">Política de Privacidad</a> | 
+            <a href="#" class="text-blue-400 hover:underline">Política de Cookies</a> | 
+            <a href="#" class="text-blue-400 hover:underline">Aviso Legal</a>
+        </p>
+    </footer>
+
+    <script>
+        // Animaciones con GSAP y ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Animación de entrada para el nombre, título y botón de descarga (hero)
+        const tl = gsap.timeline({ delay: 0.5 });
+        tl.from("#name", {
+            x: -100,
+            opacity: 0,
+            duration: 1.5,
+            ease: "power2.out"
+        })
+        .from("#title", {
+            x: 100,
+            opacity: 0,
+            duration: 1.5,
+            ease: "power2.out"
+        }, "-=0.3")
+        .from("#download-btn", {
+            scale: 0,
+            opacity: 0,
+            duration: 0.8,
+            ease: "elastic.out(1, 0.3)"
+        }, "-=0.2");
+
+        // Animación para el botón de descarga inferior
+        gsap.from("#download-btn-footer", {
+            scrollTrigger: {
+                trigger: "#download-section",
+                start: "top 80%",
+                toggleActions: "play none none none",
+            },
+            scale: 0,
+            opacity: 0,
+            duration: 0.8,
+            ease: "elastic.out(1, 0.3)"
+        });
+
+        gsap.utils.toArray(".section").forEach((section) => {
+            gsap.to(section, {
+                scrollTrigger: {
+                    trigger: section,
+                    start: "top 80%",
+                    toggleActions: "play none none none",
+                },
+                opacity: 1,
+                y: 0,
+                duration: 0.6,
+            });
+        });
+
+        gsap.utils.toArray(".card").forEach((card) => {
+            gsap.to(card, {
+                scrollTrigger: {
+                    trigger: card,
+                    start: "top 90%",
+                    toggleActions: "play none none none",
+                },
+                scale: 1.02,
+                duration: 0.3,
+                ease: "power1.out"
+            });
+        });
+
+        gsap.utils.toArray(".icon").forEach((icon) => {
+            gsap.to(icon, {
+                scrollTrigger: {
+                    trigger: icon,
+                    start: "top 90%",
+                    toggleActions: "play none none none",
+                },
+                scale: 1.1,
+                rotation: 5,
+                duration: 0.5,
+                ease: "power1.out",
+                yoyo: true,
+                repeat: 1
+            });
+        });
+
+        // Parallax effect
+        window.addEventListener("scroll", () => {
+            const hero = document.querySelector(".section-hero");
+            const scrollPosition = window.pageYOffset;
+            hero.style.backgroundPositionY = `${scrollPosition * 0.5}px`;
+        });
+
+        // Dropdown toggle functionality
+        document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const menu = toggle.nextElementSibling;
+                menu.classList.toggle('active');
+            });
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            const dropdowns = document.querySelectorAll('.dropdown-menu');
+            dropdowns.forEach(dropdown => {
+                if (!dropdown.parentElement.contains(e.target)) {
+                    dropdown.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
