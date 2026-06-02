@@ -1,2192 +1,1270 @@
 <!DOCTYPE html>
 <html lang="es" class="scroll-smooth">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Romero Mecánica Integral - Taller de reparación de automóviles con años de experiencia. Servicio de calidad, confiable y transparente en Paysandú, Uruguay.">
-<meta name="theme-color" content="#0A0A0A">
-<title>ROMERO MECÁNICA INTEGRAL | Taller Mecánico - Diagnóstico y Reparación Profesional</title>
-<!-- Preconnect para mejor rendimiento-->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- Tailwind CSS CDN + Supresor de warnings-->
-<script>
-(function(){
-const originalWarn= console.warn;
-console.warn= function(...args){
-if(typeof args[0]=== 'string' && args[0].includes('cdn.tailwindcss.com')) return;
-originalWarn.apply(console, args); }; })();
-</script>
-<script src="https://cdn.tailwindcss.com/3.4.14"></script>
-<!-- Font Awesome-->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<!-- Google Fonts-->
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-<script>
-tailwind.config ={
-theme:{
-extend:{
-fontFamily:{
-sans:['Manrope','sans-serif'],
-display:['Space Grotesk','sans-serif'],
-},
-colors:{
-primary:{
-orange:'#FF6B35',
-amber:'#F7931E',
-dark:'#0A0A0A',
-gray:'#1A1A1A',
-card:'#2D2D2D',
-metallic:'#C0C0C0',
-light:'#F1F5F9',
-cream:'#F5F1E8'
-}
-},
-boxShadow:{
-'neon':'0 0 25px rgba(255, 107, 53, 0.45)',
-'glow':'0 0 40px rgba(255, 107, 53, 0.25)',
-'card':'0 10px 40px-10px rgba(0, 0, 0, 0.5)',
-'soft':'0 4px 20px rgba(0, 0, 0, 0.15)',
-'premium':'0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(255, 107, 53, 0.15)',
-},
-screens:{
-'xs':'475px',
-'2xl':'1400px',
-},
-animation:{
-'float':'float 6s ease-in-out infinite',
-'pulse-slow':'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-'shimmer':'shimmer 2s linear infinite',
-'gradient':'gradient 8s ease infinite',
-'scroll-banner':'scroll-banner 50s linear infinite',
-},
-keyframes:{
-float:{
-'0%, 100%':{transform:'translateY(0)'},
-'50%':{transform:'translateY(-12px)'},
-},
-shimmer:{
-'0%':{backgroundPosition:'-1000px 0'},
-'100%':{backgroundPosition:'1000px 0'},
-},
-gradient:{
-'0%, 100%':{backgroundPosition:'0% 50%'},
-'50%':{backgroundPosition:'100% 50%'},
-},
-'scroll-banner':{
-'0%':{transform:'translateX(0)'},
-'100%':{transform:'translateX(-100%)'}
-}
-}
-}
-}
-}
-</script>
-<style>
-:root{
---gradient-primary: linear-gradient(135deg,#FF6B35 0%,#F7931E 100%);
---gradient-dark: linear-gradient(180deg,#0A0A0A 0%,#1A1A1A 100%);
---gradient-metallic: linear-gradient(135deg,#E8E8E8 0%,#A8A8A8 50%,#E8E8E8 100%);
---gradient-orange-glow: linear-gradient(135deg, rgba(255,107,53,0.3) 0%, rgba(247,147,30,0.1) 100%);
---gradient-animated: linear-gradient(-45deg, #FF6B35, #F7931E, #FF8C42, #FF6B35);
-}
-*{
--webkit-tap-highlight-color: transparent;
-}
-body{
-background: var(--gradient-dark);
-color:#E2E8F0;
-font-feature-settings:"cv02","cv03","cv04","cv11";
-overflow-x: hidden;
-position: relative;
-}
-body::before{
-content:'';
-position: fixed;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-background-image: url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1920&q=80');
-background-size: cover;
-background-position: center;
-background-repeat: no-repeat;
-opacity: 0.25;
-z-index: -2;
-animation: backgroundMove 40s ease-in-out infinite;
-filter: brightness(0.7) contrast(1.2);
-}
-body::after{
-content:'';
-position: fixed;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-background: var(--gradient-animated);
-background-size: 400% 400%;
-opacity: 0.03;
-z-index: -1;
-animation: gradient 15s ease infinite;
-pointer-events: none;
-}
-@keyframes backgroundMove{
-0%, 100%{transform: scale(1) translate(0, 0);}
-25%{transform: scale(1.08) translate(-2%, -2%);}
-50%{transform: scale(1) translate(0, -3%);}
-75%{transform: scale(1.08) translate(2%, -2%);}
-}
-.glass{
-background: rgba(26, 26, 26, 0.75);
-backdrop-filter: blur(20px) saturate(180%);
--webkit-backdrop-filter: blur(20px) saturate(180%);
-border: 1px solid rgba(255, 107, 53, 0.2);
-box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.1);
-}
-.glass-card{
-background: linear-gradient(145deg, rgba(45, 45, 45, 0.85), rgba(26, 26, 26, 0.95));
-backdrop-filter: blur(20px) saturate(180%);
-border: 1px solid rgba(255, 255, 255, 0.08);
-border-radius: 24px;
-transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-position: relative;
-overflow: hidden;
-}
-.glass-card:hover{
-border-color: rgba(255, 107, 53, 0.4);
-transform: translateY(-4px);
-box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 30px rgba(255, 107, 53, 0.15);
-}
-.glow-text{
-text-shadow: 0 0 30px rgba(255, 107, 53, 0.7), 0 0 60px rgba(247, 147, 30, 0.4), 0 0 90px rgba(255, 107, 53, 0.2);
-letter-spacing:-0.02em;
-}
-.gradient-text{
-background: var(--gradient-primary);
--webkit-background-clip: text;
--webkit-text-fill-color: transparent;
-background-clip: text;
-background-size: 200% auto;
-animation: shimmer 3s linear infinite;
-}
-.pulse-glow{
-animation: pulse-glow 3s ease-in-out infinite;
-}
-@keyframes pulse-glow{
-0%, 100%{opacity: 1; box-shadow: 0 0 20px rgba(255, 107, 53, 0.4);}
-50%{opacity: 0.85; box-shadow: 0 0 50px rgba(255, 107, 53, 0.8);}
-}
-.fade-in-up{
-opacity: 0;
-transform: translateY(40px);
-animation: fadeInUp 1s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
-}
-@keyframes fadeInUp{
-to{opacity: 1; transform: translateY(0);}
-}
-.parallax-image{
-transition: transform 0.5s ease-out;
-will-change: transform;
-filter: brightness(0.85) contrast(1.15);
-}
-.parallax-bg{
-animation: subtle-move 30s ease-in-out infinite alternate;
-}
-@keyframes subtle-move{
-0%{transform: translate(0, 0) scale(1.05);}
-50%{transform: translate(5%, 3%) scale(1.1);}
-100%{transform: translate(0, 0) scale(1.05);}
-}
-.input-modern{
-background: rgba(26, 26, 26, 0.85);
-border: 2px solid rgba(255, 255, 255, 0.12);
-border-radius: 16px;
-transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-color:#fff;
-position: relative;
-width: 100%;
--webkit-appearance: none;
-appearance: none;
-font-family: 'Manrope', sans-serif;
-font-size: 0.9rem;
-}
-.input-modern:focus{
-border-color:#FF6B35;
-box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.2), 0 0 30px rgba(255, 107, 53, 0.2);
-outline: none;
-background: rgba(26, 26, 26, 0.95);
-}
-.input-modern::placeholder{
-color: rgba(226, 232, 240, 0.4);
-}
-.input-modern option{
-background: #1A1A1A;
-color: #E2E8F0;
-padding: 0.5rem;
-}
-.input-modern:focus::placeholder{
-color: rgba(255, 107, 53, 0.5);
-}
-.btn-primary{
-background: var(--gradient-primary);
-color:#fff;
-font-weight: 700;
-letter-spacing: 0.02em;
-position: relative;
-overflow: hidden;
-transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
-border: none;
-cursor: pointer;
-}
-.btn-primary::before{
-content:'';
-position: absolute;
-top: 50%;
-left: 50%;
-width: 0;
-height: 0;
-border-radius: 50%;
-background: rgba(255,255,255,0.3);
-transform: translate(-50%, -50%);
-transition: width 0.6s, height 0.6s;
-pointer-events: none;
-}
-.btn-primary:hover::before{
-width: 300px;
-height: 300px;
-}
-.btn-primary:hover{
-transform: translateY(-4px) scale(1.02);
-box-shadow: 0 20px 50px rgba(255, 107, 53, 0.5), 0 0 40px rgba(255, 107, 53, 0.4);
-}
-.btn-outline{
-background: transparent;
-border: 2px solid rgba(255, 255, 255, 0.25);
-color:#fff;
-font-weight: 600;
-transition: all 0.4s ease;
-position: relative;
-overflow: hidden;
-}
-.btn-outline:hover{
-border-color:#FF6B35;
-background: rgba(255, 107, 53, 0.1);
-transform: translateY(-4px);
-box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
-}
-.btn-review{
-background: linear-gradient(135deg,#FFD700 0%,#FFA500 50%,#FF8C00 100%);
-color:#0A0A0A;
-font-weight: 700;
-letter-spacing: 0.02em;
-position: relative;
-overflow: hidden;
-transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
-border: none;
-cursor: pointer;
-}
-.btn-review:hover{
-transform: translateY(-4px) scale(1.02);
-box-shadow: 0 20px 50px rgba(255, 215, 0, 0.5), 0 0 40px rgba(255, 165, 0, 0.4);
-}
-::-webkit-scrollbar{width: 10px; height: 10px;}
-::-webkit-scrollbar-track{background: rgba(26, 26, 26, 0.6);border-radius: 8px;}
-::-webkit-scrollbar-thumb{background: linear-gradient(180deg,#FF6B35,#F7931E);border-radius: 8px;border: 2px solid transparent;background-clip: content-box;}
-@media(max-width: 640px){
-.text-5xl{font-size: 2.25rem; line-height: 1.15;}
-.text-7xl{font-size: 2.75rem; line-height: 1.1;}
-h1{font-size: 2.3rem;}
-.container{padding-left: 1.25rem; padding-right: 1.25rem;}
-}
-@media(max-width: 475px){
-.text-3xl{font-size: 1.75rem;}
-.py-24{padding-top: 3.5rem; padding-bottom: 3.5rem;}
-.glass-card{border-radius: 18px;}
-}
-.status-dot{position: relative;}
-.status-dot::after{
-content:'';position: absolute;top:-2px; left:-2px; right:-2px; bottom:-2px;
-border-radius: 50%;background: inherit;filter: blur(6px);opacity: 0.7;animation: pulse 2s infinite;
-}
-.particles{
-position: absolute;top: 0; left: 0; right: 0; bottom: 0;
-pointer-events: none;overflow: hidden;z-index: 0;
-}
-.particle{
-position: absolute;width: 4px; height: 4px;
-background: rgba(255, 107, 53, 0.7);border-radius: 50%;
-animation: float-particle 20s infinite linear;opacity: 0.6;
-box-shadow: 0 0 10px rgba(255, 107, 53, 0.5);
-}
-@keyframes float-particle{
-0%{transform: translateY(100vh) translateX(0); opacity: 0;}
-10%{opacity: 0.8;}
-90%{opacity: 0.8;}
-100%{transform: translateY(-20px) translateX(100px); opacity: 0;}
-}
-.label-below{
-display: block;
-margin-top: 0.5rem;
-margin-left: 0.25rem;
-font-size: 0.75rem;
-font-weight: 600;
-color: #FF6B35;
-text-transform: uppercase;
-letter-spacing: 0.08em;
-}
-.navbar-logo{
-height: 70px;
-width: 70px;
-object-fit: cover;
-border-radius: 50%;
-border: 3px solid #FF6B35;
-box-shadow: 0 0 25px rgba(255, 107, 53, 0.6), inset 0 0 20px rgba(255, 107, 53, 0.2);
-transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-position: relative;
-}
-.navbar-logo:hover{
-transform: scale(1.15);
-box-shadow: 0 0 40px rgba(255, 107, 53, 0.9), inset 0 0 30px rgba(255, 107, 53, 0.3);
-}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Landings 100% estáticas que facturan solas • Básico $88k • Avanzado $160k • Premium $180k"/>
+  <title>NEXOar-Art | Landing que Convierte Sola</title>
 
-/* ============================== */
-/* HERO LOGO - EFECTO FUEGO GRADUAL */
-/* ============================== */
-.hero-logo{
-height: 12rem;
-width: 12rem;
-object-fit: cover;
-border-radius: 50%;
-border: 5px solid #FF6B35;
-box-shadow: 0 0 40px rgba(255, 107, 53, 0.5), 0 0 80px rgba(255, 107, 53, 0.3), inset 0 0 30px rgba(255, 107, 53, 0.15);
-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
-display: block;
-margin: 0 auto;
-position: relative;
-overflow: hidden;
-background: #0A0A0A;
-}
-.hero-logo::before{
-content:'';
-position: absolute;
-top: 0;left: 0;right: 0;
-height: 55%;
-background: linear-gradient(180deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.15) 25%, rgba(255,255,255,0.03) 50%, transparent 100%);
-border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%;
-opacity: 0.7;
-pointer-events: none;
-z-index: 2;
-}
-.hero-logo::after{
-content:'';
-position: absolute;
-inset: -8px;
-border-radius: 50%;
-border: 2px solid rgba(255, 107, 53, 0.25);
-animation: rotate 10s linear infinite;
-pointer-events: none;
-z-index: 3;
-}
-.hero-logo .shine-effect{
-position: absolute;
-top: 0;left: -100%;
-width: 100%;height: 100%;
-background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.35) 50%, transparent 100%);
-transition: left 0.8s ease;
-pointer-events: none;
-z-index: 4;
-}
-.hero-logo:hover .shine-effect{
-left: 100%;
-}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 
-/* EFECTO FUEGO CON DESVANECIMIENTO GRADUAL */
-.fire-ring{
-position: absolute;
-inset: -14px;
-border-radius: 50%;
-pointer-events: none;
-z-index: 1;
-opacity: 0;
-transition: opacity 1s ease;
-}
-.fire-ring.active{
-opacity: 1;
-}
-.fire-ring.fading{
-animation: fade-fire 5s ease-out forwards;
-}
-@keyframes fade-fire{
-0%{opacity: 1;}
-20%{opacity: 0.8;}
-40%{opacity: 0.6;}
-60%{opacity: 0.4;}
-80%{opacity: 0.2;}
-100%{opacity: 0;}
-}
-/* Llamas ascendentes */
-.fire-ring .flame{
-position: absolute;
-bottom: -4px;
-width: 100%;
-height: 100%;
-pointer-events: none;
-}
-.fire-ring .flame::before{
-content: '';
-position: absolute;
-bottom: -12px;
-left: 50%;
-transform: translateX(-50%);
-width: 85%;
-height: 70%;
-background: radial-gradient(ellipse at center bottom, 
-  rgba(255,215,0,0.9) 0%, 
-  rgba(255,107,53,0.8) 25%, 
-  rgba(255,69,0,0.6) 50%, 
-  rgba(255,0,0,0.3) 75%, 
-  transparent 100%);
-filter: blur(6px);
-animation: flames-rise 1.5s ease-in-out infinite alternate;
-border-radius: 50% 50% 30% 30%;
-}
-.fire-ring .flame::after{
-content: '';
-position: absolute;
-bottom: -8px;
-left: 50%;
-transform: translateX(-50%);
-width: 90%;
-height: 55%;
-background: radial-gradient(ellipse at center bottom,
-  rgba(255,255,200,0.95) 0%,
-  rgba(255,200,50,0.7) 20%,
-  rgba(255,107,53,0.5) 50%,
-  transparent 80%);
-filter: blur(4px);
-animation: flames-rise 1s ease-in-out infinite alternate-reverse;
-border-radius: 50% 50% 30% 30%;
-}
-/* Partículas de chispas */
-.fire-ring .spark{
-position: absolute;
-width: 3px;
-height: 3px;
-background: #FFD700;
-border-radius: 50%;
-box-shadow: 0 0 6px 2px rgba(255,165,0,0.8);
-opacity: 0;
-}
-.fire-ring.active .spark{
-animation: spark-rise 2s ease-out infinite;
-}
-.fire-ring .spark:nth-child(1){ left: 20%; animation-delay: 0s; }
-.fire-ring .spark:nth-child(2){ left: 40%; animation-delay: 0.4s; }
-.fire-ring .spark:nth-child(3){ left: 60%; animation-delay: 0.8s; }
-.fire-ring .spark:nth-child(4){ left: 80%; animation-delay: 1.2s; }
-.fire-ring .spark:nth-child(5){ left: 30%; animation-delay: 0.6s; }
-.fire-ring .spark:nth-child(6){ left: 50%; animation-delay: 1s; }
-.fire-ring .spark:nth-child(7){ left: 70%; animation-delay: 1.4s; }
-.fire-ring .spark:nth-child(8){ left: 15%; animation-delay: 0.3s; }
-
-@keyframes flames-rise{
-0%{transform: translateX(-50%) scaleY(1); opacity: 0.8;}
-100%{transform: translateX(-50%) scaleY(1.3); opacity: 1;}
-}
-@keyframes spark-rise{
-0%{
-bottom: 0;
-opacity: 0;
-transform: translateX(0) scale(1);
-}
-20%{
-opacity: 1;
-}
-100%{
-bottom: 160px;
-opacity: 0;
-transform: translateX(calc((var(--spark-x, 0)) * 1px)) scale(0.2);
-}
-}
-/* Efecto de resplandor pulsante */
-.fire-ring .glow-pulse{
-position: absolute;
-inset: -20px;
-border-radius: 50%;
-background: radial-gradient(circle, rgba(255,69,0,0.3) 0%, rgba(255,107,53,0.1) 40%, transparent 70%);
-animation: glow-pulse 2s ease-in-out infinite;
-pointer-events: none;
-}
-@keyframes glow-pulse{
-0%, 100%{transform: scale(1); opacity: 0.6;}
-50%{transform: scale(1.15); opacity: 1;}
-}
-
-.hero-logo:hover{
-transform: scale(1.08);
-box-shadow: 0 0 80px rgba(255, 107, 53, 0.8), 0 0 120px rgba(255, 107, 53, 0.5), inset 0 0 50px rgba(255, 107, 53, 0.3);
-}
-
-.hero-logo-wrapper{
-display: flex;
-justify-content: center;
-align-items: center;
-width: fit-content;
-margin: 0 auto;
-padding: 0.75rem;
-position: relative;
-z-index: 10;
-}
-.hero-logo-inner{
-position: relative;
-display: flex;
-justify-content: center;
-align-items: center;
-}
-@keyframes rotate{
-from{transform: rotate(0deg);}
-to{transform: rotate(360deg);}
-}
-@media(max-width: 768px){
-.navbar-logo{height: 55px; width: 55px;}
-.hero-logo{height: 8rem; width: 8rem;}
-.hero-logo-wrapper{padding: 0.5rem;}
-}
-.navbar-clock{
-font-family: 'Space Grotesk', monospace;
-font-weight: 700;
-font-size: 1.15rem;
-color: #FF6B35;
-text-shadow: 0 0 15px rgba(255, 107, 53, 0.7), 0 0 30px rgba(255, 107, 53, 0.4);
-letter-spacing: 0.1em;
-background: rgba(255, 107, 53, 0.1);
-border: 2px solid rgba(255, 107, 53, 0.35);
-padding: 0.3rem 0.9rem;
-border-radius: 10px;
-backdrop-filter: blur(10px);
-box-shadow: 0 0 20px rgba(255, 107, 53, 0.25), inset 0 0 15px rgba(255, 107, 53, 0.08);
-animation: clock-pulse 2s ease-in-out infinite;
-white-space: nowrap;
-display: flex;
-align-items: center;
-gap: 0.4rem;
-}
-.navbar-clock i{font-size: 0.95rem;}
-@keyframes clock-pulse{
-0%, 100%{box-shadow: 0 0 20px rgba(255, 107, 53, 0.25), inset 0 0 15px rgba(255, 107, 53, 0.08);}
-50%{box-shadow: 0 0 35px rgba(255, 107, 53, 0.45), inset 0 0 25px rgba(255, 107, 53, 0.15);}
-}
-@media(max-width: 768px){
-.navbar-clock{font-size: 0.95rem; padding: 0.25rem 0.7rem;}
-}
-.social-btn{
-display: inline-flex;align-items: center;justify-content: center;
-width: 50px;height: 50px;border-radius: 50%;
-background: rgba(255, 255, 255, 0.05);border: 2px solid rgba(255, 255, 255, 0.15);
-color: #fff;font-size: 1.4rem;
-transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);position: relative;overflow: hidden;
-}
-.social-btn:hover{
-transform: translateY(-5px) scale(1.1);box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-}
-.social-btn.whatsapp:hover{background: #25D366;border-color: transparent;}
-.badge-animated{position: relative;animation: badge-pulse 2s ease-in-out infinite;}
-@keyframes badge-pulse{0%, 100%{transform: scale(1);}50%{transform: scale(1.05);}}
-
-/* Select wrapper para flecha personalizada */
-.select-wrapper{position: relative;}
-.select-wrapper::after{
-content:'';position: absolute;right: 1rem;top: 50%;transform: translateY(-50%);
-width: 0;height: 0;border-left: 5px solid transparent;border-right: 5px solid transparent;
-border-top: 6px solid #FF6B35;pointer-events: none;z-index: 5;
-}
-.select-wrapper select{padding-right: 2.5rem;}
-
-/* Estilos para el formulario - inputs funcionales */
-.form-field{
-position: relative;
-margin-bottom: 0;
-}
-.form-field .field-label{
-display: block;
-font-size: 0.7rem;
-font-weight: 700;
-color: #FF6B35;
-text-transform: uppercase;
-letter-spacing: 0.1em;
-margin-bottom: 0.4rem;
-}
-.form-field .field-input{
-width: 100%;
-background: rgba(26, 26, 26, 0.85);
-border: 2px solid rgba(255, 255, 255, 0.12);
-border-radius: 14px;
-padding: 0.9rem 1rem;
-color: #E2E8F0;
-font-size: 0.9rem;
-font-family: 'Manrope', sans-serif;
-transition: all 0.3s ease;
-outline: none;
--webkit-appearance: none;
-appearance: none;
-}
-.form-field .field-input::placeholder{
-color: rgba(226, 232, 240, 0.35);
-}
-.form-field .field-input:focus{
-border-color: #FF6B35;
-box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.15), 0 0 20px rgba(255, 107, 53, 0.1);
-background: rgba(26, 26, 26, 0.95);
-}
-.form-field .field-input:focus::placeholder{
-color: rgba(255, 107, 53, 0.4);
-}
-.form-field select.field-input{
-cursor: pointer;
-background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23FF6B35' stroke-width='2' fill='none'/%3E%3C/svg%3E");
-background-repeat: no-repeat;
-background-position: right 1rem center;
-background-size: 12px;
-padding-right: 2.5rem;
-}
-.form-field select.field-input option{
-background: #1A1A1A;
-color: #E2E8F0;
-padding: 0.5rem;
-}
-.form-field textarea.field-input{
-resize: vertical;
-min-height: 80px;
-}
-.form-field .field-input.has-value{
-border-color: rgba(255, 107, 53, 0.5);
-}
-
-/* ✅ Banner Automático Taller - VELOCIDAD REDUCIDA */
-.banner {
-  width: 100%;
-  background: #111;
-  color: #fff;
-  font-size: 1.2em;
-  font-weight: bold;
-  overflow: hidden;
-  white-space: nowrap;
-  padding: 12px 0;
-  border-top: 3px solid #FF6B35;
-  border-bottom: 3px solid #FF6B35;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 100;
-}
-.banner-track {
-  display: inline-block;
-  padding-left: 100%;
-  animation: scroll-banner 50s linear infinite;
-}
-.banner-track span {
-  margin: 0 50px;
-}
-@keyframes scroll-banner {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-100%); }
-}
-@media(max-width: 640px){
-  .banner { font-size: 0.9em; padding: 10px 0; }
-  .banner-track span { margin: 0 25px; }
-}
-
-/* 🔥 HOVER TEXT PARA BOTONES FLOTANTES */
-@media(min-width: 768px){
-  .floating-btn-label{
-    display: none;
-    opacity: 0;
-    transform: translateX(8px);
-    transition: all 0.25s ease;
-    font-weight: 600;
-    white-space: nowrap;
-    font-size: 0.85rem;
-  }
-  .group:hover .floating-btn-label{
-    display: inline;
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-/* 📸 MICROEFECTO PERSUASIVO PARA INSTAGRAM */
-@keyframes instagram-glow{
-0%, 100%{box-shadow: 0 4px 20px rgba(220, 39, 67, 0.35), 0 0 25px rgba(245, 101, 101, 0.2);}
-50%{box-shadow: 0 6px 28px rgba(220, 39, 67, 0.55), 0 0 45px rgba(245, 101, 101, 0.4), 0 0 70px rgba(131, 58, 196, 0.25);}
-}
-.btn-instagram-pulse{
-animation: instagram-glow 3.5s ease-in-out infinite;
-}
-
-/* 🌍 SELECTOR DE IDIOMA */
-.lang-selector{
-position: relative;
-display: inline-flex;
-align-items: center;
-gap: 0.3rem;
-background: rgba(26, 26, 26, 0.85);
-border: 2px solid rgba(255, 255, 255, 0.12);
-border-radius: 12px;
-padding: 0.4rem 0.7rem;
-color: #E2E8F0;
-font-size: 0.8rem;
-font-weight: 600;
-cursor: pointer;
-transition: all 0.3s ease;
-}
-.lang-selector:hover{
-border-color: #FF6B35;
-box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.15), 0 0 15px rgba(255, 107, 53, 0.1);
-}
-.lang-selector i{
-font-size: 0.9rem;
-color: #FF6B35;
-}
-.lang-dropdown{
-position: absolute;
-top: 100%;
-right: 0;
-margin-top: 0.5rem;
-background: #1A1A1A;
-border: 1px solid rgba(255, 107, 53, 0.3);
-border-radius: 12px;
-padding: 0.3rem;
-min-width: 140px;
-z-index: 100;
-opacity: 0;
-visibility: hidden;
-transform: translateY(-10px);
-transition: all 0.2s ease;
-box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-}
-.lang-selector:hover .lang-dropdown{
-opacity: 1;
-visibility: visible;
-transform: translateY(0);
-}
-.lang-option{
-display: flex;
-align-items: center;
-gap: 0.5rem;
-padding: 0.5rem 0.7rem;
-border-radius: 8px;
-color: #E2E8F0;
-font-size: 0.85rem;
-cursor: pointer;
-transition: all 0.2s ease;
-}
-.lang-option:hover{
-background: rgba(255, 107, 53, 0.15);
-color: #FF6B35;
-}
-.lang-option.active{
-background: rgba(255, 107, 53, 0.25);
-color: #FF6B35;
-font-weight: 700;
-}
-.lang-option i{
-width: 16px;
-text-align: center;
-}
-</style>
-</head>
-<body class="antialiased relative">
-
-<!-- ✅ Banner Automático Taller -->
-<div class="banner">
-  <div class="banner-track">
-    <span data-i18n="banner_1">🧼 Limpieza de inyectores cada 6 meses = motor más eficiente</span>
-    <span data-i18n="banner_2">🛢️ Aceite de calidad cada 10.000 km = vida útil prolongada</span>
-    <span data-i18n="banner_3">⛽ Usar nafta premium = más potencia, menos desgaste</span>
-    <span data-i18n="banner_4">✅ Tres simples hábitos = menos consumo, menos fallas, más años de motor</span>
-    <span data-i18n="banner_5">📲 ¡Sacá un turno, no lo dejes pasar! WhatsApp +59898680159</span>
-    <!-- Duplicado para loop continuo -->
-    <span data-i18n="banner_1">🧼 Limpieza de inyectores cada 6 meses = motor más eficiente</span>
-    <span data-i18n="banner_2">🛢️ Aceite de calidad cada 10.000 km = vida útil prolongada</span>
-    <span data-i18n="banner_3">⛽ Usar nafta premium = más potencia, menos desgaste</span>
-    <span data-i18n="banner_4">✅ Tres simples hábitos = menos consumo, menos fallas, más años de motor</span>
-    <span data-i18n="banner_5">📲 ¡Sacá un turno, no lo dejes pasar! WhatsApp +59898680159</span>
-  </div>
-</div>
-
-<!-- Partículas decorativas de fondo-->
-<div class="particles" id="particles"></div>
-
-<!-- NAVBAR - POSICIONADO DEBAJO DEL BANNER PARA NO SUPERPONERSE -->
-<nav class="fixed w-full z-50 top-[52px] glass border-b border-white/10 transition-all duration-300" id="navbar">
-<div class="container mx-auto px-4 h-16 md:h-20 flex items-center relative">
-<a href="#" class="flex items-center md:absolute md:left-4 md:translate-x-0">
-<img src="LOGOROMERO.png" alt="Romero Mecánica Integral Logo" class="navbar-logo">
-</a>
-<a href="#" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:static md:translate-x-0 md:translate-y-0 md:ml-auto md:mr-auto font-display font-bold text-lg sm:text-xl md:text-2xl gradient-text tracking-tight uppercase text-center md:text-left drop-shadow-lg">
-ROMERO MECÁNICA INTEGRAL
-</a>
-<div id="navbarClock" class="hidden md:flex items-center ml-4">
-<div class="navbar-clock">
-<i class="fa-regular fa-clock"></i>
-<span id="navbarClockTime">00:00:00</span>
-</div>
-</div>
-<div class="ml-auto flex items-center gap-3 md:gap-5">
-<!-- 🌍 SELECTOR DE IDIOMA -->
-<div class="lang-selector" id="langSelector">
-<i class="fa-solid fa-globe"></i>
-<span id="currentLang">ES</span>
-<div class="lang-dropdown">
-<div class="lang-option active" data-lang="es"><i class="fa-solid fa-check"></i> Español</div>
-<div class="lang-option" data-lang="en"><i class="fa-regular fa-circle"></i> English</div>
-<div class="lang-option" data-lang="pt"><i class="fa-regular fa-circle"></i> Português</div>
-</div>
-</div>
-<div id="status-badge-desktop" class="hidden md:flex items-center px-3 py-1.5 md:px-4 md:py-2 rounded-full text-xs font-semibold uppercase tracking-wide bg-white/5 border border-white/10 hover:border-primary-orange/40 transition-all">
-<span id="status-dot-desktop" class="status-dot w-2 h-2 rounded-full mr-2.5 bg-gray-500"></span>
-<span id="status-text-desktop" class="text-gray-300" data-i18n="status_checking">Verificando...</span>
-</div>
-<div class="hidden md:flex items-center gap-3 lg:gap-5">
-<a href="#asesoramiento" class="text-gray-300 hover:text-primary-orange transition text-sm lg:text-base font-medium relative group" data-i18n="nav_advice">
-Asesoramiento
-<span class="absolute bottom-1 left-0 w-0 h-0.5 bg-primary-orange transition-all group-hover:w-full"></span>
-</a>
-<a href="#diagnostico" class="btn-primary px-4 lg:px-6 py-2 lg:py-2.5 rounded-xl font-bold transition shadow-neon uppercase text-xs lg:text-sm tracking-wide" data-i18n="nav_diagnosis">
-Pre-Diagnóstico
-</a>
-</div>
-</div>
-</div>
-<div id="status-bar-mobile" class="md:hidden w-full py-2 text-center text-xs font-bold uppercase bg-gray-900/80 border-t border-white/10 flex items-center justify-center gap-2">
-<span id="navbarClockTimeMobile" style="font-family:'Space Grotesk',monospace;color:#FF6B35;text-shadow:0 0 10px rgba(255,107,53,0.6);">00:00:00</span>
-<span>|</span>
-<span data-i18n="status_checking">Verificando estado...</span>
-</div>
-</nav>
-
-<!-- Botones flotantes premium -->
-<div class="fixed bottom-24 md:bottom-8 right-4 z-50 animate-float flex flex-col gap-3">
-<a href="https://api.whatsapp.com/send?phone=59898680159" target="_blank" rel="noopener noreferrer"
-class="bg-[#25D366] hover:bg-[#128C7E] text-white p-3.5 md:p-4 rounded-full shadow-lg transition-all hover:scale-110 flex items-center justify-center gap-2 group"
-title="Chat directo por WhatsApp" style="animation: float 6s ease-in-out infinite;">
-<i class="fa-brands fa-whatsapp text-2xl md:text-3xl"></i>
-<span class="hidden lg:inline text-xs font-bold whitespace-nowrap" data-i18n="btn_chat">Chat</span>
-</a>
-<a href="#diagnostico" class="btn-primary px-5 py-3 md:px-7 md:py-3.5 rounded-2xl shadow-neon transition flex items-center gap-2.5 hover:shadow-glow text-sm font-semibold group">
-<i class="fa-solid fa-calendar-check text-lg"></i>
-<span class="floating-btn-label" data-i18n="btn_appointment">Pedir Turno</span>
-<i class="fa-solid fa-arrow-right ml-1 group-hover:translate-x-1 transition-transform"></i>
-</a>
-<a href="https://maps.app.goo.gl/yiAsXENC2p94CAsE9" target="_blank" rel="noopener noreferrer" class="btn-review px-4 py-2.5 md:px-5 md:py-3 rounded-xl shadow-lg transition flex items-center gap-2 text-xs md:text-sm font-semibold group animate-float" style="animation-delay: 0.5s;">
-<i class="fa-solid fa-star text-lg"></i>
-<span class="floating-btn-label" data-i18n="btn_review">Deja tu Reseña</span>
-</a>
-<a href="https://www.instagram.com/romero_taller/" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-[#f09433] via-[#dc2743] to-[#bc1888] hover:from-[#d6822a] hover:via-[#c4223d] hover:to-[#a8167a] text-white p-3.5 md:p-4 rounded-full shadow-lg transition-all hover:scale-110 flex items-center justify-center gap-2 group animate-float btn-instagram-pulse" style="animation-delay: 1s;" title="Síguenos en Instagram">
-<i class="fa-brands fa-instagram text-2xl md:text-3xl"></i>
-<span class="floating-btn-label" data-i18n="btn_instagram">Instagram</span>
-</a>
-</div>
-
-<!-- HERO SECTION - PADDING AJUSTADO PARA SEPARAR LOGO DEL BANNER (SIN REDUCIR TAMAÑO DEL LOGO) -->
-<header class="relative pt-48 md:pt-56 lg:pt-60 pb-20 md:pt-60 md:pb-32 lg:pt-64 lg:pb-40 min-h-screen flex items-center overflow-hidden">
-<div class="absolute inset-0 bg-gradient-to-br from-primary-dark via-[#0D0D0D] to-[#0A0A0A]">
-<div class="absolute inset-0 opacity-40" style="background-image: radial-gradient(circle at 20% 35%, rgba(255,107,53, 0.2) 0%, transparent 40%), radial-gradient(circle at 80% 70%, rgba(247,147,30, 0.15) 0%, transparent 45%)"></div>
-</div>
-<div id="parallax-container" class="absolute inset-0 overflow-hidden">
-<img id="parallax-img" src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1974&auto=format&fit=crop" alt="Taller mecánico profesional" class="parallax-image w-full h-full object-cover opacity-70 parallax-bg">
-<div class="absolute inset-0 bg-gradient-to-t from-primary-dark via-primary-dark/70 to-transparent"></div>
-</div>
-<div class="container mx-auto px-4 md:px-6 relative z-10">
-<div class="max-w-4xl mx-auto text-center space-y-6 md:space-y-8">
-<div class="fade-in-up badge-animated" style="animation-delay: 0.1s;">
-<div class="inline-flex items-center gap-2 bg-primary-orange/20 border border-primary-orange/40 text-primary-orange px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider backdrop-blur-sm shadow-lg">
-<i class="fa-solid fa-microchip"></i> <span data-i18n="hero_badge">Diagnóstico de Precisión</span>
-</div>
-</div>
-<h1 class="font-display font-black text-4xl md:text-5xl lg:text-7xl leading-tight glow-text main-title fade-in-up" style="animation-delay: 0.2s;">
-ROMERO MECÁNICA<br><span class="gradient-text">INTEGRAL</span>
-</h1>
-<!-- LOGO CIRCULAR INFERIOR -->
-<div class="hero-logo-wrapper fade-in-up" style="animation-delay: 0.25s;">
-<div class="hero-logo-inner">
-<img src="LOGOROMERO.png" alt="Romero Mecánica Integral Logo" class="hero-logo" id="heroLogo">
-<div class="shine-effect"></div>
-<!-- EFECTO FUEGO -->
-<div class="fire-ring" id="fireRing">
-<div class="glow-pulse"></div>
-<div class="flame"></div>
-<div class="spark" style="--spark-x: -20;"></div>
-<div class="spark" style="--spark-x: 15;"></div>
-<div class="spark" style="--spark-x: -10;"></div>
-<div class="spark" style="--spark-x: 25;"></div>
-<div class="spark" style="--spark-x: 5;"></div>
-<div class="spark" style="--spark-x: -30;"></div>
-<div class="spark" style="--spark-x: 20;"></div>
-<div class="spark" style="--spark-x: -5;"></div>
-</div>
-</div>
-</div>
-<p class="text-gray-300/90 text-base md:text-lg max-w-3xl mx-auto description-text fade-in-up leading-relaxed" style="animation-delay: 0.3s;" data-i18n="hero_description">
-En Romero Mecánica Integral, entendemos que tu auto es una inversión importante y tu seguridad es primordial. Somos un taller de reparación de automóviles con años de experiencia en Paysandú, Uruguay, dedicados a brindarte un servicio de calidad, confiable y transparente. Nos especializamos en mantener tu vehículo en óptimas condiciones para que disfrutes de cada viaje con total tranquilidad.
-</p>
-<div class="grid grid-cols-3 gap-3 md:gap-5 pt-2 md:pt-4 fade-in-up" style="animation-delay: 0.5s;">
-<div class="text-center p-4 rounded-2xl bg-white/5 border border-white/10 transition">
-<span class="block text-2xl md:text-3xl font-bold gradient-text"><span id="counter1" data-target="99">0</span>%</span>
-<span class="text-xs text-gray-400 mt-1 block" data-i18n="stat_precision">Precisión</span>
-</div>
-<div class="text-center p-4 rounded-2xl bg-white/5 border border-white/10 transition">
-<span class="block text-2xl md:text-3xl font-bold gradient-text"><span id="counter2" data-target="50">0</span>min</span>
-<span class="text-xs text-gray-400 mt-1 block" data-i18n="stat_saving">Ahorro</span>
-</div>
-<div class="text-center p-4 rounded-2xl bg-white/5 border border-white/10 transition">
-<span class="block text-2xl md:text-3xl font-bold gradient-text"><span id="counter3" data-target="8000">0</span>+</span>
-<span class="text-xs text-gray-400 mt-1 block" data-i18n="stat_vehicles">Vehículos</span>
-</div>
-</div>
-<div class="flex flex-col sm:flex-row gap-3.5 pt-2 justify-center fade-in-up" style="animation-delay: 0.6s;">
-<a href="#diagnostico" class="btn-primary px-6 py-3.5 rounded-xl uppercase tracking-wide flex items-center justify-center gap-2.5 group text-sm font-semibold shadow-neon" data-i18n="btn_start_diagnosis">
-<span>Iniciar Diagnóstico</span> <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
-</a>
-<a href="#asesoramiento" class="btn-outline px-6 py-3.5 rounded-xl uppercase tracking-wide flex items-center justify-center gap-2 text-sm font-semibold">
-<i class="fa-solid fa-book-open text-primary-orange"></i> <span data-i18n="btn_guides">Guías Técnicas</span>
-</a>
-</div>
-</div>
-</div>
-</header>
-
-<!-- SECCIÓN: CENTRO DE ASESORAMIENTO -->
-<section id="asesoramiento" class="py-16 md:py-24 bg-[#0D0D0D] relative">
-<div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(255,107,53,0.1),_transparent_60%)]"></div>
-<div class="container mx-auto px-4 relative z-10">
-<div class="text-center mb-14 md:mb-20 max-w-3xl mx-auto">
-<div class="inline-block bg-primary-orange/15 border border-primary-orange/30 text-primary-orange px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-5">
-<i class="fa-solid fa-lightbulb mr-1.5"></i> <span data-i18n="advice_badge">Conocimiento Técnico</span>
-</div>
-<h2 class="font-display font-bold text-4xl md:text-5xl gradient-text uppercase mb-5 glow-text tracking-tight" data-i18n="advice_title">Centro de Asesoramiento</h2>
-<p class="text-gray-400/90 max-w-2xl mx-auto text-base md:text-lg leading-relaxed" data-i18n="advice_description">
-Detecta fallas en etapas tempranas y evita reparaciones costosas. Aprende a identificar las señales clave de tu vehículo.
-</p>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-7">
-<div class="glass-card">
-<div class="relative h-44 md:h-48 overflow-hidden rounded-t-2xl">
-<img src="https://placehold.co/600x400/FF6B35/0A0A0A?text=FRENOS" alt="Sistema de frenos" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
-<div class="absolute inset-0 bg-gradient-to-t from-primary-dark/90 to-transparent"></div>
-<div class="absolute bottom-3 left-4">
-<span class="text-xs font-bold text-primary-orange uppercase tracking-wider" data-i18n="card_predictive">Predictivo</span>
-</div>
-</div>
-<div class="p-5 md:p-6">
-<h3 class="font-bold text-lg md:text-xl text-white mb-2.5" data-i18n="card_brakes_title">Señales en Frenos</h3>
-<p class="text-gray-400/90 text-sm mb-4 leading-relaxed" data-i18n="card_brakes_desc">Chillidos, vibración en pedal o recorrido excesivo: indicadores de desgaste en pastillas o aire en el circuito.</p>
-<a href="#diagnostico" class="text-primary-orange hover:text-orange-300 font-semibold text-sm flex items-center gap-1.5 group">
-<span data-i18n="card_analyze">Analizar ahora</span>
-<i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
-</a>
-</div>
-</div>
-<div class="glass-card">
-<div class="relative h-44 md:h-48 overflow-hidden rounded-t-2xl">
-<img src="https://placehold.co/600x400/2D2D2D/FF6B35?text=BATERIA" alt="Sistema eléctrico" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
-<div class="absolute inset-0 bg-gradient-to-t from-primary-dark/90 to-transparent"></div>
-<div class="absolute bottom-3 left-4">
-<span class="text-xs font-bold text-primary-orange uppercase tracking-wider" data-i18n="card_preventive">Preventivo</span>
-</div>
-</div>
-<div class="p-5 md:p-6">
-<h3 class="font-bold text-lg md:text-xl text-white mb-2.5" data-i18n="card_battery_title">Batería y Alternador</h3>
-<p class="text-gray-400/90 text-sm mb-4 leading-relaxed" data-i18n="card_battery_desc">Arranque lento, luces tenues o parpadeantes: verifica voltaje y estado de carga antes de una falla total.</p>
-<a href="#diagnostico" class="text-primary-orange hover:text-orange-300 font-semibold text-sm flex items-center gap-1.5 group">
-<span data-i18n="card_verify">Verificar sistema</span>
-<i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
-</a>
-</div>
-</div>
-<div class="glass-card">
-<div class="relative h-44 md:h-48 overflow-hidden rounded-t-2xl">
-<img src="https://placehold.co/600x400/F7931E/0A0A0A?text=FLUIDOS" alt="Fluidos críticos" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
-<div class="absolute inset-0 bg-gradient-to-t from-primary-dark/90 to-transparent"></div>
-<div class="absolute bottom-3 left-4">
-<span class="text-xs font-bold text-primary-orange uppercase tracking-wider" data-i18n="card_maintenance">Mantenimiento</span>
-</div>
-</div>
-<div class="p-5 md:p-6">
-<h3 class="font-bold text-lg md:text-xl text-white mb-2.5" data-i18n="card_fluids_title">Fluidos Críticos</h3>
-<p class="text-gray-400/90 text-sm mb-4 leading-relaxed" data-i18n="card_fluids_desc">Aceite, refrigerante y líquido de frenos: niveles bajos o cambios de color indican urgencia de revisión.</p>
-<a href="#diagnostico" class="text-primary-orange hover:text-orange-300 font-semibold text-sm flex items-center gap-1.5 group">
-<span data-i18n="card_check">Revisar niveles</span>
-<i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
-</a>
-</div>
-</div>
-</div>
-<div class="text-center mt-10 md:mt-14">
-<a href="#diagnostico" class="inline-flex items-center gap-2.5 bg-white/5 hover:bg-white/10 border border-white/15 hover:border-primary-orange/40 text-white font-bold py-3.5 px-7 md:px-9 rounded-2xl transition-all uppercase tracking-wide text-sm shadow-soft hover:shadow-neon" data-i18n="btn_start_prediagnosis">
-<i class="fa-solid fa-hand-pointer text-primary-orange"></i> <span>Iniciar Pre-Diagnóstico Ahora</span>
-</a>
-</div>
-</div>
-</section>
-
-<!-- SECCIÓN: SERVICIOS INTEGRALES -->
-<section class="py-16 md:py-24 bg-primary-dark relative">
-<div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 10% 20%, rgba(255,107,53, 0.08) 0%, transparent 25%), radial-gradient(circle at 90% 80%, rgba(247,147,30, 0.08) 0%, transparent 25%)"></div>
-<div class="container mx-auto px-4 relative z-10">
-<div class="text-center mb-14 md:mb-20">
-<div class="inline-block bg-primary-orange/15 border border-primary-orange/30 text-primary-orange px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-5">
-<i class="fa-solid fa-screwdriver-wrench mr-1.5"></i> <span data-i18n="services_badge">Soluciones Profesionales</span>
-</div>
-<h2 class="font-display font-bold text-4xl md:text-5xl text-white uppercase mb-4 glow-text tracking-tight"><span data-i18n="services_title_part1">Servicios</span><span class="gradient-text" data-i18n="services_title_part2">Integrales</span></h2>
-<p class="text-gray-400/90 max-w-2xl mx-auto text-base md:text-lg leading-relaxed" data-i18n="services_description">
-Tecnología avanzada y expertise técnico para mantener tu vehículo en condiciones óptimas de seguridad y rendimiento.
-</p>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
-<div class="glass-card p-6 md:p-7 group">
-<div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-orange/20 to-primary-orange/20 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
-<i class="fa-solid fa-laptop-code text-2xl md:text-3xl text-primary-orange"></i>
-</div>
-<h3 class="font-bold text-xl text-white mb-2.5" data-i18n="service_diagnostic">Diagnóstico Computarizado</h3>
-<p class="text-gray-400/90 text-sm leading-relaxed" data-i18n="service_diagnostic_desc">Escaneo avanzado de ECU, sensores y sistemas electrónicos con equipos de última generación.</p>
-</div>
-<div class="glass-card p-6 md:p-7 group">
-<div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-orange/20 to-primary-orange/20 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
-<i class="fa-solid fa-circle-stop text-2xl md:text-3xl text-primary-orange"></i>
-</div>
-<h3 class="font-bold text-xl text-white mb-2.5" data-i18n="service_brakes">Sistema de Frenos</h3>
-<p class="text-gray-400/90 text-sm leading-relaxed" data-i18n="service_brakes_desc">Revisión integral de ABS, pastillas, discos y líquido de frenos para máxima seguridad.</p>
-</div>
-<div class="glass-card p-6 md:p-7 group">
-<div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-orange/20 to-primary-orange/20 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
-<i class="fa-solid fa-car-burst text-2xl md:text-3xl text-primary-orange"></i>
-</div>
-<h3 class="font-bold text-xl text-white mb-2.5" data-i18n="service_suspension">Suspensión y Dirección</h3>
-<p class="text-gray-400/90 text-sm leading-relaxed" data-i18n="service_suspension_desc">Amortiguadores, rótulas, alineación y balanceo para confort y estabilidad en ruta.</p>
-</div>
-<div class="glass-card p-6 md:p-7 group">
-<div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-orange/20 to-primary-orange/20 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
-<i class="fa-solid fa-bolt text-2xl md:text-3xl text-primary-orange"></i>
-</div>
-<h3 class="font-bold text-xl text-white mb-2.5" data-i18n="service_electric">Electricidad Automotriz</h3>
-<p class="text-gray-400/90 text-sm leading-relaxed" data-i18n="service_electric_desc">Diagnóstico de fallas eléctricas, baterías, alternadores y sistemas de iluminación.</p>
-</div>
-<div class="glass-card p-6 md:p-7 group">
-<div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-orange/20 to-primary-orange/20 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
-<i class="fa-solid fa-wrench text-2xl md:text-3xl text-primary-orange"></i>
-</div>
-<h3 class="font-bold text-xl text-white mb-2.5" data-i18n="service_mechanic">Mecánica Integral</h3>
-<p class="text-gray-400/90 text-sm leading-relaxed" data-i18n="service_mechanic_desc">Reparaciones completas de motor, transmisión y sistemas mecánicos con garantía de calidad.</p>
-</div>
-<!-- TARJETA: CAJA DE CAMBIO -->
-<div class="glass-card p-6 md:p-7 group">
-<div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-orange/20 to-primary-orange/20 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
-<i class="fa-solid fa-gears text-2xl md:text-3xl text-primary-orange"></i>
-</div>
-<h3 class="font-bold text-xl text-white mb-2.5" data-i18n="service_gearbox">Caja de Cambio</h3>
-<p class="text-gray-400/90 text-sm leading-relaxed" data-i18n="service_gearbox_desc">Reparación y mantenimiento de cajas manuales y automáticas. Diagnóstico de embrague y transmisión.</p>
-</div>
-</div>
-</div>
-</section>
-
-<!-- SECCIÓN: TESTIMONIOS -->
-<section class="py-16 md:py-24 bg-[#0D0D0D] border-t border-white/5">
-<div class="container mx-auto px-4">
-<div class="text-center mb-10 md:mb-14">
-<div class="inline-block bg-primary-orange/15 border border-primary-orange/30 text-primary-orange px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-5">
-<i class="fa-solid fa-comments mr-1.5"></i> <span data-i18n="testimonials_badge">Experiencias Reales</span>
-</div>
-<h2 class="font-display font-bold text-4xl md:text-5xl text-white uppercase glow-text tracking-tight" data-i18n="testimonials_title">La Voz de Nuestros Clientes</h2>
-<p class="text-gray-400/90 max-w-2xl mx-auto mt-4 text-base md:text-lg leading-relaxed" data-i18n="testimonials_description">
-Confianza construida sobre resultados verificables y atención profesional en Paysandú, Uruguay.
-</p>
-</div>
-<div class="testimonial-carousel flex gap-5 md:gap-6 overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide mx-2 px-2">
-<div class="testimonial-card glass-card p-6 md:p-7 rounded-2xl border-t-4 border-primary-orange transition flex-shrink-0 w-[85%] md:w-1/3 snap-center">
-<div class="flex justify-between items-start mb-4">
-<div class="flex text-yellow-400 text-lg">
-<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-</div>
-<i class="fa-solid fa-quote-right text-3xl text-gray-700/70"></i>
-</div>
-<p class="text-gray-300/95 italic mb-5 leading-relaxed text-sm" data-i18n="testimonial_1">"Excelente servicio en Romero Mecánica Integral. Diagnóstico preciso y rápido. Me explicaron todo con claridad y profesionalismo. Totalmente recomendado."</p>
-<div class="flex items-center pt-3 border-t border-white/10">
-<div class="w-11 h-11 rounded-full bg-gradient-to-br from-primary-orange to-orange-700 flex items-center justify-center text-white font-bold mr-3.5 flex-shrink-0">MP</div>
-<div>
-<p class="font-bold text-white text-sm">Martín P.</p>
-<p class="text-xs text-gray-500">Paysandú - Chevrolet Tracker 2023</p>
-</div>
-</div>
-</div>
-<div class="testimonial-card glass-card p-6 md:p-7 rounded-2xl border-t-4 border-primary-orange transition flex-shrink-0 w-[85%] md:w-1/3 snap-center">
-<div class="flex justify-between items-start mb-4">
-<div class="flex text-yellow-400 text-lg">
-<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
-</div>
-<i class="fa-solid fa-quote-right text-3xl text-gray-700/70"></i>
-</div>
-<p class="text-gray-300/95 italic mb-5 leading-relaxed text-sm" data-i18n="testimonial_2">"El mejor taller de Paysandú. Proceso transparente y rápido. El pre-diagnóstico online me ahorró tiempo y dinero. Volveré sin dudas a Romero Mecánica Integral."</p>
-<div class="flex items-center pt-3 border-t border-white/10">
-<div class="w-11 h-11 rounded-full bg-gradient-to-br from-primary-orange to-orange-700 flex items-center justify-center text-white font-bold mr-3.5 flex-shrink-0">AR</div>
-<div>
-<p class="font-bold text-white text-sm">Alejandra R.</p>
-<p class="text-xs text-gray-500">Paysandú - Renault Fluence</p>
-</div>
-</div>
-</div>
-<div class="testimonial-card glass-card p-6 md:p-7 rounded-2xl border-t-4 border-primary-orange transition flex-shrink-0 w-[85%] md:w-1/3 snap-center">
-<div class="flex justify-between items-start mb-4">
-<div class="flex text-yellow-400 text-lg">
-<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-</div>
-<i class="fa-solid fa-quote-right text-3xl text-gray-700/70"></i>
-</div>
-<p class="text-gray-300/95 italic mb-5 leading-relaxed text-sm" data-i18n="testimonial_3">"Llevo mi flota de utilitarios a Romero Mecánica Integral. Reportes detallados, atención personalizada y precios justos. Un taller de confianza."</p>
-<div class="flex items-center pt-3 border-t border-white/10">
-<div class="w-11 h-11 rounded-full bg-gradient-to-br from-primary-orange to-orange-700 flex items-center justify-center text-white font-bold mr-3.5 flex-shrink-0">EC</div>
-<div>
-<p class="font-bold text-white text-sm">Esteban C.</p>
-<p class="text-xs text-gray-500">Paysandú - Flota Utilitarios</p>
-</div>
-</div>
-</div>
-</div>
-<p class="text-center text-gray-500 mt-5 text-sm flex items-center justify-center gap-1.5">
-<i class="fa-solid fa-arrow-right text-primary-orange"></i> <span data-i18n="testimonials_swipe">Desliza para más opiniones</span>
-</p>
-</div>
-</section>
-
-<!-- SECCIÓN: FORMULARIO DE DIAGNÓSTICO - COMPLETAMENTE FUNCIONAL -->
-<section id="diagnostico" class="py-16 md:py-24 bg-gradient-to-b from-primary-dark to-[#080808] relative overflow-hidden">
-<div class="absolute inset-0 bg-[radial-gradient(circle_at_60%_40%,rgba(255,107,53,0.1),transparent_55%)]"></div>
-<div class="container mx-auto px-4 relative z-10">
-<div class="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
-<!-- Columna informativa -->
-<div class="lg:w-1/3 space-y-6">
-<h2 class="font-display font-bold text-4xl md:text-5xl text-white mb-2 glow-text tracking-tight">
-<span data-i18n="diagnosis_title_part1">ACELERADOR DE</span><br><span class="gradient-text" data-i18n="diagnosis_title_part2">DIAGNÓSTICO</span>
-</h2>
-<p class="text-gray-400/90 mb-6 text-base leading-relaxed" data-i18n="diagnosis_description">
-Completa el formulario y nuestros técnicos prepararán el análisis previo antes de tu llegada. Optimizamos tu tiempo y recursos.
-</p>
-<div class="space-y-5 pt-2">
-<div class="flex items-start gap-4">
-<div class="bg-gradient-to-br from-primary-orange/20 to-primary-orange/20 p-3.5 rounded-xl text-primary-orange flex-shrink-0">
-<i class="fa-solid fa-stopwatch text-xl"></i>
-</div>
-<div>
-<h4 class="font-bold text-white text-base mb-1" data-i18n="benefit_time_title">Ahorro de Tiempo</h4>
-<p class="text-gray-400/90 text-sm" data-i18n="benefit_time_desc">Evita esperas innecesarias. Tu caso ya estará en análisis al llegar.</p>
-</div>
-</div>
-<div class="flex items-start gap-4">
-<div class="bg-gradient-to-br from-primary-orange/20 to-primary-orange/20 p-3.5 rounded-xl text-primary-orange flex-shrink-0">
-<i class="fa-solid fa-file-waveform text-xl"></i>
-</div>
-<div>
-<h4 class="font-bold text-white text-base mb-1" data-i18n="benefit_analysis_title">Análisis Previo</h4>
-<p class="text-gray-400/90 text-sm" data-i18n="benefit_analysis_desc">Preparamos herramientas y repuestos específicos para tu caso.</p>
-</div>
-</div>
-<div class="flex items-start gap-4">
-<div class="bg-gradient-to-br from-primary-orange/20 to-primary-orange/20 p-3.5 rounded-xl text-primary-orange flex-shrink-0">
-<i class="fa-solid fa-shield-halved text-xl"></i>
-</div>
-<div>
-<h4 class="font-bold text-white text-base mb-1" data-i18n="benefit_transparency_title">Transparencia Total</h4>
-<p class="text-gray-400/90 text-sm" data-i18n="benefit_transparency_desc">Recibirás un informe detallado con opciones de reparación y costos.</p>
-</div>
-</div>
-</div>
-<div class="glass-card p-4 rounded-xl mt-4 flex items-center gap-3">
-<div class="w-10 h-10 rounded-full bg-orange-500/20 flex items-center justify-center flex-shrink-0">
-<i class="fa-solid fa-check text-orange-400"></i>
-</div>
-<div>
-<p class="text-sm font-semibold text-white" data-i18n="security_title">Datos 100% seguros</p>
-<p class="text-xs text-gray-500" data-i18n="security_desc">Tu información está protegida</p>
-</div>
-</div>
-</div>
-<!-- Formulario FUNCIONAL -->
-<div class="lg:w-2/3 glass-card rounded-3xl shadow-card p-6 md:p-8 w-full">
-<form id="triageForm" novalidate>
-<!-- Sección 1: Vehículo -->
-<div class="border-b border-white/10 pb-6 mb-6">
-<h3 class="text-lg font-bold text-white mb-6 flex items-center gap-3">
-<span class="bg-gradient-to-r from-primary-orange to-orange-700 text-white w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">1</span>
-<span data-i18n="form_section_vehicle">Datos del Vehículo</span>
-</h3>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-<!-- Tipo de Vehículo -->
-<div class="form-field select-wrapper">
-<label for="inputVehicleType" class="field-label" data-i18n="form_vehicle_type">Tipo de Vehículo</label>
-<select id="inputVehicleType" class="field-input">
-<option value="" disabled selected data-i18n="form_select_vehicle">Seleccionar tipo...</option>
-<option value="Auto">🚗 Auto</option>
-<option value="Moto">🏍️ Moto</option>
-<option value="Cuatriciclo">🏎️ Cuatriciclo</option>
-</select>
-</div>
-<!-- Marca y Modelo -->
-<div class="form-field">
-<label for="inputVehicle" class="field-label" data-i18n="form_vehicle_model">Marca y Modelo</label>
-<input type="text" id="inputVehicle" class="field-input" placeholder="Ej: Toyota Corolla 2020" autocomplete="off">
-</div>
-<!-- Kilometraje -->
-<div class="form-field">
-<label for="inputKm" class="field-label" data-i18n="form_mileage">Kilometraje</label>
-<input type="number" id="inputKm" class="field-input" placeholder="Ej: 85000" autocomplete="off">
-</div>
-</div>
-<!-- Combustible -->
-<div class="grid grid-cols-1 md:grid-cols-3 gap-5 mt-5">
-<div class="form-field select-wrapper">
-<label for="inputFuelType" class="field-label" data-i18n="form_fuel">Combustible</label>
-<select id="inputFuelType" class="field-input">
-<option value="" disabled selected data-i18n="form_select_fuel">Seleccionar...</option>
-<option value="Naftero">⛽ Nafta / Gasolina</option>
-<option value="Diesel">🛢️ Diesel</option>
-<option value="Híbrido">🔋 Híbrido</option>
-<option value="Eléctrico">⚡ Eléctrico</option>
-</select>
-</div>
-</div>
-</div>
-<!-- Sección 2: Síntomas -->
-<div class="border-b border-white/10 pb-6 mb-6">
-<h3 class="text-lg font-bold text-white mb-6 flex items-center gap-3">
-<span class="bg-gradient-to-r from-primary-orange to-orange-700 text-white w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">2</span>
-<span data-i18n="form_section_symptoms">Descripción de Fallas</span>
-</h3>
-<!-- Síntomas -->
-<div class="form-field mb-5">
-<label for="inputSymptoms" class="field-label" data-i18n="form_symptoms">Síntomas</label>
-<textarea id="inputSymptoms" class="field-input" rows="4" placeholder="Describe ruidos, olores, vibraciones, luces de alerta..."></textarea>
-</div>
-<!-- Contexto de la falla -->
-<div class="form-field select-wrapper">
-<label for="inputContext" class="field-label" data-i18n="form_context">Contexto de la falla</label>
-<select id="inputContext" class="field-input">
-<option value="" disabled selected data-i18n="form_select_context">Seleccionar contexto...</option>
-<optgroup label="🔋 ARRANQUE Y ENERGÍA" class="font-bold">
-<option value="no_arranca_gira" data-i18n="opt_starts_no_start">Gira pero no arranca</option>
-<option value="no_arranca_nada" data-i18n="opt_no_contact">No da contacto</option>
-<option value="arranca_lento" data-i18n="opt_slow_start">Arranque lento o difícil</option>
-</optgroup>
-<optgroup label="⚙️ RENDIMIENTO" class="font-bold">
-<option value="falla_ralenti" data-i18n="opt_idle_issue">Inestabilidad en ralentí</option>
-<option value="pierde_potencia" data-i18n="opt_power_loss">Pérdida de potencia</option>
-<option value="consumo_excesivo" data-i18n="opt_high_consumption">Consumo excesivo de combustible</option>
-<option value="humo_escape" data-i18n="opt_exhaust_smoke">Humo en escape (color)</option>
-</optgroup>
-<optgroup label="🔊 RUIDOS Y VIBRACIONES" class="font-bold">
-<option value="ruido_frenar" data-i18n="opt_brake_noise">Ruido al frenar</option>
-<option value="ruido_direccion" data-i18n="opt_steering_noise">Ruido al girar dirección</option>
-<option value="vibracion_alta" data-i18n="opt_high_speed_vibration">Vibración en alta velocidad</option>
-<option value="ruido_motor" data-i18n="opt_engine_noise">Ruido anormal en motor</option>
-</optgroup>
-<optgroup label="🌡️ TEMPERATURA Y FLUIDOS" class="font-bold">
-<option value="levanta_temp" data-i18n="opt_overheating">Se calienta el motor</option>
-<option value="perdida_fluido" data-i18n="opt_fluid_leak">Pérdida de fluido visible</option>
-</optgroup>
-<option value="falla_frio" data-i18n="opt_cold_issue">Solo falla en frío</option>
-<option value="falla_caliente" data-i18n="opt_hot_issue">Solo falla en caliente</option>
-<option value="falla_intermitente" data-i18n="opt_intermittent">Falla intermitente</option>
-</select>
-</div>
-</div>
-<!-- Sección 3: Servicio Integral -->
-<div class="border-b border-white/10 pb-6 mb-6">
-<h3 class="text-lg font-bold text-white mb-6 flex items-center gap-3">
-<span class="bg-gradient-to-r from-primary-orange to-orange-700 text-white w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">3</span>
-<span data-i18n="form_section_service">Servicio Integral</span>
-</h3>
-<div class="form-field select-wrapper">
-<label for="inputService" class="field-label" data-i18n="form_service_required">Servicio Requerido</label>
-<select id="inputService" class="field-input">
-<option value="" disabled selected data-i18n="form_select_service">Selecciona un servicio...</option>
-<option value="diagnostico" data-i18n="srv_diagnostic">🔍 Diagnóstico Computarizado</option>
-<option value="frenos" data-i18n="srv_brakes">🛑 Sistema de Frenos</option>
-<option value="suspension" data-i18n="srv_suspension">🔩 Suspensión</option>
-<option value="direccion" data-i18n="srv_steering">🔄 Dirección</option>
-<option value="electricidad" data-i18n="srv_electric">⚡ Electricidad Automotriz</option>
-<option value="mecanica_integral" data-i18n="srv_mechanic">🛠️ Mecánica Integral</option>
-<option value="caja_cambio" data-i18n="srv_gearbox">⚙️ Caja de Cambio</option>
-</select>
-</div>
-</div>
-<!-- Sección 4: Contacto -->
-<div class="mb-6">
-<h3 class="text-lg font-bold text-white mb-6 flex items-center gap-3">
-<span class="bg-gradient-to-r from-primary-orange to-orange-700 text-white w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">4</span>
-<span data-i18n="form_section_contact">Datos de Contacto</span>
-</h3>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-<div class="form-field">
-<label for="inputName" class="field-label" data-i18n="form_name">Nombre</label>
-<input type="text" id="inputName" class="field-input" placeholder="Tu nombre completo" autocomplete="name">
-</div>
-<div class="form-field">
-<label for="inputPhone" class="field-label" data-i18n="form_whatsapp">WhatsApp</label>
-<input type="tel" id="inputPhone" class="field-input" placeholder="Tu número de WhatsApp" autocomplete="tel">
-</div>
-</div>
-<p class="text-xs text-gray-500 mt-4 flex items-center gap-1.5">
-<i class="fa-solid fa-lock text-primary-orange"></i> <span data-i18n="form_privacy">Tus datos se usarán únicamente para coordinar tu turno</span>
-</p>
-</div>
-<!-- Botón de envío -->
-<button type="submit" id="submitBtn" class="btn-primary w-full font-bold uppercase text-base py-5 rounded-2xl hover:shadow-neon transition flex items-center justify-center gap-3">
-<i class="fa-brands fa-whatsapp text-2xl"></i> <span data-i18n="btn_send_request">Enviar Solicitud a ROMERO MECÁNICA INTEGRAL</span>
-</button>
-<p class="text-center text-xs text-gray-500 pt-3">
-<span data-i18n="terms_prefix">Al enviar, aceptas nuestros</span> <a href="#" class="text-primary-orange hover:underline" data-i18n="terms_link">términos de servicio</a>
-</p>
-</form>
-</div>
-</div>
-</div>
-</section>
-
-<!-- SECCIÓN: UBICACIÓN Y CONFIANZA -->
-<section class="py-14 md:py-20 bg-[#0D0D0D] border-t border-white/5">
-<div class="container mx-auto px-4 text-center">
-<div class="flex flex-wrap justify-center gap-8 md:gap-12 opacity-70 grayscale hover:grayscale-0 transition-all duration-500 mb-12 md:mb-16">
-<i class="fa-brands fa-toyota text-4xl md:text-5xl hover:text-white transition-colors"></i>
-<i class="fa-solid fa-car text-4xl md:text-5xl hover:text-white transition-colors"></i>
-<i class="fa-brands fa-honda text-4xl md:text-5xl hover:text-white transition-colors"></i>
-<i class="fa-brands fa-ford text-4xl md:text-5xl hover:text-white transition-colors"></i>
-<i class="fa-brands fa-volkswagen text-4xl md:text-5xl hover:text-white transition-colors"></i>
-<i class="fa-solid fa-truck-pickup text-4xl md:text-5xl hover:text-white transition-colors"></i>
-</div>
-<div class="glass-card rounded-3xl p-6 md:p-10 max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8">
-<div class="text-left max-w-md">
-<h3 class="font-display font-bold text-2xl md:text-3xl text-white mb-2" data-i18n="location_title">¿Dónde estamos?</h3>
-<p class="text-gray-400/90 mb-4 text-base" data-i18n="location_subtitle">Visítanos para validación final y reparaciones especializadas.</p>
-<div class="flex items-start gap-3 text-gray-300/90 text-sm mb-2">
-<i class="fa-regular fa-location-dot text-primary-orange text-xl mt-0.5 flex-shrink-0"></i>
-<div>
-<p class="font-medium" data-i18n="label_address">Dirección:</p>
-<p>AV. SORIANO 2127 ENTRE DE 4 Y 5, PAYSANDÚ</p>
-</div>
-</div>
-<div class="flex items-start gap-3 text-gray-300/90 text-sm mb-2">
-<i class="fa-brands fa-whatsapp text-primary-orange text-xl mt-0.5 flex-shrink-0"></i>
-<div>
-<p class="font-medium" data-i18n="label_whatsapp">WhatsApp:</p>
-<p dir="ltr">+598 98 680 159</p>
-</div>
-</div>
-<div class="flex items-start gap-3 text-gray-300/90 text-sm mb-2">
-<i class="fa-solid fa-envelope text-primary-orange text-xl mt-0.5 flex-shrink-0"></i>
-<div>
-<p class="font-medium" data-i18n="label_email">E-mail:</p>
-<p>romeromecanica@email.com</p>
-</div>
-</div>
-<div class="flex items-start gap-3 text-gray-300/90 text-sm">
-<i class="fa-regular fa-clock text-primary-orange text-xl mt-0.5 flex-shrink-0"></i>
-<div>
-<p class="font-medium" data-i18n="label_hours">Horarios de atención:</p>
-<p data-i18n="hours_weekdays">Lunes a Viernes: 08:00 - 12:00 y 14:00 - 18:00 hs</p>
-<p data-i18n="hours_weekend">Sábados y Domingos: Cerrado</p>
-</div>
-</div>
-</div>
-<div class="flex flex-col sm:flex-row gap-3">
-<a href="https://maps.app.goo.gl/yiAsXENC2p94CAsE9" target="_blank" rel="noopener noreferrer" class="btn-primary px-6 py-3.5 md:px-8 md:py-4 rounded-2xl font-bold hover:shadow-neon transition flex items-center gap-3 text-sm md:text-base whitespace-nowrap shadow-soft">
-<i class="fa-solid fa-map-location-dot text-lg"></i> <span data-i18n="btn_maps">Ver en Google Maps</span>
-</a>
-<a href="https://maps.app.goo.gl/yiAsXENC2p94CAsE9" target="_blank" rel="noopener noreferrer" class="btn-review px-6 py-3.5 md:px-8 md:py-4 rounded-2xl font-bold hover:shadow-neon transition flex items-center gap-3 text-sm md:text-base whitespace-nowrap shadow-soft">
-<i class="fa-solid fa-star text-lg"></i> <span data-i18n="btn_review">Deja tu Reseña</span>
-</a>
-</div>
-</div>
-<div class="mt-10 inline-flex items-center gap-3 bg-white/5 border border-white/10 px-5 py-3 rounded-full">
-<i class="fa-solid fa-certificate text-primary-orange text-lg"></i>
-<span class="text-sm font-medium text-gray-300" data-i18n="warranty_text">Garantía en todos nuestros servicios</span>
-</div>
-</div>
-</section>
-
-<!-- FOOTER -->
-<footer class="bg-primary-dark/95 text-gray-500 py-10 md:py-14 border-t border-white/10">
-<div class="container mx-auto px-4">
-<div class="flex flex-col md:flex-row items-center justify-between gap-6">
-<div class="text-center md:text-left">
-<p class="mb-2 text-white font-display font-bold text-xl md:text-2xl glow-text tracking-tight">ROMERO MECÁNICA INTEGRAL</p>
-<p class="text-sm">Paysandú, Uruguay</p>
-</div>
-<div class="flex items-center gap-4">
-<a href="https://maps.app.goo.gl/yiAsXENC2p94CAsE9" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-primary-orange hover:text-yellow-400 transition text-sm font-semibold group">
-<i class="fa-solid fa-star group-hover:scale-110 transition-transform"></i>
-<span data-i18n="btn_review">Deja tu Reseña</span>
-</a>
-</div>
-</div>
-<div class="border-t border-white/10 mt-6 pt-4 text-center">
-<a href="https://nexoar-art.github.io/NEXO-art/" target="_blank" rel="noopener noreferrer"
-class="inline-flex items-center gap-1.5 text-xs text-gray-600 hover:text-primary-orange transition font-medium group">
-<i class="fa-solid fa-pen-nib group-hover:scale-110 transition-transform"></i>
-<span data-i18n="footer_design">Diseño: NEXO-Art</span>
-</a>
-<p class="text-gray-600 mt-2 text-xs" data-i18n="footer_tech">Sitio web desarrollado con tecnología moderna</p>
-</div>
-</div>
-</footer>
-
-<!-- STICKY MOBILE CTA -->
-<div class="fixed bottom-0 left-0 w-full bg-gray-900/95 backdrop-blur-sm border-t border-white/10 p-4 md:hidden z-50 flex gap-3">
-<a href="#asesoramiento" class="flex-1 bg-white/5 text-white font-semibold py-3.5 rounded-xl text-center border border-white/10 hover:border-primary-orange/40 transition text-sm flex items-center justify-center gap-2">
-<i class="fa-solid fa-book-open text-primary-orange"></i><span data-i18n="btn_guides_short">Guías</span>
-</a>
-<a href="#diagnostico" class="flex-[2] btn-primary font-bold py-3.5 rounded-xl text-center uppercase shadow-neon text-sm flex items-center justify-center gap-2">
-<i class="fa-solid fa-microchip"></i> <span data-i18n="btn_diagnosis_short">Diagnóstico</span>
-</a>
-</div>
-
-<!-- JAVASCRIPT FUNCIONAL -->
-<script>
-// ============================================
-// 🌍 TRADUCCIONES - ESPAÑOL / ENGLISH / PORTUGUÊS
-// ============================================
-const translations = {
-  es: {
-    // Banner
-    banner_1: "🧼 Limpieza de inyectores cada 6 meses = motor más eficiente",
-    banner_2: "🛢️ Aceite de calidad cada 10.000 km = vida útil prolongada",
-    banner_3: "⛽ Usar nafta premium = más potencia, menos desgaste",
-    banner_4: "✅ Tres simples hábitos = menos consumo, menos fallas, más años de motor",
-    banner_5: "📲 ¡Sacá un turno, no lo dejes pasar! WhatsApp +59898680159",
-    // Navbar
-    status_checking: "Verificando...",
-    nav_advice: "Asesoramiento",
-    nav_diagnosis: "Pre-Diagnóstico",
-    btn_chat: "Chat",
-    btn_appointment: "Pedir Turno",
-    btn_review: "Deja tu Reseña",
-    btn_instagram: "Instagram",
-    // Hero
-    hero_badge: "Diagnóstico de Precisión",
-    hero_description: "En Romero Mecánica Integral, entendemos que tu auto es una inversión importante y tu seguridad es primordial. Somos un taller de reparación de automóviles con años de experiencia en Paysandú, Uruguay, dedicados a brindarte un servicio de calidad, confiable y transparente. Nos especializamos en mantener tu vehículo en óptimas condiciones para que disfrutes de cada viaje con total tranquilidad.",
-    stat_precision: "Precisión",
-    stat_saving: "Ahorro",
-    stat_vehicles: "Vehículos",
-    btn_start_diagnosis: "Iniciar Diagnóstico",
-    btn_guides: "Guías Técnicas",
-    // Advice Section
-    advice_badge: "Conocimiento Técnico",
-    advice_title: "Centro de Asesoramiento",
-    advice_description: "Detecta fallas en etapas tempranas y evita reparaciones costosas. Aprende a identificar las señales clave de tu vehículo.",
-    card_predictive: "Predictivo",
-    card_brakes_title: "Señales en Frenos",
-    card_brakes_desc: "Chillidos, vibración en pedal o recorrido excesivo: indicadores de desgaste en pastillas o aire en el circuito.",
-    card_analyze: "Analizar ahora",
-    card_preventive: "Preventivo",
-    card_battery_title: "Batería y Alternador",
-    card_battery_desc: "Arranque lento, luces tenues o parpadeantes: verifica voltaje y estado de carga antes de una falla total.",
-    card_verify: "Verificar sistema",
-    card_maintenance: "Mantenimiento",
-    card_fluids_title: "Fluidos Críticos",
-    card_fluids_desc: "Aceite, refrigerante y líquido de frenos: niveles bajos o cambios de color indican urgencia de revisión.",
-    card_check: "Revisar niveles",
-    btn_start_prediagnosis: "Iniciar Pre-Diagnóstico Ahora",
-    // Services Section
-    services_badge: "Soluciones Profesionales",
-    services_title_part1: "Servicios",
-    services_title_part2: "Integrales",
-    services_description: "Tecnología avanzada y expertise técnico para mantener tu vehículo en condiciones óptimas de seguridad y rendimiento.",
-    service_diagnostic: "Diagnóstico Computarizado",
-    service_diagnostic_desc: "Escaneo avanzado de ECU, sensores y sistemas electrónicos con equipos de última generación.",
-    service_brakes: "Sistema de Frenos",
-    service_brakes_desc: "Revisión integral de ABS, pastillas, discos y líquido de frenos para máxima seguridad.",
-    service_suspension: "Suspensión y Dirección",
-    service_suspension_desc: "Amortiguadores, rótulas, alineación y balanceo para confort y estabilidad en ruta.",
-    service_electric: "Electricidad Automotriz",
-    service_electric_desc: "Diagnóstico de fallas eléctricas, baterías, alternadores y sistemas de iluminación.",
-    service_mechanic: "Mecánica Integral",
-    service_mechanic_desc: "Reparaciones completas de motor, transmisión y sistemas mecánicos con garantía de calidad.",
-    service_gearbox: "Caja de Cambio",
-    service_gearbox_desc: "Reparación y mantenimiento de cajas manuales y automáticas. Diagnóstico de embrague y transmisión.",
-    // Testimonials
-    testimonials_badge: "Experiencias Reales",
-    testimonials_title: "La Voz de Nuestros Clientes",
-    testimonials_description: "Confianza construida sobre resultados verificables y atención profesional en Paysandú, Uruguay.",
-    testimonial_1: "\"Excelente servicio en Romero Mecánica Integral. Diagnóstico preciso y rápido. Me explicaron todo con claridad y profesionalismo. Totalmente recomendado.\"",
-    testimonial_2: "\"El mejor taller de Paysandú. Proceso transparente y rápido. El pre-diagnóstico online me ahorró tiempo y dinero. Volveré sin dudas a Romero Mecánica Integral.\"",
-    testimonial_3: "\"Llevo mi flota de utilitarios a Romero Mecánica Integral. Reportes detallados, atención personalizada y precios justos. Un taller de confianza.\"",
-    testimonials_swipe: "Desliza para más opiniones",
-    // Diagnosis Form
-    diagnosis_title_part1: "ACELERADOR DE",
-    diagnosis_title_part2: "DIAGNÓSTICO",
-    diagnosis_description: "Completa el formulario y nuestros técnicos prepararán el análisis previo antes de tu llegada. Optimizamos tu tiempo y recursos.",
-    benefit_time_title: "Ahorro de Tiempo",
-    benefit_time_desc: "Evita esperas innecesarias. Tu caso ya estará en análisis al llegar.",
-    benefit_analysis_title: "Análisis Previo",
-    benefit_analysis_desc: "Preparamos herramientas y repuestos específicos para tu caso.",
-    benefit_transparency_title: "Transparencia Total",
-    benefit_transparency_desc: "Recibirás un informe detallado con opciones de reparación y costos.",
-    security_title: "Datos 100% seguros",
-    security_desc: "Tu información está protegida",
-    form_section_vehicle: "Datos del Vehículo",
-    form_vehicle_type: "Tipo de Vehículo",
-    form_select_vehicle: "Seleccionar tipo...",
-    form_vehicle_model: "Marca y Modelo",
-    form_mileage: "Kilometraje",
-    form_fuel: "Combustible",
-    form_select_fuel: "Seleccionar...",
-    form_section_symptoms: "Descripción de Fallas",
-    form_symptoms: "Síntomas",
-    form_context: "Contexto de la falla",
-    form_select_context: "Seleccionar contexto...",
-    opt_starts_no_start: "Gira pero no arranca",
-    opt_no_contact: "No da contacto",
-    opt_slow_start: "Arranque lento o difícil",
-    opt_idle_issue: "Inestabilidad en ralentí",
-    opt_power_loss: "Pérdida de potencia",
-    opt_high_consumption: "Consumo excesivo de combustible",
-    opt_exhaust_smoke: "Humo en escape (color)",
-    opt_brake_noise: "Ruido al frenar",
-    opt_steering_noise: "Ruido al girar dirección",
-    opt_high_speed_vibration: "Vibración en alta velocidad",
-    opt_engine_noise: "Ruido anormal en motor",
-    opt_overheating: "Se calienta el motor",
-    opt_fluid_leak: "Pérdida de fluido visible",
-    opt_cold_issue: "Solo falla en frío",
-    opt_hot_issue: "Solo falla en caliente",
-    opt_intermittent: "Falla intermitente",
-    form_section_service: "Servicio Integral",
-    form_service_required: "Servicio Requerido",
-    form_select_service: "Selecciona un servicio...",
-    srv_diagnostic: "🔍 Diagnóstico Computarizado",
-    srv_brakes: "🛑 Sistema de Frenos",
-    srv_suspension: "🔩 Suspensión",
-    srv_steering: "🔄 Dirección",
-    srv_electric: "⚡ Electricidad Automotriz",
-    srv_mechanic: "🛠️ Mecánica Integral",
-    srv_gearbox: "⚙️ Caja de Cambio",
-    form_section_contact: "Datos de Contacto",
-    form_name: "Nombre",
-    form_whatsapp: "WhatsApp",
-    form_privacy: "Tus datos se usarán únicamente para coordinar tu turno",
-    btn_send_request: "Enviar Solicitud a ROMERO MECÁNICA INTEGRAL",
-    terms_prefix: "Al enviar, aceptas nuestros",
-    terms_link: "términos de servicio",
-    // Location
-    location_title: "¿Dónde estamos?",
-    location_subtitle: "Visítanos para validación final y reparaciones especializadas.",
-    label_address: "Dirección:",
-    label_whatsapp: "WhatsApp:",
-    label_email: "E-mail:",
-    label_hours: "Horarios de atención:",
-    hours_weekdays: "Lunes a Viernes: 08:00 - 12:00 y 14:00 - 18:00 hs",
-    hours_weekend: "Sábados y Domingos: Cerrado",
-    btn_maps: "Ver en Google Maps",
-    warranty_text: "Garantía en todos nuestros servicios",
-    // Footer
-    footer_design: "Diseño: NEXO-Art",
-    footer_tech: "Sitio web desarrollado con tecnología moderna",
-    btn_guides_short: "Guías",
-    btn_diagnosis_short: "Diagnóstico"
-  },
-  en: {
-    // Banner
-    banner_1: "🧼 Injector cleaning every 6 months = more efficient engine",
-    banner_2: "🛢️ Quality oil every 10,000 km = extended lifespan",
-    banner_3: "⛽ Use premium fuel = more power, less wear",
-    banner_4: "✅ Three simple habits = less consumption, fewer failures, more engine life",
-    banner_5: "📲 Book an appointment, don't miss out! WhatsApp +59898680159",
-    // Navbar
-    status_checking: "Checking...",
-    nav_advice: "Advice",
-    nav_diagnosis: "Pre-Diagnosis",
-    btn_chat: "Chat",
-    btn_appointment: "Book Appointment",
-    btn_review: "Leave a Review",
-    btn_instagram: "Instagram",
-    // Hero
-    hero_badge: "Precision Diagnosis",
-    hero_description: "At Romero Mecánica Integral, we understand that your car is an important investment and your safety is paramount. We are an auto repair shop with years of experience in Paysandú, Uruguay, dedicated to providing you with quality, reliable, and transparent service. We specialize in keeping your vehicle in optimal condition so you can enjoy every trip with complete peace of mind.",
-    stat_precision: "Precision",
-    stat_saving: "Savings",
-    stat_vehicles: "Vehicles",
-    btn_start_diagnosis: "Start Diagnosis",
-    btn_guides: "Technical Guides",
-    // Advice Section
-    advice_badge: "Technical Knowledge",
-    advice_title: "Advice Center",
-    advice_description: "Detect faults at early stages and avoid costly repairs. Learn to identify the key signals from your vehicle.",
-    card_predictive: "Predictive",
-    card_brakes_title: "Brake Warning Signs",
-    card_brakes_desc: "Squealing, pedal vibration, or excessive travel: indicators of worn pads or air in the circuit.",
-    card_analyze: "Analyze now",
-    card_preventive: "Preventive",
-    card_battery_title: "Battery & Alternator",
-    card_battery_desc: "Slow start, dim or flickering lights: check voltage and charge status before a total failure.",
-    card_verify: "Check system",
-    card_maintenance: "Maintenance",
-    card_fluids_title: "Critical Fluids",
-    card_fluids_desc: "Oil, coolant, and brake fluid: low levels or color changes indicate urgent need for inspection.",
-    card_check: "Check levels",
-    btn_start_prediagnosis: "Start Pre-Diagnosis Now",
-    // Services Section
-    services_badge: "Professional Solutions",
-    services_title_part1: "Integrated",
-    services_title_part2: "Services",
-    services_description: "Advanced technology and technical expertise to keep your vehicle in optimal safety and performance conditions.",
-    service_diagnostic: "Computerized Diagnosis",
-    service_diagnostic_desc: "Advanced ECU, sensor, and electronic systems scanning with latest-generation equipment.",
-    service_brakes: "Brake System",
-    service_brakes_desc: "Comprehensive ABS, pads, discs, and brake fluid inspection for maximum safety.",
-    service_suspension: "Suspension & Steering",
-    service_suspension_desc: "Shock absorbers, ball joints, alignment, and balancing for comfort and road stability.",
-    service_electric: "Automotive Electrical",
-    service_electric_desc: "Diagnosis of electrical faults, batteries, alternators, and lighting systems.",
-    service_mechanic: "Full Mechanical Service",
-    service_mechanic_desc: "Complete engine, transmission, and mechanical system repairs with quality guarantee.",
-    service_gearbox: "Gearbox",
-    service_gearbox_desc: "Manual and automatic transmission repair and maintenance. Clutch and drivetrain diagnosis.",
-    // Testimonials
-    testimonials_badge: "Real Experiences",
-    testimonials_title: "Our Customers' Voices",
-    testimonials_description: "Trust built on verifiable results and professional attention in Paysandú, Uruguay.",
-    testimonial_1: "\"Excellent service at Romero Mecánica Integral. Precise and fast diagnosis. They explained everything clearly and professionally. Highly recommended.\"",
-    testimonial_2: "\"The best workshop in Paysandú. Transparent and fast process. The online pre-diagnosis saved me time and money. I'll definitely return to Romero Mecánica Integral.\"",
-    testimonial_3: "\"I bring my utility fleet to Romero Mecánica Integral. Detailed reports, personalized attention, and fair prices. A trustworthy workshop.\"",
-    testimonials_swipe: "Swipe for more reviews",
-    // Diagnosis Form
-    diagnosis_title_part1: "DIAGNOSIS",
-    diagnosis_title_part2: "ACCELERATOR",
-    diagnosis_description: "Complete the form and our technicians will prepare the preliminary analysis before your arrival. We optimize your time and resources.",
-    benefit_time_title: "Time Savings",
-    benefit_time_desc: "Avoid unnecessary waits. Your case will already be under analysis upon arrival.",
-    benefit_analysis_title: "Preliminary Analysis",
-    benefit_analysis_desc: "We prepare specific tools and parts for your case.",
-    benefit_transparency_title: "Full Transparency",
-    benefit_transparency_desc: "You'll receive a detailed report with repair options and costs.",
-    security_title: "100% Secure Data",
-    security_desc: "Your information is protected",
-    form_section_vehicle: "Vehicle Details",
-    form_vehicle_type: "Vehicle Type",
-    form_select_vehicle: "Select type...",
-    form_vehicle_model: "Make & Model",
-    form_mileage: "Mileage",
-    form_fuel: "Fuel Type",
-    form_select_fuel: "Select...",
-    form_section_symptoms: "Issue Description",
-    form_symptoms: "Symptoms",
-    form_context: "Issue Context",
-    form_select_context: "Select context...",
-    opt_starts_no_start: "Cranks but won't start",
-    opt_no_contact: "No power/contact",
-    opt_slow_start: "Slow or difficult start",
-    opt_idle_issue: "Unstable idle",
-    opt_power_loss: "Loss of power",
-    opt_high_consumption: "Excessive fuel consumption",
-    opt_exhaust_smoke: "Exhaust smoke (color)",
-    opt_brake_noise: "Noise when braking",
-    opt_steering_noise: "Noise when turning steering",
-    opt_high_speed_vibration: "Vibration at high speed",
-    opt_engine_noise: "Abnormal engine noise",
-    opt_overheating: "Engine overheating",
-    opt_fluid_leak: "Visible fluid leak",
-    opt_cold_issue: "Only fails when cold",
-    opt_hot_issue: "Only fails when hot",
-    opt_intermittent: "Intermittent failure",
-    form_section_service: "Required Service",
-    form_service_required: "Service Required",
-    form_select_service: "Select a service...",
-    srv_diagnostic: "🔍 Computerized Diagnosis",
-    srv_brakes: "🛑 Brake System",
-    srv_suspension: "🔩 Suspension",
-    srv_steering: "🔄 Steering",
-    srv_electric: "⚡ Automotive Electrical",
-    srv_mechanic: "🛠️ Full Mechanical",
-    srv_gearbox: "⚙️ Gearbox",
-    form_section_contact: "Contact Details",
-    form_name: "Name",
-    form_whatsapp: "WhatsApp",
-    form_privacy: "Your data will only be used to coordinate your appointment",
-    btn_send_request: "Send Request to ROMERO MECÁNICA INTEGRAL",
-    terms_prefix: "By sending, you accept our",
-    terms_link: "terms of service",
-    // Location
-    location_title: "Where are we?",
-    location_subtitle: "Visit us for final validation and specialized repairs.",
-    label_address: "Address:",
-    label_whatsapp: "WhatsApp:",
-    label_email: "E-mail:",
-    label_hours: "Business Hours:",
-    hours_weekdays: "Mon-Fri: 8:00 AM - 12:00 PM & 2:00 PM - 6:00 PM",
-    hours_weekend: "Sat-Sun: Closed",
-    btn_maps: "View on Google Maps",
-    warranty_text: "Warranty on all our services",
-    // Footer
-    footer_design: "Design: NEXO-Art",
-    footer_tech: "Website developed with modern technology",
-    btn_guides_short: "Guides",
-    btn_diagnosis_short: "Diagnosis"
-  },
-  pt: {
-    // Banner
-    banner_1: "🧼 Limpeza de injetores a cada 6 meses = motor mais eficiente",
-    banner_2: "🛢️ Óleo de qualidade a cada 10.000 km = vida útil prolongada",
-    banner_3: "⛽ Usar gasolina premium = mais potência, menos desgaste",
-    banner_4: "✅ Três hábitos simples = menos consumo, menos falhas, mais anos de motor",
-    banner_5: "📲 Agende uma consulta, não perca! WhatsApp +59898680159",
-    // Navbar
-    status_checking: "Verificando...",
-    nav_advice: "Assessoria",
-    nav_diagnosis: "Pré-Diagnóstico",
-    btn_chat: "Chat",
-    btn_appointment: "Agendar",
-    btn_review: "Deixe sua Avaliação",
-    btn_instagram: "Instagram",
-    // Hero
-    hero_badge: "Diagnóstico de Precisão",
-    hero_description: "Na Romero Mecánica Integral, entendemos que seu carro é um investimento importante e sua segurança é primordial. Somos uma oficina de reparo de automóveis com anos de experiência em Paysandú, Uruguai, dedicados a oferecer um serviço de qualidade, confiável e transparente. Especializamos-nos em manter seu veículo em condições ótimas para que você aproveite cada viagem com total tranquilidade.",
-    stat_precision: "Precisão",
-    stat_saving: "Economia",
-    stat_vehicles: "Veículos",
-    btn_start_diagnosis: "Iniciar Diagnóstico",
-    btn_guides: "Guias Técnicas",
-    // Advice Section
-    advice_badge: "Conhecimento Técnico",
-    advice_title: "Centro de Assessoria",
-    advice_description: "Detecte falhas em estágios iniciais e evite reparos custosos. Aprenda a identificar os sinais-chave do seu veículo.",
-    card_predictive: "Preditivo",
-    card_brakes_title: "Sinais nos Freios",
-    card_brakes_desc: "Chiados, vibração no pedal ou curso excessivo: indicadores de desgaste nas pastilhas ou ar no circuito.",
-    card_analyze: "Analisar agora",
-    card_preventive: "Preventivo",
-    card_battery_title: "Bateria e Alternador",
-    card_battery_desc: "Partida lenta, luzes fracas ou piscando: verifique voltagem e estado de carga antes de uma falha total.",
-    card_verify: "Verificar sistema",
-    card_maintenance: "Manutenção",
-    card_fluids_title: "Fluidos Críticos",
-    card_fluids_desc: "Óleo, refrigerante e fluido de freio: níveis baixos ou mudança de cor indicam urgência de revisão.",
-    card_check: "Verificar níveis",
-    btn_start_prediagnosis: "Iniciar Pré-Diagnóstico Agora",
-    // Services Section
-    services_badge: "Soluções Profissionais",
-    services_title_part1: "Serviços",
-    services_title_part2: "Integrados",
-    services_description: "Tecnologia avançada e expertise técnico para manter seu veículo em condições ótimas de segurança e desempenho.",
-    service_diagnostic: "Diagnóstico Computadorizado",
-    service_diagnostic_desc: "Varredura avançada de ECU, sensores e sistemas eletrônicos com equipamentos de última geração.",
-    service_brakes: "Sistema de Freios",
-    service_brakes_desc: "Revisão integral de ABS, pastilhas, discos e fluido de freio para máxima segurança.",
-    service_suspension: "Suspensão e Direção",
-    service_suspension_desc: "Amortecedores, rótulas, alinhamento e balanceamento para conforto e estabilidade na estrada.",
-    service_electric: "Elétrica Automotiva",
-    service_electric_desc: "Diagnóstico de falhas elétricas, baterias, alternadores e sistemas de iluminação.",
-    service_mechanic: "Mecânica Integral",
-    service_mechanic_desc: "Reparos completos de motor, transmissão e sistemas mecânicos com garantia de qualidade.",
-    service_gearbox: "Câmbio",
-    service_gearbox_desc: "Reparo e manutenção de câmbios manuais e automáticos. Diagnóstico de embreagem e transmissão.",
-    // Testimonials
-    testimonials_badge: "Experiências Reais",
-    testimonials_title: "A Voz dos Nossos Clientes",
-    testimonials_description: "Confiança construída sobre resultados verificáveis e atendimento profissional em Paysandú, Uruguai.",
-    testimonial_1: "\"Excelente serviço na Romero Mecánica Integral. Diagnóstico preciso e rápido. Explicaram tudo com clareza e profissionalismo. Totalmente recomendado.\"",
-    testimonial_2: "\"A melhor oficina de Paysandú. Processo transparente e rápido. O pré-diagnóstico online me economizou tempo e dinheiro. Voltarei sem dúvidas à Romero Mecánica Integral.\"",
-    testimonial_3: "\"Levo minha frota de utilitários à Romero Mecánica Integral. Relatórios detalhados, atendimento personalizado e preços justos. Uma oficina de confiança.\"",
-    testimonials_swipe: "Deslize para mais opiniões",
-    // Diagnosis Form
-    diagnosis_title_part1: "ACELERADOR DE",
-    diagnosis_title_part2: "DIAGNÓSTICO",
-    diagnosis_description: "Preencha o formulário e nossos técnicos prepararão a análise prévia antes da sua chegada. Otimizamos seu tempo e recursos.",
-    benefit_time_title: "Economia de Tempo",
-    benefit_time_desc: "Evite esperas desnecessárias. Seu caso já estará em análise ao chegar.",
-    benefit_analysis_title: "Análise Prévia",
-    benefit_analysis_desc: "Preparamos ferramentas e peças específicas para o seu caso.",
-    benefit_transparency_title: "Transparência Total",
-    benefit_transparency_desc: "Você receberá um relatório detalhado com opções de reparo e custos.",
-    security_title: "Dados 100% seguros",
-    security_desc: "Suas informações estão protegidas",
-    form_section_vehicle: "Dados do Veículo",
-    form_vehicle_type: "Tipo de Veículo",
-    form_select_vehicle: "Selecionar tipo...",
-    form_vehicle_model: "Marca e Modelo",
-    form_mileage: "Quilometragem",
-    form_fuel: "Combustível",
-    form_select_fuel: "Selecionar...",
-    form_section_symptoms: "Descrição de Falhas",
-    form_symptoms: "Sintomas",
-    form_context: "Contexto da falha",
-    form_select_context: "Selecionar contexto...",
-    opt_starts_no_start: "Gira mas não liga",
-    opt_no_contact: "Não dá contato",
-    opt_slow_start: "Partida lenta ou difícil",
-    opt_idle_issue: "Instabilidade em marcha lenta",
-    opt_power_loss: "Perda de potência",
-    opt_high_consumption: "Consumo excessivo de combustível",
-    opt_exhaust_smoke: "Fumaça no escape (cor)",
-    opt_brake_noise: "Ruído ao frear",
-    opt_steering_noise: "Ruído ao girar direção",
-    opt_high_speed_vibration: "Vibração em alta velocidade",
-    opt_engine_noise: "Ruído anormal no motor",
-    opt_overheating: "Motor superaquecendo",
-    opt_fluid_leak: "Vazamento de fluido visível",
-    opt_cold_issue: "Só falha quando frio",
-    opt_hot_issue: "Só falha quando quente",
-    opt_intermittent: "Falha intermitente",
-    form_section_service: "Serviço Integral",
-    form_service_required: "Serviço Requerido",
-    form_select_service: "Selecione um serviço...",
-    srv_diagnostic: "🔍 Diagnóstico Computadorizado",
-    srv_brakes: "🛑 Sistema de Freios",
-    srv_suspension: "🔩 Suspensão",
-    srv_steering: "🔄 Direção",
-    srv_electric: "⚡ Elétrica Automotiva",
-    srv_mechanic: "🛠️ Mecânica Integral",
-    srv_gearbox: "⚙️ Câmbio",
-    form_section_contact: "Dados de Contato",
-    form_name: "Nome",
-    form_whatsapp: "WhatsApp",
-    form_privacy: "Seus dados serão usados apenas para coordenar sua consulta",
-    btn_send_request: "Enviar Solicitação à ROMERO MECÁNICA INTEGRAL",
-    terms_prefix: "Ao enviar, você aceita nossos",
-    terms_link: "termos de serviço",
-    // Location
-    location_title: "Onde estamos?",
-    location_subtitle: "Visite-nos para validação final e reparos especializados.",
-    label_address: "Endereço:",
-    label_whatsapp: "WhatsApp:",
-    label_email: "E-mail:",
-    label_hours: "Horário de atendimento:",
-    hours_weekdays: "Seg-Sex: 08:00 - 12:00 e 14:00 - 18:00 hs",
-    hours_weekend: "Sáb-Dom: Fechado",
-    btn_maps: "Ver no Google Maps",
-    warranty_text: "Garantia em todos os nossos serviços",
-    // Footer
-    footer_design: "Design: NEXO-Art",
-    footer_tech: "Site desenvolvido com tecnologia moderna",
-    btn_guides_short: "Guias",
-    btn_diagnosis_short: "Diagnóstico"
-  }
-};
-
-document.addEventListener('DOMContentLoaded', function(){
-// ========== RELOJ DIGITAL ==========
-function updateClock(){
-const now = new Date();
-const hours = String(now.getHours()).padStart(2,'0');
-const minutes = String(now.getMinutes()).padStart(2,'0');
-const seconds = String(now.getSeconds()).padStart(2,'0');
-const timeString = hours + ':' + minutes + ':' + seconds;
-const clockElement = document.getElementById('navbarClockTime');
-if(clockElement) clockElement.textContent = timeString;
-const clockMobile = document.getElementById('navbarClockTimeMobile');
-if(clockMobile) clockMobile.textContent = timeString;
-}
-updateClock();
-setInterval(updateClock, 1000);
-
-// ========== EFECTO FUEGO - Aparece a los 5s y se desvanece gradualmente ==========
-setTimeout(function(){
-const fireRing = document.getElementById('fireRing');
-if(fireRing){
-fireRing.classList.add('active');
-setTimeout(function(){
-fireRing.classList.add('fading');
-}, 0);
-}
-}, 5000);
-
-// ========== PARTÍCULAS ==========
-function createParticles(){
-const container = document.getElementById('particles');
-if(!container) return;
-for(let i = 0; i < 30; i++){
-const particle = document.createElement('div');
-particle.className = 'particle';
-particle.style.left = Math.random()*100 + '%';
-particle.style.animationDelay = Math.random()*20 + 's';
-particle.style.animationDuration = (20 + Math.random()*30) + 's';
-particle.style.width = particle.style.height = (3 + Math.random()*4) + 'px';
-container.appendChild(particle);
-}
-}
-createParticles();
-
-// ========== ESTADO DEL NEGOCIO ==========
-function checkStatus(){
-    const now = new Date();
-    const hours = now.getHours();
-    const minutes = now.getMinutes();
-    const day = now.getDay();
-    const currentMinutes = hours * 60 + minutes;
-    
-    const weekdayMorningOpen = 8 * 60;
-    const weekdayMorningClose = 12 * 60;
-    const weekdayAfternoonOpen = 14 * 60;
-    const weekdayAfternoonClose = 18 * 60;
-    
-    let isOpen = false;
-    
-    if(day >= 1 && day <= 5){
-        const morningOpen = currentMinutes >= weekdayMorningOpen && currentMinutes < weekdayMorningClose;
-        const afternoonOpen = currentMinutes >= weekdayAfternoonOpen && currentMinutes < weekdayAfternoonClose;
-        isOpen = morningOpen || afternoonOpen;
-    }
-    
-    const dotDesktop = document.getElementById('status-dot-desktop');
-    const textDesktop = document.getElementById('status-text-desktop');
-    const barMobile = document.getElementById('status-bar-mobile');
-    
-    if(isOpen){
-        dotDesktop.className = 'status-dot w-2 h-2 rounded-full mr-2.5 bg-primary-orange';
-        textDesktop.textContent = 'Abierto Ahora';
-        textDesktop.className = 'text-primary-orange font-semibold';
-        barMobile.className = 'md:hidden w-full py-2 text-center text-xs font-bold uppercase tracking-wide text-white bg-gradient-to-r from-primary-orange/20 to-orange-700/20 flex items-center justify-center gap-2';
-    } else {
-        dotDesktop.className = 'w-2 h-2 rounded-full mr-2.5 bg-gray-500';
-        textDesktop.textContent = 'Cerrado';
-        textDesktop.className = 'text-gray-400';
-        barMobile.className = 'md:hidden w-full py-2 text-center text-xs font-bold uppercase tracking-wide text-gray-300 bg-gray-900/80 flex items-center justify-center gap-2';
-    }
-}
-checkStatus();
-setInterval(checkStatus, 60000);
-
-// ========== ANIMACIÓN DE CONTADORES ==========
-function animateCounter(id, start, target, duration){
-const obj = document.getElementById(id);
-if(!obj) return;
-let startTimestamp = null;
-const step = function(timestamp){
-if(!startTimestamp) startTimestamp = timestamp;
-const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-const easeProgress = 1 - Math.pow(1 - progress, 3);
-const value = Math.floor(easeProgress * (target - start) + start);
-obj.textContent = value.toLocaleString('es-AR');
-if(progress < 1){
-window.requestAnimationFrame(step);
-} else {
-obj.textContent = target.toLocaleString('es-AR');
-}
-};
-window.requestAnimationFrame(step);
-}
-function startCounters(){
-const observer = new IntersectionObserver(function(entries){
-entries.forEach(function(entry){
-if(entry.isIntersecting){
-animateCounter('counter1', 0, 99, 1500);
-animateCounter('counter2', 0, 50, 1800);
-animateCounter('counter3', 0, 8000, 2000);
-observer.disconnect();
-}
-});
-}, {threshold: 0.3});
-const statsSection = document.querySelector('.grid.grid-cols-3');
-if(statsSection) observer.observe(statsSection);
-}
-startCounters();
-
-// ========== FORMULARIO FUNCIONAL ==========
-const form = document.getElementById('triageForm');
-const submitBtn = document.getElementById('submitBtn');
-
-const allFields = document.querySelectorAll('.field-input');
-allFields.forEach(function(field){
-field.addEventListener('input', function(){
-if(this.value.trim().length > 0){
-this.classList.add('has-value');
-} else {
-this.classList.remove('has-value');
-}
-});
-if(this.tagName === 'SELECT'){
-this.addEventListener('change', function(){
-if(this.value){
-this.classList.add('has-value');
-} else {
-this.classList.remove('has-value');
-}
-});
-}
-});
-
-if(form){
-form.addEventListener('submit', function(e){
-e.preventDefault();
-
-var vehicleTypeEl = document.getElementById('inputVehicleType');
-var vehicleType = vehicleTypeEl && vehicleTypeEl.value ? vehicleTypeEl.value : 'No especificado';
-
-var vehicle = document.getElementById('inputVehicle').value.trim() || 'No especificado';
-var km = document.getElementById('inputKm').value.trim() || 'No especificado';
-
-var fuelTypeEl = document.getElementById('inputFuelType');
-var fuelType = fuelTypeEl && fuelTypeEl.value ? fuelTypeEl.value : 'No especificado';
-
-var symptoms = document.getElementById('inputSymptoms').value.trim() || 'No especificado';
-
-var contextEl = document.getElementById('inputContext');
-var context = contextEl && contextEl.value ? contextEl.options[contextEl.selectedIndex].text : 'No especificado';
-
-var serviceEl = document.getElementById('inputService');
-var service = serviceEl && serviceEl.value ? serviceEl.options[serviceEl.selectedIndex].text : 'No especificado';
-
-var name = document.getElementById('inputName').value.trim() || 'Cliente';
-var phone = document.getElementById('inputPhone').value.trim() || 'No proporcionado';
-
-var message = '🚗 ¡Hola ROMERO MECÁNICA INTEGRAL! 👋\n';
-message += '*Cliente:* ' + name + '\n';
-message += '📱 *Contacto:* ' + phone + '\n';
-message += '🚘 *Tipo de Vehículo:* ' + vehicleType + '\n';
-message += '🚙 *Vehículo:* ' + vehicle + '\n';
-message += '🛣 *Kilometraje:* ' + km + ' km\n';
-message += '⛽ *Combustible:* ' + fuelType + '\n';
-message += '⚠️ *Síntomas reportados:*\n' + symptoms + '\n';
-message += '🔍 *Contexto:* ' + context + '\n';
-message += '🔧 *Servicio solicitado:* ' + service + '\n';
-message += '📍 *Ubicación: Paysandú, Uruguay*\n';
-message += '📅 *Solicito turno para diagnóstico profesional.* 💨';
-
-var originalBtnContent = submitBtn.innerHTML;
-submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Procesando solicitud...';
-submitBtn.classList.add('opacity-80', 'cursor-not-allowed');
-submitBtn.disabled = true;
-
-setTimeout(function(){
-var whatsappUrl = 'https://api.whatsapp.com/send?phone=59898680159&text=' + encodeURIComponent(message);
-window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
-
-submitBtn.innerHTML = '<i class="fa-solid fa-circle-check"></i> ¡Solicitud Enviada! ✅';
-submitBtn.classList.add('bg-green-600');
-
-setTimeout(function(){
-submitBtn.innerHTML = originalBtnContent;
-submitBtn.classList.remove('opacity-80', 'cursor-not-allowed', 'bg-green-600');
-submitBtn.disabled = false;
-form.reset();
-allFields.forEach(function(el){
-el.classList.remove('has-value');
-});
-}, 3500);
-}, 1200);
-});
-}
-
-// ========== PARALLAX ==========
-const parallaxImg = document.getElementById('parallax-img');
-if(parallaxImg){
-window.addEventListener('scroll', function(){
-const scrollY = window.scrollY;
-if(scrollY < window.innerHeight){
-parallaxImg.style.transform = 'translateY(' + (scrollY * 0.3) + 'px) scale(1.08)';
-}
-}, {passive: true});
-}
-
-// ========== NAVBAR SCROLL ==========
-const navbar = document.getElementById('navbar');
-if(navbar){
-window.addEventListener('scroll', function(){
-if(window.scrollY > 50){
-navbar.classList.add('shadow-lg', 'bg-gray-900/95');
-navbar.classList.remove('glass');
-} else {
-navbar.classList.remove('shadow-lg', 'bg-gray-900/95');
-navbar.classList.add('glass');
-}
-}, {passive: true});
-}
-
-// ========== SMOOTH SCROLL ==========
-document.querySelectorAll('a[href^="#"]').forEach(function(anchor){
-anchor.addEventListener('click', function(e){
-e.preventDefault();
-const targetId = this.getAttribute('href');
-if(targetId === '#') return;
-const targetElement = document.querySelector(targetId);
-if(targetElement){
-window.scrollTo({
-top: targetElement.offsetTop - 120,
-behavior: 'smooth'
-});
-}
-});
-});
-
-// ========== FADE IN UP ==========
-document.querySelectorAll('.fade-in-up').forEach(function(el, i){
-el.style.animationDelay = (0.1 + i * 0.12) + 's';
-});
-
-// ========== 🌍 SISTEMA DE IDIOMAS ==========
-function applyTranslations(lang){
-  // Aplicar traducciones a todos los elementos con data-i18n
-  document.querySelectorAll('[data-i18n]').forEach(function(el){
-    const key = el.getAttribute('data-i18n');
-    if(translations[lang] && translations[lang][key]){
-      // Preservar iconos y estructura HTML si existen
-      const icon = el.querySelector('i');
-      const text = translations[lang][key];
-      if(icon && el.childNodes.length > 1){
-        el.innerHTML = '';
-        el.appendChild(document.createTextNode(text));
-        el.appendChild(icon.cloneNode(true));
-      } else {
-        el.textContent = text;
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
+          colors: { 
+            primary: '#00F0FF', 
+            secondary: '#FF00FF', 
+            accent: '#39FF14',
+            dark: '#0a0a1a'
+          },
+          animation: { 
+            slideDown: 'slideDown 0.6s ease-out', 
+            pulseBtn: 'pulse 2s infinite',
+            float: 'float 3s ease-in-out infinite'
+          },
+          keyframes: { 
+            slideDown: { 
+              '0%': { opacity:0, transform:'translateY(-50px)' }, 
+              '100%': { opacity:1, transform:'translateY(0)' } 
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-10px)' }
+            }
+          }
+        }
       }
     }
-  });
-  
-  // Actualizar indicador de idioma activo
-  document.querySelectorAll('.lang-option').forEach(function(opt){
-    opt.classList.toggle('active', opt.dataset.lang === lang);
-    const icon = opt.querySelector('i');
-    if(icon){
-      icon.className = opt.dataset.lang === lang ? 'fa-solid fa-check' : 'fa-regular fa-circle';
+  </script>
+
+  <style>
+    /* === ESTILOS BASE === */
+    body { 
+      background:#050511; 
+      color:white; 
+      overflow-x:hidden; 
+      font-feature-settings: "ss01", "ss02", "cv01", "cv02";
     }
-  });
+    
+    /* === GLASSMORPHISM === */
+    .glass { 
+      background:rgba(255,255,255,0.06); 
+      backdrop-filter:blur(20px); 
+      border:1px solid rgba(255,255,255,0.12); 
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+    
+    /* === TEXTO GRADIENTE ANIMADO === */
+    .gradient-text { 
+      background:linear-gradient(90deg,#00F0FF,#FF00FF,#39FF14,#00F0FF); 
+      background-size:400%; 
+      -webkit-background-clip:text; 
+      -webkit-text-fill-color:transparent; 
+      background-clip:text;
+      animation:gradient 6s ease infinite; 
+    }
+    @keyframes gradient { 
+      0%{background-position:0% 50%}
+      50%{background-position:100% 50%}
+      100%{background-position:0% 50%}
+    }
+    
+    /* === PARTÍCULAS DE FONDO === */
+    #particles-js { 
+      position:fixed; 
+      inset:0; 
+      z-index:1; 
+      pointer-events:none; 
+    }
+    
+    /* === SELECTOR DE PAÍSES === */
+    .country-select {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(0,240,255,0.4);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2300F0FF'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 16px;
+      padding-right: 36px;
+      font-size: 0.875rem;
+    }
+    .country-select:hover, .country-select:focus {
+      border-color: #00F0FF;
+      box-shadow: 0 0 20px rgba(0,240,255,0.3);
+      outline: none;
+      background-color: rgba(0,240,255,0.1);
+    }
+    .country-select option {
+      background: #050511;
+      color: white;
+      padding: 8px;
+    }
+    
+    /* === ANIMACIÓN DE CAMBIO DE PRECIO === */
+    .price-badge {
+      transition: all 0.3s ease;
+    }
+    .price-change {
+      animation: pricePulse 0.4s ease;
+    }
+    @keyframes pricePulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.15); opacity: 0.9; color: #00F0FF; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    
+    /* === HOVER EFFECTS PARA TARJETAS === */
+    .plan-card {
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .plan-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 60px rgba(0,240,255,0.2);
+    }
+    
+    /* === BOTONES CON EFECTO GLOW === */
+    .btn-glow {
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-glow::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s;
+    }
+    .btn-glow:hover::before {
+      left: 100%;
+    }
+    
+    /* === SCROLLBAR PERSONALIZADO === */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #050511;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #00F0FF, #FF00FF);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, #FF00FF, #00F0FF);
+    }
+    
+    /* === UTILIDADES === */
+    .text-shadow {
+      text-shadow: 0 0 20px rgba(0,240,255,0.5);
+    }
+    .border-glow {
+      box-shadow: 0 0 20px rgba(0,240,255,0.3);
+    }
+    
+    /* === ANIMACIÓN DEL BADGE DE DESCUENTO === */
+    .badge-descount {
+      transition: all 0.3s ease;
+    }
+
+    /* === HOVER TEXT PARA TARJETAS DE PAGO === */
+    .payment-card {
+      position: relative;
+    }
+    .payment-card .hover-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      opacity: 0;
+      transition: all 0.3s ease;
+      font-weight: 700;
+      font-size: 0.875rem;
+      color: #374151;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+    .payment-card:hover .hover-text {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    .payment-card:hover img {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-primary selection:text-black">
+
+  <!-- ✨ BARRA DE MARCA NEXO-ART - INTELIGENCIA QUE CONVIERTE ✨ -->
+  <header class="fixed top-0 left-0 right-0 z-40 py-3 px-4 text-center glass border-b border-white/10">
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4">
+      <span class="text-primary font-mono font-black text-lg tracking-wider">NEXO-ART</span>
+      <span class="text-gray-500 text-xs sm:text-sm hidden sm:inline">•</span>
+      <span class="text-gray-300 text-xs sm:text-sm font-medium">Inteligencia que convierte visitantes en clientes</span>
+      
+      <!-- 🌍 SELECTOR DE PAÍSES -->
+      <div class="flex items-center gap-2 mt-2 sm:mt-0 sm:ml-4">
+        <span class="text-gray-400 text-xs">🌎</span>
+        <select id="countrySelector" class="country-select text-sm" onchange="cambiarPais()" aria-label="Seleccionar país">
+          <option value="argentina">🇦🇷 Argentina</option>
+          <option value="bolivia">🇧🇴 Bolivia</option>
+          <option value="brasil">🇧 Brasil</option>
+          <option value="chile">🇨🇱 Chile</option>
+          <option value="colombia">🇨🇴 Colombia</option>
+          <option value="costarica">🇨🇷 Costa Rica</option>
+          <option value="cuba">🇨🇺 Cuba</option>
+          <option value="ecuador">🇪🇨 Ecuador</option>
+          <option value="elsalvador">🇸🇻 El Salvador</option>
+          <option value="guatemala">🇬🇹 Guatemala</option>
+          <option value="honduras">🇭 Honduras</option>
+          <option value="mexico">🇲 México</option>
+          <option value="nicaragua">🇳🇮 Nicaragua</option>
+          <option value="panama">🇵🇦 Panamá</option>
+          <option value="paraguay">🇵🇾 Paraguay</option>
+          <option value="peru">🇵🇪 Perú</option>
+          <option value="rd">🇩🇴 República Dominicana</option>
+          <option value="uruguay">🇺🇾 Uruguay</option>
+          <option value="venezuela">🇻🇪 Venezuela</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <!-- 📱 MODAL DE WHATSAPP -->
+  <div id="whatsappModal" class="fixed inset-0 bg-black/90 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4 sm:p-6" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="glass p-6 sm:p-8 md:p-10 rounded-3xl border border-primary/50 max-w-md w-full animate-slideDown">
+      <h3 id="modalTitle" class="text-3xl sm:text-4xl font-black mb-4 sm:mb-6 text-center gradient-text">¡Último paso!</h3>
+      <p class="text-center text-lg sm:text-xl mb-6 sm:mb-8 text-gray-200">Te redirigimos a WhatsApp con tu propuesta personalizada</p>
+
+      <form id="whatsappForm" onsubmit="enviarWhatsApp(); return false;" class="space-y-4">
+        <input type="text" id="modalNombre" placeholder="Tu nombre *" class="w-full px-4 sm:px-6 py-4 sm:py-5 glass border border-white/20 rounded-2xl focus:border-primary focus:outline-none text-base bg-transparent placeholder-gray-500" required aria-required="true">
+        <input type="email" id="modalEmail" placeholder="Email (opcional)" class="w-full px-4 sm:px-6 py-4 sm:py-5 glass border border-white/20 rounded-2xl focus:border-primary focus:outline-none text-base bg-transparent placeholder-gray-500" aria-label="Email opcional">
+        <input type="hidden" id="modalPlan">
+        <input type="hidden" id="modalPais" value="argentina">
+
+        <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2">
+          <button type="button" onclick="cerrarModal()" class="w-full sm:flex-1 py-4 sm:py-5 glass border border-white/30 rounded-2xl font-bold hover:bg-white/10 transition text-base sm:text-lg focus:outline-none focus:ring-2 focus:ring-primary/50">
+            Cancelar
+          </button>
+          <button type="submit" class="w-full sm:flex-1 py-4 sm:py-5 bg-gradient-to-r from-green-500 to-emerald-500 text-black font-black text-lg sm:text-xl rounded-2xl hover:scale-105 transition shadow-xl focus:outline-none focus:ring-2 focus:ring-green-400">
+            Enviar por WhatsApp 🚀
+          </button>
+        </div>
+      </form>
+      
+      <p class="text-xs text-gray-500 text-center mt-6">
+        🔒 Tus datos están seguros • Respuesta en minutos
+      </p>
+    </div>
+  </div>
+
+  <!-- 🤖 MODAL DEL ASISTENTE NOTEBOOKLM -->
+  <div id="notebookModal" class="fixed inset-0 bg-black/90 backdrop-blur-xl z-50 hidden flex items-center justify-center p-4 sm:p-6" role="dialog" aria-modal="true" aria-labelledby="notebookModalTitle">
+    <div class="glass p-2 sm:p-4 rounded-3xl border border-primary/50 max-w-3xl w-full h-[80vh] sm:h-[85vh] flex flex-col animate-slideDown relative">
+      <!-- Header del Modal -->
+      <div class="flex justify-between items-center mb-4 px-4">
+        <h3 id="notebookModalTitle" class="text-xl sm:text-2xl font-black gradient-text flex items-center gap-2">
+          <span>🤖</span> Asistente NEXO-Art
+        </h3>
+        <button onclick="cerrarNotebookModal()" class="text-gray-400 hover:text-white transition text-3xl font-bold leading-none" aria-label="Cerrar asistente">&times;</button>
+      </div>
+      
+      <!-- Iframe de NotebookLM -->
+      <div class="flex-grow rounded-2xl overflow-hidden border border-white/10 bg-black/50 relative">
+        <a href="https://notebooklm.google.com/notebook/8b4f5d92-7e6f-471c-bfdf-5c0de7da2a38/preview" target="_blank" 
+           class="absolute top-3 right-3 z-10 px-3 py-1.5 bg-black/70 hover:bg-primary hover:text-black text-white text-xs font-bold rounded-lg border border-white/20 transition flex items-center gap-1 backdrop-blur-sm">
+          <span>Abrir en pestaña nueva</span>
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+        </a>
+        <iframe 
+          src="https://notebooklm.google.com/notebook/8b4f5d92-7e6f-471c-bfdf-5c0de7da2a38/preview" 
+          class="w-full h-full border-0"
+          title="Asistente NotebookLM NEXO-Art"
+          allow="clipboard-write"
+          loading="lazy">
+        </iframe>
+      </div>
+      
+      <p class="text-xs text-gray-500 text-center mt-4 px-4">
+        💡 Preguntame sobre planes, precios, métodos de pago o cualquier duda de NEXO-Art.
+      </p>
+    </div>
+  </div>
+
+  <!-- 🎨 FONDO DE PARTÍCULAS -->
+  <div id="particles-js"></div>
+
+  <!-- 🌟 SECCIÓN HERO -->
+  <section class="relative min-h-screen flex items-center justify-center px-4 sm:px-6 pt-20">
+    <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-25">
+      <source src="https://assets.mixkit.co/videos/preview/mixkit-neon-matrix-rain-and-digital-glitch-32694-large.mp4" type="video/mp4">
+      <source src="https://assets.mixkit.co/videos/preview/mixkit-neon-matrix-rain-and-digital-glitch-32694-medium.mp4" type="video/mp4">
+    </video>
+    <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-[#050511]/95 to-[#050511]"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(0,240,255,0.1)_0%,_transparent_70%)]"></div>
+
+    <div class="relative z-10 text-center max-w-7xl mx-auto px-2">
+      <div class="inline-flex items-center gap-2 px-4 py-2 glass rounded-full mb-6 sm:mb-8 animate-float">
+        <span class="w-2 h-2 bg-accent rounded-full animate-pulse"></span>
+        <span class="text-sm text-gray-300">✨ Landings que facturan 24/7</span>
+      </div>
+      
+      <h1 class="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black leading-tight sm:leading-none mb-6 sm:mb-10 text-shadow">
+        TU LANDING<br><span class="gradient-text">FACTURA SOLA</span>
+      </h1>
+      
+      <p class="text-lg sm:text-2xl md:text-4xl font-bold text-gray-200 mb-8 sm:mb-12 px-2 max-w-4xl mx-auto">
+        100% estática • carga en menos de 0.8s • Clasifica tus leads automáticamente
+      </p>
+      
+      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <button onclick="abrirModal('Avanzado')" class="px-8 sm:px-12 py-4 sm:py-5 bg-gradient-to-r from-primary to-cyan-400 text-black font-black text-lg sm:text-xl rounded-2xl hover:scale-105 transition shadow-2xl btn-glow">
+          EMPEZAR AHORA →
+        </button>
+        <a href="#planes" class="px-8 sm:px-12 py-4 sm:py-5 glass border border-white/30 rounded-2xl font-bold hover:bg-white/10 transition text-lg sm:text-xl">
+          Ver Planes ↓
+        </a>
+      </div>
+      
+      <div class="mt-12 sm:mt-16 flex flex-wrap justify-center gap-6 text-sm text-gray-400">
+        <div class="flex items-center gap-2">
+          <span class="text-accent">✓</span>
+          <span>Sin mensualidades</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-accent">✓</span>
+          <span>Entrega en 24HS</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-accent">✓</span>
+          <span>Soporte incluido</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+      <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+      </svg>
+    </div>
+  </section>
+
+  <!-- 💡 MENSAJE ESTÁTICO -->
+  <section class="py-12 sm:py-16 bg-black/50 backdrop-blur-xl text-center px-4 border-y border-white/5">
+    <p class="text-xl sm:text-2xl md:text-3xl font-black text-primary mb-3 sm:mb-4">
+      Todas nuestras webs son 100% estáticas (HTML + CSS + JS)
+    </p>
+    <p class="text-base sm:text-xl text-gray-300 leading-relaxed max-w-3xl mx-auto">
+      Carga instantánea • Puntaje 100/100 Google • Nunca se cae • Sin hosting caro • SEO optimizado
+    </p>
+  </section>
+
+  <!-- 🎬 VIDEO EXPLICATIVO EMBEBIDO -->
+  <section class="py-16 sm:py-24 px-4 sm:px-6 bg-gradient-to-b from-black/30 to-black/50">
+    <div class="max-w-5xl mx-auto text-center">
+      <h2 class="text-3xl sm:text-5xl font-black mb-6 sm:mb-8 gradient-text">
+        CONOCÉ CÓMO FUNCIONA NEXO-ART
+      </h2>
+      <p class="text-base sm:text-xl text-gray-300 mb-8 sm:mb-12 max-w-3xl mx-auto">
+        Mirá nuestro video explicativo directamente aquí y descubrí cómo nuestras landings pueden transformar tu negocio y empezar a facturar automáticamente.
+      </p>
+      
+      <!-- VIDEO DE YOUTUBE -->
+      <div class="relative w-full max-w-4xl mx-auto aspect-video rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl shadow-primary/20 border border-white/10 glass">
+        <iframe 
+          src="https://www.youtube.com/embed/1tHb9OWXvAI?rel=0&modestbranding=1&playsinline=1" 
+          title="Video explicativo NEXO-ART: Landings que convierten"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          allowfullscreen
+          class="absolute inset-0 w-full h-full"
+          loading="lazy"
+          referrerpolicy="strict-origin-when-cross-origin">
+        </iframe>
+      </div>
+      
+      <p class="text-sm text-gray-500 mt-6 flex items-center justify-center gap-2 flex-wrap">
+        <span>⏱️</span>
+        <span>Duración: 3-5 minutos</span>
+        <span class="mx-2 hidden sm:inline">•</span>
+        <span>🔊</span>
+        <span>Activá el sonido para mejor experiencia</span>
+        <span class="mx-2 hidden sm:inline">•</span>
+        <span>📱</span>
+        <span>Compatible con móvil y desktop</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- 💰 PLANES CON PRECIOS DINÁMICOS -->
+  <section id="planes" class="py-20 sm:py-32 px-4 sm:px-6 max-w-7xl mx-auto">
+    <h2 class="text-4xl sm:text-6xl md:text-8xl font-black text-center mb-12 sm:mb-20 px-2 gradient-text">ELIGÍ TU RESULTADO</h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 md:gap-12">
+
+      <!-- ===== PLAN BÁSICO ===== -->
+      <article class="plan-card glass p-6 sm:p-8 md:p-12 rounded-3xl border border-white/10 hover:border-primary/50 transition text-center flex flex-col relative">
+        
+        <!-- 🏷️ BADGE 10% OFF (OCULTO PARA ARGENTINA) -->
+        <div id="badge-10off" class="badge-descount absolute top-3 sm:top-4 right-3 sm:right-4 bg-gradient-to-r from-red-500 to-orange-500 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-full font-black text-sm sm:text-lg whitespace-nowrap z-10 shadow-lg" style="display: none">10% OFF</div>
+        
+        <!-- ✅ TÍTULO MODIFICADO -->
+        <h3 class="text-2xl sm:text-3xl font-black mb-3 sm:mb-4 leading-tight">BÁSICO<br><span class="text-base sm:text-lg font-medium text-gray-300">PIENSA EN GRANDE PARA PEQUEÑOS NEGOCIOS</span></h3>
+        
+        <div id="price-basico" class="text-4xl sm:text-6xl font-black mb-4 sm:mb-6 price-badge text-shadow">$88.000</div>
+        
+        <!-- ✅ MICRO TARJETA DE CUOTAS (NUEVO) -->
+        <div class="mb-6 sm:mb-8 p-4 bg-gradient-to-r from-accent/15 to-green-500/15 border-2 border-accent/40 rounded-2xl">
+          <p class="text-sm text-gray-300 mb-1">Opción de Crédito</p>
+          <p id="price-cuotas-basico" class="text-xl sm:text-2xl font-black text-accent">2 cuotas de $50.000<span class="text-sm text-gray-400 font-normal" id="cuotas-moneda"></span></p>
+        </div>
+        
+        <ul class="text-left space-y-3 sm:space-y-5 text-gray-300 text-base sm:text-lg mb-8 sm:mb-10 flex-grow">
+          <li class="leading-relaxed flex items-start gap-3">
+            <span class="text-accent mt-1">✓</span>
+            <span>Landing 100% estática</span>
+          </li>
+          <li class="leading-relaxed flex items-start gap-3">
+            <span class="text-accent mt-1">✓</span>
+            <span>Diseño premium responsive</span>
+          </li>
+          <li class="leading-relaxed flex items-start gap-3">
+            <span class="text-accent mt-1">✓</span>
+            <span>Formulario de captura</span>
+          </li>
+          <li class="leading-relaxed flex items-start gap-3">
+            <span class="text-accent mt-1">✓</span>
+            <span>Entrega en 24HS</span>
+          </li>
+        </ul>
+        
+        <!-- BOTÓN DE CRÉDITO (Solo Argentina - ahora integrado en micro tarjeta) -->
+        <button id="btn-credito-basico" onclick="mostrarInfoCredito()" class="w-full mb-3 sm:mb-4 py-2 sm:py-3 glass border border-accent/40 text-accent font-bold text-sm sm:text-base rounded-xl hover:bg-accent/10 transition flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-accent/50">
+          <span>ℹ️</span> Más info sobre cuotas
+        </button>
+        
+        <button onclick="abrirModal('Básico')" class="w-full py-4 sm:py-6 bg-gradient-to-r from-cyan-500 to-blue-500 text-black font-black text-lg sm:text-xl rounded-2xl hover:scale-105 transition shadow-xl mt-auto btn-glow focus:outline-none focus:ring-2 focus:ring-cyan-400">
+          EMPEZAR YA
+        </button>
+      </article>
+
+      <!-- ===== PLAN AVANZADO EMPRESA (DESTACADO) ===== -->
+      <article class="plan-card glass p-6 sm:p-8 md:p-12 rounded-3xl border-4 border-primary shadow-2xl shadow-primary/60 transform md:scale-110 relative overflow-hidden flex flex-col">
+        <div class="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent pointer-events-none"></div>
+        <div class="absolute top-3 sm:top-4 right-3 sm:right-4 bg-gradient-to-r from-primary to-cyan-400 text-black px-4 sm:px-8 py-2 sm:py-3 rounded-full font-black text-sm sm:text-lg whitespace-nowrap shadow-lg z-10">🔥 MÁS VENDIDO</div>
+        
+        <h3 class="text-4xl sm:text-5xl font-black mb-4 sm:mb-6 mt-2 sm:mt-0">Avanzado Empresa</h3>
+        <div id="price-avanzado" class="text-5xl sm:text-7xl font-black text-primary mb-6 sm:mb-8 price-badge text-shadow">$160.000</div>
+        
+        <ul class="text-left space-y-3 sm:space-y-5 text-gray-200 text-base sm:text-lg mb-6 sm:mb-8 flex-grow">
+          <li class="leading-relaxed flex items-start gap-3">
+            <span class="text-primary mt-1">✓</span>
+            <span>Todo lo del Básico</span>
+          </li>
+          <li class="leading-relaxed flex items-start gap-3">
+            <span class="text-primary mt-1">✓</span>
+            <span>Animaciones premium</span>
+          </li>
+          <li class="leading-relaxed flex items-start gap-3">
+            <span class="text-primary mt-1">✓</span>
+            <span>CRM automático</span>
+          </li>
+          <li class="leading-relaxed flex items-start gap-3">
+            <span class="text-primary mt-1">✓</span>
+            <span>E-mail Marketing</span>
+          </li>
+          <li class="leading-relaxed flex items-start gap-3">
+            <span class="text-primary mt-1">✓</span>
+            <span>Mantenimiento mensual</span>
+          </li>
+          <li class="leading-relaxed flex items-start gap-3">
+            <span class="text-primary mt-1">✓</span>
+            <span>Entrega en 24HS</span>
+          </li>
+        </ul>
+
+        <!-- MICRO TARJETA MANTENIMIENTO MENSUAL -->
+        <div class="mb-6 sm:mb-8 p-4 bg-gradient-to-r from-primary/20 to-cyan-400/20 border-2 border-primary/50 rounded-2xl">
+          <p class="text-sm text-gray-300 mb-1">Mantenimiento Mensual</p>
+          <p id="price-mantenimiento-avanzado" class="text-2xl sm:text-3xl font-black text-primary">$20 USD<span class="text-sm text-gray-400 font-normal">/mes</span></p>
+        </div>
+        
+        <button onclick="abrirModal('Avanzado')" class="w-full py-5 sm:py-7 bg-primary text-black font-black text-xl sm:text-2xl rounded-2xl hover:bg-white transform hover:scale-105 transition shadow-2xl mt-auto btn-glow focus:outline-none focus:ring-2 focus:ring-primary">
+          RESERVAR MI AVANZADO
+        </button>
+      </article>
+
+      <!-- ===== PLAN PREMIUM ===== -->
+      <article class="plan-card glass p-6 sm:p-8 md:p-12 rounded-3xl border border-secondary/50 hover:border-secondary transition text-center flex flex-col">
+        <h3 class="text-3xl sm:text-4xl font-black mb-3 sm:mb-4">Premium</h3>
+        <div id="price-premium" class="text-4xl sm:text-6xl font-black text-secondary mb-6 sm:mb-8 price-badge text-shadow">$180.000</div>
+        
+        <ul class="text-left space-y-3 sm:space-y-5 text-gray-300 text-base sm:text-lg mb-6 sm:mb-8 flex-grow">
+          <li class="leading-relaxed flex items-start gap-3">
+            <span class="text-secondary mt-1">✓</span>
+            <span>Todo lo del Avanzado</span>
+          </li>
+          <li class="leading-relaxed flex items-start gap-3">
+            <span class="text-secondary mt-1">✓</span>
+            <span>Web completa full custom</span>
+          </li>
+          <li class="leading-relaxed flex items-start gap-3">
+            <span class="text-secondary mt-1">✓</span>
+            <span>SEO técnico avanzado</span>
+          </li>
+          <li class="leading-relaxed flex items-start gap-3">
+            <span class="text-secondary mt-1">✓</span>
+            <span>E-mail Marketing</span>
+          </li>
+          <li class="leading-relaxed flex items-start gap-3">
+            <span class="text-secondary mt-1">✓</span>
+            <span>Mantenimiento mensual</span>
+          </li>
+          <li class="leading-relaxed flex items-start gap-3">
+            <span class="text-secondary mt-1">✓</span>
+            <span>Estrategia 1 a 1</span>
+          </li>
+          <li class="leading-relaxed flex items-start gap-3">
+            <span class="text-secondary mt-1">✓</span>
+            <span>Entrega en 24HS</span>
+          </li>
+        </ul>
+
+        <!-- MICRO TARJETA MANTENIMIENTO MENSUAL -->
+        <div class="mb-6 sm:mb-8 p-4 bg-gradient-to-r from-secondary/20 to-pink-500/20 border-2 border-secondary/50 rounded-2xl">
+          <p class="text-sm text-gray-300 mb-1">Mantenimiento Mensual</p>
+          <p id="price-mantenimiento-premium" class="text-2xl sm:text-3xl font-black text-secondary">$20 USD<span class="text-sm text-gray-400 font-normal">/mes</span></p>
+        </div>
+        
+        <button onclick="abrirModal('Premium')" class="w-full py-4 sm:py-6 bg-gradient-to-r from-secondary to-pink-500 text-black font-black text-lg sm:text-xl rounded-2xl hover:scale-105 transition mt-auto btn-glow focus:outline-none focus:ring-2 focus:ring-secondary">
+          DOMINAR MI MERCADO
+        </button>
+      </article>
+    </div>
+    
+    <!-- Nota de precios -->
+    <p class="text-center text-gray-500 text-sm mt-12 max-w-2xl mx-auto">
+      💡 <strong>Nota:</strong> Los precios en USD para Latinoamérica se pagan vía transferencia internacional, PayPal o criptomonedas. 
+      Argentina: precios en pesos con opción de crédito para plan Básico.
+    </p>
+  </section>
+
+  <!-- 🎨 SECCIÓN: TRABAJOS REALIZADOS -->
+  <section class="py-20 sm:py-32 px-4 sm:px-6 max-w-7xl mx-auto">
+    <h2 class="text-4xl sm:text-6xl md:text-8xl font-black text-center mb-12 sm:mb-20 px-2 gradient-text">TRABAJOS REALIZADOS</h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 md:gap-12">
+      
+      <!-- PROYECTO 1: MECANICA LEON -->
+      <a href="https://nexoar-art.github.io/MECANICA-LEON/" target="_blank" rel="noopener noreferrer" 
+         class="plan-card glass p-6 sm:p-8 md:p-12 rounded-3xl border border-white/10 hover:border-primary/50 transition text-center flex flex-col group">
+        <div class="w-full aspect-video mb-6 rounded-xl overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+          <span class="text-4xl">🔧</span>
+        </div>
+        <h3 class="text-2xl sm:text-3xl font-black mb-4 group-hover:text-primary transition">MECANICA LEON</h3>
+        <p class="text-gray-300 text-base sm:text-lg mb-6 flex-grow">Landing page para taller mecánico • Diseño responsive • Captura de leads</p>
+        <span class="inline-block py-3 px-6 bg-gradient-to-r from-primary to-cyan-400 text-black font-black rounded-2xl group-hover:scale-105 transition">
+          VER PROYECTO →
+        </span>
+      </a>
+
+      <!-- PROYECTO 2: PEKA AUTOPARTS -->
+      <a href="https://nexoar-art.github.io/PEKA-AUTOPART/" target="_blank" rel="noopener noreferrer" 
+         class="plan-card glass p-6 sm:p-8 md:p-12 rounded-3xl border border-white/10 hover:border-primary/50 transition text-center flex flex-col group">
+        <div class="w-full aspect-video mb-6 rounded-xl overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+          <span class="text-4xl">🚗</span>
+        </div>
+        <h3 class="text-2xl sm:text-3xl font-black mb-4 group-hover:text-primary transition">PEKA AUTOPARTS</h3>
+        <p class="text-gray-300 text-base sm:text-lg mb-6 flex-grow">E-commerce estático para autopartes • Catálogo interactivo • Optimizado para móviles</p>
+        <span class="inline-block py-3 px-6 bg-gradient-to-r from-primary to-cyan-400 text-black font-black rounded-2xl group-hover:scale-105 transition">
+          VER PROYECTO →
+        </span>
+      </a>
+
+      <!-- PROYECTO 3: ARGENTPLAY -->
+      <a href="https://nexoar-art.github.io/ArgenPlay/" target="_blank" rel="noopener noreferrer" 
+         class="plan-card glass p-6 sm:p-8 md:p-12 rounded-3xl border border-white/10 hover:border-primary/50 transition text-center flex flex-col group">
+        <div class="w-full aspect-video mb-6 rounded-xl overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+          <span class="text-4xl">🎮</span>
+        </div>
+        <h3 class="text-2xl sm:text-3xl font-black mb-4 group-hover:text-primary transition">ARGENTPLAY</h3>
+        <p class="text-gray-300 text-base sm:text-lg mb-6 flex-grow">Plataforma de gaming • Animaciones premium • Experiencia inmersiva</p>
+        <span class="inline-block py-3 px-6 bg-gradient-to-r from-primary to-cyan-400 text-black font-black rounded-2xl group-hover:scale-105 transition">
+          VER PROYECTO →
+        </span>
+      </a>
+
+      <!-- PROYECTO 4: AUXILIO DE CAMIONES DOLORES SORIANO -->
+      <a href="https://nexoar-art.github.io/AXILIO-DE-CAMIONES-DOLORES-SORIANO/" target="_blank" rel="noopener noreferrer" 
+         class="plan-card glass p-6 sm:p-8 md:p-12 rounded-3xl border border-white/10 hover:border-primary/50 transition text-center flex flex-col group">
+        <div class="w-full aspect-video mb-6 rounded-xl overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+          <span class="text-4xl">🚛</span>
+        </div>
+        <h3 class="text-2xl sm:text-3xl font-black mb-4 group-hover:text-primary transition">AUXILIO DE CAMIONES DOLORES SORIANO</h3>
+        <p class="text-gray-300 text-base sm:text-lg mb-6 flex-grow">Servicio de auxilio vial • Diseño profesional • Captura de clientes 24/7</p>
+        <span class="inline-block py-3 px-6 bg-gradient-to-r from-primary to-cyan-400 text-black font-black rounded-2xl group-hover:scale-105 transition">
+          VER PROYECTO →
+        </span>
+      </a>
+    </div>
+  </section>
+
+  <!-- 🚀 CTA FINAL -->
+  <section class="py-16 sm:py-24 px-4 sm:px-6 text-center">
+    <div class="max-w-4xl mx-auto">
+      <h3 class="text-3xl sm:text-5xl font-black mb-6 sm:mb-8 gradient-text">¿Listo para que tu landing facture sola?</h3>
+      <p class="text-lg sm:text-xl text-gray-300 mb-8 sm:mb-10">No esperes más. Tu competencia ya está convirtiendo visitantes en clientes.</p>
+      <button onclick="abrirModal('Avanzado')" class="px-10 sm:px-20 py-6 sm:py-8 bg-gradient-to-r from-primary to-cyan-400 text-black font-black text-xl sm:text-2xl rounded-3xl hover:scale-105 transform transition shadow-2xl w-full sm:w-auto animate-pulseBtn btn-glow focus:outline-none focus:ring-2 focus:ring-primary">
+        EMPEZAR YA →
+      </button>
+      <p class="text-sm text-gray-500 mt-4">Sin compromiso • Respuesta en minutos • Pago seguro</p>
+    </div>
+  </section>
+
+  <!-- 💳 MÉTODOS DE PAGO SEGUROS -->
+  <section class="py-12 px-4 sm:px-6 border-t border-white/10 bg-gradient-to-b from-black/50 to-transparent">
+    <div class="max-w-5xl mx-auto">
+      <p class="text-center text-gray-400 text-sm mb-8 font-medium tracking-wide">
+        🔒 PAGOS 100% SEGUROS Y ENCRIPTADOS
+      </p>
+      <div class="flex flex-wrap justify-center items-center gap-8 sm:gap-16">
+        <!-- Mercado Pago -->
+        <div class="flex flex-col items-center gap-3 group cursor-pointer">
+          <div class="payment-card w-40 h-16 bg-white rounded-xl flex items-center justify-center p-4 shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform duration-300 relative overflow-hidden">
+            <img src="https://http2.mlstatic.com/frontend-assets/ui-navigation/5.19.1/mercadolibre/logo__small.png" 
+                 alt="Mercado Pago" 
+                 class="h-full object-contain transition-opacity duration-300"
+                 onerror="this.parentElement.innerHTML='<span class=\'text-blue-600 font-black text-xl\'>MercadoPago</span>'">
+            <span class="hover-text">MERCADO PAGO</span>
+          </div>
+          <span class="text-xs text-gray-500">Argentina</span>
+        </div>
+
+        <!-- PayPal -->
+        <div class="flex flex-col items-center gap-3 group cursor-pointer">
+          <div class="payment-card w-40 h-16 bg-white rounded-xl flex items-center justify-center p-4 shadow-lg shadow-blue-600/20 group-hover:scale-110 transition-transform duration-300 relative overflow-hidden">
+            <img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_111x69.jpg" 
+                 alt="PayPal" 
+                 class="h-full object-contain transition-opacity duration-300"
+                 onerror="this.parentElement.innerHTML='<span class=\'text-blue-700 font-black text-xl\'>PayPal</span>'">
+            <span class="hover-text">PAYPAL</span>
+          </div>
+          <span class="text-xs text-gray-500">Internacional</span>
+        </div>
+
+        <!-- Global66 -->
+        <div class="flex flex-col items-center gap-3 group cursor-pointer">
+          <div class="payment-card w-40 h-16 bg-white rounded-xl flex items-center justify-center p-4 shadow-lg shadow-purple-500/20 group-hover:scale-110 transition-transform duration-300 relative overflow-hidden">
+            <img src="GLOBAL66.png" 
+                 alt="Global66" 
+                 class="h-full object-contain transition-opacity duration-300"
+                 onerror="this.parentElement.innerHTML='<span class=\'text-purple-600 font-black text-xl\'>Global66</span>'">
+            <span class="hover-text">GLOBAL66</span>
+          </div>
+          <span class="text-xs text-gray-500">Latam</span>
+        </div>
+      </div>
+      
+      <div class="mt-8 text-center">
+        <p class="text-xs text-gray-500 flex items-center justify-center gap-2 flex-wrap">
+          <span>✓</span>
+          <span>Transferencias bancarias</span>
+          <span class="mx-2">•</span>
+          <span>Criptomonedas (USDT/BTC)</span>
+          <span class="mx-2">•</span>
+          <span>Tarjetas de crédito/débito</span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 📞 BOTONES FLOTANTES DE CONTACTO -->
   
-  // Actualizar texto del botón selector
-  const currentLangEl = document.getElementById('currentLang');
-  if(currentLangEl) currentLangEl.textContent = lang.toUpperCase();
-  
-  // Actualizar atributo lang del HTML
-  document.documentElement.lang = lang;
-  
-  // Guardar preferencia en localStorage
-  localStorage.setItem('romero_lang', lang);
-}
+  <!-- 🤖 BOTÓN FLOTANTE ASISTENTE NOTEBOOKLM - Lado izquierdo -->
+  <button onclick="abrirNotebookModal()" 
+     class="fixed bottom-24 left-6 z-50 flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-r from-primary to-cyan-400 hover:from-cyan-400 hover:to-primary rounded-full shadow-2xl shadow-primary/40 transition-all duration-300 hover:scale-110 group animate-float"
+     aria-label="Abrir Asistente NEXO-Art" title="Abrir Asistente NEXO-Art">
+    <svg class="w-7 h-7 sm:w-8 sm:h-8 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+    </svg>
+    <span class="absolute -top-12 left-1/2 -translate-x-1/2 bg-black/90 text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none border border-white/20">
+      💬 Asistente NEXO-Art
+    </span>
+  </button>
 
-// Inicializar selector de idioma
-const langSelector = document.getElementById('langSelector');
-const langOptions = document.querySelectorAll('.lang-option');
+  <!-- WhatsApp EMERGENCIA 3834689137 - Lado izquierdo -->
+  <a href="https://api.whatsapp.com/send?phone=543834689137&text=🚨%20EMERGENCIA%20NEXO-Art:%20Necesito%20asistencia%20inmediata.%20Mi%20nombre%20es:" target="_blank" rel="noopener noreferrer"
+     class="fixed bottom-6 left-6 z-50 flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-[#25D366] hover:bg-[#128C7E] rounded-xl sm:rounded-2xl shadow-2xl shadow-[#25D366]/40 transition-all duration-300 hover:scale-110 group border-2 border-white/30"
+     aria-label="WhatsApp EMERGENCIA: 3834689137" title="WhatsApp EMERGENCIA: 3834689137">
+    <div class="relative w-full h-full flex items-center justify-center">
+      <svg class="w-8 h-8 sm:w-9 sm:h-9 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+      </svg>
+      <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-black px-1.5 py-0.5 rounded-sm border border-white/50 animate-pulse">!</span>
+    </div>
+    <span class="absolute -top-12 left-1/2 -translate-x-1/2 bg-red-600/95 text-white text-xs font-bold px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none border border-white/30 shadow-lg">
+      🚨 EMERGENCIA: 3834689137
+    </span>
+  </a>
 
-// Cargar idioma guardado o usar español por defecto
-const savedLang = localStorage.getItem('romero_lang') || 'es';
-applyTranslations(savedLang);
+  <!-- LinkedIn - Lado derecho -->
+  <a href="https://www.linkedin.com/in/nexo-art-591a64389/" target="_blank" rel="noopener noreferrer"
+     class="fixed bottom-6 right-6 z-50 flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-[#0077B5] hover:bg-[#005885] rounded-full shadow-2xl shadow-[#0077B5]/40 transition-all duration-300 hover:scale-110 group"
+     aria-label="Contáctanos por LinkedIn" title="Contáctanos por LinkedIn">
+    <svg class="w-7 h-7 sm:w-8 sm:h-8 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+    </svg>
+    <span class="absolute -top-10 right-0 bg-black/90 text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none border border-white/20">
+      LinkedIn
+    </span>
+  </a>
 
-// Event listeners para opciones de idioma
-langOptions.forEach(function(option){
-  option.addEventListener('click', function(e){
-    e.stopPropagation();
-    const selectedLang = this.dataset.lang;
-    applyTranslations(selectedLang);
-  });
-});
+  <!-- WhatsApp Principal: 3489686939 - Lado derecho -->
+  <a href="https://api.whatsapp.com/send?phone=543489686939&text=Hola%20NEXO-Art!%20Quiero%20más%20información%20sobre%20sus%20servicios." target="_blank" rel="noopener noreferrer"
+     class="fixed bottom-24 right-6 z-50 flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-[#25D366] hover:bg-[#128C7E] rounded-full shadow-2xl shadow-[#25D366]/40 transition-all duration-300 hover:scale-110 group"
+     aria-label="WhatsApp: 3489686939" title="WhatsApp: 3489686939">
+    <svg class="w-7 h-7 sm:w-8 sm:h-8 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+    </svg>
+    <span class="absolute -top-10 right-0 bg-black/90 text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none border border-white/20">
+      WhatsApp: 3489686939
+    </span>
+  </a>
 
-// Cerrar dropdown al hacer clic fuera
-document.addEventListener('click', function(e){
-  if(langSelector && !langSelector.contains(e.target)){
-    // El dropdown se cierra automáticamente por CSS hover
-  }
-});
-});
-</script>
+  <!-- Telegram: +543489686939 - Lado derecho -->
+  <a href="https://t.me/+543489686939" target="_blank" rel="noopener noreferrer"
+     class="fixed bottom-42 right-6 z-50 flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-[#0088cc] hover:bg-[#006699] rounded-full shadow-2xl shadow-[#0088cc]/40 transition-all duration-300 hover:scale-110 group"
+     aria-label="Telegram: +543489686939" title="Telegram: +543489686939">
+    <svg class="w-7 h-7 sm:w-8 sm:h-8 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+    </svg>
+    <span class="absolute -top-10 right-0 bg-black/90 text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none border border-white/20">
+      Telegram: +543489686939
+    </span>
+  </a>
+
+  <!-- ⚙️ SCRIPT COMPLETO CON TODA LA LÓGICA -->
+  <script>
+    // ============================================
+    // 🌍 CONFIGURACIÓN DE PRECIOS POR PAÍS (ACTUALIZADO)
+    // ============================================
+    const preciosPorPais = {
+      argentina: {
+        basico: { 
+          precio: "$88.000", 
+          credito: "2 cuotas de $50.000",  // ✅ ACTUALIZADO
+          mostrarCredito: true, 
+          mostrarDescuento: false,
+          moneda: ""  // Sin sufijo para pesos
+        },
+        avanzado: { precio: "$160.000", mantenimiento: "$20 USD" },
+        premium: { precio: "$180.000", mantenimiento: "$20 USD" }
+      },
+      bolivia: {
+        basico: { 
+          precio: "$88 USD", 
+          credito: "2 cuotas de $50 USD",  // ✅ ACTUALIZADO
+          mostrarCredito: true,  // ✅ Ahora muestra opción de crédito para todos
+          mostrarDescuento: false,
+          moneda: ""  // El USD ya está incluido en el texto
+        },
+        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
+        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
+      },
+      brasil: {
+        basico: { 
+          precio: "$88 USD", 
+          credito: "2 cuotas de $50 USD",
+          mostrarCredito: true,
+          mostrarDescuento: false,
+          moneda: ""
+        },
+        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
+        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
+      },
+      chile: {
+        basico: { 
+          precio: "$88 USD", 
+          credito: "2 cuotas de $50 USD",
+          mostrarCredito: true,
+          mostrarDescuento: false,
+          moneda: ""
+        },
+        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
+        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
+      },
+      colombia: {
+        basico: { 
+          precio: "$88 USD", 
+          credito: "2 cuotas de $50 USD",
+          mostrarCredito: true,
+          mostrarDescuento: false,
+          moneda: ""
+        },
+        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
+        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
+      },
+      costarica: {
+        basico: { 
+          precio: "$88 USD", 
+          credito: "2 cuotas de $50 USD",
+          mostrarCredito: true,
+          mostrarDescuento: false,
+          moneda: ""
+        },
+        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
+        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
+      },
+      cuba: {
+        basico: { 
+          precio: "$88 USD", 
+          credito: "2 cuotas de $50 USD",
+          mostrarCredito: true,
+          mostrarDescuento: false,
+          moneda: ""
+        },
+        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
+        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
+      },
+      ecuador: {
+        basico: { 
+          precio: "$88 USD", 
+          credito: "2 cuotas de $50 USD",
+          mostrarCredito: true,
+          mostrarDescuento: false,
+          moneda: ""
+        },
+        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
+        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
+      },
+      elsalvador: {
+        basico: { 
+          precio: "$88 USD", 
+          credito: "2 cuotas de $50 USD",
+          mostrarCredito: true,
+          mostrarDescuento: false,
+          moneda: ""
+        },
+        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
+        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
+      },
+      guatemala: {
+        basico: { 
+          precio: "$88 USD", 
+          credito: "2 cuotas de $50 USD",
+          mostrarCredito: true,
+          mostrarDescuento: false,
+          moneda: ""
+        },
+        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
+        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
+      },
+      honduras: {
+        basico: { 
+          precio: "$88 USD", 
+          credito: "2 cuotas de $50 USD",
+          mostrarCredito: true,
+          mostrarDescuento: false,
+          moneda: ""
+        },
+        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
+        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
+      },
+      mexico: {
+        basico: { 
+          precio: "$88 USD", 
+          credito: "2 cuotas de $50 USD",
+          mostrarCredito: true,
+          mostrarDescuento: false,
+          moneda: ""
+        },
+        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
+        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
+      },
+      nicaragua: {
+        basico: { 
+          precio: "$88 USD", 
+          credito: "2 cuotas de $50 USD",
+          mostrarCredito: true,
+          mostrarDescuento: false,
+          moneda: ""
+        },
+        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
+        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
+      },
+      panama: {
+        basico: { 
+          precio: "$88 USD", 
+          credito: "2 cuotas de $50 USD",
+          mostrarCredito: true,
+          mostrarDescuento: false,
+          moneda: ""
+        },
+        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
+        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
+      },
+      paraguay: {
+        basico: { 
+          precio: "$88 USD", 
+          credito: "2 cuotas de $50 USD",
+          mostrarCredito: true,
+          mostrarDescuento: false,
+          moneda: ""
+        },
+        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
+        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
+      },
+      peru: {
+        basico: { 
+          precio: "$88 USD", 
+          credito: "2 cuotas de $50 USD",
+          mostrarCredito: true,
+          mostrarDescuento: false,
+          moneda: ""
+        },
+        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
+        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
+      },
+      rd: {
+        basico: { 
+          precio: "$88 USD", 
+          credito: "2 cuotas de $50 USD",
+          mostrarCredito: true,
+          mostrarDescuento: false,
+          moneda: ""
+        },
+        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
+        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
+      },
+      uruguay: {
+        basico: { 
+          precio: "$88 USD", 
+          credito: "2 cuotas de $50 USD",
+          mostrarCredito: true,
+          mostrarDescuento: false,
+          moneda: ""
+        },
+        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
+        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
+      },
+      venezuela: {
+        basico: { 
+          precio: "$88 USD", 
+          credito: "2 cuotas de $50 USD",
+          mostrarCredito: true,
+          mostrarDescuento: false,
+          moneda: ""
+        },
+        avanzado: { precio: "$120 USD", mantenimiento: "$20 USD" },
+        premium: { precio: "$160 USD", mantenimiento: "$20 USD" }
+      }
+    };
+
+    let paisActual = 'argentina';
+
+    // ============================================
+    // 🔄 FUNCIÓN: CAMBIAR PAÍS Y ACTUALIZAR UI
+    // ============================================
+    function cambiarPais() {
+      const selector = document.getElementById('countrySelector');
+      const nuevoPais = selector.value;
+      
+      // Evitar recarga innecesaria
+      if (nuevoPais === paisActual) return;
+      
+      paisActual = nuevoPais;
+      const precios = preciosPorPais[paisActual];
+      
+      // Animación y actualización de precios
+      ['basico', 'avanzado', 'premium'].forEach(plan => {
+        const el = document.getElementById(`price-${plan}`);
+        if (el) {
+          el.classList.add('price-change');
+          setTimeout(() => {
+            el.textContent = precios[plan].precio;
+            el.classList.remove('price-change');
+          }, 200);
+        }
+      });
+      
+      // Actualizar precios de mantenimiento
+      const mantAvanzado = document.getElementById('price-mantenimiento-avanzado');
+      const mantPremium = document.getElementById('price-mantenimiento-premium');
+      if (mantAvanzado) {
+        mantAvanzado.innerHTML = `${precios.avanzado.mantenimiento}<span class="text-sm text-gray-400 font-normal">/mes</span>`;
+      }
+      if (mantPremium) {
+        mantPremium.innerHTML = `${precios.premium.mantenimiento}<span class="text-sm text-gray-400 font-normal">/mes</span>`;
+      }
+      
+      // ✅ ACTUALIZAR MICRO TARJETA DE CUOTAS PARA PLAN BÁSICO
+      const cuotasBasico = document.getElementById('price-cuotas-basico');
+      const cuotasMoneda = document.getElementById('cuotas-moneda');
+      if (cuotasBasico && precios.basico.credito) {
+        // Extraer el monto y la moneda del texto de crédito
+        const creditoTexto = precios.basico.credito;
+        cuotasBasico.innerHTML = `${creditoTexto}<span class="text-sm text-gray-400 font-normal">/cuota</span>`;
+      }
+      
+      // Mostrar/ocultar botón de info de crédito para plan Básico
+      const btnCredito = document.getElementById('btn-credito-basico');
+      if (btnCredito) {
+        if (precios.basico.mostrarCredito) {
+          btnCredito.style.display = 'flex';
+        } else {
+          btnCredito.style.display = 'none';
+        }
+      }
+      
+      // 🏷️ MOSTRAR/OCULTAR BADGE "10% OFF"
+      const badge10off = document.getElementById('badge-10off');
+      if (badge10off) {
+        if (precios.basico.mostrarDescuento) {
+          badge10off.style.display = 'block';
+        } else {
+          badge10off.style.display = 'none';
+        }
+      }
+      
+      // Actualizar campo oculto del modal
+      document.getElementById('modalPais').value = paisActual;
+      
+      // Guardar preferencia en localStorage
+      try {
+        localStorage.setItem('nexoar-pais', paisActual);
+      } catch(e) {
+        console.log('localStorage no disponible');
+      }
+      
+      // Feedback visual al usuario
+      mostrarNotificacion(`🌎 Precios actualizados para ${selector.options[selector.selectedIndex].text}`);
+    }
+
+    // ============================================
+    // 💬 FUNCIÓN: ABRIR MODAL DE WHATSAPP
+    // ============================================
+    function abrirModal(plan) {
+      document.getElementById('modalPlan').value = plan;
+      document.getElementById('modalPais').value = paisActual;
+      document.getElementById('whatsappModal').classList.remove('hidden');
+      document.getElementById('modalNombre').focus();
+      
+      // Prevenir scroll del body
+      document.body.style.overflow = 'hidden';
+    }
+
+    // ============================================
+    // ❌ FUNCIÓN: CERRAR MODAL
+    // ============================================
+    function cerrarModal() {
+      document.getElementById('whatsappModal').classList.add('hidden');
+      document.body.style.overflow = '';
+      
+      // Limpiar formulario
+      document.getElementById('whatsappForm').reset();
+    }
+
+    // ============================================
+    // 📤 FUNCIÓN: ENVIAR A WHATSAPP
+    // ============================================
+    function enviarWhatsApp() {
+      const nombre = document.getElementById('modalNombre').value.trim();
+      const email = document.getElementById('modalEmail').value.trim();
+      const plan = document.getElementById('modalPlan').value;
+      const pais = document.getElementById('modalPais').value || paisActual;
+
+      // Validación
+      if (!nombre) {
+        alert("⚠️ Por favor, ingresá tu nombre para continuar");
+        document.getElementById('modalNombre').focus();
+        return;
+      }
+
+      // Mensajes personalizados por plan y país
+      const precios = preciosPorPais[pais];
+      const mensajes = {
+        "Básico": `🚀 *Hola NEXO-Art!* Me llamo *${nombre}* y quiero el plan *BÁSICO - PIENSA EN GRANDE PARA PEQUEÑOS NEGOCIOS* por *${precios.basico.precio}* con opción de *${precios.basico.credito}*. ¡Empecemos ya!`,
+        "Avanzado": `🚀 *Hola NEXO-Art!* Soy *${nombre}* y quiero el plan *AVANZADO EMPRESA* por *${precios.avanzado.precio}* + mantenimiento mensual *${precios.avanzado.mantenimiento}*. ¡Es el más vendido y necesito que mi landing facture sola!`,
+        "Premium": `🚀 *Hola NEXO-Art!* Mi nombre es *${nombre}* y quiero el plan *PREMIUM* por *${precios.premium.precio}* + mantenimiento mensual *${precios.premium.mantenimiento}*. ¡Quiero dominar mi mercado con una web full custom!`
+      };
+
+      let mensaje = mensajes[plan] || mensajes["Avanzado"];
+      if (email) mensaje += `\n📧 Email: ${email}`;
+      mensaje += `\n🌍 País: ${pais.charAt(0).toUpperCase() + pais.slice(1)}`;
+
+      const textoFinal = encodeURIComponent(mensaje);
+      const whatsappUrl = `https://api.whatsapp.com/send?phone=+543489686939&text=${textoFinal}`;
+      
+      // Abrir WhatsApp en nueva pestaña
+      window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+      
+      // Cerrar modal y feedback
+      cerrarModal();
+      mostrarNotificacion('✅ ¡Mensaje enviado! Te contactaremos en breve');
+    }
+
+    // ============================================
+    // 💳 FUNCIÓN: MOSTRAR INFO DE CRÉDITO
+    // ============================================
+    function mostrarInfoCredito() {
+      const precios = preciosPorPais[paisActual].basico;
+      const esArgentina = paisActual === 'argentina';
+      
+      alert(`💳 *OPCIÓN DE CRÉDITO - PLAN BÁSICO*\n\n✅ Adquirí tu landing por ${precios.precio} en:\n\n• ${precios.credito}\n• Sin interés adicional\n• Aprobación inmediata\n\n🔹 Primera cuota: al confirmar el proyecto\n🔹 Segunda cuota: a los 15 días\n\n${esArgentina ? '💰 Pago en pesos argentinos' : '💱 Pago en dólares USD (PayPal, transferencia o cripto)'}\n\n¡Empezá hoy y pagá cómodo! 🚀`);
+    }
+
+    // ============================================
+    // 🔔 FUNCIÓN: MOSTRAR NOTIFICACIÓN TEMPORAL
+    // ============================================
+    function mostrarNotificacion(mensaje) {
+      // Crear elemento de notificación
+      const notif = document.createElement('div');
+      notif.className = 'fixed bottom-24 left-1/2 -translate-x-1/2 z-50 px-6 py-4 glass border border-accent/50 rounded-2xl text-accent font-medium shadow-2xl animate-slideDown';
+      notif.style.maxWidth = '90%';
+      notif.style.textAlign = 'center';
+      notif.innerHTML = mensaje;
+      
+      document.body.appendChild(notif);
+      
+      // Eliminar después de 4 segundos
+      setTimeout(() => {
+        notif.style.opacity = '0';
+        notif.style.transform = 'translateY(-20px)';
+        notif.style.transition = 'all 0.3s ease';
+        setTimeout(() => notif.remove(), 300);
+      }, 4000);
+    }
+
+    // ============================================
+    // 🤖 FUNCIONES DEL ASISTENTE NOTEBOOKLM
+    // ============================================
+    function abrirNotebookModal() {
+      const modal = document.getElementById('notebookModal');
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden'; // Prevenir scroll del body
+    }
+
+    function cerrarNotebookModal() {
+      const modal = document.getElementById('notebookModal');
+      modal.classList.add('hidden');
+      document.body.style.overflow = ''; // Restaurar scroll
+    }
+
+    // ============================================
+    // 🎨 INICIALIZAR PARTÍCULAS
+    // ============================================
+    function inicializarParticulas() {
+      if (typeof particlesJS !== 'undefined') {
+        particlesJS("particles-js", {
+          particles: {
+            number: { value: 80, density: { enable: true, value_area: 800 } },
+            color: { value: "#00F0FF" },
+            shape: { type: "circle" },
+            opacity: { value: 0.4, random: true },
+            size: { value: 3, random: true },
+            line_linked: {
+              enable: true,
+              distance: 150,
+              color: "#00F0FF",
+              opacity: 0.2,
+              width: 1
+            },
+            move: {
+              enable: true,
+              speed: 2,
+              direction: "none",
+              random: true,
+              straight: false,
+              out_mode: "out",
+              bounce: false
+            }
+          },
+          interactivity: {
+            detect_on: "canvas",
+            events: {
+              onhover: { enable: true, mode: "repulse" },
+              onclick: { enable: true, mode: "push" },
+              resize: true
+            }
+          },
+          retina_detect: true
+        });
+      }
+    }
+
+    // ============================================
+    // 🚀 INICIALIZACIÓN AL CARGAR LA PÁGINA
+    // ============================================
+    document.addEventListener('DOMContentLoaded', function() {
+      // 1. Inicializar partículas
+      inicializarParticulas();
+      
+      // 2. Recuperar país guardado
+      try {
+        const paisGuardado = localStorage.getItem('nexoar-pais');
+        if (paisGuardado && preciosPorPais[paisGuardado]) {
+          const selector = document.getElementById('countrySelector');
+          selector.value = paisGuardado;
+          paisActual = paisGuardado;
+          cambiarPais(); // Aplicar precios sin animación inicial
+        }
+      } catch(e) {
+        console.log('localStorage no disponible');
+      }
+      
+      // 3. Cerrar modales con tecla ESC
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          cerrarModal();
+          cerrarNotebookModal();
+        }
+      });
+      
+      // 4. Cerrar modales al hacer clic fuera
+      document.getElementById('whatsappModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+          cerrarModal();
+        }
+      });
+      document.getElementById('notebookModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+          cerrarNotebookModal();
+        }
+      });
+      
+      // 5. Smooth scroll para enlaces internos
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      });
+      
+      // 6. Lazy load para iframes
+      if ('loading' in HTMLIFrameElement.prototype) {
+        document.querySelectorAll('iframe[loading="lazy"]').forEach(iframe => {
+          iframe.src = iframe.src;
+        });
+      }
+    });
+  </script>
 </body>
 </html>
