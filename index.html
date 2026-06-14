@@ -10,7 +10,7 @@ gtag('config', 'G-BSSDB7TRE7');
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>ArgentPlay.online - Mercado De Locales</title>
+<title>ArgentPlay.online - Mercado Digital De Locales</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
@@ -50,6 +50,7 @@ html, body {
 width: 100%;
 height: 100%;
 overflow-x: hidden;
+scroll-behavior: smooth;
 }
  
 body {
@@ -75,11 +76,137 @@ pointer-events: none;
 z-index: -1;
 }
  
-/* HEADER PROFECIONAL */
+/* VIDEO HERO */
+.video-hero {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100vh;
+overflow: hidden;
+z-index: 100;
+background: #000;
+transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+ 
+.video-hero.scroll-active {
+height: 40vh;
+position: sticky;
+top: 0;
+border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+box-shadow: var(--shadow-lg);
+}
+ 
+.video-hero video {
+width: 100%;
+height: 100%;
+object-fit: cover;
+display: block;
+}
+ 
+.video-overlay {
+position: absolute;
+inset: 0;
+background: linear-gradient(135deg, rgba(10, 15, 30, 0.3) 0%, rgba(10, 15, 30, 0.1) 100%);
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+text-align: center;
+color: white;
+z-index: 10;
+transition: opacity 0.6s ease;
+}
+ 
+.video-hero.scroll-active .video-overlay {
+opacity: 0;
+pointer-events: none;
+}
+ 
+.hero-title {
+font-family: 'Space Grotesk', sans-serif;
+font-size: 4.5rem;
+font-weight: 900;
+text-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+margin-bottom: 20px;
+animation: slideDown 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+line-height: 1.1;
+}
+ 
+.hero-subtitle {
+font-size: 1.8rem;
+font-weight: 600;
+text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+margin-bottom: 40px;
+animation: slideUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both;
+}
+ 
+.hero-cta {
+display: inline-flex;
+gap: 15px;
+animation: slideUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.4s both;
+}
+ 
+.btn-hero {
+padding: 16px 40px;
+border-radius: 50px;
+border: none;
+font-weight: 700;
+font-size: 1.1rem;
+cursor: pointer;
+transition: all 0.3s ease;
+text-decoration: none;
+display: inline-block;
+}
+ 
+.btn-hero.primary {
+background: white;
+color: var(--primary-dark);
+}
+ 
+.btn-hero.primary:hover {
+transform: translateY(-4px) scale(1.05);
+box-shadow: 0 20px 50px rgba(255, 255, 255, 0.3);
+}
+ 
+.btn-hero.secondary {
+background: transparent;
+color: white;
+border: 2px solid white;
+}
+ 
+.btn-hero.secondary:hover {
+background: white;
+color: var(--primary-dark);
+transform: translateY(-4px);
+}
+ 
+@keyframes slideDown {
+from { transform: translateY(-60px); opacity: 0; }
+to { transform: translateY(0); opacity: 1; }
+}
+ 
+@keyframes slideUp {
+from { transform: translateY(60px); opacity: 0; }
+to { transform: translateY(0); opacity: 1; }
+}
+ 
+/* ESPACIADOR PARA VIDEO FIJO */
+.video-spacer {
+height: 100vh;
+position: relative;
+z-index: 1;
+}
+ 
+.video-spacer.scroll-active {
+height: 0;
+}
+ 
+/* HEADER STICKY */
 header {
 position: sticky;
 top: 0;
-z-index: 1000;
+z-index: 999;
 background: var(--glass-medium);
 backdrop-filter: var(--blur-lg);
 -webkit-backdrop-filter: var(--blur-lg);
@@ -87,6 +214,11 @@ border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
 padding: 12px 20px;
 transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+transform: translateY(0);
+}
+ 
+header.hide {
+transform: translateY(-100%);
 }
  
 header.scrolled {
@@ -212,14 +344,6 @@ border-color: var(--primary);
 transform: translateY(-2px);
 }
  
-.location-btn i:last-child {
-transition: transform 0.3s ease;
-}
- 
-.location-btn.active i:last-child {
-transform: rotate(180deg);
-}
- 
 .dropdown-menu {
 position: absolute;
 top: calc(100% + 12px);
@@ -291,28 +415,277 @@ border-color: var(--primary);
 box-shadow: 0 12px 30px rgba(117, 170, 219, 0.2);
 }
  
-.btn-icon.social {
-color: inherit;
-}
- 
-.btn-icon.social.ig { color: #E4405F; }
-.btn-icon.social.fb { color: #1877F2; }
- 
 .btn-icon.ai {
 background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 color: white;
 border: none;
-animation: float-ai 2s ease-in-out infinite;
 }
  
 .btn-icon.ai:hover {
 box-shadow: 0 15px 40px rgba(102, 126, 234, 0.35);
-animation: none;
 }
  
-@keyframes float-ai {
-0%, 100% { transform: translateY(-4px); }
-50% { transform: translateY(-8px); }
+/* SECCIONES INFORMATIVAS */
+.info-section {
+padding: 80px 20px;
+max-width: 1400px;
+margin: 0 auto;
+width: 100%;
+position: relative;
+}
+ 
+.info-section.dark {
+background: linear-gradient(135deg, rgba(10, 15, 30, 0.95) 0%, rgba(30, 40, 70, 0.9) 100%);
+color: white;
+margin: 0;
+margin-left: -100vw;
+margin-right: -100vw;
+padding: 80px 20px 80px calc(20px + 50vw);
+width: 200vw;
+left: -50vw;
+}
+ 
+.info-section.light {
+background: transparent;
+}
+ 
+.section-title {
+font-family: 'Space Grotesk', sans-serif;
+font-size: 3rem;
+font-weight: 900;
+margin-bottom: 30px;
+background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+line-height: 1.2;
+}
+ 
+.info-section.dark .section-title {
+background: linear-gradient(135deg, #00ff88 0%, #00d084 100%);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+}
+ 
+.section-subtitle {
+font-size: 1.3rem;
+color: #666;
+margin-bottom: 40px;
+line-height: 1.6;
+}
+ 
+.info-section.dark .section-subtitle {
+color: rgba(255, 255, 255, 0.7);
+}
+ 
+.features-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+gap: 25px;
+margin-top: 40px;
+}
+ 
+.feature-card {
+background: var(--glass-light);
+backdrop-filter: var(--blur-md);
+-webkit-backdrop-filter: var(--blur-md);
+border: 1px solid rgba(255, 255, 255, 0.3);
+border-radius: var(--radius-lg);
+padding: 30px;
+text-align: center;
+transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+ 
+.info-section.dark .feature-card {
+background: rgba(255, 255, 255, 0.05);
+border-color: rgba(255, 255, 255, 0.1);
+color: white;
+}
+ 
+.feature-card:hover {
+transform: translateY(-12px);
+box-shadow: var(--shadow-lg);
+border-color: var(--primary);
+}
+ 
+.info-section.dark .feature-card:hover {
+border-color: var(--accent-green);
+box-shadow: 0 25px 80px rgba(0, 208, 132, 0.15);
+}
+ 
+.feature-icon {
+font-size: 3.5rem;
+margin-bottom: 15px;
+display: block;
+transition: transform 0.3s ease;
+}
+ 
+.feature-card:hover .feature-icon {
+transform: scale(1.15) rotateY(10deg);
+}
+ 
+.feature-title {
+font-family: 'Space Grotesk', sans-serif;
+font-weight: 700;
+font-size: 1.3rem;
+margin-bottom: 10px;
+}
+ 
+.feature-desc {
+font-size: 0.95rem;
+line-height: 1.6;
+opacity: 0.8;
+}
+ 
+/* ESTADÍSTICAS */
+.stats-section {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+gap: 30px;
+margin-top: 50px;
+}
+ 
+.stat-card {
+text-align: center;
+padding: 30px;
+border-radius: var(--radius-lg);
+background: rgba(117, 170, 219, 0.1);
+border: 1px solid rgba(117, 170, 219, 0.2);
+transition: all 0.3s ease;
+}
+ 
+.info-section.dark .stat-card {
+background: rgba(0, 255, 136, 0.08);
+border-color: rgba(0, 255, 136, 0.2);
+}
+ 
+.stat-card:hover {
+transform: scale(1.05);
+box-shadow: var(--shadow-md);
+}
+ 
+.stat-number {
+font-family: 'Space Grotesk', sans-serif;
+font-size: 3rem;
+font-weight: 900;
+color: var(--primary);
+margin-bottom: 10px;
+}
+ 
+.info-section.dark .stat-number {
+color: var(--accent-green);
+}
+ 
+.stat-label {
+font-weight: 600;
+font-size: 1rem;
+opacity: 0.8;
+}
+ 
+/* CÓMO FUNCIONA */
+.steps-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+gap: 30px;
+margin-top: 40px;
+}
+ 
+.step-card {
+position: relative;
+background: var(--glass-light);
+backdrop-filter: var(--blur-md);
+-webkit-backdrop-filter: var(--blur-md);
+border: 1px solid rgba(255, 255, 255, 0.3);
+border-radius: var(--radius-lg);
+padding: 40px 25px;
+text-align: center;
+transition: all 0.4s ease;
+}
+ 
+.info-section.dark .step-card {
+background: rgba(255, 255, 255, 0.05);
+border-color: rgba(255, 255, 255, 0.1);
+color: white;
+}
+ 
+.step-number {
+position: absolute;
+top: -15px;
+left: 50%;
+transform: translateX(-50%);
+width: 50px;
+height: 50px;
+background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+color: white;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-family: 'Space Grotesk', sans-serif;
+font-weight: 900;
+font-size: 1.5rem;
+box-shadow: var(--shadow-md);
+}
+ 
+.info-section.dark .step-number {
+background: linear-gradient(135deg, var(--accent-green) 0%, #00b368 100%);
+}
+ 
+.step-title {
+font-family: 'Space Grotesk', sans-serif;
+font-weight: 700;
+font-size: 1.3rem;
+margin-top: 20px;
+margin-bottom: 15px;
+}
+ 
+.step-desc {
+font-size: 0.95rem;
+line-height: 1.6;
+opacity: 0.75;
+}
+ 
+.step-card:hover {
+transform: translateY(-8px);
+box-shadow: var(--shadow-md);
+}
+ 
+/* CATEGORÍAS PREVIEW */
+.categories-preview {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+gap: 15px;
+margin-top: 40px;
+}
+ 
+.category-badge {
+background: var(--glass-light);
+backdrop-filter: var(--blur-md);
+-webkit-backdrop-filter: var(--blur-md);
+border: 1px solid rgba(255, 255, 255, 0.3);
+border-radius: 30px;
+padding: 12px 20px;
+text-align: center;
+cursor: pointer;
+transition: all 0.3s ease;
+font-weight: 600;
+}
+ 
+.info-section.dark .category-badge {
+background: rgba(255, 255, 255, 0.1);
+border-color: rgba(255, 255, 255, 0.2);
+}
+ 
+.category-badge:hover {
+transform: translateY(-4px);
+box-shadow: var(--shadow-sm);
+border-color: var(--primary);
+}
+ 
+.info-section.dark .category-badge:hover {
+border-color: var(--accent-green);
+background: rgba(0, 255, 136, 0.1);
 }
  
 /* FILTROS */
@@ -326,13 +699,15 @@ backdrop-filter: var(--blur-md);
 border: 1px solid rgba(255, 255, 255, 0.2);
 border-radius: var(--radius-md);
 overflow-x: auto;
-overflow-y: hidden;
-margin: 15px 20px;
+margin: 30px 20px;
 max-width: calc(100% - 40px);
 margin-left: auto;
 margin-right: auto;
 box-shadow: var(--shadow-sm);
 scroll-behavior: smooth;
+position: sticky;
+top: 65px;
+z-index: 98;
 }
  
 .filter-bar::-webkit-scrollbar {
@@ -377,231 +752,7 @@ font-weight: 700;
 .btn-filter.active.yellow { background: linear-gradient(135deg, var(--accent-yellow) 0%, #e69500 100%); }
 .btn-filter.active.red { background: linear-gradient(135deg, var(--accent-red) 0%, #e62e2e 100%); }
  
-/* CARRUSEL ESPECTACULAR */
-.carousel-section {
-position: relative;
-margin: 30px auto;
-width: 100%;
-max-width: 1400px;
-padding: 0 20px;
-}
- 
-.carousel-title {
-font-family: 'Space Grotesk', sans-serif;
-font-size: 1.8rem;
-font-weight: 800;
-margin-bottom: 15px;
-background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
--webkit-background-clip: text;
--webkit-text-fill-color: transparent;
-background-clip: text;
-}
- 
-.carousel {
-position: relative;
-overflow: hidden;
-width: 100%;
-height: 380px;
-border-radius: var(--radius-lg);
-background: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.5) 100%);
-backdrop-filter: var(--blur-md);
--webkit-backdrop-filter: var(--blur-md);
-border: 1px solid rgba(255, 255, 255, 0.4);
-box-shadow: var(--shadow-lg);
-}
- 
-.carousel-track {
-display: flex;
-width: 100%;
-height: 100%;
-transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-}
- 
-.carousel-item {
-min-width: 100%;
-width: 100%;
-height: 100%;
-flex-shrink: 0;
-position: relative;
-border-radius: var(--radius-lg);
-overflow: hidden;
-cursor: pointer;
-}
- 
-.carousel-item img {
-width: 100%;
-height: 100%;
-object-fit: cover;
-}
- 
-.carousel-overlay {
-position: absolute;
-inset: 0;
-background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.7) 100%);
-display: flex;
-flex-direction: column;
-justify-content: flex-end;
-padding: 40px;
-color: white;
-}
- 
-.carousel-name {
-font-family: 'Space Grotesk', sans-serif;
-font-size: 2.5rem;
-font-weight: 900;
-text-shadow: 0 4px 12px rgba(0,0,0,0.4);
-margin-bottom: 10px;
-}
- 
-.carousel-discount {
-font-size: 3.5rem;
-font-weight: 900;
-text-shadow: 0 4px 12px rgba(0,0,0,0.4);
-margin-bottom: 15px;
-}
- 
-.carousel-discount.tier-green { color: #00ff88; }
-.carousel-discount.tier-yellow { color: #ffdd00; }
-.carousel-discount.tier-red { color: #ff6666; }
- 
-.carousel-cta {
-padding: 12px 28px;
-background: rgba(255, 255, 255, 0.95);
-color: var(--primary-dark);
-border: none;
-border-radius: 30px;
-font-weight: 700;
-cursor: pointer;
-width: fit-content;
-transition: all 0.3s ease;
-font-size: 0.95rem;
-}
- 
-.carousel-cta:hover {
-transform: scale(1.05);
-box-shadow: 0 12px 30px rgba(0,0,0,0.2);
-}
- 
-.carousel-nav {
-position: absolute;
-top: 50%;
-transform: translateY(-50%);
-width: 50px;
-height: 50px;
-border-radius: 50%;
-background: rgba(255, 255, 255, 0.9);
-border: none;
-color: var(--primary);
-font-size: 1.5rem;
-cursor: pointer;
-z-index: 10;
-transition: all 0.3s ease;
-display: flex;
-align-items: center;
-justify-content: center;
-backdrop-filter: var(--blur-sm);
--webkit-backdrop-filter: var(--blur-sm);
-}
- 
-.carousel-nav:hover {
-background: white;
-transform: translateY(-50%) scale(1.1);
-box-shadow: var(--shadow-md);
-}
- 
-.carousel-nav.prev { left: 20px; }
-.carousel-nav.next { right: 20px; }
- 
-.carousel-dots {
-position: absolute;
-bottom: 20px;
-left: 50%;
-transform: translateX(-50%);
-display: flex;
-gap: 8px;
-z-index: 10;
-}
- 
-.carousel-dot {
-width: 8px;
-height: 8px;
-border-radius: 50%;
-background: rgba(255, 255, 255, 0.4);
-cursor: pointer;
-transition: all 0.3s ease;
-border: 1px solid rgba(255, 255, 255, 0.6);
-}
- 
-.carousel-dot.active {
-background: white;
-width: 24px;
-border-radius: 4px;
-}
- 
-/* TICKER BANNER */
-.ticker-banner {
-background: linear-gradient(90deg, rgba(10, 15, 30, 0.85) 0%, rgba(10, 15, 30, 0.9) 100%);
-backdrop-filter: var(--blur-md);
--webkit-backdrop-filter: var(--blur-md);
-color: white;
-padding: 15px 0;
-border-top: 1px solid rgba(255, 255, 255, 0.1);
-border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-overflow: hidden;
-box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
-}
- 
-.ticker-wrap {
-display: flex;
-animation: marquee 20s linear infinite;
-gap: 60px;
-}
- 
-.ticker-wrap:hover {
-animation-play-state: paused;
-}
- 
-.ticker-items-group {
-display: flex;
-gap: 60px;
-flex-shrink: 0;
-align-items: center;
-}
- 
-.ticker-item {
-display: flex;
-align-items: center;
-gap: 15px;
-white-space: nowrap;
-font-weight: 700;
-font-size: 0.95rem;
-text-transform: uppercase;
-letter-spacing: 1px;
-}
- 
-.ticker-name {
-font-family: 'Space Grotesk', sans-serif;
-font-weight: 900;
-font-size: 1.1rem;
-}
- 
-.ticker-discount {
-font-family: 'Space Grotesk', sans-serif;
-font-weight: 900;
-font-size: 1.4rem;
-}
- 
-.ticker-sep {
-color: rgba(255, 255, 255, 0.3);
-font-weight: 300;
-}
- 
-@keyframes marquee {
-0% { transform: translateX(0); }
-100% { transform: translateX(-50%); }
-}
- 
-/* MATRIZ PROFESIONAL */
+/* MATRIZ */
 .board-container {
 flex: 1;
 margin: 30px auto;
@@ -629,7 +780,6 @@ transition: height 0.4s ease;
 overflow: visible;
 }
  
-/* TARJETAS - GLASSMORPHISM PREMIUM */
 .tile {
 background: var(--glass-light);
 backdrop-filter: var(--blur-lg);
@@ -666,17 +816,9 @@ border-color: rgba(255, 255, 255, 0.6);
 opacity: 1;
 }
  
-.tile.tier-green {
-border-color: rgba(0, 208, 132, 0.3);
-}
- 
-.tile.tier-yellow {
-border-color: rgba(255, 171, 0, 0.3);
-}
- 
-.tile.tier-red {
-border-color: rgba(255, 59, 59, 0.3);
-}
+.tile.tier-green { border-color: rgba(0, 208, 132, 0.3); }
+.tile.tier-yellow { border-color: rgba(255, 171, 0, 0.3); }
+.tile.tier-red { border-color: rgba(255, 59, 59, 0.3); }
  
 .tile:not(:hover).tier-green {
 animation: pulse-glow-green 3s infinite;
@@ -778,39 +920,7 @@ border: 1px solid rgba(255, 255, 255, 0.3);
 .tile.tier-yellow .tile-discount { color: var(--accent-yellow); }
 .tile.tier-red .tile-discount { color: var(--accent-red); }
  
-/* VISTA LISTA */
-.view-list #puzzle-board {
-display: flex;
-flex-direction: column;
-gap: 20px;
-padding: 10px;
-}
- 
-.view-list .tile {
-position: relative !important;
-top: auto !important;
-left: auto !important;
-width: 100% !important;
-height: 280px !important;
-transform: none !important;
-border-radius: var(--radius-lg);
-}
- 
-.view-list .tile:hover {
-transform: translateY(-4px) scale(1.01);
-}
- 
-.view-list .tile-title {
-font-size: 1.4rem;
-white-space: normal;
-width: 100%;
-}
- 
-.view-list .tile-discount {
-font-size: 1.5rem;
-}
- 
-/* MODAL GALERÍA */
+/* MODALES */
 .modal {
 position: fixed;
 top: 0;
@@ -835,13 +945,6 @@ opacity: 1;
 pointer-events: auto;
 }
  
-.gallery-container {
-width: 100%;
-max-width: 500px;
-margin: 0 auto;
-position: relative;
-}
- 
 .gallery-card {
 background: var(--glass-light);
 backdrop-filter: var(--blur-lg);
@@ -849,7 +952,8 @@ backdrop-filter: var(--blur-lg);
 border: 1.5px solid rgba(255, 255, 255, 0.3);
 border-radius: var(--radius-lg);
 overflow: hidden;
-margin: 20px;
+max-width: 500px;
+width: 90%;
 animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 box-shadow: var(--shadow-lg);
 }
@@ -863,7 +967,6 @@ to { transform: translateY(0); opacity: 1; }
 width: 100%;
 height: 350px;
 object-fit: cover;
-filter: brightness(0.95);
 }
  
 .gallery-body {
@@ -872,14 +975,6 @@ text-align: center;
 background: rgba(255, 255, 255, 0.05);
 backdrop-filter: var(--blur-sm);
 -webkit-backdrop-filter: var(--blur-sm);
-}
- 
-.gallery-body h2 {
-font-family: 'Space Grotesk', sans-serif;
-font-size: 1.6rem;
-font-weight: 800;
-margin-bottom: 15px;
-color: var(--primary-dark);
 }
  
 .btn-action {
@@ -916,36 +1011,6 @@ transform: translateY(-2px);
 box-shadow: 0 12px 30px rgba(117, 170, 219, 0.3);
 }
  
-.nav-arrow {
-position: absolute;
-top: 50%;
-transform: translateY(-50%);
-background: rgba(255, 255, 255, 0.85);
-backdrop-filter: var(--blur-sm);
--webkit-backdrop-filter: var(--blur-sm);
-color: var(--primary);
-border: 1.5px solid rgba(255, 255, 255, 0.3);
-width: 50px;
-height: 50px;
-border-radius: 50%;
-font-size: 1.5rem;
-cursor: pointer;
-z-index: 6005;
-transition: all 0.3s ease;
-display: flex;
-align-items: center;
-justify-content: center;
-}
- 
-.nav-arrow:hover {
-background: white;
-transform: translateY(-50%) scale(1.1);
-box-shadow: var(--shadow-md);
-}
- 
-.nav-prev { left: 10px; }
-.nav-next { right: 10px; }
- 
 .close-modal {
 position: absolute;
 top: 20px;
@@ -973,7 +1038,7 @@ border-color: rgba(255, 255, 255, 0.4);
 transform: scale(1.1);
 }
  
-/* FAB BUTTONS */
+/* FAB */
 .fab-container {
 position: fixed;
 bottom: 25px;
@@ -1010,20 +1075,6 @@ box-shadow: var(--shadow-lg);
 background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
 }
  
-.fab-news {
-background: linear-gradient(135deg, #ff8a00 0%, #ff6b00 100%);
-animation: pulse-glow-fab 2s infinite;
-}
- 
-.fab-delivery {
-background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
- 
-@keyframes pulse-glow-fab {
-0%, 100% { box-shadow: 0 8px 20px rgba(255, 138, 0, 0.3); }
-50% { box-shadow: 0 12px 35px rgba(255, 138, 0, 0.5); }
-}
- 
 /* FOOTER */
 footer {
 background: var(--glass-medium);
@@ -1048,120 +1099,84 @@ color: var(--primary-dark);
 text-decoration: underline;
 }
  
-/* RESPONSIVE */
+/* SCROLL INDICATOR */
+.scroll-indicator {
+position: fixed;
+bottom: 30px;
+left: 50%;
+transform: translateX(-50%);
+font-size: 1.5rem;
+animation: bounce 2s infinite;
+z-index: 50;
+}
+ 
+@keyframes bounce {
+0%, 100% { transform: translateX(-50%) translateY(0); }
+50% { transform: translateX(-50%) translateY(10px); }
+}
+ 
+/* RESPONSIVO */
 @media (max-width: 768px) {
-.carousel {
-height: 280px;
-}
- 
-.carousel-name {
-font-size: 1.8rem;
-}
- 
-.carousel-discount {
+.hero-title {
 font-size: 2.5rem;
 }
  
-.carousel-nav {
-width: 40px;
-height: 40px;
+.hero-subtitle {
 font-size: 1.2rem;
 }
  
-.carousel-nav.prev { left: 10px; }
-.carousel-nav.next { right: 10px; }
- 
-.header-content {
-flex-direction: column;
-gap: 10px;
-}
- 
-.search-container {
-max-width: none;
-flex: unset;
-width: 100%;
-}
- 
-.logo-text {
-font-size: 1.2rem;
-}
- 
-.ticker-item {
-font-size: 0.8rem;
-gap: 10px;
-}
- 
-.ticker-items-group {
-gap: 40px;
-}
- 
-.carousel-title, .board-title {
-font-size: 1.4rem;
-}
- 
-.tile-title {
-font-size: 0.75rem;
-}
- 
-.tile-discount {
+.btn-hero {
+padding: 12px 28px;
 font-size: 0.95rem;
+}
+ 
+.section-title {
+font-size: 2rem;
+}
+ 
+.feature-icon {
+font-size: 2.5rem;
+}
+ 
+.info-section.dark {
+padding-left: 20px;
+padding-right: 20px;
+width: 100%;
+left: auto;
+margin-left: 0;
+margin-right: 0;
 }
 }
  
 @media (max-width: 480px) {
-.carousel {
-height: 220px;
+.hero-title {
+font-size: 1.8rem;
 }
  
-.carousel-name {
-font-size: 1.4rem;
+.hero-subtitle {
+font-size: 1rem;
 }
  
-.carousel-discount {
+.hero-cta {
+flex-direction: column;
+width: 100%;
+}
+ 
+.btn-hero {
+width: 100%;
+}
+ 
+.section-title {
+font-size: 1.5rem;
+}
+ 
+.stat-number {
 font-size: 2rem;
 }
  
-.carousel-overlay {
-padding: 25px;
-}
- 
-.carousel-cta {
-padding: 10px 20px;
-font-size: 0.85rem;
-}
- 
-header {
-padding: 10px 15px;
-}
- 
-.logo-img {
-height: 90px;
-width: 60px;
-}
- 
-.logo-text {
-font-size: 1rem;
-}
- 
-.logo-text span {
-font-size: 0.7rem;
-}
- 
-.btn-icon {
-width: 38px;
-height: 38px;
-font-size: 1rem;
-}
- 
 .filter-bar {
-margin: 10px 15px;
-max-width: calc(100% - 30px);
-padding: 10px 15px;
-}
- 
-.btn-filter {
-padding: 6px 12px;
-font-size: 0.8rem;
+margin: 20px 10px;
+max-width: calc(100% - 20px);
 }
  
 .fab-btn {
@@ -1169,36 +1184,36 @@ width: 55px;
 height: 55px;
 font-size: 1.2rem;
 }
- 
-.carousel-nav {
-width: 35px;
-height: 35px;
-font-size: 1rem;
-}
- 
-.ticker-item {
-font-size: 0.75rem;
-gap: 8px;
-}
- 
-.board-container {
-padding: 0 10px;
-}
- 
-.carousel-section {
-padding: 0 10px;
-}
 }
 </style>
 </head>
-<body class="view-matrix">
+<body>
+ 
+<!-- VIDEO HERO SECTION -->
+<div class="video-hero" id="videoHero">
+<video autoplay muted playsinline id="heroVideo">
+<source src="VIDEO-ARGENTPLAY.mp4" type="video/mp4">
+Tu navegador no soporta video HTML5
+</video>
+<div class="video-overlay" id="videoOverlay">
+<h1 class="hero-title">ArgentPlay.online</h1>
+<p class="hero-subtitle">🏪 El Mercado Digital De Locales</p>
+<div class="hero-cta">
+<button class="btn-hero primary" onclick="scrollToContent()">Explorar Ahora</button>
+<button class="btn-hero secondary" onclick="window.open('https://www.instagram.com/mercadodelocales/', '_blank')">Síguenos</button>
+</div>
+</div>
+</div>
+ 
+<div class="video-spacer" id="videoSpacer"></div>
+ 
+<!-- HEADER STICKY -->
 <header id="main-header">
 <div class="header-content">
 <div class="logo-area" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
 <img class="logo-img" src="mercado de locales.jpeg" alt="ArgentPlay.online">
 <div class="logo-text">
-ArgentPlay.online
-<span>Mercado De Locales</span>
+ArgentPlay<span>Mercado De Locales</span>
 </div>
 </div>
  
@@ -1218,7 +1233,7 @@ ArgentPlay.online
 </div>
  
 <div class="search-container">
-<input type="text" id="search-input" placeholder="Buscar local, categoría..." onkeyup="handleSearch(this.value)">
+<input type="text" id="search-input" placeholder="Buscar local..." onkeyup="handleSearch(this.value)">
 <i class="fas fa-search"></i>
 </div>
  
@@ -1226,145 +1241,159 @@ ArgentPlay.online
 <button class="btn-icon" onclick="toggleViewMode()">
 <i class="fas fa-th-large" id="view-icon"></i>
 </button>
-<button class="btn-icon" onclick="openShareModal()">
-<i class="fas fa-share-alt"></i>
-</button>
-<a href="https://www.instagram.com/mercadodelocales/" target="_blank" class="btn-icon social ig">
+<a href="https://www.instagram.com/mercadodelocales/" target="_blank" class="btn-icon">
 <i class="fab fa-instagram"></i>
 </a>
-<a href="https://www.facebook.com/profile.php?id=61588437962904" target="_blank" class="btn-icon social fb">
+<a href="https://www.facebook.com/profile.php?id=61588437962904" target="_blank" class="btn-icon">
 <i class="fab fa-facebook"></i>
-</a>
-<a href="https://notebooklm.google.com/notebook/631e4bfa-bd69-4e0d-bdbb-aa6031d46b2c" target="_blank" class="btn-icon ai">
-<i class="fas fa-robot"></i>
 </a>
 </div>
 </div>
 </header>
  
-<div class="carousel-section">
-<h2 class="carousel-title">✨ Ofertas Destacadas</h2>
-<div class="carousel">
-<div class="carousel-track"></div>
-<button class="carousel-nav prev" onclick="carouselNav(-1)"><i class="fas fa-chevron-left"></i></button>
-<button class="carousel-nav next" onclick="carouselNav(1)"><i class="fas fa-chevron-right"></i></button>
-<div class="carousel-dots" id="carousel-dots"></div>
+<!-- SECCIÓN 1: CARACTERÍSTICAS -->
+<section class="info-section light">
+<h2 class="section-title">✨ ¿Por qué ArgentPlay?</h2>
+<p class="section-subtitle">Descubre la plataforma que conecta miles de clientes con los mejores locales de tu zona</p>
+ 
+<div class="features-grid">
+<div class="feature-card">
+<span class="feature-icon">🔥</span>
+<h3 class="feature-title">Ofertas Impresionantes</h3>
+<p class="feature-desc">Descuentos de hasta 60% en tus locales favoritos</p>
+</div>
+ 
+<div class="feature-card">
+<span class="feature-icon">🎯</span>
+<h3 class="feature-title">Fácil de Usar</h3>
+<p class="feature-desc">Interfaz intuitiva para encontrar exactamente lo que buscas</p>
+</div>
+ 
+<div class="feature-card">
+<span class="feature-icon">⚡</span>
+<h3 class="feature-title">Instantáneo</h3>
+<p class="feature-desc">Contacta directamente por WhatsApp sin intermediarios</p>
+</div>
+ 
+<div class="feature-card">
+<span class="feature-icon">📍</span>
+<h3 class="feature-title">Múltiples Localidades</h3>
+<p class="feature-desc">Campana, Zárate, Escobar, Pilar y más ciudades</p>
 </div>
 </div>
  
-<div class="ticker-banner" id="ticker-normal">
-<div class="ticker-wrap">
-<div class="ticker-items-group" id="ticker-group1"></div>
-<div class="ticker-items-group" id="ticker-group2"></div>
+<div class="stats-section">
+<div class="stat-card">
+<div class="stat-number">50+</div>
+<div class="stat-label">Locales Activos</div>
 </div>
+<div class="stat-card">
+<div class="stat-number">∞</div>
+<div class="stat-label">Ofertas Nuevas</div>
+</div>
+<div class="stat-card">
+<div class="stat-number">24/7</div>
+<div class="stat-label">Disponible</div>
+</div>
+</div>
+</section>
+ 
+<!-- SECCIÓN 2: CÓMO FUNCIONA (DARK) -->
+<section class="info-section dark">
+<h2 class="section-title">🚀 Cómo Funciona</h2>
+<p class="section-subtitle">3 pasos simples para encontrar los mejores descuentos</p>
+ 
+<div class="steps-grid">
+<div class="step-card">
+<div class="step-number">1</div>
+<h3 class="step-title">Busca tu Categoría</h3>
+<p class="step-desc">Filtra por tipo de local: comida, servicios, salud, tecnología y más</p>
 </div>
  
-<div class="ticker-banner" style="background: linear-gradient(90deg, rgba(255,100,0,0.8) 0%, rgba(255,59,59,0.8) 100%); border-top: 2px solid rgba(255,255,255,0.2);">
-<div class="ticker-wrap">
-<div class="ticker-items-group" id="admin-ticker-group1"></div>
-<div class="ticker-items-group" id="admin-ticker-group2"></div>
-</div>
+<div class="step-card">
+<div class="step-number">2</div>
+<h3 class="step-title">Encuentra Ofertas</h3>
+<p class="step-desc">Visualiza descuentos, horarios y ubicación en tiempo real</p>
 </div>
  
+<div class="step-card">
+<div class="step-number">3</div>
+<h3 class="step-title">Contacta Directo</h3>
+<p class="step-desc">Envía mensaje por WhatsApp al local y realiza tu compra</p>
+</div>
+</div>
+</section>
+ 
+<!-- SECCIÓN 3: CATEGORÍAS -->
+<section class="info-section light">
+<h2 class="section-title">🏪 Categorías Disponibles</h2>
+<p class="section-subtitle">Accede a más de 40 rubros diferentes</p>
+ 
+<div class="categories-preview">
+<div class="category-badge">🥩 Carnicería</div>
+<div class="category-badge">💊 Farmacia</div>
+<div class="category-badge">🍔 Comida</div>
+<div class="category-badge">💪 Gym</div>
+<div class="category-badge">📱 Tecnología</div>
+<div class="category-badge">🍻 Bares</div>
+<div class="category-badge">🔧 Servicios</div>
+<div class="category-badge">🏬 Tiendas</div>
+<div class="category-badge">✂️ Peluquería</div>
+<div class="category-badge">🍦 Heladería</div>
+<div class="category-badge">🚚 Delivery</div>
+<div class="category-badge">+ 30 más</div>
+</div>
+</section>
+ 
+<!-- FILTROS -->
 <div class="filter-bar" id="filter-bar">
-<button class="btn-filter" onclick="resetAll()" aria-label="Mostrar todos">🎯 Todo</button>
+<button class="btn-filter" onclick="resetAll()">🎯 Todo</button>
 <button class="btn-filter" onclick="filter('cat', 'CARNICERIA', this)">🥩 Carnicería</button>
 <button class="btn-filter" onclick="filter('cat', 'FARMACIA', this)">💊 Farmacia</button>
-<button class="btn-filter" onclick="filter('cat', 'FERRETERIA', this)">🔧 Ferretería</button>
-<button class="btn-filter" onclick="filter('cat', 'HELADERIA', this)">🍦 Heladería</button>
-<button class="btn-filter" onclick="filter('cat', 'PANADERIA', this)">🍞 Panadería</button>
-<button class="btn-filter" onclick="filter('cat', 'VERDULERIA', this)">🥦 Verdulería</button>
-<button class="btn-filter" onclick="filter('cat', 'TALLER_MECANICO', this)">🛠️ Taller Mecánico</button>
-<button class="btn-filter" onclick="filter('cat', 'SALUD', this)">🏥 Salud</button>
-<button class="btn-filter" onclick="filter('cat', 'GYM', this)">💪 Gym</button>
 <button class="btn-filter" onclick="filter('cat', 'COMIDA', this)">🍔 Comida</button>
-<button class="btn-filter" onclick="filter('cat', 'BARES', this)">🍻 Bares</button>
+<button class="btn-filter" onclick="filter('cat', 'GYM', this)">💪 Gym</button>
 <button class="btn-filter" onclick="filter('cat', 'SERVICIOS', this)">🔧 Servicios</button>
-<button class="btn-filter" onclick="filter('cat', 'TIENDA', this)">🏬 Tienda</button>
 <button class="btn-filter green" onclick="filter('discount', 'green', this)">🟢 < 20%</button>
 <button class="btn-filter yellow" onclick="filter('discount', 'yellow', this)">🟡 20-40%</button>
 <button class="btn-filter red" onclick="filter('discount', 'red', this)">🔴 > 40%</button>
 </div>
  
+<!-- MATRIZ DE LOCALES -->
 <div class="board-container">
 <h2 class="board-title">🏪 Todos los Locales</h2>
 <div id="puzzle-board"></div>
 </div>
  
+<!-- FAB BUTTONS -->
 <div class="fab-container">
-<button class="fab-btn fab-news" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSfmPQj06Quq3c43nl5IPjJiAKO0QOJbV-VPhMZng9BP1l3m7Q/viewform?usp=dialog', '_blank')" title="Noticias">
-<i class="fas fa-bell"></i>
-</button>
-<button class="fab-btn fab-pub" onclick="openFormModal()" title="Publicitar">
+<button class="fab-btn fab-pub" onclick="openFormModal()" title="Publicitar Local">
 <i class="fas fa-bullhorn"></i>
-</button>
-<button class="fab-btn fab-delivery" onclick="openDeliveryModal()" title="Delivery">
-<i class="fas fa-truck"></i>
 </button>
 </div>
  
-<!-- MODALS -->
+<!-- MODALES -->
 <div class="modal" id="gallery-modal">
 <button class="close-modal" onclick="closeGallery()">&times;</button>
-<button class="nav-arrow nav-prev" onclick="navGallery(-1)"><i class="fas fa-chevron-left"></i></button>
-<button class="nav-arrow nav-next" onclick="navGallery(1)"><i class="fas fa-chevron-right"></i></button>
 <div class="gallery-container">
 <div class="gallery-card" id="gallery-card-content"></div>
 </div>
 </div>
  
-<div class="modal" id="share-modal">
-<button class="close-modal" onclick="closeShareModal()">&times;</button>
-<div style="background: var(--glass-light); backdrop-filter: var(--blur-lg); border: 1.5px solid rgba(255,255,255,0.3); border-radius: var(--radius-lg); padding: 30px 20px; max-width: 380px; width: 90%; margin: 0 auto; text-align: center;">
-<h2 style="color: var(--primary-dark); margin-bottom: 20px; font-family: 'Space Grotesk', sans-serif; font-weight: 800;">¡Compartí ArgentPlay!</h2>
-<img src="QR-ML.png" alt="QR Code" style="width: 260px; max-width: 85%; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); margin: 20px 0;">
-<button class="btn-action btn-url" onclick="copyToClipboard()" style="margin-top: 20px;">📋 Copiar Enlace</button>
-<a class="btn-action btn-wa" id="wa-share-link" target="_blank">📱 Compartir por WhatsApp</a>
-</div>
-</div>
- 
 <div class="modal" id="form-modal">
-<div style="background: var(--glass-light); backdrop-filter: var(--blur-lg); -webkit-backdrop-filter: var(--blur-lg); border: 1.5px solid rgba(255,255,255,0.3); border-radius: var(--radius-lg); width: 90%; max-width: 420px; padding: 30px; margin: 0 auto;">
+<div style="background: var(--glass-light); backdrop-filter: var(--blur-lg); border: 1.5px solid rgba(255,255,255,0.3); border-radius: var(--radius-lg); width: 90%; max-width: 420px; padding: 30px; margin: 0 auto;">
 <button class="close-modal" style="color: var(--primary-dark);" onclick="closeFormModal()">&times;</button>
 <h3 style="text-align: center; color: var(--primary-dark); font-family: 'Space Grotesk', sans-serif; font-weight: 800; margin-bottom: 10px;">🚀 Publicitar tu Local</h3>
-<p style="text-align: center; color: #666; font-size: 0.9rem; margin-bottom: 20px;">¡Suma tu negocio a nuestro marketplace!</p>
 <form onsubmit="sendWhatsappForm(event)">
-<input type="text" id="frm-nombre" class="form-input" placeholder="🏪 Nombre del Local" required style="width: 100%; padding: 12px; margin: 10px 0; border: 1px solid rgba(0,0,0,0.1); border-radius: var(--radius-sm); background: rgba(255,255,255,0.8); font-size: 0.95rem;">
-<select id="frm-rubro" class="form-input" required style="width: 100%; padding: 12px; margin: 10px 0; border: 1px solid rgba(0,0,0,0.1); border-radius: var(--radius-sm); background: rgba(255,255,255,0.8); font-size: 0.95rem;">
-<option value="" disabled selected>🗂️ Selecciona Rubro</option>
-<option value="Carnicería">🥩 Carnicería</option>
-<option value="Farmacia">💊 Farmacia</option>
-<option value="Ferretería">🔧 Ferretería</option>
-<option value="Comida">🍔 Comida</option>
-<option value="Servicios">🔧 Servicios</option>
-</select>
-<input type="text" id="frm-ubicacion" class="form-input" placeholder="📍 Dirección" required style="width: 100%; padding: 12px; margin: 10px 0; border: 1px solid rgba(0,0,0,0.1); border-radius: var(--radius-sm); background: rgba(255,255,255,0.8); font-size: 0.95rem;">
-<button type="submit" class="btn-action btn-wa" style="margin-top: 15px;">📤 Enviar por WhatsApp</button>
-</form>
-</div>
-</div>
- 
-<div class="modal" id="delivery-modal">
-<div style="background: var(--glass-light); backdrop-filter: var(--blur-lg); -webkit-backdrop-filter: var(--blur-lg); border: 1.5px solid rgba(255,255,255,0.3); border-radius: var(--radius-lg); width: 90%; max-width: 420px; padding: 30px; margin: 0 auto;">
-<button class="close-modal" style="color: var(--primary-dark);" onclick="closeDeliveryModal()">&times;</button>
-<h3 style="text-align: center; color: var(--primary-dark); font-family: 'Space Grotesk', sans-serif; font-weight: 800; margin-bottom: 10px;">🚚 Publicar como Delivery</h3>
-<form onsubmit="sendDeliveryWhatsappForm(event)">
-<input type="text" id="del-nombre" class="form-input" placeholder="👤 Tu Nombre" required style="width: 100%; padding: 12px; margin: 10px 0; border: 1px solid rgba(0,0,0,0.1); border-radius: var(--radius-sm); background: rgba(255,255,255,0.8); font-size: 0.95rem;">
-<select id="del-vehiculo" class="form-input" required style="width: 100%; padding: 12px; margin: 10px 0; border: 1px solid rgba(0,0,0,0.1); border-radius: var(--radius-sm); background: rgba(255,255,255,0.8); font-size: 0.95rem;">
-<option value="" disabled selected>🚗 Tipo Vehículo</option>
-<option value="Moto">🏍️ Moto</option>
-<option value="Auto">🚗 Auto</option>
-<option value="Camioneta">🚐 Camioneta</option>
-</select>
-<input type="text" id="del-dni" class="form-input" placeholder="🆔 DNI" required style="width: 100%; padding: 12px; margin: 10px 0; border: 1px solid rgba(0,0,0,0.1); border-radius: var(--radius-sm); background: rgba(255,255,255,0.8); font-size: 0.95rem;">
+<input type="text" id="frm-nombre" placeholder="🏪 Nombre del Local" required style="width: 100%; padding: 12px; margin: 10px 0; border: 1px solid rgba(0,0,0,0.1); border-radius: var(--radius-sm); background: rgba(255,255,255,0.8); font-size: 0.95rem;">
+<input type="text" id="frm-ubicacion" placeholder="📍 Dirección" required style="width: 100%; padding: 12px; margin: 10px 0; border: 1px solid rgba(0,0,0,0.1); border-radius: var(--radius-sm); background: rgba(255,255,255,0.8); font-size: 0.95rem;">
 <button type="submit" class="btn-action btn-wa" style="margin-top: 15px;">📤 Enviar por WhatsApp</button>
 </form>
 </div>
 </div>
  
 <footer>
-<p>Seguinos en <a href="https://www.instagram.com/mercadodelocales/" target="_blank"><i class="fab fa-instagram"></i> @mercadodelocales</a> | <a href="https://www.facebook.com/profile.php?id=61588437962904" target="_blank"><i class="fab fa-facebook"></i> Facebook</a></p>
-<p style="margin-top: 10px;">© 2026 Mercado de Locales - Campana | <a href="#" onclick="openPrivacyModal()">Política de Privacidad</a></p>
+<p>Síguenos en <a href="https://www.instagram.com/mercadodelocales/" target="_blank"><i class="fab fa-instagram"></i> @mercadodelocales</a> | <a href="https://www.facebook.com/profile.php?id=61588437962904" target="_blank"><i class="fab fa-facebook"></i> Facebook</a></p>
+<p style="margin-top: 10px;">© 2026 Mercado de Locales - Campana</p>
 </footer>
  
 <script>
@@ -1377,7 +1406,6 @@ let viewMode = 'matrix';
 let tiles = [];
 let displayedTiles = [];
 let currentGalleryIndex = 0;
-let carouselIndex = 0;
  
 const baseData = [
 { name: "Frigorifico Daireaux", cat: "CARNICERIA", discount: 10, img: "FRIGORIFICO.png", location: "Av. Pres. Juan Domingo Peron 800, Pilar", url: "https://frigorificodaireaux.com.ar/", whatsapp: "541133055298", hours: { days: "Lun-Sáb", from: "09:00", to: "20:00", sundayClosed: true } },
@@ -1393,26 +1421,45 @@ const baseData = [
 { name: "Restaurante Sabor", cat: "COMIDA", discount: 35, img: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4", location: "Av. 6 de Julio 111, Campana", url: "https://instagram.com/restaurantesabor", whatsapp: "543489778899", hours: { days: "Lun-Dom", from: "12:00", to: "23:00", sundayClosed: false } },
 { name: "Bar El Encuentro", cat: "BARES", discount: 40, img: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5", location: "Rivadavia 333, Campana", url: "https://instagram.com/barelencuentro", whatsapp: "543489990011", hours: { days: "Lun-Dom", from: "18:00", to: "04:00", sundayClosed: false } },
 { name: "NEXO-Art Paginas Web", cat: "SERVICIOS", discount: 50, img: "NEXO-ART.png", location: "Campana", url: "https://nexoar-art.github.io/NEXO-art/", whatsapp: "543489686939", hours: { days: "Lun-Sáb", from: "08:00", to: "19:00", sundayClosed: true } },
-{ name: "CV-ATS para Empleos", cat: "SERVICIOS", discount: 5, img: "Logo CV-ATS.png", location: "Campana", url: "https://nexoar-art.github.io/CV-ATS/", whatsapp: "543489686939", hours: { days: "Lun-Vier", from: "10:00", to: "18:00", sundayClosed: true } },
-];
- 
-const adminMessages = [
-"🔥 ¡NUEVOS LOCALES CADA SEMANA!",
-"✨ SÍGUENOS @mercadodelocales PARA OFERTAS EXCLUSIVAS",
-"💯 MÁS DE 50 LOCALES CON DESCUENTOS IMPERDIBLES",
-"⚡ OFERTAS FLASH: HASTA 60% OFF EN SELECCIONADOS",
-"🚀 ¡PUBLICITÁ TU LOCAL Y LLEGA A MILES!"
 ];
  
 let activeFilters = { cat: null, discount: null, search: '', location: null };
  
-function getCity(t) {
-if (!t.location) return 'Campana';
-const lower = t.location.toLowerCase();
-if (lower.includes('zarat')) return 'Zárate';
-if (lower.includes('escobar')) return 'Escobar';
-if (lower.includes('pilar')) return 'Pilar';
-return 'Campana';
+// SCROLL DETECTION
+window.addEventListener('scroll', () => {
+const videoHero = document.getElementById('videoHero');
+const videoSpacer = document.getElementById('videoSpacer');
+const scrollPos = window.scrollY;
+const triggerPoint = window.innerHeight * 0.3;
+ 
+if (scrollPos > triggerPoint) {
+videoHero.classList.add('scroll-active');
+videoSpacer.classList.add('scroll-active');
+} else {
+videoHero.classList.remove('scroll-active');
+videoSpacer.classList.remove('scroll-active');
+}
+ 
+// Header visibility
+const header = document.getElementById('main-header');
+if (scrollPos > window.innerHeight) {
+header.classList.add('scrolled');
+} else {
+header.classList.remove('scrolled');
+}
+ 
+// Hide header on scroll down
+let lastScrollTop = 0;
+if (scrollPos > lastScrollTop + 50) {
+header.classList.add('hide');
+} else if (scrollPos < lastScrollTop - 50) {
+header.classList.remove('hide');
+}
+lastScrollTop = scrollPos <= 0 ? 0 : scrollPos;
+});
+ 
+function scrollToContent() {
+document.querySelector('.info-section').scrollIntoView({ behavior: 'smooth' });
 }
  
 function generateMatrix() {
@@ -1441,7 +1488,7 @@ function createTileElement(t, index) {
 const el = document.createElement('div');
 el.className = `tile ${t.tier}`;
 el.innerHTML = `
-<img src="${t.img}" class="tile-img" loading="lazy" decoding="async" alt="${t.name}">
+<img src="${t.img}" class="tile-img" loading="lazy" alt="${t.name}">
 <div class="tile-info">
 <div class="tile-title">${t.name}</div>
 <div class="tile-discount">${t.discount}% OFF</div>
@@ -1456,10 +1503,9 @@ if (activeFilters.cat && t.cat !== activeFilters.cat) return false;
 if (activeFilters.discount === 'green' && t.discount >= 20) return false;
 if (activeFilters.discount === 'yellow' && (t.discount < 20 || t.discount > 40)) return false;
 if (activeFilters.discount === 'red' && t.discount <= 40) return false;
-if (activeFilters.location && getCity(t) !== activeFilters.location) return false;
 if (activeFilters.search) {
 const term = activeFilters.search.toLowerCase();
-if (!t.name.toLowerCase().includes(term) && !t.cat.toLowerCase().includes(term)) return false;
+if (!t.name.toLowerCase().includes(term)) return false;
 }
 return true;
 }
@@ -1469,7 +1515,6 @@ const board = document.getElementById('puzzle-board');
 board.innerHTML = '';
 displayedTiles = tiles.filter(t => checkFilter(t));
  
-if (viewMode === 'matrix') {
 const boardWidth = board.parentElement.clientWidth;
 const cellSize = (boardWidth - (GAP * (COLS - 1))) / COLS;
 let maxY = 0;
@@ -1482,128 +1527,7 @@ board.appendChild(el);
 if (t.y + t.h > maxY) maxY = t.y + t.h;
 });
 board.style.height = `${maxY * (cellSize + GAP)}px`;
-} else {
-board.style.height = 'auto';
-displayedTiles.forEach((t, index) => board.appendChild(createTileElement(t, index)));
 }
- 
-populateCarousel();
-populateTicker();
-populateAdminTicker();
-}
- 
-function populateCarousel() {
-const track = document.querySelector('.carousel-track');
-const dots = document.getElementById('carousel-dots');
-track.innerHTML = '';
-dots.innerHTML = '';
- 
-let featured = displayedTiles.slice(0, 8);
-featured.sort(() => Math.random() - 0.5);
- 
-featured.forEach((t, idx) => {
-const tierClass = t.discount > 40 ? 'tier-red' : t.discount >= 20 ? 'tier-yellow' : 'tier-green';
-const item = document.createElement('div');
-item.className = 'carousel-item';
-item.innerHTML = `
-<img src="${t.img}" alt="${t.name}">
-<div class="carousel-overlay">
-<div class="carousel-name">${t.name.toUpperCase()}</div>
-<div class="carousel-discount ${tierClass}">${t.discount}%</div>
-<button class="carousel-cta" onclick="window.open('https://wa.me/${t.whatsapp}', '_blank')">CONTACTAR 🚀</button>
-</div>
-`;
-track.appendChild(item);
- 
-const dot = document.createElement('div');
-dot.className = `carousel-dot ${idx === 0 ? 'active' : ''}`;
-dot.onclick = () => carouselGoTo(idx);
-dots.appendChild(dot);
-});
- 
-if (featured.length === 0) return;
- 
-autoPlayCarousel();
-}
- 
-function carouselNav(dir) {
-const items = document.querySelectorAll('.carousel-item');
-if (items.length === 0) return;
-carouselIndex = (carouselIndex + dir + items.length) % items.length;
-updateCarousel();
-}
- 
-function carouselGoTo(idx) {
-carouselIndex = idx;
-updateCarousel();
-}
- 
-function updateCarousel() {
-const track = document.querySelector('.carousel-track');
-track.style.transform = `translateX(-${carouselIndex * 100}%)`;
-document.querySelectorAll('.carousel-dot').forEach((dot, idx) => {
-dot.classList.toggle('active', idx === carouselIndex);
-});
-}
- 
-function autoPlayCarousel() {
-setInterval(() => {
-const items = document.querySelectorAll('.carousel-item');
-if (items.length === 0) return;
-carouselIndex = (carouselIndex + 1) % items.length;
-updateCarousel();
-}, 6000);
-}
- 
-function populateTicker() {
-const g1 = document.getElementById('ticker-group1');
-const g2 = document.getElementById('ticker-group2');
-g1.innerHTML = '';
-g2.innerHTML = '';
- 
-let offers = displayedTiles.filter(t => t.discount > 0);
-offers.sort(() => Math.random() - 0.5);
- 
-offers.forEach(t => {
-const discColor = t.discount > 40 ? '#ff6666' : t.discount >= 20 ? '#ffdd00' : '#00ff88';
-const item = document.createElement('div');
-item.className = 'ticker-item';
-item.innerHTML = `
-<span class="ticker-name">${t.name.toUpperCase()}</span>
-<span class="ticker-sep">│</span>
-<span class="ticker-discount" style="color:${discColor}">${t.discount}% OFF</span>
-<span class="ticker-sep">│</span>
-<span style="font-size:0.9rem;">${t.hours.days} ${t.hours.from}-${t.hours.to}</span>
-`;
-g1.appendChild(item);
-});
-g2.innerHTML = g1.innerHTML;
-}
- 
-function populateAdminTicker() {
-const g1 = document.getElementById('admin-ticker-group1');
-const g2 = document.getElementById('admin-ticker-group2');
-g1.innerHTML = '';
-g2.innerHTML = '';
- 
-adminMessages.forEach(msg => {
-const item = document.createElement('div');
-item.className = 'ticker-item';
-item.innerHTML = `<span style="font-size:1.1rem; font-weight:900; letter-spacing:1px;">${msg}</span>`;
-g1.appendChild(item);
-});
-g2.innerHTML = g1.innerHTML;
-}
- 
-// HEADER SCROLL
-window.addEventListener('scroll', () => {
-const header = document.getElementById('main-header');
-if (window.scrollY > 20) {
-header.classList.add('scrolled');
-} else {
-header.classList.remove('scrolled');
-}
-});
  
 function toggleDropdown() {
 const menu = document.getElementById('dropdown-menu');
@@ -1639,15 +1563,12 @@ render();
 function resetAll() {
 activeFilters = { cat: null, discount: null, search: '', location: null };
 document.getElementById('search-input').value = '';
-document.getElementById('location-text').innerText = 'Todas las localidades';
 document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
 render();
 }
  
 function toggleViewMode() {
 viewMode = viewMode === 'matrix' ? 'list' : 'matrix';
-document.body.className = viewMode === 'list' ? 'view-list' : 'view-matrix';
-document.getElementById('view-icon').className = viewMode === 'list' ? 'fas fa-th' : 'fas fa-th-large';
 render();
 }
  
@@ -1661,61 +1582,21 @@ function closeGallery() {
 document.getElementById('gallery-modal').classList.remove('active');
 }
  
-function navGallery(dir) {
-currentGalleryIndex = (currentGalleryIndex + dir + displayedTiles.length) % displayedTiles.length;
-updateGallery();
-}
- 
 function updateGallery() {
 const t = displayedTiles[currentGalleryIndex];
-const tierClass = t.discount > 40 ? 'tier-red' : t.discount >= 20 ? 'tier-yellow' : 'tier-green';
 const tierColor = t.discount > 40 ? '#ff6666' : t.discount >= 20 ? '#ffdd00' : '#00ff88';
-const openStatus = isOpen(t) ? '🟢 ABIERTO AHORA' : '🔴 CERRADO';
-const encodedLoc = encodeURIComponent(t.location + ", Buenos Aires");
- 
 const content = document.getElementById('gallery-card-content');
 content.innerHTML = `
 <img src="${t.img}" class="gallery-img" alt="${t.name}">
 <div class="gallery-body">
 <h2>${t.name}</h2>
 <h1 style="color:${tierColor}; font-size:2.8rem; margin:15px 0;">${t.discount}%</h1>
-<div style="font-weight:700; font-size:1.1rem; margin:15px 0;">${openStatus}</div>
-<p style="margin:10px 0; color:#666;"><strong>📍</strong> ${t.location}</p>
-<p style="margin:10px 0; color:#666;"><strong>🕐</strong> ${t.hours.days}: ${t.hours.from} - ${t.hours.to}</p>
-<a href="https://www.google.com/maps/search/?api=1&query=${encodedLoc}" target="_blank" class="btn-action btn-url">📍 VER EN MAPA</a>
-<a href="${t.url}" target="_blank" class="btn-action btn-url">📱 INSTAGRAM / WEB</a>
-<button class="btn-action btn-wa" onclick="window.open('https://wa.me/${t.whatsapp}','_blank')">💬 WHATSAPP</button>
+<p style="margin:10px 0;"><strong>📍</strong> ${t.location}</p>
+<p style="margin:10px 0;"><strong>🕐</strong> ${t.hours.days}: ${t.hours.from} - ${t.hours.to}</p>
+<a href="${t.url}" target="_blank" class="btn-action btn-url">📱 Ver Más</a>
+<button class="btn-action btn-wa" onclick="window.open('https://wa.me/${t.whatsapp}','_blank')">💬 WhatsApp</button>
 </div>
 `;
-}
- 
-function isOpen(t) {
-const now = new Date();
-const day = now.getDay();
-const time = now.getHours() * 60 + now.getMinutes();
-if (day === 0 && t.hours.sundayClosed) return false;
-const [fh, fm] = t.hours.from.split(':').map(Number);
-const [th, tm] = t.hours.to.split(':').map(Number);
-return time >= fh * 60 + fm && time <= th * 60 + tm;
-}
- 
-function openShareModal() {
-document.getElementById('share-modal').classList.add('active');
-const text = "¡Mirá las mejores ofertas en ArgentPlay.online! 🔥 Descuentos imperdibles en locales de Campana, Zárate y zona.";
-const url = window.location.href;
-document.getElementById('wa-share-link').href = `https://api.whatsapp.com/send?text=${encodeURIComponent(text + '\n' + url)}`;
-}
- 
-function closeShareModal() {
-document.getElementById('share-modal').classList.remove('active');
-}
- 
-function copyToClipboard() {
-navigator.clipboard.writeText(window.location.href).then(() => {
-alert('¡Enlace copiado! 📋');
-}).catch(() => {
-prompt('Copia manualmente:', window.location.href);
-});
 }
  
 function openFormModal() {
@@ -1729,47 +1610,17 @@ document.getElementById('form-modal').classList.remove('active');
 function sendWhatsappForm(e) {
 e.preventDefault();
 const n = document.getElementById('frm-nombre').value.trim();
-const r = document.getElementById('frm-rubro').value;
 const u = document.getElementById('frm-ubicacion').value.trim();
-const text = `¡Hola! 🚀\n*Quiero publicitar mi local*:\n🏪 *Nombre*: ${n}\n🗂️ *Rubro*: ${r}\n📍 *Dirección*: ${u}\n\n¡Gracias! ❤️`;
+const text = `¡Hola! 🚀\n*Quiero publicitar mi local*:\n🏪 *Nombre*: ${n}\n📍 *Dirección*: ${u}\n\n¡Gracias! ❤️`;
 window.open(`https://api.whatsapp.com/send?phone=+543489686939&text=${encodeURIComponent(text)}`, '_blank');
 closeFormModal();
 }
  
-function openDeliveryModal() {
-document.getElementById('delivery-modal').classList.add('active');
-}
- 
-function closeDeliveryModal() {
-document.getElementById('delivery-modal').classList.remove('active');
-}
- 
-function sendDeliveryWhatsappForm(e) {
-e.preventDefault();
-const n = document.getElementById('del-nombre').value.trim();
-const v = document.getElementById('del-vehiculo').value;
-const d = document.getElementById('del-dni').value.trim();
-const text = `¡Hola! 🚚\n*Quiero registrarme como Delivery*:\n👤 *Nombre*: ${n}\n🚗 *Vehículo*: ${v}\n🆔 *DNI*: ${d}\n\n¡Listo para repartir! ❤️`;
-window.open(`https://api.whatsapp.com/send?phone=+543489686939&text=${encodeURIComponent(text)}`, '_blank');
-closeDeliveryModal();
-}
- 
-function openPrivacyModal() {
-alert('📜 Política de Privacidad\n\nTus datos se envían directamente por WhatsApp. No se almacenan en servidores.\n\nLas ofertas son responsabilidad de cada comercio.');
-}
- 
-// INIT
 window.addEventListener('resize', () => {
 COLS = window.innerWidth > 800 ? DESKTOP_COLS : MOBILE_COLS;
 generateMatrix();
 render();
 });
- 
-setInterval(() => {
-if (viewMode === 'list' || Object.values(activeFilters).some(v => v)) return;
-generateMatrix();
-render();
-}, 12000);
  
 document.addEventListener('click', (e) => {
 if (!e.target.closest('.location-dropdown')) {
