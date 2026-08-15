@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXO-ART | Diseñamos Experiencias. Creamos Negocios.</title>
+    <title>NEXO-ART | Experiencia Inmersiva 3D</title>
     <!-- Google Fonts: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,7 +33,6 @@
         }
     </script>
     <style>
-        /* Estilos Personalizados */
         body {
             background-color: #030712;
             color: #f3f4f6;
@@ -41,531 +40,283 @@
             overflow-x: hidden;
         }
 
-        /* Glassmorphism */
-        .glass-panel {
-            background: rgba(10, 15, 36, 0.7);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .glass-card {
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(124, 58, 237, 0.2);
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .glass-card:hover {
-            border-color: rgba(6, 182, 212, 0.6);
-            box-shadow: 0 0 25px rgba(6, 182, 212, 0.25), 0 0 10px rgba(124, 58, 237, 0.2);
-            transform: translateY(-5px) scale(1.01);
-        }
-
-        /* Video Background 3D Depth Layer */
-        #video-bg-container {
+        /* Video Fullscreen Canvas (Segundo Plano Total) */
+        #video-canvas-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: -2;
+            z-index: 0;
             overflow: hidden;
             pointer-events: none;
         }
 
-        #bg-video {
+        #scroll-video {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: brightness(0.45) contrast(1.15) saturate(1.1);
-            transform: scale(1.05);
-            transition: transform 0.1s ease-out;
+            filter: brightness(0.65) contrast(1.1) saturate(1.15);
         }
 
-        /* Glow Orbs */
-        .glow-orb-purple {
+        /* Capa de Scroll Fantasma para Controlar la Línea de Tiempo */
+        #scroll-track {
+            position: relative;
+            height: 600vh; /* Permite un recorrido largo y preciso del video */
+            z-index: 10;
+        }
+
+        /* Glassmorphism Spatial UI */
+        .glass-panel {
+            background: rgba(10, 15, 36, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(6, 182, 212, 0.8);
+            box-shadow: 0 0 30px rgba(6, 182, 212, 0.3);
+        }
+
+        /* Hotspots / Botones de Acción Flotantes Neón */
+        .interactive-node {
             position: fixed;
-            width: 500px;
-            height: 500px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(124, 58, 237, 0.25) 0%, rgba(0,0,0,0) 70%);
-            z-index: -1;
+            z-index: 30;
+            transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+            opacity: 0;
             pointer-events: none;
+            transform: scale(0.8) translateY(20px);
         }
 
-        .glow-orb-cyan {
-            position: fixed;
-            width: 500px;
-            height: 500px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(6, 182, 212, 0.2) 0%, rgba(0,0,0,0) 70%);
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        /* Cuadrícula Tecnológica */
-        .bg-grid-pattern {
-            background-size: 50px 50px;
-            background-image: 
-                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-        }
-
-        /* Motor Cinema Scroll Perspective */
-        .cinema-section {
-            opacity: 0.3;
-            transform: scale(0.9) translateY(40px);
-            transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-            will-change: transform, opacity;
-        }
-
-        .cinema-section.cinema-active {
+        .interactive-node.node-active {
             opacity: 1;
+            pointer-events: auto;
             transform: scale(1) translateY(0);
         }
 
-        .cinema-section.cinema-passed {
-            opacity: 0.5;
-            transform: scale(0.94) translateY(-20px);
-        }
-
-        /* Perspectiva Mockups 3D */
-        .perspective-container {
-            perspective: 1200px;
-        }
-
-        .mockup-3d-card {
-            transform-style: preserve-3d;
-            transform: rotateX(8deg) rotateY(-8deg) rotateZ(1deg);
-            transition: transform 0.5s ease;
-        }
-
-        .perspective-container:hover .mockup-3d-card {
-            transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
-        }
-
-        /* Neon Glow Text & Elements */
-        .text-glow-purple {
-            text-shadow: 0 0 15px rgba(168, 85, 247, 0.6);
-        }
-
-        .text-glow-cyan {
-            text-shadow: 0 0 15px rgba(56, 189, 248, 0.6);
-        }
-
-        .btn-neon {
+        .btn-pulse-neon {
             background: linear-gradient(135deg, #7c3aed 0%, #06b6d4 100%);
-            box-shadow: 0 0 20px rgba(124, 58, 237, 0.4);
+            box-shadow: 0 0 25px rgba(124, 58, 237, 0.6);
             transition: all 0.3s ease;
+            animation: pulseGlow 2s infinite alternate;
         }
 
-        .btn-neon:hover {
-            box-shadow: 0 0 30px rgba(6, 182, 212, 0.7);
-            transform: translateY(-2px);
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 15px rgba(124, 58, 237, 0.5); }
+            100% { box-shadow: 0 0 35px rgba(6, 182, 212, 0.8); }
         }
 
-        /* Custom Scrollbar */
+        .btn-pulse-neon:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(6, 182, 212, 0.9);
+        }
+
+        /* Indicador de Scroll */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 25;
+            pointer-events: none;
+        }
+
+        /* Custom Scrollbar Oculta para Experiencia Limpia */
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
         }
         ::-webkit-scrollbar-track {
             background: #030712;
         }
         ::-webkit-scrollbar-thumb {
-            background: #1e1b4b;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
             background: #7c3aed;
+            border-radius: 3px;
         }
     </style>
 </head>
-<body class="bg-darkBg text-gray-100 min-h-screen relative antialiased bg-grid-pattern">
+<body class="bg-darkBg text-gray-100 antialiased select-none">
 
-    <!-- VIDEO BACKGROUND SYNC WITH SCROLL -->
-    <div id="video-bg-container">
-        <video id="bg-video" muted playsinline preload="auto">
+    <!-- 1. VIDEO DE FONDO 100% FULLSCREEN (SEGUNDO PLANO) -->
+    <div id="video-canvas-container">
+        <video id="scroll-video" muted playsinline preload="auto">
             <source src="NEXO VIDEO.mp4" type="video/mp4">
             Tu navegador no soporta reproducción de video HTML5.
         </video>
-        <!-- Overlay de Oscurecimiento Gradual -->
-        <div class="absolute inset-0 bg-gradient-to-b from-darkBg/70 via-darkBg/80 to-darkBg"></div>
+        <!-- Overlay sutil cibernético -->
+        <div class="absolute inset-0 bg-gradient-to-t from-darkBg/80 via-transparent to-darkBg/60"></div>
     </div>
 
-    <!-- GLOW ORBS AMBIENTALES -->
-    <div class="glow-orb-purple top-10 left-[-100px]"></div>
-    <div class="glow-orb-cyan top-[40%] right-[-100px]"></div>
-    <div class="glow-orb-purple bottom-10 left-[20%]"></div>
+    <!-- 2. TRACKER DE SCROLL VIRTUAL (SEGUNDO PLANO DE NAVEGACIÓN) -->
+    <div id="scroll-track"></div>
 
-    <!-- 4. TOP NAVIGATION (GLASS PANEL) -->
-    <header class="fixed top-0 left-0 w-full z-50 px-4 py-3">
+    <!-- 3. HEADER FLOTANTE MINIMALISTA (PRIMER PLANO) -->
+    <header class="fixed top-0 left-0 w-full z-40 px-4 py-4">
         <div class="max-w-7xl mx-auto glass-panel rounded-2xl px-6 py-3 flex items-center justify-between shadow-2xl">
             <!-- Logo -->
-            <a href="#inicio" class="flex items-center gap-3 group">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purpleNeon to-cyanNeon flex items-center justify-center text-white font-extrabold text-xl shadow-lg shadow-purpleNeon/30 group-hover:scale-105 transition-transform">
+            <a href="javascript:scrollToSection(0)" class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purpleNeon to-cyanNeon flex items-center justify-center text-white font-extrabold text-xl shadow-lg shadow-purpleNeon/30">
                     N
                 </div>
                 <span class="font-bold text-xl tracking-wider text-white">NEXO<span class="text-cyanNeon">-ART</span></span>
             </a>
 
-            <!-- Search Engine de Países LATAM -->
-            <div class="relative hidden lg:block w-72">
+            <!-- Buscador de Países LATAM -->
+            <div class="relative hidden md:block w-64">
                 <div class="relative flex items-center">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3 text-gray-400 text-sm"></i>
-                    <input type="text" id="country-search" placeholder="Buscar país (ej: Argentina)..." 
-                        class="w-full bg-slate-900/80 border border-slate-700/60 rounded-xl pl-9 pr-8 py-1.5 text-xs text-white placeholder-gray-400 focus:outline-none focus:border-cyanNeon transition-colors"
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 text-gray-400 text-xs"></i>
+                    <input type="text" id="country-search" placeholder="País (ej: Argentina)..." 
+                        class="w-full bg-slate-900/80 border border-slate-700/60 rounded-xl pl-8 pr-8 py-1.5 text-xs text-white placeholder-gray-400 focus:outline-none focus:border-cyanNeon transition-colors"
                         autocomplete="off">
                     <button id="clear-search" class="absolute right-2 text-gray-400 hover:text-white hidden text-xs">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
-                <!-- Autocomplete Dropdown -->
-                <div id="search-dropdown" class="absolute top-full left-0 w-full mt-2 glass-panel rounded-xl shadow-2xl overflow-hidden hidden z-50">
-                    <ul id="country-list" class="max-h-48 overflow-y-auto text-xs py-1">
-                        <!-- Inyectado JS -->
-                    </ul>
+                <!-- Dropdown -->
+                <div id="search-dropdown" class="absolute top-full left-0 w-full mt-2 glass-panel rounded-xl overflow-hidden hidden z-50">
+                    <ul id="country-list" class="max-h-40 overflow-y-auto text-xs py-1"></ul>
                 </div>
             </div>
 
-            <!-- Header Badge & Quick Nav -->
-            <div class="flex items-center gap-6">
-                <!-- Region Badge -->
-                <div id="region-badge" class="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800/80 border border-purpleNeon/40 text-xs font-semibold text-cyanNeon">
+            <!-- Region Badge + Navegación Rápida de Hitos -->
+            <div class="flex items-center gap-4">
+                <div id="region-badge" class="flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/90 border border-purpleNeon/40 text-xs font-semibold text-cyanNeon">
                     <span id="badge-flag">🇦🇷</span>
-                    <span id="badge-text">Argentina - ARS</span>
+                    <span id="badge-text">ARS</span>
                 </div>
 
-                <!-- Nav Links -->
-                <nav class="hidden md:flex items-center gap-6 text-xs font-medium text-gray-300">
-                    <a href="#inicio" class="hover:text-cyanNeon transition-colors">Inicio</a>
-                    <a href="#servicios" class="hover:text-cyanNeon transition-colors">Servicios</a>
-                    <a href="#beneficios" class="hover:text-cyanNeon transition-colors">Beneficios</a>
-                    <a href="#planes" class="hover:text-cyanNeon transition-colors">Planes</a>
-                    <a href="#nosotros" class="hover:text-cyanNeon transition-colors">Nosotros</a>
-                </nav>
-
-                <!-- CTA Button -->
-                <a href="#planes" class="btn-neon px-5 py-2 rounded-xl text-xs font-bold text-white tracking-wide flex items-center gap-2">
-                    <span>HABLEMOS</span>
-                    <i class="fa-solid fa-arrow-right text-[10px]"></i>
-                </a>
+                <div class="hidden lg:flex items-center gap-2 bg-slate-900/80 p-1 rounded-xl border border-slate-800 text-xs">
+                    <button onclick="scrollToProgress(0.05)" class="px-3 py-1 hover:text-cyanNeon transition-colors">Inicio</button>
+                    <button onclick="scrollToProgress(0.35)" class="px-3 py-1 hover:text-cyanNeon transition-colors">Servicios</button>
+                    <button onclick="scrollToProgress(0.65)" class="px-3 py-1 hover:text-cyanNeon transition-colors">Planes</button>
+                    <button onclick="scrollToProgress(0.92)" class="px-3 py-1 hover:text-cyanNeon transition-colors">Testimonios</button>
+                </div>
             </div>
         </div>
     </header>
 
-    <!-- MAIN CONTENT CONTAINERS -->
-    <main class="max-w-7xl mx-auto px-4 pt-28 pb-16 space-y-32">
+    <!-- 4. BOTONES INTELIGENTES DE ACCIÓN (SPATIAL HOTSPOTS EN PRIMER PLANO) -->
 
-        <!-- 7. HERO SECTION -->
-        <section id="inicio" class="cinema-section min-h-[85vh] flex flex-col justify-center items-center text-center relative pt-8">
-            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border border-purpleNeon/30 text-purpleGlow text-xs font-semibold mb-6">
-                <span class="w-2 h-2 rounded-full bg-cyanNeon animate-pulse"></span>
-                <span>#030712 ARCHITECTURE FRAMEWORK</span>
-            </div>
-
-            <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-tight max-w-5xl mb-6">
+    <!-- NODE 1: HERO OVERLAY (0% - 15% Scroll) -->
+    <div id="node-hero" class="interactive-node bottom-16 left-6 md:left-16 max-w-md">
+        <div class="glass-card p-6 rounded-3xl space-y-4">
+            <span class="px-3 py-1 rounded-full bg-purpleNeon/20 border border-purpleNeon/40 text-purpleGlow text-[10px] font-bold uppercase tracking-wider">
+                <i class="fa-solid fa-sparkles mr-1"></i> EXPERIENCIA 3D INTERACTIVA
+            </span>
+            <h1 class="text-2xl md:text-3xl font-extrabold text-white leading-tight">
                 DISEÑAMOS EXPERIENCIAS. <br>
-                <span class="bg-gradient-to-r from-purpleGlow via-cyanNeon to-white bg-clip-text text-transparent">CREAMOS NEGOCIOS.</span> <br>
-                IMPULSAMOS TU ÉXITO.
+                <span class="bg-gradient-to-r from-purpleGlow to-cyanNeon bg-clip-text text-transparent">CREAMOS NEGOCIOS.</span>
             </h1>
-
-            <p class="text-gray-400 text-sm md:text-base max-w-2xl mb-10 font-normal">
-                Landing pages que convierten, tiendas e-commerce de alto rendimiento y soluciones digitales a medida que proyectan tu marca al siguiente nivel.
+            <p class="text-xs text-gray-300 leading-relaxed">
+                Desplaza la pantalla para explorar nuestro universo de desarrollo web en tiempo real.
             </p>
-
-            <div class="flex flex-wrap justify-center gap-4 mb-16">
-                <a href="#planes" class="btn-neon px-8 py-3.5 rounded-xl text-sm font-bold text-white tracking-wider uppercase flex items-center gap-3">
-                    <span>VER SERVICIOS</span>
-                    <i class="fa-solid fa-arrow-down"></i>
-                </a>
-                <a href="#beneficios" class="glass-panel hover:bg-slate-800/60 px-8 py-3.5 rounded-xl text-sm font-bold text-gray-200 border border-slate-700/80 transition-all flex items-center gap-2">
-                    <i class="fa-solid fa-play text-cyanNeon text-xs"></i>
-                    <span>VER DEMO 3D</span>
-                </a>
+            <div class="flex gap-3 pt-2">
+                <button onclick="openModalData('HERO_INFO')" class="btn-pulse-neon px-5 py-2.5 rounded-xl text-xs font-bold text-white tracking-wider uppercase flex items-center gap-2">
+                    <i class="fa-solid fa-eye"></i>
+                    <span>VER RESUMEN</span>
+                </button>
+                <button onclick="scrollToProgress(0.35)" class="glass-panel px-4 py-2.5 rounded-xl text-xs font-bold text-gray-200 hover:text-white transition-colors">
+                    EXPLORAR <i class="fa-solid fa-arrow-down ml-1"></i>
+                </button>
             </div>
+        </div>
+    </div>
 
-            <!-- 3 Tarjetas de Beneficios Rápidos -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl mb-12">
-                <div class="glass-card p-5 rounded-2xl text-left flex items-start gap-4">
-                    <div class="w-10 h-10 rounded-xl bg-purpleNeon/20 border border-purpleNeon/40 flex items-center justify-center text-purpleGlow shrink-0">
-                        <i class="fa-solid fa-bolt text-lg"></i>
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-sm text-white mb-1">Carga Ultra Rápida</h4>
-                        <p class="text-xs text-gray-400">Sitios optimizados con velocidad de respuesta inferior a 1 segundo.</p>
-                    </div>
-                </div>
-
-                <div class="glass-card p-5 rounded-2xl text-left flex items-start gap-4">
-                    <div class="w-10 h-10 rounded-xl bg-cyanNeon/20 border border-cyanNeon/40 flex items-center justify-center text-cyanNeon shrink-0">
-                        <i class="fa-solid fa-bullseye text-lg"></i>
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-sm text-white mb-1">Alta Conversión</h4>
-                        <p class="text-xs text-gray-400">Diseño UX centrado en guiado del usuario y generación de ventas.</p>
-                    </div>
-                </div>
-
-                <div class="glass-card p-5 rounded-2xl text-left flex items-start gap-4">
-                    <div class="w-10 h-10 rounded-xl bg-indigo-500/20 border border-indigo-500/40 flex items-center justify-center text-indigo-400 shrink-0">
-                        <i class="fa-solid fa-mobile-screen-button text-lg"></i>
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-sm text-white mb-1">100% Adaptable</h4>
-                        <p class="text-xs text-gray-400">Visualización perfecta e interactiva en smartphones, tablets y PC.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Mockup 3D de Laptop + Smartphone Interactivo -->
-            <div class="perspective-container w-full max-w-4xl mt-4">
-                <div class="mockup-3d-card glass-panel rounded-3xl p-4 md:p-6 border border-purpleNeon/30 relative overflow-hidden shadow-2xl">
-                    <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-4">
-                        <div class="flex gap-2">
-                            <span class="w-3 h-3 rounded-full bg-red-500/80"></span>
-                            <span class="w-3 h-3 rounded-full bg-yellow-500/80"></span>
-                            <span class="w-3 h-3 rounded-full bg-green-500/80"></span>
-                        </div>
-                        <span class="text-[10px] text-gray-500 font-mono tracking-widest">NEXO-ART // LIVE PREVIEW ENGINE</span>
-                    </div>
-                    <div class="relative rounded-xl overflow-hidden aspect-video border border-slate-700/50 flex items-center justify-center bg-slate-950/80">
-                        <!-- Simulated Interactive Interface inside Mockup -->
-                        <div class="absolute inset-0 bg-gradient-to-tr from-purple-900/20 via-transparent to-cyan-900/20"></div>
-                        <div class="p-6 text-center space-y-4">
-                            <div class="w-16 h-16 rounded-2xl bg-cyanNeon/10 border border-cyanNeon/30 flex items-center justify-center mx-auto text-cyanNeon text-2xl animate-bounce">
-                                <i class="fa-solid fa-cubes-stacked"></i>
-                            </div>
-                            <h3 class="text-xl font-bold text-white">Experiencia Tridimensional Integrada</h3>
-                            <p class="text-xs text-gray-400 max-w-md mx-auto">Sincronización fluida entre el scroll del usuario y el canvas de video de alta definición.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 7. SECCIÓN ¿QUÉ HACEMOS? (SERVICIOS) -->
-        <section id="servicios" class="cinema-section space-y-12">
-            <div class="text-center space-y-3">
+    <!-- NODE 2: SERVICIOS / SOLUCIONES (25% - 45% Scroll) -->
+    <div id="node-services" class="interactive-node top-1/3 right-6 md:right-16 max-w-sm">
+        <div class="glass-card p-6 rounded-3xl space-y-4 border-cyanNeon/50">
+            <div class="flex items-center justify-between">
                 <span class="text-cyanNeon text-xs font-bold tracking-widest uppercase">SOLUCIONES DIGITALES</span>
-                <h2 class="text-3xl md:text-5xl font-extrabold text-white">SOLUCIONES QUE GENERAN <span class="text-purpleGlow">RESULTADOS</span></h2>
-                <p class="text-gray-400 text-xs md:text-sm max-w-xl mx-auto">Diseños pensados estratégicamente para maximizar tu impacto visual y comercial.</p>
+                <span class="w-2.5 h-2.5 rounded-full bg-cyanNeon animate-ping"></span>
             </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Card 1 -->
-                <div class="glass-card p-8 rounded-3xl relative overflow-hidden group flex flex-col justify-between">
-                    <div class="space-y-4">
-                        <div class="w-14 h-14 rounded-2xl bg-purpleNeon/20 border border-purpleNeon/40 flex items-center justify-center text-purpleGlow text-2xl group-hover:scale-110 transition-transform">
-                            <i class="fa-solid fa-rocket"></i>
-                        </div>
-                        <h3 class="text-xl font-bold text-white">LANDING PAGES QUE CONVIERTEN</h3>
-                        <p class="text-xs text-gray-400 leading-relaxed">
-                            Páginas de aterrizaje enfocadas en una sola acción clave. Ideales para campañas publicitarias de alta efectividad y captura acelerada de leads.
-                        </p>
-                    </div>
-                    <div class="pt-8">
-                        <a href="#planes" onclick="selectServiceInModal('Landing Pages que convierten')" class="text-xs font-bold text-cyanNeon hover:text-white flex items-center gap-2 transition-colors">
-                            <span>ELEGIR ESTE SERVICIO</span>
-                            <i class="fa-solid fa-chevron-right text-[10px]"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Card 2 -->
-                <div class="glass-card p-8 rounded-3xl relative overflow-hidden group flex flex-col justify-between border-cyanNeon/40 shadow-lg shadow-cyanNeon/10">
-                    <div class="absolute top-4 right-4 bg-cyanNeon/20 border border-cyanNeon/50 text-cyanNeon text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                        POPULAR
-                    </div>
-                    <div class="space-y-4">
-                        <div class="w-14 h-14 rounded-2xl bg-cyanNeon/20 border border-cyanNeon/40 flex items-center justify-center text-cyanNeon text-2xl group-hover:scale-110 transition-transform">
-                            <i class="fa-solid fa-cart-shopping"></i>
-                        </div>
-                        <h3 class="text-xl font-bold text-white">TIENDAS ONLINE QUE VENDEN</h3>
-                        <p class="text-xs text-gray-400 leading-relaxed">
-                            E-commerce ágil, seguro y escalable. Pasarelas de pago integradas, carrito dinámico y panel de gestión para tus productos sin complicaciones.
-                        </p>
-                    </div>
-                    <div class="pt-8">
-                        <a href="#planes" onclick="selectServiceInModal('Tiendas Online que venden')" class="text-xs font-bold text-cyanNeon hover:text-white flex items-center gap-2 transition-colors">
-                            <span>ELEGIR ESTE SERVICIO</span>
-                            <i class="fa-solid fa-chevron-right text-[10px]"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Card 3 -->
-                <div class="glass-card p-8 rounded-3xl relative overflow-hidden group flex flex-col justify-between">
-                    <div class="space-y-4">
-                        <div class="w-14 h-14 rounded-2xl bg-indigo-500/20 border border-indigo-500/40 flex items-center justify-center text-indigo-400 text-2xl group-hover:scale-110 transition-transform">
-                            <i class="fa-solid fa-chart-line"></i>
-                        </div>
-                        <h3 class="text-xl font-bold text-white">E-COMMERCE QUE ESCALAN</h3>
-                        <p class="text-xs text-gray-400 leading-relaxed">
-                            Plataformas a medida preparadas para alto tráfico de ventas, integración de bases de datos, automatizaciones CRM y análisis predictivo.
-                        </p>
-                    </div>
-                    <div class="pt-8">
-                        <a href="#planes" onclick="selectServiceInModal('E-commerce que escalan')" class="text-xs font-bold text-cyanNeon hover:text-white flex items-center gap-2 transition-colors">
-                            <span>ELEGIR ESTE SERVICIO</span>
-                            <i class="fa-solid fa-chevron-right text-[10px]"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 7. SECCIÓN ¿POR QUÉ ELEGIRNOS? (BENEFICIOS) -->
-        <section id="beneficios" class="cinema-section glass-panel rounded-3xl p-8 md:p-12 relative overflow-hidden border border-purpleNeon/30">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div class="space-y-6">
-                    <span class="text-purpleGlow text-xs font-bold tracking-widest uppercase">VENTAJAS COMPETITIVAS</span>
-                    <h2 class="text-3xl md:text-4xl font-extrabold text-white">¿POR QUÉ NEXO-ART ES TU MEJOR SOCIO DIGITAL?</h2>
-                    <p class="text-gray-400 text-xs md:text-sm leading-relaxed">
-                        Combinamos diseño estético de vanguardia con arquitectura web sólida para garantizar rendimiento, seguridad e ingresos reales para tu marca.
-                    </p>
-
-                    <ul class="space-y-4 text-xs md:text-sm">
-                        <li class="flex items-center gap-3">
-                            <div class="w-6 h-6 rounded-full bg-cyanNeon/20 border border-cyanNeon/50 flex items-center justify-center text-cyanNeon text-xs shrink-0">
-                                <i class="fa-solid fa-check"></i>
-                            </div>
-                            <span class="text-gray-200">Entrega garantizada en tiempo récord (hasta 24 horas).</span>
-                        </li>
-                        <li class="flex items-center gap-3">
-                            <div class="w-6 h-6 rounded-full bg-cyanNeon/20 border border-cyanNeon/50 flex items-center justify-center text-cyanNeon text-xs shrink-0">
-                                <i class="fa-solid fa-check"></i>
-                            </div>
-                            <span class="text-gray-200">Asistencia automatizada e inteligente con Meta Business Agent.</span>
-                        </li>
-                        <li class="flex items-center gap-3">
-                            <div class="w-6 h-6 rounded-full bg-cyanNeon/20 border border-cyanNeon/50 flex items-center justify-center text-cyanNeon text-xs shrink-0">
-                                <i class="fa-solid fa-check"></i>
-                            </div>
-                            <span class="text-gray-200">Mantenimiento continuo y soporte técnico mensual post-entrega.</span>
-                        </li>
-                        <li class="flex items-center gap-3">
-                            <div class="w-6 h-6 rounded-full bg-cyanNeon/20 border border-cyanNeon/50 flex items-center justify-center text-cyanNeon text-xs shrink-0">
-                                <i class="fa-solid fa-check"></i>
-                            </div>
-                            <span class="text-gray-200">Optimización SEO técnica completa incluida de origen.</span>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Cita Testimonial & Social Proof -->
-                <div class="space-y-6">
-                    <div class="glass-card p-6 rounded-2xl relative">
-                        <i class="fa-solid fa-quote-left text-3xl text-purpleNeon/40 mb-3 block"></i>
-                        <p class="text-xs md:text-sm text-gray-300 italic mb-4">
-                            "NEXO-ART transformó por completo la imagen de nuestra empresa. La velocidad de carga y el diseño 3D interactivo duplicaron nuestras consultas de clientes en el primer mes."
-                        </p>
-                        <div class="flex items-center gap-4">
-                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-cyanNeon to-purpleNeon flex items-center justify-center text-white font-bold text-xs">
-                                CM
-                            </div>
-                            <div>
-                                <h5 class="text-xs font-bold text-white">Carlos Mendoza</h5>
-                                <p class="text-[10px] text-gray-400">CEO - TechLatam Solutions</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Métricas de Impacto -->
-                    <div class="grid grid-cols-3 gap-4 text-center">
-                        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
-                            <p class="text-xl md:text-2xl font-extrabold text-cyanNeon">+120</p>
-                            <p class="text-[10px] text-gray-400">PROYECTOS</p>
-                        </div>
-                        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
-                            <p class="text-xl md:text-2xl font-extrabold text-purpleGlow">5+</p>
-                            <p class="text-[10px] text-gray-400">AÑOS EXP.</p>
-                        </div>
-                        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
-                            <p class="text-xl md:text-2xl font-extrabold text-green-400">99.8%</p>
-                            <p class="text-[10px] text-gray-400">SATISFACCIÓN</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 5. CATÁLOGO DE PLANES Y PRECIOS (DATOS EXACTOS Y DINÁMICOS) -->
-        <section id="planes" class="cinema-section space-y-10">
-            <div class="text-center space-y-3">
-                <span class="text-cyanNeon text-xs font-bold tracking-widest uppercase">TARIFARIO DE INVERSIÓN</span>
-                <h2 class="text-3xl md:text-5xl font-extrabold text-white">PLANES Y PRECIOS <span class="text-cyanNeon">TRANSPARENTES</span></h2>
-                <p class="text-gray-400 text-xs md:text-sm max-w-xl mx-auto">Selecciona tu país para consultar las tarifas vigentes adaptadas a tu región.</p>
-
-                <!-- Selector Manual de Región/País -->
-                <div class="flex justify-center items-center gap-3 pt-4">
-                    <button id="btn-arg" onclick="switchRegion('ARG')" class="px-5 py-2 rounded-xl text-xs font-bold border transition-all flex items-center gap-2 bg-purpleNeon text-white border-purpleNeon shadow-lg shadow-purpleNeon/30">
-                        <span>🇦🇷 Argentina (ARS)</span>
-                    </button>
-                    <button id="btn-latam" onclick="switchRegion('LATAM')" class="px-5 py-2 rounded-xl text-xs font-bold border transition-all flex items-center gap-2 bg-slate-800 text-gray-400 border-slate-700 hover:text-white">
-                        <span>🌎 Resto LATAM (USD)</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Grilla de Tarjetas Dinámicas de Precios -->
-            <div id="pricing-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Se Inyectará por JS basado en la región seleccionada -->
-            </div>
-
-            <!-- Banner Métodos de Pago Aceptados -->
-            <div class="glass-panel p-6 rounded-2xl flex flex-wrap items-center justify-between gap-4 border border-slate-800">
-                <div class="flex items-center gap-3">
-                    <i class="fa-solid fa-shield-halved text-cyanNeon text-2xl"></i>
-                    <div>
-                        <h4 class="text-xs font-bold text-white">Métodos de Pago 100% Seguros</h4>
-                        <p class="text-[10px] text-gray-400">Transacciones cifradas con entrega garantizada.</p>
-                    </div>
-                </div>
-                <div class="flex flex-wrap items-center gap-4 text-xs text-gray-300 font-semibold">
-                    <span class="px-3 py-1 rounded-lg bg-slate-800 border border-slate-700"><i class="fa-solid fa-bolt text-blue-400 mr-1.5"></i>Mercado Pago</span>
-                    <span class="px-3 py-1 rounded-lg bg-slate-800 border border-slate-700"><i class="fa-solid fa-building-columns text-green-400 mr-1.5"></i>Transferencia Bancaria</span>
-                    <span class="px-3 py-1 rounded-lg bg-slate-800 border border-slate-700"><i class="fa-brands fa-paypal text-indigo-400 mr-1.5"></i>PayPal</span>
-                    <span class="px-3 py-1 rounded-lg bg-slate-800 border border-slate-700"><i class="fa-solid fa-globe text-cyan-400 mr-1.5"></i>Global66</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECCIÓN NOSOTROS / FOOTER -->
-        <section id="nosotros" class="cinema-section text-center space-y-6 pt-12 border-t border-slate-800/80">
-            <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-purpleNeon to-cyanNeon flex items-center justify-center text-white font-extrabold text-2xl mx-auto shadow-xl">
-                N
-            </div>
-            <h3 class="text-2xl font-bold text-white">NEXO-ART DIGITAL AGENCY</h3>
-            <p class="text-gray-400 text-xs max-w-lg mx-auto leading-relaxed">
-                Especialistas en desarrollo web interactivo de alto nivel, optimización de conversión y soluciones para marcas que buscan destacar sin límites.
+            <h2 class="text-xl font-extrabold text-white">¿QUÉ DESEAS CONSTRUIR?</h2>
+            <p class="text-xs text-gray-300">
+                Landing pages de alta conversión, tiendas virtuales e-commerce y desarrollo custom.
             </p>
-            
-            <div class="flex justify-center gap-6 text-gray-400 text-lg pt-2">
-                <a href="#" class="hover:text-cyanNeon transition-colors"><i class="fa-brands fa-instagram"></i></a>
-                <a href="#" class="hover:text-cyanNeon transition-colors"><i class="fa-brands fa-linkedin"></i></a>
-                <a href="#" class="hover:text-cyanNeon transition-colors"><i class="fa-brands fa-whatsapp"></i></a>
+            <button onclick="openModalData('SERVICES_CATALOG')" class="w-full btn-pulse-neon py-3 rounded-xl text-xs font-bold text-white tracking-wider uppercase flex items-center justify-center gap-2">
+                <i class="fa-solid fa-cubes text-sm"></i>
+                <span>DESPLEGAR SERVICIOS</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- NODE 3: PLANES Y PRECIOS (55% - 78% Scroll) -->
+    <div id="node-pricing" class="interactive-node bottom-20 left-1/2 -translate-x-1/2 max-w-lg w-[90%]">
+        <div class="glass-card p-6 rounded-3xl text-center space-y-4 border-purpleNeon/60 shadow-2xl">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purpleNeon/20 text-purpleGlow text-[10px] font-bold uppercase">
+                <i class="fa-solid fa-tag"></i> TARIFARIO REGIONAL
             </div>
-
-            <p class="text-[10px] text-gray-500 pt-8">
-                &copy; 2026 NEXO-ART. Todos los derechos reservados.
+            <h2 class="text-2xl font-extrabold text-white">PLANES & PRECIOS VIGENTES</h2>
+            <p class="text-xs text-gray-300">
+                Consulta los costos de inversión adaptados a tu moneda local con entrega en 24hs.
             </p>
-        </section>
+            <div class="flex flex-wrap justify-center gap-3 pt-2">
+                <button onclick="openModalData('PRICING_TABLE')" class="btn-pulse-neon px-8 py-3 rounded-xl text-xs font-bold text-white tracking-wider uppercase flex items-center gap-2">
+                    <i class="fa-solid fa-rocket"></i>
+                    <span>VER TARIFAS Y CONTRATAR</span>
+                </button>
+            </div>
+        </div>
+    </div>
 
-    </main>
+    <!-- NODE 4: TESTIMONIOS Y CONTACTO (85% - 100% Scroll) -->
+    <div id="node-contact" class="interactive-node bottom-16 right-6 md:right-16 max-w-sm">
+        <div class="glass-card p-6 rounded-3xl space-y-4 border-green-500/40">
+            <div class="flex items-center gap-2 text-green-400 text-xs font-bold uppercase">
+                <i class="fa-solid fa-shield-check"></i>
+                <span>GARANTÍA & SOPORTE</span>
+            </div>
+            <h3 class="text-lg font-bold text-white">¿LISTO PARA COMENZAR?</h3>
+            <p class="text-xs text-gray-300">
+                Habla directamente con nuestro Meta Business Agent para cotizar tu proyecto en minutos.
+            </p>
+            <button onclick="openLeadModal('CONSULTA DIRECTA', 'Cotización Personalizada')" class="w-full bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 py-3 rounded-xl text-xs font-bold text-white tracking-wider uppercase flex items-center justify-center gap-2 shadow-lg shadow-emerald-900/40 transition-all">
+                <i class="fa-brands fa-whatsapp text-base"></i>
+                <span>INICIAR CHAT DIRECTO</span>
+            </button>
+        </div>
+    </div>
 
-    <!-- 6. MODAL GLASSMORPHISM DE CAPTURA DE LEADS (META BUSINESS AGENT) -->
-    <div id="lead-modal" class="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/80 backdrop-blur-md hidden transition-opacity duration-300">
-        <div class="glass-panel max-w-lg w-full rounded-3xl p-6 md:p-8 border border-purpleNeon/40 relative shadow-2xl animate-in fade-in zoom-in duration-200">
-            <!-- Botón Cerrar -->
-            <button onclick="closeModal()" class="absolute top-5 right-5 text-gray-400 hover:text-white text-lg">
+    <!-- INDICADOR DE SCROLL ANIMADO -->
+    <div class="scroll-indicator flex flex-col items-center gap-2 text-gray-400 opacity-80">
+        <span class="text-[10px] font-mono tracking-widest uppercase text-cyanNeon">DESPLAZA PARA NAVEGAR EL VIDEO</span>
+        <div class="w-5 h-8 border-2 border-gray-500 rounded-full flex justify-center p-1">
+            <div class="w-1 h-2 bg-cyanNeon rounded-full animate-bounce"></div>
+        </div>
+    </div>
+
+    <!-- 5. OVERLAYS DE INFORMACIÓN DINÁMICOS (AL PRESIONAR ACCIÓN) -->
+
+    <!-- MODAL GENERAL DE CONTENIDO (HERO / SERVICIOS / PLANES) -->
+    <div id="info-modal" class="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/80 backdrop-blur-xl hidden transition-all duration-300">
+        <div class="glass-panel max-w-3xl w-full rounded-3xl p-6 md:p-8 border border-purpleNeon/40 relative shadow-2xl max-h-[90vh] overflow-y-auto">
+            <button onclick="closeInfoModal()" class="absolute top-5 right-5 text-gray-400 hover:text-white text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div id="modal-dynamic-content">
+                <!-- Inyectado JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE CAPTURA DE LEADS (META BUSINESS AGENT) -->
+    <div id="lead-modal" class="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/80 backdrop-blur-xl hidden transition-all duration-300">
+        <div class="glass-panel max-w-lg w-full rounded-3xl p-6 md:p-8 border border-cyanNeon/40 relative shadow-2xl">
+            <button onclick="closeLeadModal()" class="absolute top-5 right-5 text-gray-400 hover:text-white text-xl">
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
-            <!-- Encabezado Modal -->
             <div class="mb-6 space-y-2">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purpleNeon/20 border border-purpleNeon/40 text-purpleGlow text-[10px] font-bold uppercase">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyanNeon/20 border border-cyanNeon/40 text-cyanNeon text-[10px] font-bold uppercase">
                     <i class="fa-solid fa-robot"></i>
                     <span>META BUSINESS AGENT</span>
                 </div>
@@ -573,7 +324,6 @@
                 <p id="modal-plan-price" class="text-sm font-semibold text-cyanNeon"></p>
             </div>
 
-            <!-- Formulario de Captura de Leads -->
             <form id="lead-form" onsubmit="handleLeadSubmit(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs font-semibold text-gray-300 mb-1">NOMBRE Y APELLIDO *</label>
@@ -593,16 +343,14 @@
                         class="w-full bg-slate-900/90 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-cyanNeon transition-colors resize-none"></textarea>
                 </div>
 
-                <!-- Notificación Informativa del Sistema -->
-                <div class="p-3.5 rounded-xl bg-purple-950/40 border border-purpleNeon/30 text-[10px] text-gray-300 flex items-start gap-3">
+                <div class="p-3 rounded-xl bg-purple-950/40 border border-purpleNeon/30 text-[10px] text-gray-300 flex items-start gap-3">
                     <i class="fa-solid fa-circle-info text-cyanNeon text-sm shrink-0 mt-0.5"></i>
                     <p class="leading-relaxed">
-                        <strong class="text-white">META BUSINESS AGENT ACTIVADO:</strong> Al presionar enviar, serás redirigido a WhatsApp para continuar el proceso de venta con nuestro agente inteligente.
+                        <strong class="text-white">META BUSINESS AGENT:</strong> Serás redirigido a WhatsApp con tus datos precargados para iniciar el flujo automatizado de ventas.
                     </p>
                 </div>
 
-                <!-- Botón de Envío Redirección WhatsApp -->
-                <button type="submit" class="w-full btn-neon py-3.5 rounded-xl text-xs font-bold text-white tracking-wider uppercase flex items-center justify-center gap-2">
+                <button type="submit" class="w-full btn-pulse-neon py-3.5 rounded-xl text-xs font-bold text-white tracking-wider uppercase flex items-center justify-center gap-2">
                     <i class="fa-brands fa-whatsapp text-lg"></i>
                     <span>CONTINUAR EN WHATSAPP</span>
                 </button>
@@ -610,9 +358,9 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
+    <!-- JAVASCRIPT ENGINE -->
     <script>
-        // 5. BASE DE DATOS EXACTA DE PLANES Y PRECIOS
+        // DATOS EXACTOS REQUERIDOS
         const PRICING_DATA = {
             ARG: {
                 flag: '🇦🇷',
@@ -624,36 +372,19 @@
                         name: 'PLAN BÁSICO',
                         price: '98.000',
                         badge: null,
-                        features: [
-                            'Landing 100% estática',
-                            'Diseño premium responsive',
-                            'Formulario de captura de leads',
-                            'Entrega en 24hs'
-                        ]
+                        features: ['Landing 100% estática', 'Diseño premium responsive', 'Formulario de captura de leads', 'Entrega en 24hs']
                     },
                     {
                         name: 'PLAN AVANZADO',
                         price: '160.000',
                         badge: 'MÁS VENDIDO',
-                        features: [
-                            'Todo lo del Básico',
-                            'Animaciones premium',
-                            'CRM automático',
-                            'Mantenimiento mensual ($30 USD/mes)',
-                            'Entrega en 24hs'
-                        ]
+                        features: ['Todo lo del Básico', 'Animaciones premium', 'CRM automático', 'Mantenimiento mensual ($30 USD/mes)', 'Entrega en 24hs']
                     },
                     {
                         name: 'PLAN PREMIUM',
                         price: '430.000',
                         badge: null,
-                        features: [
-                            'Todo lo del Avanzado',
-                            'Web completa full custom - E-commerce - Tienda virtual',
-                            'SEO técnico avanzado',
-                            'Mantenimiento mensual ($40 USD/mes)',
-                            'Entrega en 24hs'
-                        ]
+                        features: ['Todo lo del Avanzado', 'Web completa full custom - E-commerce', 'SEO técnico avanzado', 'Mantenimiento mensual ($40 USD/mes)', 'Entrega en 24hs']
                     }
                 ]
             },
@@ -667,42 +398,24 @@
                         name: 'PLAN BÁSICO',
                         price: '90',
                         badge: null,
-                        features: [
-                            'Landing 100% estática',
-                            'Diseño premium responsive',
-                            'Formulario de captura de leads',
-                            'Entrega en 24hs'
-                        ]
+                        features: ['Landing 100% estática', 'Diseño premium responsive', 'Formulario de captura de leads', 'Entrega en 24hs']
                     },
                     {
                         name: 'PLAN AVANZADO',
                         price: '160',
                         badge: 'MÁS VENDIDO',
-                        features: [
-                            'Todo lo del Básico',
-                            'Animaciones premium',
-                            'CRM automático',
-                            'Mantenimiento mensual ($30 USD/mes)',
-                            'Entrega en 24hs'
-                        ]
+                        features: ['Todo lo del Básico', 'Animaciones premium', 'CRM automático', 'Mantenimiento mensual ($30 USD/mes)', 'Entrega en 24hs']
                     },
                     {
                         name: 'PLAN PREMIUM',
                         price: '290',
                         badge: null,
-                        features: [
-                            'Todo lo del Avanzado',
-                            'Web completa full custom - E-commerce - Tienda virtual',
-                            'SEO técnico avanzado',
-                            'Mantenimiento mensual ($40 USD/mes)',
-                            'Entrega en 24hs'
-                        ]
+                        features: ['Todo lo del Avanzado', 'Web completa full custom - E-commerce', 'SEO técnico avanzado', 'Mantenimiento mensual ($40 USD/mes)', 'Entrega en 24hs']
                     }
                 ]
             }
         };
 
-        // LISTA DE PAÍSES LATAM PARA AUTOCOMPLETE
         const COUNTRIES_LATAM = [
             { name: 'Argentina', code: 'ARG' },
             { name: 'Uruguay', code: 'LATAM' },
@@ -712,93 +425,68 @@
             { name: 'Perú', code: 'LATAM' },
             { name: 'Paraguay', code: 'LATAM' },
             { name: 'Ecuador', code: 'LATAM' },
-            { name: 'Bolivia', code: 'LATAM' },
-            { name: 'Costa Rica', code: 'LATAM' },
-            { name: 'Panamá', code: 'LATAM' },
-            { name: 'República Dominicana', code: 'LATAM' }
+            { name: 'Bolivia', code: 'LATAM' }
         ];
 
         let currentRegion = 'ARG';
         let selectedPlanForModal = null;
+        let videoElement = null;
 
-        // Cargar Inicialización
         document.addEventListener('DOMContentLoaded', () => {
-            renderPricing();
+            videoElement = document.getElementById('scroll-video');
+            initVideoScrollEngine();
             initSearchEngine();
-            initCinemaScroll();
-            initVideoScrollSync();
         });
 
-        // RENDERIZAR TABLA DE PRECIOS
-        function renderPricing() {
-            const data = PRICING_DATA[currentRegion];
-            const grid = document.getElementById('pricing-grid');
-            grid.innerHTML = '';
+        // MOTOR DE VIDEO CONTROLADO POR SCROLL WEB (MARCHA Y FRENO DE VIDEO)
+        function initVideoScrollEngine() {
+            window.addEventListener('scroll', () => {
+                const scrollTrack = document.getElementById('scroll-track');
+                const totalHeight = scrollTrack.clientHeight - window.innerHeight;
+                const currentScroll = window.scrollY;
+                const progress = Math.min(Math.max(currentScroll / totalHeight, 0), 1);
 
-            // Actualizar Badge del Header
-            document.getElementById('badge-flag').textContent = data.flag;
-            document.getElementById('badge-text').textContent = data.currencyName;
+                // Controlar tiempo del video según avance
+                if (videoElement && videoElement.duration) {
+                    videoElement.currentTime = progress * videoElement.duration;
+                }
 
-            data.plans.forEach(plan => {
-                const isPopular = plan.badge !== null;
-                const card = document.createElement('div');
-                card.className = `glass-card p-8 rounded-3xl relative flex flex-col justify-between ${
-                    isPopular ? 'border-purpleNeon shadow-xl shadow-purpleNeon/20 scale-105 z-10' : ''
-                }`;
-
-                card.innerHTML = `
-                    <div>
-                        ${isPopular ? `
-                            <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-purpleNeon to-cyanNeon text-white text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-widest shadow-lg">
-                                ${plan.badge}
-                            </div>
-                        ` : ''}
-                        
-                        <div class="mb-6">
-                            <h3 class="text-lg font-bold text-white mb-2">${plan.name}</h3>
-                            <div class="flex items-baseline gap-1">
-                                <span class="text-3xl md:text-4xl font-extrabold text-white">${data.symbol}${plan.price}</span>
-                                <span class="text-xs font-semibold text-gray-400">${data.suffix}</span>
-                            </div>
-                        </div>
-
-                        <ul class="space-y-3 mb-8 border-t border-slate-800/80 pt-6">
-                            ${plan.features.map(feat => `
-                                <li class="flex items-start gap-3 text-xs text-gray-300">
-                                    <i class="fa-solid fa-circle-check text-cyanNeon mt-0.5 text-sm shrink-0"></i>
-                                    <span>${feat}</span>
-                                </li>
-                            `).join('')}
-                        </ul>
-                    </div>
-
-                    <button onclick="openLeadModal('${plan.name}', '${data.symbol}${plan.price} ${data.suffix}')" 
-                        class="w-full ${isPopular ? 'btn-neon' : 'glass-panel hover:bg-slate-800'} py-3.5 rounded-xl text-xs font-bold text-white tracking-wider uppercase transition-all">
-                        ELEGIR PLAN
-                    </button>
-                `;
-                grid.appendChild(card);
+                // Lógica de visibilidad de los Botones de Acción (Hotspots) por secciones del video
+                toggleNodeVisibility('node-hero', progress >= 0 && progress < 0.20);
+                toggleNodeVisibility('node-services', progress >= 0.25 && progress < 0.50);
+                toggleNodeVisibility('node-pricing', progress >= 0.52 && progress < 0.80);
+                toggleNodeVisibility('node-contact', progress >= 0.82 && progress <= 1.0);
             });
         }
 
-        // SWAP DE REGIÓN MANUAL
-        function switchRegion(regionCode) {
-            currentRegion = regionCode;
-            const btnArg = document.getElementById('btn-arg');
-            const btnLatam = document.getElementById('btn-latam');
-
-            if (regionCode === 'ARG') {
-                btnArg.className = 'px-5 py-2 rounded-xl text-xs font-bold border transition-all flex items-center gap-2 bg-purpleNeon text-white border-purpleNeon shadow-lg shadow-purpleNeon/30';
-                btnLatam.className = 'px-5 py-2 rounded-xl text-xs font-bold border transition-all flex items-center gap-2 bg-slate-800 text-gray-400 border-slate-700 hover:text-white';
-            } else {
-                btnLatam.className = 'px-5 py-2 rounded-xl text-xs font-bold border transition-all flex items-center gap-2 bg-purpleNeon text-white border-purpleNeon shadow-lg shadow-purpleNeon/30';
-                btnArg.className = 'px-5 py-2 rounded-xl text-xs font-bold border transition-all flex items-center gap-2 bg-slate-800 text-gray-400 border-slate-700 hover:text-white';
+        function toggleNodeVisibility(nodeId, isVisible) {
+            const node = document.getElementById(nodeId);
+            if (node) {
+                if (isVisible) {
+                    node.classList.add('node-active');
+                } else {
+                    node.classList.remove('node-active');
+                }
             }
-
-            renderPricing();
         }
 
-        // 4. LÓGICA DEL BUSCADOR DE PAÍSES LATAM
+        function scrollToProgress(fraction) {
+            const scrollTrack = document.getElementById('scroll-track');
+            const totalHeight = scrollTrack.clientHeight - window.innerHeight;
+            window.scrollTo({
+                top: totalHeight * fraction,
+                behavior: 'smooth'
+            });
+        }
+
+        // SWAP DE REGIÓN Y BÚSQUEDA
+        function switchRegion(code) {
+            currentRegion = code;
+            const data = PRICING_DATA[currentRegion];
+            document.getElementById('badge-flag').textContent = data.flag;
+            document.getElementById('badge-text').textContent = data.suffix;
+        }
+
         function initSearchEngine() {
             const input = document.getElementById('country-search');
             const dropdown = document.getElementById('search-dropdown');
@@ -807,11 +495,9 @@
 
             input.addEventListener('input', (e) => {
                 const query = e.target.value.toLowerCase().trim();
-                
                 if (query.length > 0) {
                     clearBtn.classList.remove('hidden');
                     const filtered = COUNTRIES_LATAM.filter(c => c.name.toLowerCase().includes(query));
-                    
                     if (filtered.length > 0) {
                         list.innerHTML = filtered.map(c => `
                             <li onclick="selectCountry('${c.name}', '${c.code}')" class="px-4 py-2 hover:bg-purpleNeon/20 cursor-pointer flex items-center justify-between text-gray-200">
@@ -819,9 +505,6 @@
                                 <span class="text-[10px] text-cyanNeon">${c.code === 'ARG' ? 'ARS' : 'USD'}</span>
                             </li>
                         `).join('');
-                        dropdown.classList.remove('hidden');
-                    } else {
-                        list.innerHTML = `<li class="px-4 py-2 text-gray-500 italic">No se encontraron resultados</li>`;
                         dropdown.classList.remove('hidden');
                     }
                 } else {
@@ -835,12 +518,6 @@
                 dropdown.classList.add('hidden');
                 clearBtn.classList.add('hidden');
             });
-
-            document.addEventListener('click', (e) => {
-                if (!input.contains(e.target) && !dropdown.contains(e.target)) {
-                    dropdown.classList.add('hidden');
-                }
-            });
         }
 
         function selectCountry(name, code) {
@@ -849,56 +526,93 @@
             switchRegion(code);
         }
 
-        // 3. MOTOR DE ANIMACIÓN: CINEMA SCROLL PERSPECTIVE
-        function initCinemaScroll() {
-            const sections = document.querySelectorAll('.cinema-section');
+        // DESPLIEGUE DE INFORMACIÓN DINÁMICA (OVERLAYS PRIMER PLANO)
+        function openModalData(type) {
+            const container = document.getElementById('modal-dynamic-content');
+            const data = PRICING_DATA[currentRegion];
 
-            const observerOptions = {
-                root: null,
-                rootMargin: '0px',
-                threshold: 0.15
-            };
+            if (type === 'HERO_INFO') {
+                container.innerHTML = `
+                    <div class="space-y-6">
+                        <h2 class="text-2xl font-extrabold text-white">NEXO-ART DIGITAL AGENCY</h2>
+                        <p class="text-xs text-gray-300 leading-relaxed">
+                            Diseñamos experiencias digitales ultra-modernas con rendimiento optimizado. Nuestro enfoque combina estética cibernética en 3D con arquitecturas diseñadas para maximizar tus ingresos comerciales.
+                        </p>
+                        <div class="grid grid-cols-3 gap-4 text-center">
+                            <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800">
+                                <p class="text-2xl font-extrabold text-cyanNeon">+120</p>
+                                <p class="text-[10px] text-gray-400">Proyectos Entregados</p>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800">
+                                <p class="text-2xl font-extrabold text-purpleGlow">24hs</p>
+                                <p class="text-[10px] text-gray-400">Tiempo de Entrega</p>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800">
+                                <p class="text-2xl font-extrabold text-green-400">99.8%</p>
+                                <p class="text-[10px] text-gray-400">Satisfacción</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (type === 'SERVICES_CATALOG') {
+                container.innerHTML = `
+                    <div class="space-y-6">
+                        <h2 class="text-2xl font-extrabold text-white">NUESTROS SERVICIOS</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="glass-card p-5 rounded-2xl space-y-2">
+                                <i class="fa-solid fa-rocket text-purpleGlow text-2xl"></i>
+                                <h4 class="font-bold text-sm text-white">Landing Pages</h4>
+                                <p class="text-[11px] text-gray-400">100% enfocadas en conversión rápida y captura de clientes.</p>
+                            </div>
+                            <div class="glass-card p-5 rounded-2xl space-y-2 border-cyanNeon/50">
+                                <i class="fa-solid fa-cart-shopping text-cyanNeon text-2xl"></i>
+                                <h4 class="font-bold text-sm text-white">Tiendas Online</h4>
+                                <p class="text-[11px] text-gray-400">E-commerce dinámico, pasarelas de pago y gestión ágil.</p>
+                            </div>
+                            <div class="glass-card p-5 rounded-2xl space-y-2">
+                                <i class="fa-solid fa-chart-line text-indigo-400 text-2xl"></i>
+                                <h4 class="font-bold text-sm text-white">E-Commerce Escalable</h4>
+                                <p class="text-[11px] text-gray-400">Sistemas custom con CRM e integración de datos.</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (type === 'PRICING_TABLE') {
+                container.innerHTML = `
+                    <div class="space-y-6">
+                        <div class="flex items-center justify-between">
+                            <h2 class="text-2xl font-extrabold text-white">TARIFAS ${data.currencyName}</h2>
+                            <div class="flex gap-2">
+                                <button onclick="switchRegion('ARG'); openModalData('PRICING_TABLE');" class="px-3 py-1 rounded-lg text-xs ${currentRegion === 'ARG' ? 'bg-purpleNeon text-white' : 'bg-slate-800 text-gray-400'}">🇦🇷 ARS</button>
+                                <button onclick="switchRegion('LATAM'); openModalData('PRICING_TABLE');" class="px-3 py-1 rounded-lg text-xs ${currentRegion === 'LATAM' ? 'bg-purpleNeon text-white' : 'bg-slate-800 text-gray-400'}">🌎 USD</button>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            ${data.plans.map(p => `
+                                <div class="glass-card p-5 rounded-2xl flex flex-col justify-between space-y-4">
+                                    <div>
+                                        <h4 class="font-bold text-sm text-white">${p.name}</h4>
+                                        <p class="text-xl font-extrabold text-cyanNeon">${data.symbol}${p.price} <span class="text-xs text-gray-400 font-normal">${data.suffix}</span></p>
+                                        <ul class="mt-3 space-y-2 text-[11px] text-gray-300">
+                                            ${p.features.map(f => `<li><i class="fa-solid fa-check text-cyanNeon mr-1"></i> ${f}</li>`).join('')}
+                                        </ul>
+                                    </div>
+                                    <button onclick="closeInfoModal(); openLeadModal('${p.name}', '${data.symbol}${p.price} ${data.suffix}');" class="w-full btn-pulse-neon py-2 rounded-xl text-xs font-bold text-white">ELEGIR</button>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
 
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('cinema-active');
-                        entry.target.classList.remove('cinema-passed');
-                    } else {
-                        if (entry.boundingClientRect.top < 0) {
-                            entry.target.classList.add('cinema-passed');
-                        } else {
-                            entry.target.classList.remove('cinema-active');
-                        }
-                    }
-                });
-            }, observerOptions);
-
-            sections.forEach(sec => observer.observe(sec));
+            document.getElementById('info-modal').classList.remove('hidden');
         }
 
-        // SCROLL SYNC WITH BACKGROUND VIDEO CONTROL
-        function initVideoScrollSync() {
-            const video = document.getElementById('bg-video');
-            
-            // Asegurar que el video empiece reproducido si es soportado
-            video.play().catch(() => {
-                console.log('Autoplay suspendido por el navegador.');
-            });
-
-            window.addEventListener('scroll', () => {
-                const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-                const currentScroll = window.scrollY;
-                const scrollFraction = currentScroll / maxScroll;
-
-                if (video.duration) {
-                    // Control de tiempo de video relativo al scroll
-                    video.currentTime = scrollFraction * video.duration;
-                }
-            });
+        function closeInfoModal() {
+            document.getElementById('info-modal').classList.add('hidden');
         }
 
-        // 6. MODAL LEADS & INTEGRACIÓN DE WHATSAPP REDIRECTION
+        // CAPTURA DE LEADS Y REDIRECCIÓN A WHATSAPP
         function openLeadModal(planName, planPrice) {
             selectedPlanForModal = { name: planName, price: planPrice };
             document.getElementById('modal-plan-title').textContent = planName;
@@ -906,19 +620,13 @@
             document.getElementById('lead-modal').classList.remove('hidden');
         }
 
-        function closeModal() {
+        function closeLeadModal() {
             document.getElementById('lead-modal').classList.add('hidden');
             document.getElementById('lead-form').reset();
         }
 
-        function selectServiceInModal(serviceName) {
-            const regionData = PRICING_DATA[currentRegion];
-            openLeadModal(serviceName, `Consulta de Cotización (${regionData.suffix})`);
-        }
-
         function handleLeadSubmit(e) {
             e.preventDefault();
-
             const name = document.getElementById('lead-name').value.trim();
             const email = document.getElementById('lead-email').value.trim();
             const idea = document.getElementById('lead-idea').value.trim();
@@ -926,31 +634,27 @@
 
             const targetPhoneNumber = "543489686939";
 
-            // Compilar Mensaje Estructurado para el Bot Meta Business Agent
             const textMessage = 
 `🚀 *NEXO-ART // NUEVO LEAD SOLICITUD DE PROYECTO*
 
 📌 *DATOS DEL CLIENTE:*
 • Nombre: ${name}
 • Email: ${email}
-• Región: ${country}
+• Moneda / Región: ${country}
 
-💼 *PLAN SELECCIONADO:*
-• Servicio: ${selectedPlanForModal.name}
+💼 *SELECCIÓN:*
+• Servicio/Plan: ${selectedPlanForModal.name}
 • Tarifa: ${selectedPlanForModal.price}
 
-💡 *IDEA DEL PROYECTO:*
+💡 *PROYECTO:*
 "${idea}"
 
 --------------------------------------------------
 🤖 *SISTEMA:* META BUSINESS AGENT - Iniciar flujo de ventas automatizado para cierre.`;
 
             const encodedMessage = encodeURIComponent(textMessage);
-            const whatsappUrl = `https://wa.me/${targetPhoneNumber}?text=${encodedMessage}`;
-
-            // Redireccionar
-            window.open(whatsappUrl, '_blank');
-            closeModal();
+            window.open(`https://wa.me/${targetPhoneNumber}?text=${encodedMessage}`, '_blank');
+            closeLeadModal();
         }
     </script>
 </body>
