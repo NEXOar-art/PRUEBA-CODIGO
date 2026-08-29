@@ -6,8 +6,8 @@
 <title>FC RACING SKILL · Dashboard Intelligent Analytics</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Rajdhani:wght@500;600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
-<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
@@ -57,7 +57,6 @@ main{padding:18px 22px 60px;max-width:1560px;margin:auto;display:flex;flex-direc
 #analysisBar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 #analysisBar[hidden]{display:none}
 #viewBar{width:max-content;box-shadow:0 6px 18px rgba(0,0,0,.4)}
-/* KPIs limpios y centrados */
 #kpiGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
 .kpi{padding:18px 16px 16px;display:flex;flex-direction:column;gap:6px;align-items:center;text-align:center}
 .kpi::after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.09) 50%,transparent 60%);transform:translateX(-130%);transition:transform .7s ease;pointer-events:none}
@@ -66,7 +65,6 @@ main{padding:18px 22px 60px;max-width:1560px;margin:auto;display:flex;flex-direc
 .kpi .val{font-family:'Orbitron';font-size:1.4rem;font-weight:800;color:#fff;text-shadow:0 0 18px color-mix(in srgb,var(--primary) 45%,transparent);transition:text-shadow .3s}
 .kpi:hover .val{text-shadow:0 0 28px color-mix(in srgb,var(--primary) 80%,transparent)}
 .kpi .sub{font-size:.74rem;color:var(--accent)}
-/* Charts */
 #chartsGrid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
 .ch-card{grid-column:span 6;display:flex;flex-direction:column;min-height:320px}
 .ch-card.w7{grid-column:span 7}.ch-card.w5{grid-column:span 5}
@@ -80,10 +78,13 @@ main{padding:18px 22px 60px;max-width:1560px;margin:auto;display:flex;flex-direc
 .ch-card .ch-body canvas{transition:filter .3s}
 .ch-card:hover .ch-body canvas{filter:drop-shadow(0 0 14px color-mix(in srgb,var(--primary) 22%,transparent))}
 .ch-card:hover h3{color:#fff;text-shadow:0 0 12px color-mix(in srgb,var(--primary) 60%,transparent)}
-/* Geo + heat */
+/* ===== Mapa Argentina + heat ===== */
 #geoSection[hidden]{display:none}
 .geo-grid{display:grid;grid-template-columns:7fr 5fr;gap:14px}
-#mapDiv{height:340px;background:#0a0d12}
+#mapDiv{height:380px;background:#e8e4d8;border-radius:0 0 14px 14px}
+.arg-tip{background:#121820!important;color:var(--text)!important;border:1px solid var(--primary)!important;border-radius:6px!important;font-family:'Rajdhani';font-weight:700;font-size:.68rem;letter-spacing:.5px;box-shadow:0 4px 12px rgba(0,0,0,.4)!important}
+.arg-tip::before{border-top-color:var(--primary)!important}
+.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#121820;color:var(--text)}
 .heat-body{padding:14px 16px;display:flex;flex-direction:column;gap:10px}
 #heatGrid{display:grid;gap:3px}
 .hcell{border-radius:4px;min-height:26px;cursor:pointer;transition:.15s}
@@ -92,7 +93,6 @@ main{padding:18px 22px 60px;max-width:1560px;margin:auto;display:flex;flex-direc
 .hcol{font-size:.6rem;color:var(--muted);text-align:center}
 .heat-legend{display:flex;align-items:center;gap:8px;font-size:.65rem;color:var(--muted)}
 .heat-legend i{flex:0 0 120px;height:8px;border-radius:4px;background:linear-gradient(90deg,rgba(225,6,0,.05),var(--primary))}
-.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#121820;color:var(--text)}
 /* Filtros */
 #filterBar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding:14px 18px}
 .sel,.inp{background:#0d1219;border:1px solid #263140;color:var(--text);border-radius:8px;padding:8px 10px;font-family:'Rajdhani';font-size:.85rem;outline:none;transition:.2s}
@@ -100,7 +100,6 @@ main{padding:18px 22px 60px;max-width:1560px;margin:auto;display:flex;flex-direc
 #searchInp{min-width:200px;flex:1;max-width:340px}
 .chip{display:inline-flex;align-items:center;gap:8px;background:color-mix(in srgb,var(--primary) 16%,#12161d);border:1px solid color-mix(in srgb,var(--primary) 55%,transparent);border-radius:999px;padding:5px 12px;font-size:.75rem}
 .chip button{background:none;border:none;color:#ffb4b0;cursor:pointer;font-size:.85rem}
-/* Comparativo + temporal */
 #compareSection,#timeSection{display:flex;flex-direction:column;gap:16px}
 #compareSection[hidden],#timeSection[hidden]{display:none}
 .cmp-body{padding:16px 18px;display:flex;flex-direction:column;gap:14px}
@@ -115,7 +114,6 @@ main{padding:18px 22px 60px;max-width:1560px;margin:auto;display:flex;flex-direc
 .delta.up,td.up{color:var(--ok)}.delta.down,td.down{color:var(--bad)}.delta.flat,td.flat{color:var(--muted)}
 .cmp-charts{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .cmp-ch{height:260px;position:relative;border:1px solid #1b2430;border-radius:10px;padding:8px;background:#0c1016}
-/* Tabla + derecha */
 #bottomGrid{display:grid;grid-template-columns:8fr 4fr;gap:14px}
 .right-col{display:flex;flex-direction:column;gap:14px;min-width:0}
 .tbl-wrap{overflow:auto;max-height:520px}
@@ -162,13 +160,13 @@ tbody tr.sel{background:color-mix(in srgb,var(--primary) 16%,transparent)}
 footer{padding:18px;text-align:center;color:var(--muted);font-size:.72rem;letter-spacing:2px;text-transform:uppercase}
 .flash{animation:flash .6s}@keyframes flash{0%{box-shadow:0 0 0 3px color-mix(in srgb,var(--primary) 70%,transparent)}100%{box-shadow:none}}
 @media(max-width:1100px){.ch-card,.ch-card.w7,.ch-card.w5{grid-column:span 12}#bottomGrid{grid-template-columns:1fr}.geo-grid{grid-template-columns:1fr}.cmp-charts{grid-template-columns:1fr}}
-@media(max-width:900px){#mapDiv{height:280px}}
+@media(max-width:900px){#mapDiv{height:300px}}
 @media(max-width:640px){
  header{padding:10px 12px}main{padding:14px 12px 50px}.brand h1{font-size:1.05rem}.brand p{font-size:.6rem}
  .btn{padding:8px 12px;font-size:.7rem}
  #kpiGrid{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
  .kpi .val{font-size:1.05rem}
- .cmp-ch{height:220px}#mapDiv{height:240px}
+ .cmp-ch{height:220px}#mapDiv{height:250px}
  thead th,tbody td{padding:6px 8px}tbody td{max-width:140px}
  #viewBar{width:100%}#viewBar .seg-btn{flex:1}
  .conn-row .inp{min-width:100%}
@@ -231,7 +229,7 @@ footer{padding:18px;text-align:center;color:var(--muted);font-size:.72rem;letter
         <span id="badgeB" class="src-badge" hidden></span>
         <button class="btn" id="btnRemoveB" hidden><span>✖ Quitar B</span></button>
       </div>
-      <div class="note">🗄️ Carga tu dataset <b>Principal</b> y uno <b>Secundario</b> (p.ej. Repuestos y R.R.H.H.): cada uno se analiza por separado con la barra de vistas y el botón <b>🆚 Comparativo</b> los enfrenta en un reporte profesional. 🔒 Procesamiento 100% local.</div>
+      <div class="note">🗄️ Carga tu dataset <b>Principal</b> y uno <b>Secundario</b>: cada uno se analiza por separado con la barra de vistas y el botón <b>🆚 Comparativo</b> los enfrenta en un reporte profesional. 🗺️ El mapa marca las ciudades de <b>Argentina</b> y reacciona a todos los filtros. 🔒 Procesamiento 100% local.</div>
     </div>
   </section>
 
@@ -256,7 +254,6 @@ footer{padding:18px;text-align:center;color:var(--muted);font-size:.72rem;letter
 
   <section id="chartsGrid"></section>
 
-  <!-- ===== Análisis temporal de ventas ===== -->
   <section id="timeSection" hidden>
     <div class="card">
       <div class="card-h"><h3>📅 Análisis temporal de ventas</h3><span class="spacer"></span>
@@ -281,7 +278,7 @@ footer{padding:18px;text-align:center;color:var(--muted);font-size:.72rem;letter
   <section id="geoSection" hidden>
     <div class="geo-grid">
       <div class="card" id="mapCard">
-        <div class="card-h"><h3>🗺️ Mapa interactivo</h3><span class="spacer"></span><span id="mapInfo" class="src-badge"></span></div>
+        <div class="card-h"><h3>🗺️ Mapa interactivo · Argentina</h3><span class="spacer"></span><span id="mapInfo" class="src-badge"></span></div>
         <div id="mapDiv"></div>
       </div>
       <div class="card" id="heatCard">
@@ -435,7 +432,7 @@ const TypeDetector={
     return null;}
 };
 
-/* ================= Detección estados / ventas / geo ================= */
+/* ================= Detección estados / ventas ================= */
 const isCompleted=v=>/complet|entregad|pagad|aprobad|finalizad|success|\bok\b|cerrado|closed/i.test(String(v));
 const isCancelled=v=>/cancel|anulad/i.test(String(v));
 const isReturned=v=>/devuelt|return|reembols/i.test(String(v));
@@ -456,7 +453,36 @@ const findSoldQty=cols=>cols.find(c=>c.type==='number'&&/cant(idad)?|\bqty\b|\bu
 function isoWeek(d){const t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));const day=(t.getUTCDay()+6)%7;t.setUTCDate(t.getUTCDate()-day+3);
   const firstThu=new Date(Date.UTC(t.getUTCFullYear(),0,4));const fday=(firstThu.getUTCDay()+6)%7;firstThu.setUTCDate(firstThu.getUTCDate()-fday+3);
   return 1+Math.round((t-firstThu)/(7*864e5));}
-const GEO={'mexico':[23.6,-102.5],'ciudad de mexico':[19.43,-99.13],'cdmx':[19.43,-99.13],'guadalajara':[20.66,-103.35],'monterrey':[25.69,-100.32],'puebla':[19.04,-98.2],'tijuana':[32.51,-117.03],'cancun':[21.16,-86.85],'queretaro':[20.59,-100.39],'merida':[20.97,-89.59],'leon':[21.12,-101.68],'toluca':[19.29,-99.66],'espana':[40.46,-3.74],'madrid':[40.42,-3.7],'barcelona':[41.39,2.17],'valencia':[39.47,-0.38],'sevilla':[37.39,-5.98],'bilbao':[43.26,-2.93],'zaragoza':[41.66,-0.88],'colombia':[4.57,-74.29],'bogota':[4.71,-74.07],'medellin':[6.24,-75.58],'cali':[3.45,-76.53],'barranquilla':[10.96,-74.8],'argentina':[-38.42,-63.62],'buenos aires':[-34.6,-58.38],'cordoba':[-31.42,-64.18],'rosario':[-32.95,-60.65],'chile':[-35.68,-71.54],'santiago':[-33.45,-70.66],'valparaiso':[-33.05,-71.62],'peru':[-9.19,-75.02],'lima':[-12.05,-77.04],'arequipa':[-16.41,-71.54],'ecuador':[-1.83,-78.18],'quito':[-0.18,-78.47],'guayaquil':[-2.17,-79.92],'venezuela':[6.42,-66.59],'caracas':[10.48,-66.9],'bolivia':[-16.29,-63.59],'la paz':[-16.5,-68.15],'uruguay':[-32.55,-55.76],'montevideo':[-34.9,-56.16],'paraguay':[-23.44,-58.44],'asuncion':[-25.26,-57.57],'guatemala':[15.78,-90.23],'honduras':[15.2,-86.24],'tegucigalpa':[14.07,-87.19],'el salvador':[13.79,-88.9],'san salvador':[13.69,-89.19],'nicaragua':[12.87,-85.2],'managua':[12.13,-86.25],'costa rica':[9.75,-83.75],'san jose':[9.93,-84.08],'panama':[8.54,-80.79],'republica dominicana':[18.74,-70.16],'santo domingo':[18.49,-69.94],'estados unidos':[37.09,-95.71],'usa':[37.09,-95.71],'nueva york':[40.71,-74.0],'new york':[40.71,-74.0],'los angeles':[34.05,-118.24],'miami':[25.76,-80.19],'houston':[29.76,-95.36],'chicago':[41.88,-87.63],'san antonio':[29.42,-98.49],'brasil':[-14.24,-51.93],'sao paulo':[-23.55,-46.63],'rio de janeiro':[-22.91,-43.17]};
+
+/* ===== Geocoder embebido: Argentina (prioridad) + mundo ===== */
+const GEO={
+ 'argentina':[-34.61,-64.18],'provincia de buenos aires':[-36.7,-60.5],'buenos aires':[-34.60,-58.38],'caba':[-34.60,-58.38],
+ 'cordoba':[-31.42,-64.18],'rosario':[-32.95,-60.65],'santa fe':[-31.63,-60.70],'mendoza':[-32.89,-68.85],'la plata':[-34.92,-57.95],
+ 'mar del plata':[-38.00,-57.55],'salta':[-24.79,-65.41],'san juan':[-31.54,-68.54],'san luis':[-33.30,-66.34],'la rioja':[-29.41,-66.86],
+ 'catamarca':[-28.46,-65.78],'santiago del estero':[-27.79,-64.26],'san miguel de tucuman':[-26.82,-65.22],'tucuman':[-26.82,-65.22],
+ 'neuquen':[-38.95,-68.06],'bariloche':[-41.13,-71.31],'san carlos de bariloche':[-41.13,-71.31],'posadas':[-27.37,-55.90],'misiones':[-27.37,-55.90],
+ 'resistencia':[-27.45,-58.99],'chaco':[-27.45,-58.99],'corrientes':[-27.48,-58.83],'parana':[-31.73,-60.53],'entre rios':[-31.73,-60.53],
+ 'bahia blanca':[-38.72,-62.27],'comodoro rivadavia':[-45.86,-67.50],'rio gallegos':[-51.62,-69.22],'ushuaia':[-54.80,-68.30],
+ 'tierra del fuego':[-54.80,-68.30],'formosa':[-26.18,-58.18],'jujuy':[-24.19,-65.30],'san salvador de jujuy':[-24.19,-65.30],
+ 'viedma':[-40.81,-62.99],'rio negro':[-40.81,-62.99],'rawson':[-43.30,-65.10],'trelew':[-43.25,-65.31],'chubut':[-43.30,-65.10],
+ 'la pampa':[-36.62,-64.29],'santa rosa':[-36.62,-64.29],'quilmes':[-34.72,-58.25],'avellaneda':[-34.66,-58.36],'lomas de zamora':[-34.76,-58.40],
+ 'lanus':[-34.70,-58.39],'moron':[-34.65,-58.62],'san isidro':[-34.47,-58.51],'tigre':[-34.43,-58.58],'pilar':[-34.46,-58.91],
+ 'vicente lopez':[-34.53,-58.48],'junin':[-34.58,-60.94],'tandil':[-37.32,-59.14],'olavarria':[-36.89,-60.32],'pergamino':[-33.89,-60.57],
+ 'rio cuarto':[-33.13,-64.35],'villa maria':[-32.41,-63.24],'villa carlos paz':[-31.42,-64.50],'concordia':[-31.39,-58.02],
+ 'gualeguaychu':[-33.01,-58.52],'rafaela':[-31.25,-61.49],'venado tuerto':[-33.75,-61.97],'san nicolas':[-33.33,-60.22],
+ 'zarate':[-34.10,-59.03],'campana':[-34.17,-58.96],'puerto madryn':[-42.77,-65.04],'san rafael':[-34.62,-68.33],
+ 'mexico':[23.6,-102.5],'ciudad de mexico':[19.43,-99.13],'cdmx':[19.43,-99.13],'guadalajara':[20.66,-103.35],'monterrey':[25.69,-100.32],
+ 'espana':[40.46,-3.74],'madrid':[40.42,-3.70],'barcelona':[41.39,2.17],'valencia':[39.47,-0.38],'sevilla':[37.39,-5.98],
+ 'colombia':[4.57,-74.29],'bogota':[4.71,-74.07],'medellin':[6.24,-75.58],'cali':[3.45,-76.53],
+ 'chile':[-35.68,-71.54],'santiago':[-33.45,-70.66],'peru':[-9.19,-75.02],'lima':[-12.05,-77.04],
+ 'uruguay':[-32.55,-55.76],'montevideo':[-34.90,-56.16],'paraguay':[-23.44,-58.44],'asuncion':[-25.26,-57.57],
+ 'bolivia':[-16.29,-63.59],'la paz':[-16.50,-68.15],'venezuela':[6.42,-66.59],'caracas':[10.48,-66.90],
+ 'ecuador':[-1.83,-78.18],'quito':[-0.18,-78.47],'guayaquil':[-2.17,-79.92],'brasil':[-14.24,-51.93],'sao paulo':[-23.55,-46.63],
+ 'estados unidos':[37.09,-95.71],'usa':[37.09,-95.71],'nueva york':[40.71,-74.0],'new york':[40.71,-74.0],'miami':[25.76,-80.19],'houston':[29.76,-95.36]
+};
+/* Contorno simplificado de Argentina (continental + Tierra del Fuego) */
+const ARG_MAIN=[[-21.8,-65.0],[-22.0,-62.5],[-23.9,-60.9],[-24.8,-58.4],[-25.6,-57.6],[-27.0,-57.6],[-27.5,-56.5],[-27.4,-55.6],[-26.7,-54.6],[-26.6,-53.8],[-27.2,-53.6],[-28.6,-54.5],[-30.0,-55.2],[-31.0,-56.0],[-32.0,-57.6],[-33.0,-58.1],[-34.5,-58.4],[-35.5,-57.3],[-36.5,-56.8],[-37.5,-57.0],[-38.0,-57.6],[-39.0,-61.5],[-40.5,-62.8],[-41.5,-63.8],[-42.5,-63.6],[-43.5,-65.0],[-44.5,-65.5],[-45.5,-66.5],[-46.5,-67.5],[-47.5,-66.0],[-48.5,-67.0],[-49.5,-67.5],[-50.5,-68.5],[-51.5,-69.0],[-52.5,-68.8],[-54.0,-68.5],[-52.0,-68.6],[-50.0,-69.0],[-48.0,-70.0],[-46.0,-71.0],[-44.0,-71.5],[-42.0,-71.8],[-40.0,-71.9],[-38.0,-71.5],[-36.0,-70.8],[-34.0,-70.0],[-32.0,-69.8],[-30.0,-69.7],[-28.0,-69.0],[-26.0,-68.5],[-24.0,-67.0],[-22.5,-66.0]];
+const ARG_TDF=[[-53.6,-68.5],[-54.5,-65.5],[-55.0,-66.5],[-54.5,-68.5]];
 
 /* ================= DataEngine ================= */
 function detectColumns(data){
@@ -497,7 +523,6 @@ function finishMeta(cols,rows){
 }
 function processDataset(data){
   const columns=detectColumns(data);const rows=normalize(data,columns);finishMeta(columns,rows);
-  // Campos derivados: fecha de egreso y días en stock
   const dateC=columns.find(c=>c.role==='date');
   const egC=columns.find(c=>c.type==='date'&&/egreso|salida|baja|entrega/i.test(c.name));
   if(dateC){for(const r of rows){const ing=r[dateC.key];const eg=egC?r[egC.key]:null;
@@ -522,7 +547,7 @@ function ingest(data,source){
     state.B=P;updateBBadge();
     if(state.view==='B')activateDS(P,true);else refresh();
     renderCompare();
-    Utils.toast(`🅱 Dataset Secundario cargado: <b>${Utils.fmtInt(P.rows.length)}</b> registros. Usa <b>🅱 Secundario</b> para analizarlo y <b>🆚 Comparativo</b> para enfrentarlos.`,'ok');
+    Utils.toast(`🅱 Dataset Secundario cargado: <b>${Utils.fmtInt(P.rows.length)}</b> registros.`,'ok');
     return;
   }
   state.A=P;state.view='A';syncViewButtons();
@@ -621,7 +646,7 @@ const DataSource={
       Electrónica:['ECU Race Pro','Dash Logger 5"','Sensor Lambda WB','Arnés Mil-Spec','Telemetría GPS 10Hz'],
       Escape:['Colector Inox EQ','Downpipe 3"','Válvula Cut-Off','Cat-Back Titanio','Punta Carbon 90mm']};
     const prov=['RaceParts MX','SpeedCorp EU','JDM Supply','TurboWorks'];
-    const cities=['CDMX','Guadalajara','Monterrey','Puebla','Tijuana','Cancún','Madrid','Barcelona','Bogotá','Buenos Aires','Santiago','Lima','Miami','Houston'];
+    const cities=['Buenos Aires','Córdoba','Rosario','Mendoza','La Plata','Mar del Plata','Salta','Neuquén','Bariloche','Posadas','San Miguel de Tucumán','Bahía Blanca'];
     const estados=['Completado','Completado','Completado','Pendiente','Cancelado','Devuelto'];
     const rows=[];const hoy=new Date();
     for(let i=0;i<160;i++){const cat=cats[R(0,5)];const d=new Date(hoy);d.setDate(d.getDate()-R(0,720));
@@ -638,7 +663,7 @@ const DataSource={
     return rows;}
 };
 
-/* ================= KPIEngine v4 (limpio + ventas por período) ================= */
+/* ================= KPIEngine ================= */
 function renderKPIs(rows){
   const n=rows.length,C=[];
   const lab=roleCol('label')||roleCol('product')||roleCol('code'),
@@ -655,7 +680,6 @@ function renderKPIs(rows){
     if(fact>0){
       push(99,'Facturación total',Utils.fmtCur(fact,saleCol.sym),statusCol?'Σ '+saleCol.name+' · “Completado”':'Σ '+saleCol.name);
       push(98,'Ticket promedio',Utils.fmtCur(fact/Math.max(1,comp.length),saleCol.sym),Utils.fmtInt(comp.length)+' pedidos completados');
-      // Ventas diarias / semanales / mensuales / anuales (promedio por período)
       if(date){
         const per=g=>{const s=new Set();comp.forEach(r=>{const d=r[date.key];if(d)s.add(TimeEngine.bucket(d,g));});return s.size;};
         const nd=per('day'),nw=per('week'),nm=per('month'),ny=per('year');
@@ -793,7 +817,7 @@ function chartClick(def,D,i){
   refresh();
 }
 
-/* ================= TimeEngine: ventas día/semana/mes/año ================= */
+/* ================= TimeEngine ================= */
 const TimeEngine={gran:'month',period:null,charts:{},
   bucket(d,g){
     if(g==='day')return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
@@ -848,7 +872,7 @@ const TimeEngine={gran:'month',period:null,charts:{},
     }
   }};
 
-/* ================= GeoEngine ================= */
+/* ================= GeoEngine: Mapa Argentina + ciudades filtradas ================= */
 function destroyMap(){if(state.leafletMap){state.leafletMap.remove();state.leafletMap=null;}}
 function buildGeoPoints(rows){
   const cols=state.columns,meas=pickMeasure();
@@ -858,30 +882,37 @@ function buildGeoPoints(rows){
     return rows.map(r=>{const la=valNum(r[latC.key]),lo=valNum(r[lngC.key]);
       if(la==null||lo==null||Math.abs(la)>90||Math.abs(lo)>180)return null;
       const lb=roleCol('label')||roleCol('product');
-      return{lat:la,lng:lo,label:lb?(r[lb.key]??''):'',w:meas?(valNum(r[meas.key])||1):1};}).filter(Boolean);}
+      return{lat:la,lng:lo,label:lb?(r[lb.key]??''):'',w:meas?(valNum(r[meas.key])||1):1,cnt:1};}).filter(Boolean);}
   const statusC=findStatusCol(cols);
   const geoC=cols.find(c=>c.type==='text'&&c!==statusC&&/ciudad|city|pa[ií]s|country|regi[oó]n|zona|sucursal|provincia|ubicaci|location|direcci/i.test(c.name));
   if(!geoC)return[];
   const agg=new Map();
   for(const r of rows){const k=r[geoC.key];if(!k)continue;
     const nk=Utils.norm(k);const co=GEO[nk]||GEO[nk.split(' ')[0]];if(!co)continue;
-    const e=agg.get(k)||{lat:co[0],lng:co[1],w:0,label:k};
-    e.w+=meas?(valNum(r[meas.key])||1):1;agg.set(k,e);}
+    const e=agg.get(k)||{lat:co[0],lng:co[1],w:0,cnt:0,label:k};
+    e.w+=meas?(valNum(r[meas.key])||1):1;e.cnt++;agg.set(k,e);}
   return [...agg.values()];
 }
 function renderMap(pts){
   if(!window.L){$('#mapDiv').innerHTML='<div class="note" style="padding:20px">Leaflet no cargó (sin conexión).</div>';return;}
   destroyMap();
   const primary=(getComputedStyle(document.documentElement).getPropertyValue('--primary')||'#e10600').trim();
+  // Mapa centrado en Argentina (como configuración base)
   const map=L.map('mapDiv',{scrollWheelZoom:false});state.leafletMap=map;
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap · CARTO',maxZoom:19}).addTo(map);
+  map.setView([-34.6037,-64.1888],4);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap contributors',maxZoom:19}).addTo(map);
+  // Contorno de Argentina resaltado con el color corporativo
+  L.polygon([ARG_MAIN,ARG_TDF],{color:primary,weight:1.5,dashArray:'5 4',fillColor:primary,fillOpacity:.06,interactive:false}).addTo(map);
   const maxW=Math.max(...pts.map(p=>p.w))||1;
   if(L.heatLayer&&pts.length>=3)L.heatLayer(pts.map(p=>[p.lat,p.lng,.2+.8*(p.w/maxW)]),{radius:28,blur:18,maxZoom:10,gradient:{0.2:'#1d4ed8',0.5:'#f59e0b',0.8:primary}}).addTo(map);
-  pts.forEach(p=>{L.circleMarker([p.lat,p.lng],{radius:5+9*Math.sqrt(p.w/maxW),color:primary,weight:1.5,fillColor:primary,fillOpacity:.45})
-    .addTo(map).bindPopup(`<b>${Utils.esc(p.label)}</b><br>${Utils.fmtNum(p.w)}`);});
-  map.fitBounds(L.latLngBounds(pts.map(p=>[p.lat,p.lng])),{padding:[30,30]});
+  pts.forEach(p=>{
+    const mk=L.circleMarker([p.lat,p.lng],{radius:6+9*Math.sqrt(p.w/maxW),color:primary,weight:2,fillColor:primary,fillOpacity:.5})
+      .addTo(map)
+      .bindPopup(`<b>${Utils.esc(p.label)}</b><br>${Utils.fmtNum(p.w)}${p.cnt?` · ${p.cnt} reg`:''}`);
+    mk.bindTooltip(Utils.esc(p.label),{permanent:pts.length<=10,direction:'top',className:'arg-tip',offset:[0,-6]});});
+  if(pts.length)map.fitBounds(L.latLngBounds(pts.map(p=>[p.lat,p.lng])),{padding:[28,28],maxZoom:11});
   setTimeout(()=>map.invalidateSize(),120);
-  $('#mapInfo').textContent=pts.length+' ubicaciones';
+  $('#mapInfo').textContent=pts.length+' ciudades marcadas · 🇦 Argentina';
 }
 function buildHeat(rows){
   const date=roleCol('date');if(!date)return null;
@@ -929,7 +960,7 @@ function renderGeo(){
   if(heat)renderHeat(heat);
 }
 
-/* ================= CompareEngine (botón Comparativo) ================= */
+/* ================= CompareEngine ================= */
 function renderCompare(){
   const sec=$('#compareSection');
   Object.values(state.cmpCharts||{}).forEach(c=>c.destroy());state.cmpCharts={};
@@ -1022,7 +1053,7 @@ const FilterEngine={
   }
 };
 
-/* ================= TableEngine (con Fecha egreso y Días en stock) ================= */
+/* ================= TableEngine ================= */
 const TableEngine={
   visCols(){
     const cols=state.columns.filter(c=>c.type!=='image');
@@ -1255,7 +1286,6 @@ document.addEventListener('DOMContentLoaded',()=>{
   window.addEventListener('dragleave',e=>{e.preventDefault();if(--depth<=0){$('#dropOverlay').classList.remove('on');$('#dropzone').classList.remove('drag');}});
   window.addEventListener('dragover',e=>e.preventDefault());
   window.addEventListener('drop',e=>{e.preventDefault();depth=0;$('#dropOverlay').classList.remove('on');$('#dropzone').classList.remove('drag');handleFile(e.dataTransfer.files?.[0]);});
-  // Análisis temporal: granularidad y período
   document.querySelectorAll('.gbtn').forEach(b=>b.addEventListener('click',()=>{
     TimeEngine.gran=b.dataset.g;TimeEngine.period=null;
     document.querySelectorAll('.gbtn').forEach(x=>x.classList.toggle('active',x===b));
@@ -1263,7 +1293,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   $('#periodSel').addEventListener('change',e=>{TimeEngine.period=e.target.value;TimeEngine.render();});
   if(!window.Chart)Utils.toast('⚠️ Chart.js no cargó (sin internet). KPIs, filtros y tabla seguirán funcionando.','err');
   if(!window.XLSX)Utils.toast('⚠️ SheetJS no cargó: XLSX deshabilitado, CSV sigue operativo.','err');
-  if(!window.L)Utils.toast('⚠️ Leaflet no cargó: el mapa interactivo estará deshabilitado sin conexión.','err');
+  if(!window.L)Utils.toast('⚠️ Leaflet no cargó: el mapa estará deshabilitado sin conexión.','err');
   $('#btnTheme').onclick=()=>$('#mTheme').classList.add('open');
   $('#btnCloseTheme').onclick=()=>$('#mTheme').classList.remove('open');
   $('#mTheme').addEventListener('click',e=>{if(e.target.id==='mTheme')e.target.classList.remove('open');});
@@ -1293,5 +1323,6 @@ document.addEventListener('DOMContentLoaded',()=>{
 </script>
 </body>
 </html>
+
 
 
