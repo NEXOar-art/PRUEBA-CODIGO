@@ -54,21 +54,18 @@ main{padding:18px 22px 60px;max-width:1560px;margin:auto;display:flex;flex-direc
 .seg{display:flex;border:1px solid #263140;border-radius:8px;overflow:hidden}
 .seg-btn{background:#0d1219;border:none;color:var(--muted);font-family:'Rajdhani';font-weight:700;font-size:.75rem;letter-spacing:1px;text-transform:uppercase;padding:8px 14px;cursor:pointer;transition:.2s}
 .seg-btn.active{background:color-mix(in srgb,var(--primary) 22%,#12161d);color:#fff;box-shadow:inset 0 0 0 1px var(--primary)}
+#analysisBar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+#analysisBar[hidden]{display:none}
 #viewBar{width:max-content;box-shadow:0 6px 18px rgba(0,0,0,.4)}
-#viewBar[hidden]{display:none}
-/* KPIs centrados + microefectos */
+/* KPIs limpios y centrados */
 #kpiGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
 .kpi{padding:18px 16px 16px;display:flex;flex-direction:column;gap:6px;align-items:center;text-align:center}
 .kpi::after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.09) 50%,transparent 60%);transform:translateX(-130%);transition:transform .7s ease;pointer-events:none}
 .kpi:hover::after{transform:translateX(130%)}
-.kpi .ico{position:absolute;right:12px;top:12px;font-size:1.2rem;transition:.3s}
-.kpi:hover .ico{animation:pulse .9s ease-in-out infinite;filter:drop-shadow(0 0 10px color-mix(in srgb,var(--primary) 70%,transparent))}
-@keyframes pulse{50%{transform:scale(1.18) rotate(-4deg)}}
 .kpi .lbl{font-size:.7rem;letter-spacing:1.8px;text-transform:uppercase;color:var(--muted)}
 .kpi .val{font-family:'Orbitron';font-size:1.4rem;font-weight:800;color:#fff;text-shadow:0 0 18px color-mix(in srgb,var(--primary) 45%,transparent);transition:text-shadow .3s}
 .kpi:hover .val{text-shadow:0 0 28px color-mix(in srgb,var(--primary) 80%,transparent)}
 .kpi .sub{font-size:.74rem;color:var(--accent)}
-.rk{display:inline-block;min-width:16px;text-align:center;margin-right:7px;padding:1px 5px;border:1px solid color-mix(in srgb,var(--primary) 55%,transparent);border-radius:5px;font-family:'Orbitron';font-size:.58rem;color:var(--primary);background:color-mix(in srgb,var(--primary) 12%,transparent);vertical-align:1px}
 /* Charts */
 #chartsGrid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
 .ch-card{grid-column:span 6;display:flex;flex-direction:column;min-height:320px}
@@ -83,11 +80,10 @@ main{padding:18px 22px 60px;max-width:1560px;margin:auto;display:flex;flex-direc
 .ch-card .ch-body canvas{transition:filter .3s}
 .ch-card:hover .ch-body canvas{filter:drop-shadow(0 0 14px color-mix(in srgb,var(--primary) 22%,transparent))}
 .ch-card:hover h3{color:#fff;text-shadow:0 0 12px color-mix(in srgb,var(--primary) 60%,transparent)}
-/* ===== NUEVO: Geo + Heatmap ===== */
+/* Geo + heat */
 #geoSection[hidden]{display:none}
 .geo-grid{display:grid;grid-template-columns:7fr 5fr;gap:14px}
 #mapDiv{height:340px;background:#0a0d12}
-#mapDiv .leaflet-container{background:#0a0d12}
 .heat-body{padding:14px 16px;display:flex;flex-direction:column;gap:10px}
 #heatGrid{display:grid;gap:3px}
 .hcell{border-radius:4px;min-height:26px;cursor:pointer;transition:.15s}
@@ -104,9 +100,9 @@ main{padding:18px 22px 60px;max-width:1560px;margin:auto;display:flex;flex-direc
 #searchInp{min-width:200px;flex:1;max-width:340px}
 .chip{display:inline-flex;align-items:center;gap:8px;background:color-mix(in srgb,var(--primary) 16%,#12161d);border:1px solid color-mix(in srgb,var(--primary) 55%,transparent);border-radius:999px;padding:5px 12px;font-size:.75rem}
 .chip button{background:none;border:none;color:#ffb4b0;cursor:pointer;font-size:.85rem}
-/* Comparativo */
-#compareSection{display:flex;flex-direction:column;gap:16px}
-#compareSection[hidden]{display:none}
+/* Comparativo + temporal */
+#compareSection,#timeSection{display:flex;flex-direction:column;gap:16px}
+#compareSection[hidden],#timeSection[hidden]{display:none}
 .cmp-body{padding:16px 18px;display:flex;flex-direction:column;gap:14px}
 .cmp-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:12px}
 .cmp-kpi{border:1px solid #1b2430;border-radius:10px;padding:10px 12px;background:#0d1218;display:flex;flex-direction:column;gap:4px;transition:.2s}
@@ -165,7 +161,7 @@ tbody tr.sel{background:color-mix(in srgb,var(--primary) 16%,transparent)}
 .toast.err{border-left-color:var(--bad)}.toast.ok{border-left-color:var(--ok)}
 footer{padding:18px;text-align:center;color:var(--muted);font-size:.72rem;letter-spacing:2px;text-transform:uppercase}
 .flash{animation:flash .6s}@keyframes flash{0%{box-shadow:0 0 0 3px color-mix(in srgb,var(--primary) 70%,transparent)}100%{box-shadow:none}}
-@media(max-width:1100px){.ch-card,.ch-card.w7,.ch-card.w5{grid-column:span 12}#bottomGrid{grid-template-columns:1fr}.geo-grid{grid-template-columns:1fr}}
+@media(max-width:1100px){.ch-card,.ch-card.w7,.ch-card.w5{grid-column:span 12}#bottomGrid{grid-template-columns:1fr}.geo-grid{grid-template-columns:1fr}.cmp-charts{grid-template-columns:1fr}}
 @media(max-width:900px){#mapDiv{height:280px}}
 @media(max-width:640px){
  header{padding:10px 12px}main{padding:14px 12px 50px}.brand h1{font-size:1.05rem}.brand p{font-size:.6rem}
@@ -230,18 +226,21 @@ footer{padding:18px;text-align:center;color:var(--muted);font-size:.72rem;letter
         <span style="font-size:.75rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase">Cargar en:</span>
         <div class="seg" id="slotSeg">
           <button class="seg-btn active" data-slot="A">🅰 Principal</button>
-          <button class="seg-btn" data-slot="B">🅱 Comparativo</button>
+          <button class="seg-btn" data-slot="B">🅱 Secundario</button>
         </div>
         <span id="badgeB" class="src-badge" hidden></span>
         <button class="btn" id="btnRemoveB" hidden><span>✖ Quitar B</span></button>
       </div>
-      <div class="note">🗄️ Cada dataset se analiza <b>por separado</b> en el mismo dashboard (p.ej. Repuestos en 🅰 y R.R.H.H. en 🅱): alterna con la barra de vistas y usa el reporte 🆚 para compararlos. 🔒 Procesamiento 100% local.</div>
+      <div class="note">🗄️ Carga tu dataset <b>Principal</b> y uno <b>Secundario</b> (p.ej. Repuestos y R.R.H.H.): cada uno se analiza por separado con la barra de vistas y el botón <b>🆚 Comparativo</b> los enfrenta en un reporte profesional. 🔒 Procesamiento 100% local.</div>
     </div>
   </section>
 
-  <div class="seg" id="viewBar" hidden>
-    <button class="seg-btn view-btn active" data-view="A">🅰 Análisis A</button>
-    <button class="seg-btn view-btn" data-view="B">🅱 Análisis B</button>
+  <div id="analysisBar" hidden>
+    <div class="seg" id="viewBar">
+      <button class="seg-btn view-btn active" data-view="A">🅰 Principal</button>
+      <button class="seg-btn view-btn" data-view="B">🅱 Secundario</button>
+    </div>
+    <button class="btn" id="btnCompare"><span>🆚 Comparativo</span></button>
   </div>
 
   <section id="kpiGrid"></section>
@@ -256,6 +255,28 @@ footer{padding:18px;text-align:center;color:var(--muted);font-size:.72rem;letter
   </section>
 
   <section id="chartsGrid"></section>
+
+  <!-- ===== Análisis temporal de ventas ===== -->
+  <section id="timeSection" hidden>
+    <div class="card">
+      <div class="card-h"><h3>📅 Análisis temporal de ventas</h3><span class="spacer"></span>
+        <div class="seg" id="granSeg">
+          <button class="seg-btn gbtn active" data-g="day">Día</button>
+          <button class="seg-btn gbtn" data-g="week">Semana</button>
+          <button class="seg-btn gbtn" data-g="month">Mes</button>
+          <button class="seg-btn gbtn" data-g="year">Año</button>
+        </div>
+        <select class="sel" id="periodSel" style="margin-left:8px" title="Período a analizar"></select>
+      </div>
+      <div class="cmp-body">
+        <div id="periodKpis" class="cmp-kpis"></div>
+        <div class="cmp-charts">
+          <div class="cmp-ch"><canvas id="cvTimeSeries"></canvas></div>
+          <div class="cmp-ch"><canvas id="cvTopPeriod"></canvas></div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <section id="geoSection" hidden>
     <div class="geo-grid">
@@ -275,7 +296,7 @@ footer{padding:18px;text-align:center;color:var(--muted);font-size:.72rem;letter
 
   <section id="compareSection" hidden>
     <div class="card" id="compareCard">
-      <div class="card-h"><h3>🆚 Reporte comparativo · Dataset A vs B</h3><span class="spacer"></span><span id="cmpSrc" class="src-badge"></span></div>
+      <div class="card-h"><h3>🆚 Reporte comparativo · Principal vs Secundario</h3><span class="spacer"></span><span id="cmpSrc" class="src-badge"></span></div>
       <div class="cmp-body">
         <div id="cmpKpis" class="cmp-kpis"></div>
         <div class="cmp-charts">
@@ -338,7 +359,7 @@ footer{padding:18px;text-align:center;color:var(--muted);font-size:.72rem;letter
 <script>
 'use strict';
 const $=s=>document.querySelector(s);
-const state={rows:[],columns:[],filters:{},search:'',sort:{key:null,dir:1},page:1,pageSize:10,selected:new Set(),charts:{},chartTypes:{},cmpCharts:{},source:{type:'demo',label:'Demo'},lastSheetsUrl:null,updatedAt:null,slot:'A',view:'A',A:null,B:null,leafletMap:null};
+const state={rows:[],columns:[],filters:{},search:'',sort:{key:null,dir:1},page:1,pageSize:10,selected:new Set(),charts:{},chartTypes:{},cmpCharts:{},source:{type:'demo',label:'Demo'},lastSheetsUrl:null,updatedAt:null,slot:'A',view:'A',showCompare:false,A:null,B:null,leafletMap:null};
 
 /* ================= Utils ================= */
 const Utils={
@@ -414,7 +435,7 @@ const TypeDetector={
     return null;}
 };
 
-/* ================= Detección de estados / ventas / geo ================= */
+/* ================= Detección estados / ventas / geo ================= */
 const isCompleted=v=>/complet|entregad|pagad|aprobad|finalizad|success|\bok\b|cerrado|closed/i.test(String(v));
 const isCancelled=v=>/cancel|anulad/i.test(String(v));
 const isReturned=v=>/devuelt|return|reembols/i.test(String(v));
@@ -431,6 +452,10 @@ function findSaleCol(cols){
    ||cols.find(c=>(c.type==='currency'||c.type==='number')&&/total/i.test(c.name))
    ||cols.find(c=>c.role==='price')||null;
 }
+const findSoldQty=cols=>cols.find(c=>c.type==='number'&&/cant(idad)?|\bqty\b|\buds\b|unidades/i.test(c.name))||null;
+function isoWeek(d){const t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));const day=(t.getUTCDay()+6)%7;t.setUTCDate(t.getUTCDate()-day+3);
+  const firstThu=new Date(Date.UTC(t.getUTCFullYear(),0,4));const fday=(firstThu.getUTCDay()+6)%7;firstThu.setUTCDate(firstThu.getUTCDate()-fday+3);
+  return 1+Math.round((t-firstThu)/(7*864e5));}
 const GEO={'mexico':[23.6,-102.5],'ciudad de mexico':[19.43,-99.13],'cdmx':[19.43,-99.13],'guadalajara':[20.66,-103.35],'monterrey':[25.69,-100.32],'puebla':[19.04,-98.2],'tijuana':[32.51,-117.03],'cancun':[21.16,-86.85],'queretaro':[20.59,-100.39],'merida':[20.97,-89.59],'leon':[21.12,-101.68],'toluca':[19.29,-99.66],'espana':[40.46,-3.74],'madrid':[40.42,-3.7],'barcelona':[41.39,2.17],'valencia':[39.47,-0.38],'sevilla':[37.39,-5.98],'bilbao':[43.26,-2.93],'zaragoza':[41.66,-0.88],'colombia':[4.57,-74.29],'bogota':[4.71,-74.07],'medellin':[6.24,-75.58],'cali':[3.45,-76.53],'barranquilla':[10.96,-74.8],'argentina':[-38.42,-63.62],'buenos aires':[-34.6,-58.38],'cordoba':[-31.42,-64.18],'rosario':[-32.95,-60.65],'chile':[-35.68,-71.54],'santiago':[-33.45,-70.66],'valparaiso':[-33.05,-71.62],'peru':[-9.19,-75.02],'lima':[-12.05,-77.04],'arequipa':[-16.41,-71.54],'ecuador':[-1.83,-78.18],'quito':[-0.18,-78.47],'guayaquil':[-2.17,-79.92],'venezuela':[6.42,-66.59],'caracas':[10.48,-66.9],'bolivia':[-16.29,-63.59],'la paz':[-16.5,-68.15],'uruguay':[-32.55,-55.76],'montevideo':[-34.9,-56.16],'paraguay':[-23.44,-58.44],'asuncion':[-25.26,-57.57],'guatemala':[15.78,-90.23],'honduras':[15.2,-86.24],'tegucigalpa':[14.07,-87.19],'el salvador':[13.79,-88.9],'san salvador':[13.69,-89.19],'nicaragua':[12.87,-85.2],'managua':[12.13,-86.25],'costa rica':[9.75,-83.75],'san jose':[9.93,-84.08],'panama':[8.54,-80.79],'republica dominicana':[18.74,-70.16],'santo domingo':[18.49,-69.94],'estados unidos':[37.09,-95.71],'usa':[37.09,-95.71],'nueva york':[40.71,-74.0],'new york':[40.71,-74.0],'los angeles':[34.05,-118.24],'miami':[25.76,-80.19],'houston':[29.76,-95.36],'chicago':[41.88,-87.63],'san antonio':[29.42,-98.49],'brasil':[-14.24,-51.93],'sao paulo':[-23.55,-46.63],'rio de janeiro':[-22.91,-43.17]};
 
 /* ================= DataEngine ================= */
@@ -470,7 +495,16 @@ function finishMeta(cols,rows){
   if(cols._autoLab){const t=cols.filter(c=>c.type==='text'&&c.role!=='category').sort((a,b)=>b.cardinal-a.cardinal)[0];if(t)t.role='label';delete cols._autoLab;}
   if(!cols.some(c=>c.role==='label')&&!cols.some(c=>c.role==='product')){const p=cols.find(c=>c.role==='code');if(p)p.role='label';}
 }
-function processDataset(data){const columns=detectColumns(data);const rows=normalize(data,columns);finishMeta(columns,rows);return{rows,columns};}
+function processDataset(data){
+  const columns=detectColumns(data);const rows=normalize(data,columns);finishMeta(columns,rows);
+  // Campos derivados: fecha de egreso y días en stock
+  const dateC=columns.find(c=>c.role==='date');
+  const egC=columns.find(c=>c.type==='date'&&/egreso|salida|baja|entrega/i.test(c.name));
+  if(dateC){for(const r of rows){const ing=r[dateC.key];const eg=egC?r[egC.key]:null;
+    r.__egreso=eg||null;
+    r.__diasStock=ing?Math.max(0,Math.round(((eg||new Date())-ing)/864e5)):null;}}
+  return{rows,columns};
+}
 function activateDS(ds,reset){
   state.rows=ds.rows;state.columns=ds.columns;state.source=ds.source;state.updatedAt=ds.updatedAt;
   if(reset||!ds.ui){state.filters={};state.search='';state.page=1;state.selected=new Set();state.sort={key:null,dir:1};state.chartTypes={};}
@@ -486,16 +520,15 @@ function ingest(data,source){
   const P=processDataset(data);P.source=source;P.updatedAt=new Date();P.ui=null;
   if(state.slot==='B'){
     state.B=P;updateBBadge();
-    if(state.view==='B')activateDS(P,true);
-    else{renderCompare();refresh();}
+    if(state.view==='B')activateDS(P,true);else refresh();
     renderCompare();
-    Utils.toast(`🅱 Dataset B cargado: <b>${Utils.fmtInt(P.rows.length)}</b> registros. Usa la vista <b>🅱 Análisis B</b> para analizarlo por separado.`,'ok');
+    Utils.toast(`🅱 Dataset Secundario cargado: <b>${Utils.fmtInt(P.rows.length)}</b> registros. Usa <b>🅱 Secundario</b> para analizarlo y <b>🆚 Comparativo</b> para enfrentarlos.`,'ok');
     return;
   }
   state.A=P;state.view='A';syncViewButtons();
   activateDS(P,true);
-  if(state.B)renderCompare();
-  Utils.toast(`✅ Fuente cargada en 🅰: <b>${Utils.fmtInt(P.rows.length)}</b> registros · <b>${P.columns.length}</b> columnas detectadas.`,'ok');
+  renderCompare();
+  Utils.toast(`✅ Fuente cargada en 🅰 Principal: <b>${Utils.fmtInt(P.rows.length)}</b> registros · <b>${P.columns.length}</b> columnas.`,'ok');
 }
 function updateStatus(){
   const s=state.source,h=state.updatedAt?state.updatedAt.toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'}):'—';
@@ -505,7 +538,7 @@ function updateStatus(){
 }
 function updateBBadge(){
   const has=!!state.B;
-  $('#badgeB').hidden=!has;$('#btnRemoveB').hidden=!has;$('#viewBar').hidden=!has;
+  $('#badgeB').hidden=!has;$('#btnRemoveB').hidden=!has;$('#analysisBar').hidden=!has;
   if(has)$('#badgeB').innerHTML=`🅱 <b>${Utils.esc(Utils.trunc(state.B.source.label,26))}</b> · ${Utils.fmtInt(state.B.rows.length)} reg`;
   syncViewButtons();
 }
@@ -593,70 +626,84 @@ const DataSource={
     const rows=[];const hoy=new Date();
     for(let i=0;i<160;i++){const cat=cats[R(0,5)];const d=new Date(hoy);d.setDate(d.getDate()-R(0,720));
       const st=estados[R(0,5)];const qty=R(1,4);const price=R(40,2500)+R(0,99)/100;
+      const eg=new Date(d);eg.setDate(d.getDate()+R(1,25));
       rows.push({'Código':'FC-'+(1000+i),'Producto':items[cat][R(0,4)],'Categoría':cat,'Proveedor':prov[R(0,3)],'Ciudad':cities[R(0,cities.length-1)],
         'Stock':R(0,9)<2?0:R(1,120),'Cantidad':qty,
         'Precio':'$ '+price.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}),
         'Total_Venta':'$ '+(price*qty).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}),
         'Estado':st,'Margen':R(8,35)+'%',
         'Fecha Ingreso':d.toLocaleDateString('es',{day:'2-digit',month:'2-digit',year:'numeric'}),
+        'Fecha Egreso':(st!=='Pendiente'&&eg<=hoy)?eg.toLocaleDateString('es',{day:'2-digit',month:'2-digit',year:'numeric'}):'',
         'URL Imagen':i%3===0?('https://images.fcracing.example/p'+i+'.png'):''});}
     return rows;}
 };
 
-/* ================= KPIEngine v3 (Facturación, Ticket, Tasa + ranking) ================= */
+/* ================= KPIEngine v4 (limpio + ventas por período) ================= */
 function renderKPIs(rows){
   const n=rows.length,C=[];
   const lab=roleCol('label')||roleCol('product')||roleCol('code'),
         cat=roleCol('category'),stock=roleCol('stock'),price=roleCol('price'),
         date=roleCol('date'),pctCol=state.columns.find(c=>c.type==='percent'),
-        meas=pickMeasure(),statusCol=findStatusCol(state.columns),saleCol=findSaleCol(state.columns);
-  const push=(sc,i,l,v,s)=>C.push({sc,i,l,v,s});
+        meas=pickMeasure(),statusCol=findStatusCol(state.columns),saleCol=findSaleCol(state.columns),
+        soldQty=findSoldQty(state.columns);
+  const push=(sc,l,v,s)=>C.push({sc,l,v,s});
   const isBrand=cat?/marca|brand/i.test(cat.name):false;
-  push(100,'📊','Registros',Utils.fmtInt(n),'total de la vista');
-  // 💵 Facturación Total (solo Completado)
+  push(100,'Registros',Utils.fmtInt(n),'total de la vista');
   if(saleCol){
     const comp=statusCol?rows.filter(r=>isCompleted(r[statusCol.key])):rows;
     const fact=sumIn(comp,saleCol.key);
     if(fact>0){
-      push(99,'💵','Facturación total',Utils.fmtCur(fact,saleCol.sym),statusCol?`Σ ${saleCol.name} · estado “Completado”`:`Σ ${saleCol.name}`);
-      push(98,'🎫','Ticket promedio',Utils.fmtCur(fact/Math.max(1,comp.length),saleCol.sym),`${Utils.fmtInt(comp.length)} pedidos completados`);
+      push(99,'Facturación total',Utils.fmtCur(fact,saleCol.sym),statusCol?'Σ '+saleCol.name+' · “Completado”':'Σ '+saleCol.name);
+      push(98,'Ticket promedio',Utils.fmtCur(fact/Math.max(1,comp.length),saleCol.sym),Utils.fmtInt(comp.length)+' pedidos completados');
+      // Ventas diarias / semanales / mensuales / anuales (promedio por período)
+      if(date){
+        const per=g=>{const s=new Set();comp.forEach(r=>{const d=r[date.key];if(d)s.add(TimeEngine.bucket(d,g));});return s.size;};
+        const nd=per('day'),nw=per('week'),nm=per('month'),ny=per('year');
+        if(nd)push(93,'Venta diaria prom.',Utils.fmtCur(fact/nd,saleCol.sym),'facturación / día activo');
+        if(nw)push(91,'Venta semanal prom.',Utils.fmtCur(fact/nw,saleCol.sym),'facturación / semana');
+        if(nm)push(89,'Venta mensual prom.',Utils.fmtCur(fact/nm,saleCol.sym),'facturación / mes');
+        if(ny)push(85,'Venta anual prom.',Utils.fmtCur(fact/ny,saleCol.sym),'facturación / año');
+      }
     }
   }
-  // ↩️ Tasa de Cancelación/Devolución
   if(statusCol){
     const withS=rows.filter(r=>r[statusCol.key]!=null&&r[statusCol.key]!=='').length;
     const canc=rows.filter(r=>isCancelled(r[statusCol.key])).length;
     const dev=rows.filter(r=>isReturned(r[statusCol.key])).length;
-    if(withS>0&&(canc>0||dev>0))push(96,'↩️','Tasa cancel./devol.',Utils.fmtNum((canc+dev)/withS*100)+'%',`${canc} canc · ${dev} dev de ${Utils.fmtInt(withS)}`);
+    if(withS>0&&(canc>0||dev>0))push(96,'Tasa cancel./devol.',Utils.fmtNum((canc+dev)/withS*100)+'%',canc+' canc · '+dev+' dev de '+Utils.fmtInt(withS));
+  }
+  if(lab&&(soldQty||saleCol)){
+    const g=groupAgg(rows,lab.key,(soldQty||saleCol).key,'sum',1)[0];
+    if(g)push(94,'Producto más vendido',Utils.esc(Utils.trunc(g.label,20)),Utils.fmtNum(g.value)+(soldQty?' uds':' en ventas'));
   }
   if(price&&stock){let val=0;rows.forEach(r=>{const p=valNum(r[price.key]),q=valNum(r[stock.key]);if(p!=null&&q!=null)val+=p*q;});
-    if(val>0)push(97,'💎','Valor de inventario',Utils.fmtCur(val,price.sym),`Σ ${price.name} × ${stock.name}`);}
-  if(stock&&stock.stats.count)push(95,'📦','Stock total',Utils.fmtNum(sumIn(rows,stock.key)),'subtotal unidades');
-  if(meas&&meas!==stock&&meas.stats.count)push(94,'∑','Total '+Utils.trunc(meas.name,16),Utils.fmtNum(sumIn(rows,meas.key)),'Σ medida principal');
+    if(val>0)push(97,'Valor de inventario',Utils.fmtCur(val,price.sym),'Σ '+price.name+' × '+stock.name);}
+  if(stock&&stock.stats.count)push(95,'Stock total',Utils.fmtNum(sumIn(rows,stock.key)),'subtotal unidades');
+  if(meas&&meas!==stock&&meas.stats.count)push(94,'Total '+Utils.trunc(meas.name,16),Utils.fmtNum(sumIn(rows,meas.key)),'Σ medida principal');
   const dimSub=cat||(lab&&lab.cardinal>=2&&lab.cardinal<=60?lab:null);
   if(dimSub){const g=groupAgg(rows,dimSub.key,meas?.key,meas?'sum':'count',1)[0];
     const tot=groupAgg(rows,dimSub.key,meas?.key,meas?'sum':'count',1e9).reduce((a,b)=>a+b.value,0)||1;
-    if(g&&g.value>0)push(92,'🧾','Subtotal top · '+Utils.trunc(dimSub.name,13),Utils.fmtNum(g.value),`${Utils.trunc(g.label,18)} · ${Math.round(g.value/tot*100)}% del total`);}
+    if(g&&g.value>0)push(92,'Subtotal top · '+Utils.trunc(dimSub.name,13),Utils.fmtNum(g.value),Utils.trunc(g.label,18)+' · '+Math.round(g.value/tot*100)+'% del total');}
   if(price){const vs=rows.map(r=>valNum(r[price.key])).filter(v=>v!=null);
-    if(vs.length)push(90,'💰','Precio promedio',Utils.fmtCur(vs.reduce((a,b)=>a+b,0)/vs.length,price.sym),Utils.trunc(price.name,20));}
+    if(vs.length)push(90,'Precio promedio',Utils.fmtCur(vs.reduce((a,b)=>a+b,0)/vs.length,price.sym),Utils.trunc(price.name,20));}
   if(lab&&price){const g=groupAvg(rows,lab.key,price.key);
-    if(g)push(88,'🏷️','Precio por producto',Utils.fmtCur(g.avg,price.sym),'top: '+Utils.trunc(g.label,20));}
+    if(g)push(88,'Precio por producto',Utils.fmtCur(g.avg,price.sym),'top: '+Utils.trunc(g.label,20));}
   if(stock){const zero=rows.filter(r=>valNum(r[stock.key])===0).length;
-    push(87,'⛔','Sin stock',Utils.fmtInt(zero),'alerta de reposición');}
+    push(87,'Sin stock',Utils.fmtInt(zero),'alerta de reposición');}
   if(cat&&price){const g=groupAvg(rows,cat.key,price.key);
-    if(g)push(86,isBrand?'🛡️':'🗂️',isBrand?'Precio por marca':'Precio por categoría',Utils.fmtCur(g.avg,price.sym),'top: '+Utils.trunc(g.label,20));}
+    if(g)push(86,isBrand?'Precio por marca':'Precio por categoría',Utils.fmtCur(g.avg,price.sym),'top: '+Utils.trunc(g.label,20));}
   if(price&&lab){let mx=-Infinity,mxL='—',mn=Infinity,mnL='—';
     rows.forEach(r=>{const v=valNum(r[price.key]);if(v==null)return;if(v>mx){mx=v;mxL=r[lab.key]||'—';}if(v<mn){mn=v;mnL=r[lab.key]||'—';}});
-    if(mx>-Infinity)push(84,'🚀','Precio máximo',Utils.fmtCur(mx,price.sym),Utils.trunc(mxL,20));
-    if(mn<Infinity)push(82,'🐢','Precio mínimo',Utils.fmtCur(mn,price.sym),Utils.trunc(mnL,20));}
-  if(lab)push(80,'🏷️',Utils.trunc(lab.name,15)+' únicos',Utils.fmtInt(distinctIn(rows,lab.key)),'elementos distintos');
-  if(cat)push(78,'🗂️',isBrand?'Marcas':'Categorías',Utils.fmtInt(distinctIn(rows,cat.key)),'subtotales calculados');
-  if(pctCol&&pctCol.stats.count)push(76,'％',Utils.trunc(pctCol.name,13)+' prom.',Utils.fmtNum(pctCol.stats.mean)+'%','rango '+Utils.fmtNum(pctCol.stats.min)+'–'+Utils.fmtNum(pctCol.stats.max));
-  if(date&&date.stats.min)push(70,'📅','Período',Utils.fmtDate(date.stats.min)+' → '+Utils.fmtDate(date.stats.max),'rango temporal');
+    if(mx>-Infinity)push(84,'Precio máximo',Utils.fmtCur(mx,price.sym),Utils.trunc(mxL,20));
+    if(mn<Infinity)push(82,'Precio mínimo',Utils.fmtCur(mn,price.sym),Utils.trunc(mnL,20));}
+  if(lab)push(80,Utils.trunc(lab.name,15)+' únicos',Utils.fmtInt(distinctIn(rows,lab.key)),'elementos distintos');
+  if(cat)push(78,isBrand?'Marcas':'Categorías',Utils.fmtInt(distinctIn(rows,cat.key)),'subtotales calculados');
+  if(pctCol&&pctCol.stats.count)push(76,Utils.trunc(pctCol.name,13)+' prom.',Utils.fmtNum(pctCol.stats.mean)+'%','rango '+Utils.fmtNum(pctCol.stats.min)+'–'+Utils.fmtNum(pctCol.stats.max));
+  if(date&&date.stats.min)push(70,'Período',Utils.fmtDate(date.stats.min)+' → '+Utils.fmtDate(date.stats.max),'rango temporal');
   C.sort((a,b)=>b.sc-a.sc);
   $('#kpiGrid').innerHTML=C.slice(0,12).map((c,idx)=>`
-    <div class="card kpi" style="animation-delay:${idx*55}ms"><span class="ico">${c.i}</span>
-      <span class="lbl"><b class="rk">${idx+1}</b>${Utils.esc(c.l)}</span>
+    <div class="card kpi" style="animation-delay:${idx*55}ms">
+      <span class="lbl">${Utils.esc(c.l)}</span>
       <span class="val" style="${String(c.v).length>14?'font-size:.95rem':''}">${Utils.esc(c.v)}</span>
       <span class="sub">${Utils.esc(c.s||'')}</span></div>`).join('');
 }
@@ -674,11 +721,14 @@ function buildChartDefs(){
   const cols=state.columns,defs=[];
   const cat=roleCol('category')||cols.filter(c=>c.type==='text'&&c.cardinal>=2&&c.cardinal<=60).sort((a,b)=>a.cardinal-b.cardinal)[0]||null;
   const lab=roleCol('label')||roleCol('product')||cols.filter(c=>c.type==='text'&&c!==cat).sort((a,b)=>b.cardinal-a.cardinal)[0]||null;
-  const meas=pickMeasure(),date=roleCol('date');
+  const meas=pickMeasure(),date=roleCol('date'),
+        soldQty=findSoldQty(cols),saleCol=findSaleCol(cols),
+        stKey=findStatusCol(cols)?.key||null;
   if(cat)defs.push({id:'cA',w:'w7',title:`${meas?'Σ '+meas.name:'Registros'} por ${cat.name}`,dim:cat.key,fk:cat.key,meas:meas?.key,mode:meas?'sum':'count',top:12,types:['bar','line','area','doughnut']});
   if(cat)defs.push({id:'cB',w:'w5',title:`Distribución · ${cat.name}`,dim:cat.key,fk:cat.key,meas:meas?.key,mode:meas?'sum':'count',top:8,types:['doughnut','bar']});
   if(date)defs.push({id:'cC',w:'w7',title:`Evolución temporal${meas?' · '+meas.name:''}`,dateKey:date.key,fk:date.key+'__bk',meas:meas?.key,mode:meas?'sum':'count',types:['line','area','bar']});
   if(lab&&meas&&lab!==cat)defs.push({id:'cD',w:'w5',title:`Top 10 ${lab.name} por ${meas.name}`,dim:lab.key,fk:lab.key,meas:meas.key,mode:'sum',top:10,types:['bar'],hz:true});
+  if(lab&&(soldQty||saleCol))defs.push({id:'cE',w:'w7',title:'🏅 Top 10 productos más vendidos',dim:lab.key,fk:lab.key,meas:(soldQty||saleCol).key,mode:'sum',top:10,types:['bar'],hz:true,comp:stKey});
   if(!defs.length&&meas)defs.push({id:'cA',w:'w7',title:`Distribución de ${meas.name}`,hist:meas.key,fk:meas.key+'__bin',types:['bar']});
   defs.forEach(d=>d.type=state.chartTypes[d.id]||d.types[0]);
   return defs;
@@ -710,7 +760,9 @@ function renderCharts(){
     card.innerHTML=`<div class="card-h"><h3>${Utils.esc(def.title)}</h3><span class="spacer"></span>${typeSel}</div><div class="ch-body"><canvas id="cv_${def.id}"></canvas></div>`;
     grid.appendChild(card);
     card.querySelector('.chtype')?.addEventListener('change',e=>{state.chartTypes[def.id]=e.target.value;renderCharts();});
-    const rows=getFiltered(def.fk);const D=chartData(def,rows);
+    let rows=getFiltered(def.fk);
+    if(def.comp)rows=rows.filter(r=>isCompleted(r[def.comp]));
+    const D=chartData(def,rows);
     const actF=state.filters[def.fk];let bg,brd;
     if(def.type==='doughnut'){bg=Utils.palette(D.labels.length).map(c=>Utils.hexRgba(c,.85));brd='#0b0e12';}
     else{bg=D.labels.map((l,i)=>actF&&actF.kind==='set'?(actF.values.has(String(D.raw?.[i]?.label??l))?Utils.hexRgba(primary,.95):Utils.hexRgba(primary,.22)):Utils.hexRgba(primary,.75));brd=primary;}
@@ -741,7 +793,62 @@ function chartClick(def,D,i){
   refresh();
 }
 
-/* ================= GeoEngine: mapa interactivo + mapa de calor ================= */
+/* ================= TimeEngine: ventas día/semana/mes/año ================= */
+const TimeEngine={gran:'month',period:null,charts:{},
+  bucket(d,g){
+    if(g==='day')return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    if(g==='week')return d.getFullYear()+'-W'+String(isoWeek(d)).padStart(2,'0');
+    if(g==='month')return bucketOf(d,'month');
+    return String(d.getFullYear());},
+  label(b,g){
+    if(g==='day'){const[y,m,d]=b.split('-');return d+' '+MESES[+m-1]+' '+y.slice(2);}
+    if(g==='week'){const[y,w]=b.split('-W');return 'Sem '+(+w)+' · '+y;}
+    if(g==='month')return bucketLabel(b,'month');return b;},
+  render(){
+    const sec=$('#timeSection');const date=roleCol('date');
+    Object.values(this.charts).forEach(c=>c.destroy());this.charts={};
+    if(!date){sec.hidden=true;return;}
+    const saleCol=findSaleCol(state.columns),meas=saleCol||pickMeasure(),
+          soldQty=findSoldQty(state.columns),stKey=findStatusCol(state.columns)?.key,
+          lab=roleCol('label')||roleCol('product'),cat=roleCol('category');
+    let rows=getFiltered();if(stKey)rows=rows.filter(r=>isCompleted(r[stKey]));
+    const m=new Map();
+    for(const r of rows){const d=r[date.key];if(!d)continue;const b=this.bucket(d,this.gran);
+      const e=m.get(b)||{v:0,c:0};e.c++;e.v+=meas?(valNum(r[meas.key])||0):1;m.set(b,e);}
+    const keys=[...m.keys()].sort();
+    if(!keys.length){sec.hidden=true;return;}
+    sec.hidden=false;
+    if(!this.period||!m.has(this.period))this.period=keys[keys.length-1];
+    $('#periodSel').innerHTML=keys.slice().reverse().map(k=>`<option value="${k}" ${k===this.period?'selected':''}>${this.label(k,this.gran)}</option>`).join('');
+    const pr=rows.filter(r=>{const d=r[date.key];return d&&this.bucket(d,this.gran)===this.period;});
+    const totV=sumIn(pr,meas?.key),totQ=soldQty?sumIn(pr,soldQty.key):pr.length;
+    let topP='—',topPv=0;
+    if(lab){const g=groupAgg(pr,lab.key,(soldQty||meas)?.key,soldQty||meas?'sum':'count',1)[0];if(g){topP=g.label;topPv=g.value;}}
+    let topC='—',topCv=0;
+    if(cat){const g=groupAgg(pr,cat.key,(soldQty||meas)?.key,soldQty||meas?'sum':'count',1)[0];if(g){topC=g.label;topCv=g.value;}}
+    $('#periodKpis').innerHTML=`
+      <div class="cmp-kpi"><span class="lbl">Ventas del período</span><span class="ab">${saleCol?Utils.fmtCur(totV,saleCol.sym):Utils.fmtNum(totV)}</span><span class="delta flat">${this.label(this.period,this.gran)}</span></div>
+      <div class="cmp-kpi"><span class="lbl">Pedidos</span><span class="ab">${Utils.fmtInt(pr.length)}</span><span class="delta flat">${Utils.fmtNum(totQ)} uds</span></div>
+      <div class="cmp-kpi"><span class="lbl">Top producto del período</span><span class="ab">${Utils.esc(Utils.trunc(topP,24))}</span><span class="delta up">${Utils.fmtNum(topPv)}${soldQty?' uds':''}</span></div>
+      <div class="cmp-kpi"><span class="lbl">Top categoría</span><span class="ab">${Utils.esc(Utils.trunc(topC,24))}</span><span class="delta up">${Utils.fmtNum(topCv)}</span></div>`;
+    if(window.Chart){
+      const pri=chartDefaults();
+      this.charts.series=new Chart($('#cvTimeSeries'),{type:'bar',
+        data:{labels:keys.map(k=>this.label(k,this.gran)),datasets:[{label:saleCol?'Ventas':'Σ',
+          data:keys.map(k=>+(m.get(k).v).toFixed(2)),
+          backgroundColor:keys.map(k=>k===this.period?Utils.hexRgba(pri,.95):Utils.hexRgba(pri,.4)),borderRadius:5}]},
+        options:{maintainAspectRatio:false,responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+Utils.fmtNum(c.parsed.y)}}},
+          scales:{y:{grid:{color:'rgba(143,160,175,.08)'}}},
+          onClick:(e,els)=>{if(!els.length)return;this.period=keys[els[0].index];this.render();}}});
+      if(lab){const g=groupAgg(pr,lab.key,(soldQty||meas)?.key,soldQty||meas?'sum':'count',5);
+        this.charts.top=new Chart($('#cvTopPeriod'),{type:'bar',
+          data:{labels:g.map(x=>Utils.trunc(x.label,16)),datasets:[{label:'Top 5',data:g.map(x=>+x.value.toFixed(2)),backgroundColor:Utils.hexRgba(pri,.75),borderRadius:5}]},
+          options:{indexAxis:'y',maintainAspectRatio:false,responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+Utils.fmtNum(c.parsed.x)}}},
+            scales:{x:{grid:{color:'rgba(143,160,175,.08)'}}}}});}
+    }
+  }};
+
+/* ================= GeoEngine ================= */
 function destroyMap(){if(state.leafletMap){state.leafletMap.remove();state.leafletMap=null;}}
 function buildGeoPoints(rows){
   const cols=state.columns,meas=pickMeasure();
@@ -751,7 +858,7 @@ function buildGeoPoints(rows){
     return rows.map(r=>{const la=valNum(r[latC.key]),lo=valNum(r[lngC.key]);
       if(la==null||lo==null||Math.abs(la)>90||Math.abs(lo)>180)return null;
       const lb=roleCol('label')||roleCol('product');
-      return{lat:la,lng:lo,label:lb?(r[lb.key]??''):'' ,w:meas?(valNum(r[meas.key])||1):1};}).filter(Boolean);}
+      return{lat:la,lng:lo,label:lb?(r[lb.key]??''):'',w:meas?(valNum(r[meas.key])||1):1};}).filter(Boolean);}
   const statusC=findStatusCol(cols);
   const geoC=cols.find(c=>c.type==='text'&&c!==statusC&&/ciudad|city|pa[ií]s|country|regi[oó]n|zona|sucursal|provincia|ubicaci|location|direcci/i.test(c.name));
   if(!geoC)return[];
@@ -802,7 +909,7 @@ function renderHeat(h){
   h.rowEntries.forEach(e=>{
     html+=`<div class="hlab" title="${Utils.esc(e.label)}">${Utils.esc(Utils.trunc(e.label,14))}</div>`;
     h.cols.forEach(c=>{const v=e.vals.get(c)||0;const ratio=h.maxV?v/h.maxV:0;
-      html+=`<div class="hcell" data-row="${Utils.esc(e.label)}" data-col="${c}" title="${Utils.esc(e.label)} · ${bucketLabel(c,'month')}: ${Utils.fmtNum(v)}" style="background:${v?Utils.hexRgba(primary,.08+.88*ratio):'rgba(255,255,255,.03)'}"></div>`;});});
+      html+=`<div class="hcell" data-row="${Utils.esc(e.label)}" title="${Utils.esc(e.label)} · ${bucketLabel(c,'month')}: ${Utils.fmtNum(v)}" style="background:${v?Utils.hexRgba(primary,.08+.88*ratio):'rgba(255,255,255,.03)'}"></div>`;});});
   g.innerHTML=html;
   if(h.rowKey)g.querySelectorAll('.hcell').forEach(cell=>cell.addEventListener('click',()=>{
     const v=cell.dataset.row,k=h.rowKey;
@@ -822,14 +929,14 @@ function renderGeo(){
   if(heat)renderHeat(heat);
 }
 
-/* ================= CompareEngine (usa state.A y state.B) ================= */
+/* ================= CompareEngine (botón Comparativo) ================= */
 function renderCompare(){
   const sec=$('#compareSection');
   Object.values(state.cmpCharts||{}).forEach(c=>c.destroy());state.cmpCharts={};
-  if(!state.A||!state.B){sec.hidden=true;return;}
+  if(!state.showCompare||!state.A||!state.B){sec.hidden=true;return;}
   sec.hidden=false;
   const A=state.A,B=state.B;
-  $('#cmpSrc').innerHTML=`A: <b>${Utils.esc(Utils.trunc(A.source.label,22))}</b> · B: <b>${Utils.esc(Utils.trunc(B.source.label,22))}</b>`;
+  $('#cmpSrc').innerHTML=`Principal: <b>${Utils.esc(Utils.trunc(A.source.label,22))}</b> · Secundario: <b>${Utils.esc(Utils.trunc(B.source.label,22))}</b>`;
   const catA=roleIn(A.columns,'category'),catB=B.columns.find(c=>c.role==='category')||(catA?B.columns.find(c=>c.name===catA.name):null)||null;
   const measA=pickMeasureIn(A.columns),measB=pickMeasureIn(B.columns);
   const priceA=roleIn(A.columns,'price'),priceB=B.columns.find(c=>c.role==='price');
@@ -849,7 +956,7 @@ function renderCompare(){
     return `<div class="cmp-kpi"><span class="lbl">${Utils.esc(k.l)}</span>
       <span class="ab"><b>A</b> ${fOf(k)(k.a)} · <span class="bb"><b>B</b> ${fOf(k)(k.b)}</span></span>
       <span class="delta ${cls}">${arrow} ${k.d==null?'—':(k.d>0?'+':'')+Math.round(k.d)+'%'}</span></div>`;}).join('')
-    ||'<div class="note">Sin columnas comparables entre A y B.</div>';
+    ||'<div class="note">Sin columnas comparables entre Principal y Secundario.</div>';
   if(!window.Chart)return;
   const pri=chartDefaults();
   const acc=(getComputedStyle(document.documentElement).getPropertyValue('--accent')||'#9aa7b4').trim();
@@ -859,8 +966,8 @@ function renderCompare(){
     const mB=new Map(groupAgg(B.rows,catB.key,measB?.key,mode,9999).map(g=>[g.label,g.value]));
     state.cmpCharts.cat=new Chart($('#cvCmpCat'),{type:'bar',
       data:{labels:gA.map(g=>Utils.trunc(g.label,14)),datasets:[
-        {label:'A',data:gA.map(g=>+g.value.toFixed(2)),backgroundColor:Utils.hexRgba(pri,.8),borderRadius:5},
-        {label:'B',data:gA.map(g=>+(mB.get(g.label)||0).toFixed(2)),backgroundColor:Utils.hexRgba(acc,.55),borderRadius:5}]},
+        {label:'Principal',data:gA.map(g=>+g.value.toFixed(2)),backgroundColor:Utils.hexRgba(pri,.8),borderRadius:5},
+        {label:'Secundario',data:gA.map(g=>+(mB.get(g.label)||0).toFixed(2)),backgroundColor:Utils.hexRgba(acc,.55),borderRadius:5}]},
       options:{maintainAspectRatio:false,responsive:true,plugins:{legend:{labels:{boxWidth:10}},tooltip:{callbacks:{label:c=>' '+c.dataset.label+': '+Utils.fmtNum(c.parsed.y)}}},scales:{y:{grid:{color:'rgba(143,160,175,.08)'}}}}});
   }
   if(dateA&&dateB){
@@ -869,14 +976,14 @@ function renderCompare(){
     const keys=[...new Set([...mA.keys(),...mB.keys()])].sort();
     state.cmpCharts.time=new Chart($('#cvCmpTime'),{type:'line',
       data:{labels:keys.map(k=>bucketLabel(k,'month')),datasets:[
-        {label:'A',data:keys.map(k=>mode==='sum'?(mA.get(k)?.v||0):(mA.get(k)?.c||0)),borderColor:pri,backgroundColor:Utils.hexRgba(pri,.2),fill:true,tension:.35},
-        {label:'B',data:keys.map(k=>mode==='sum'?(mB.get(k)?.v||0):(mB.get(k)?.c||0)),borderColor:acc,backgroundColor:Utils.hexRgba(acc,.15),fill:true,tension:.35}]},
+        {label:'Principal',data:keys.map(k=>mode==='sum'?(mA.get(k)?.v||0):(mA.get(k)?.c||0)),borderColor:pri,backgroundColor:Utils.hexRgba(pri,.2),fill:true,tension:.35},
+        {label:'Secundario',data:keys.map(k=>mode==='sum'?(mB.get(k)?.v||0):(mB.get(k)?.c||0)),borderColor:acc,backgroundColor:Utils.hexRgba(acc,.15),fill:true,tension:.35}]},
       options:{maintainAspectRatio:false,responsive:true,plugins:{legend:{labels:{boxWidth:10}},tooltip:{callbacks:{label:c=>' '+c.dataset.label+': '+Utils.fmtNum(c.parsed.y)}}},scales:{y:{grid:{color:'rgba(143,160,175,.08)'}}}}});
   }
   if(catA&&catB&&measA&&measB){
     const gA=groupAgg(A.rows,catA.key,measA.key,'sum',6);
     const mB=new Map(groupAgg(B.rows,catB.key,measB.key,'sum',9999).map(g=>[g.label,g.value]));
-    $('#cmpHead').innerHTML='<tr><th>Categoría</th><th>Σ A</th><th>Σ B</th><th>Δ</th><th>Δ%</th></tr>';
+    $('#cmpHead').innerHTML='<tr><th>Categoría</th><th>Σ Principal</th><th>Σ Secundario</th><th>Δ</th><th>Δ%</th></tr>';
     $('#cmpBody').innerHTML=gA.map(g=>{const b=mB.get(g.label)||0;const d=g.value-b;const dp=b>0?d/b*100:null;
       const cls=dp==null?'flat':dp>0?'up':dp<0?'down':'flat';
       return `<tr><td>${Utils.esc(g.label)}</td><td style="text-align:right">${Utils.fmtNum(g.value)}</td><td style="text-align:right">${Utils.fmtNum(b)}</td><td style="text-align:right" class="${cls}">${d>0?'+':''}${Utils.fmtNum(d)}</td><td style="text-align:right" class="${cls}">${dp==null?'—':(dp>0?'+':'')+Math.round(dp)+'%'}</td></tr>`;}).join('');
@@ -915,9 +1022,15 @@ const FilterEngine={
   }
 };
 
-/* ================= TableEngine ================= */
+/* ================= TableEngine (con Fecha egreso y Días en stock) ================= */
 const TableEngine={
-  visCols:()=>state.columns.filter(c=>c.type!=='image'),
+  visCols(){
+    const cols=state.columns.filter(c=>c.type!=='image');
+    const hasEg=state.columns.some(c=>c.type==='date'&&/egreso|salida|baja|entrega/i.test(c.name));
+    const hasDs=state.rows.length&&('__diasStock' in state.rows[0]);
+    if(!hasEg&&hasDs)cols.push({key:'__egreso',name:'Fecha egreso',type:'date',virtual:true});
+    if(hasDs)cols.push({key:'__diasStock',name:'Días en stock',type:'number',virtual:true});
+    return cols;},
   render(rows){
     const cols=this.visCols();
     $('#tblHead').innerHTML='<tr><th style="width:34px"><input type="checkbox" id="selAll"></th>'+cols.map(c=>{
@@ -939,6 +1052,8 @@ const TableEngine={
       const sel=state.selected.has(r.__id);
       return `<tr class="${sel?'sel':''}"><td><input type="checkbox" data-id="${r.__id}" ${sel?'checked':''}></td>`+cols.map(c=>{
         const v=r[c.key];
+        if(c.key==='__egreso')return `<td>${v?Utils.fmtDate(v):'<span style="color:var(--ok)">🟢 En stock</span>'}</td>`;
+        if(c.key==='__diasStock')return `<td style="text-align:right">${v!=null?Utils.fmtInt(v)+' d':'—'}</td>`;
         if(c.type==='url')return `<td>${v?`<a href="${Utils.esc(v)}" target="_blank" rel="noopener" style="color:var(--primary)">🔗 enlace</a>`:'—'}</td>`;
         if(c.type==='date')return `<td>${Utils.fmtDate(v)}</td>`;
         if(c.type==='currency')return `<td style="text-align:right">${v!=null?Utils.fmtCur(v,c.sym):'—'}</td>`;
@@ -1001,7 +1116,7 @@ function renderInsights(rows){
       let up=null,dn=null;
       gA.forEach(g=>{const b=mapB.get(g.label);if(b>0){const d=(g.value-b)/b*100;
         if(!up||d>up.d)up={label:g.label,d};if(!dn||d<dn.d)dn={label:g.label,d};}});
-      const tag=other===state.B?'B':'A';
+      const tag=other===state.B?'Secundario':'Principal';
       if(up&&up.d>0)out.push({t:'ok',i:'🆚',x:`Vs dataset ${tag}: <b>${Utils.esc(up.label)}</b> creció <b>+${Math.round(up.d)}%</b>.`});
       if(dn&&dn.d<0)out.push({t:'warn',i:'🆚',x:`Vs dataset ${tag}: <b>${Utils.esc(dn.label)}</b> cayó <b>${Math.round(dn.d)}%</b>.`});}}
   const miss=state.columns.filter(c=>c.type!=='image').map(c=>({c,m:rows.filter(r=>r[c.key]==null||r[c.key]==='').length})).filter(x=>x.m/n>.1);
@@ -1018,7 +1133,7 @@ function renderDecisions(rows){
         statusCol=findStatusCol(state.columns);
   const add=(p,tag,ic,x)=>D.push({p,tag,ic,x});
   if(statusCol){const canc=rows.filter(r=>isCancelled(r[statusCol.key])||isReturned(r[statusCol.key])).length;
-    if(canc/n>.12)add('alta','Servicio','↩️',`Tasa de cancelación/devolución <b>${Math.round(canc/n*100)}%</b>: investigar causa raíz (stock, calidad, logística).`);}
+    if(n&&canc/n>.12)add('alta','Servicio','↩️',`Tasa de cancelación/devolución <b>${Math.round(canc/n*100)}%</b>: investigar causa raíz (stock, calidad, logística).`);}
   if(stock){
     const zero=rows.filter(r=>valNum(r[stock.key])===0);
     if(zero.length){const names=groupAgg(zero,lab?lab.key:stock.key,null,'count',3).map(g=>g.label).join(', ');
@@ -1050,7 +1165,7 @@ function renderDecisions(rows){
   const other=state.view==='B'?state.A:state.B;
   if(other&&meas){const mB=pickMeasureIn(other.columns);
     if(mB){const a=sumIn(rows,meas.key),b=sumIn(other.rows,mB.key);
-      if(b>0){const d=(a-b)/b*100;const tag=other===state.B?'B':'A';
+      if(b>0){const d=(a-b)/b*100;const tag=other===state.B?'Secundario':'Principal';
         if(d<0)add('alta','Comparativo','🆚',`Σ ${Utils.esc(meas.name)} <b>${Math.round(d)}%</b> vs dataset ${tag}: corregir desviación.`);
         else add('baja','Comparativo','🆚',`Σ ${Utils.esc(meas.name)} <b>+${Math.round(d)}%</b> vs ${tag}: escalar lo que funciona.`);}}}
   const miss=state.columns.filter(c=>c.type!=='image').map(c=>({c,m:rows.filter(r=>r[c.key]==null||r[c.key]==='').length})).filter(x=>n&&x.m/n>.15);
@@ -1065,7 +1180,7 @@ function renderDecisions(rows){
 
 function refresh(){
   try{const full=getFiltered();
-    renderKPIs(full);renderCharts();renderGeo();TableEngine.render(full);renderInsights(full);renderDecisions(full);FilterEngine.renderChips();
+    renderKPIs(full);renderCharts();TimeEngine.render();renderGeo();TableEngine.render(full);renderInsights(full);renderDecisions(full);FilterEngine.renderChips();
   }catch(e){console.error(e);Utils.toast('⚠️ Error procesando: '+Utils.esc(e.message),'err');}
 }
 
@@ -1107,12 +1222,18 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.querySelectorAll('.seg-btn[data-slot]').forEach(b=>b.addEventListener('click',()=>{
     state.slot=b.dataset.slot;
     document.querySelectorAll('.seg-btn[data-slot]').forEach(x=>x.classList.toggle('active',x===b));
-    Utils.toast(state.slot==='B'?'🅱 La próxima carga irá al <b>Dataset B</b>.':'🅰 La próxima carga irá al <b>Dataset A</b>.');
+    Utils.toast(state.slot==='B'?'🅱 La próxima carga irá al dataset <b>Secundario</b>.':'🅰 La próxima carga irá al dataset <b>Principal</b>.');
   }));
   document.querySelectorAll('.view-btn').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view)));
-  $('#btnRemoveB').onclick=()=>{state.B=null;updateBBadge();
+  $('#btnCompare').onclick=()=>{
+    if(!state.B)return Utils.toast('Carga primero un dataset Secundario para comparar.','err');
+    state.showCompare=!state.showCompare;
+    $('#btnCompare').classList.toggle('primary',state.showCompare);
+    renderCompare();
+    if(state.showCompare)setTimeout(()=>$('#compareSection').scrollIntoView({behavior:'smooth',block:'start'}),150);};
+  $('#btnRemoveB').onclick=()=>{state.B=null;state.showCompare=false;$('#btnCompare').classList.remove('primary');updateBBadge();
     if(state.view==='B'){state.view='A';syncViewButtons();activateDS(state.A,false);}
-    renderCompare();refresh();Utils.toast('🅱 Dataset B retirado del reporte.');};
+    renderCompare();refresh();Utils.toast('🅱 Dataset Secundario retirado del reporte.');};
   $('#btnSheets').onclick=()=>connectSheets($('#sheetsUrl').value.trim());
   $('#sheetsUrl').addEventListener('keydown',e=>{if(e.key==='Enter')connectSheets(e.target.value.trim());});
   $('#btnCSV').onclick=()=>$('#fileCSV').click();
@@ -1134,6 +1255,12 @@ document.addEventListener('DOMContentLoaded',()=>{
   window.addEventListener('dragleave',e=>{e.preventDefault();if(--depth<=0){$('#dropOverlay').classList.remove('on');$('#dropzone').classList.remove('drag');}});
   window.addEventListener('dragover',e=>e.preventDefault());
   window.addEventListener('drop',e=>{e.preventDefault();depth=0;$('#dropOverlay').classList.remove('on');$('#dropzone').classList.remove('drag');handleFile(e.dataTransfer.files?.[0]);});
+  // Análisis temporal: granularidad y período
+  document.querySelectorAll('.gbtn').forEach(b=>b.addEventListener('click',()=>{
+    TimeEngine.gran=b.dataset.g;TimeEngine.period=null;
+    document.querySelectorAll('.gbtn').forEach(x=>x.classList.toggle('active',x===b));
+    TimeEngine.render();}));
+  $('#periodSel').addEventListener('change',e=>{TimeEngine.period=e.target.value;TimeEngine.render();});
   if(!window.Chart)Utils.toast('⚠️ Chart.js no cargó (sin internet). KPIs, filtros y tabla seguirán funcionando.','err');
   if(!window.XLSX)Utils.toast('⚠️ SheetJS no cargó: XLSX deshabilitado, CSV sigue operativo.','err');
   if(!window.L)Utils.toast('⚠️ Leaflet no cargó: el mapa interactivo estará deshabilitado sin conexión.','err');
@@ -1166,4 +1293,5 @@ document.addEventListener('DOMContentLoaded',()=>{
 </script>
 </body>
 </html>
+
 
