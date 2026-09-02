@@ -78,13 +78,39 @@ main{padding:18px 22px 60px;max-width:1560px;margin:auto;display:flex;flex-direc
 .ch-card .ch-body canvas{transition:filter .3s}
 .ch-card:hover .ch-body canvas{filter:drop-shadow(0 0 14px color-mix(in srgb,var(--primary) 22%,transparent))}
 .ch-card:hover h3{color:#fff;text-shadow:0 0 12px color-mix(in srgb,var(--primary) 60%,transparent)}
-/* ===== Mapa Argentina + heat ===== */
+/* Mapa HUD */
 #geoSection[hidden]{display:none}
 .geo-grid{display:grid;grid-template-columns:7fr 5fr;gap:14px}
-#mapDiv{height:380px;background:#e8e4d8;border-radius:0 0 14px 14px}
+.map-wrap{position:relative}
+#mapDiv{height:380px;background:#0a0d12;border-radius:0 0 14px 14px;box-shadow:inset 0 0 60px rgba(0,0,0,.55)}
+#mapDiv .leaflet-container{background:#0a0d12;font-family:'Rajdhani',sans-serif}
+#mapDiv .leaflet-tile{filter:brightness(.82) contrast(1.18) saturate(.55) sepia(.12) hue-rotate(-12deg)}
+#mapCard::after{content:'';position:absolute;inset:8px;pointer-events:none;opacity:0;transition:opacity .35s;z-index:6;background:
+ linear-gradient(var(--primary),var(--primary)) left top/16px 2px,linear-gradient(var(--primary),var(--primary)) left top/2px 16px,
+ linear-gradient(var(--primary),var(--primary)) right top/16px 2px,linear-gradient(var(--primary),var(--primary)) right top/2px 16px,
+ linear-gradient(var(--primary),var(--primary)) left bottom/16px 2px,linear-gradient(var(--primary),var(--primary)) left bottom/2px 16px,
+ linear-gradient(var(--primary),var(--primary)) right bottom/16px 2px,linear-gradient(var(--primary),var(--primary)) right bottom/2px 16px;background-repeat:no-repeat}
+#mapCard:hover::after{opacity:.85}
+.map-overlay{position:absolute;top:12px;left:12px;z-index:800;pointer-events:none;display:flex;gap:8px;align-items:center;
+ background:linear-gradient(90deg,rgba(8,10,14,.92),rgba(8,10,14,.55));border:1px solid color-mix(in srgb,var(--primary) 45%,transparent);
+ border-radius:8px;padding:6px 12px;font-family:'Orbitron';font-size:.6rem;letter-spacing:2px;color:#fff;text-transform:uppercase;
+ box-shadow:0 6px 18px rgba(0,0,0,.5),inset 0 0 12px color-mix(in srgb,var(--primary) 12%,transparent)}
+.map-overlay i{width:8px;height:8px;border-radius:50%;background:var(--primary);box-shadow:0 0 10px var(--primary);animation:blink 1.6s infinite}
+@keyframes blink{50%{opacity:.35}}
+.leaflet-control-zoom a{background:#121820!important;color:var(--text)!important;border:1px solid #263140!important;transition:.2s}
+.leaflet-control-zoom a:hover{background:color-mix(in srgb,var(--primary) 30%,#121820)!important;color:#fff!important;border-color:var(--primary)!important}
+.leaflet-control-scale-line{background:rgba(8,10,14,.6)!important;color:var(--muted)!important;border-color:#2a3542!important;font-size:.6rem!important}
+.leaflet-control-attribution{background:rgba(8,10,14,.7)!important;color:#5b6a79!important;font-size:.6rem!important}
+.leaflet-control-attribution a{color:#7d8ea0!important}
+.leaflet-popup-content-wrapper{background:#121820;color:var(--text);border:1px solid color-mix(in srgb,var(--primary) 55%,transparent);border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.6)}
+.leaflet-popup-tip{background:#121820}
+.leaflet-popup-content{font-family:'Rajdhani';font-size:.82rem}
 .arg-tip{background:#121820!important;color:var(--text)!important;border:1px solid var(--primary)!important;border-radius:6px!important;font-family:'Rajdhani';font-weight:700;font-size:.68rem;letter-spacing:.5px;box-shadow:0 4px 12px rgba(0,0,0,.4)!important}
 .arg-tip::before{border-top-color:var(--primary)!important}
-.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#121820;color:var(--text)}
+.mk-glow{filter:drop-shadow(0 0 8px color-mix(in srgb,var(--primary) 85%,transparent))}
+.mk-halo{animation:halo 2.2s ease-in-out infinite}
+@keyframes halo{0%,100%{stroke-opacity:.7;stroke-width:2}50%{stroke-opacity:.12;stroke-width:9}}
+.arg-outline{filter:drop-shadow(0 0 6px color-mix(in srgb,var(--primary) 55%,transparent))}
 .heat-body{padding:14px 16px;display:flex;flex-direction:column;gap:10px}
 #heatGrid{display:grid;gap:3px}
 .hcell{border-radius:4px;min-height:26px;cursor:pointer;transition:.15s}
@@ -93,7 +119,6 @@ main{padding:18px 22px 60px;max-width:1560px;margin:auto;display:flex;flex-direc
 .hcol{font-size:.6rem;color:var(--muted);text-align:center}
 .heat-legend{display:flex;align-items:center;gap:8px;font-size:.65rem;color:var(--muted)}
 .heat-legend i{flex:0 0 120px;height:8px;border-radius:4px;background:linear-gradient(90deg,rgba(225,6,0,.05),var(--primary))}
-/* Filtros */
 #filterBar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding:14px 18px}
 .sel,.inp{background:#0d1219;border:1px solid #263140;color:var(--text);border-radius:8px;padding:8px 10px;font-family:'Rajdhani';font-size:.85rem;outline:none;transition:.2s}
 .sel:focus,.inp:focus{border-color:var(--primary);box-shadow:0 0 0 3px color-mix(in srgb,var(--primary) 25%,transparent)}
@@ -130,15 +155,31 @@ tbody tr.sel{background:color-mix(in srgb,var(--primary) 16%,transparent)}
 #insightsList li{display:flex;gap:10px;padding:10px 12px;border:1px solid #1b2430;border-left:3px solid var(--muted);border-radius:10px;background:#0d1218;font-size:.84rem;line-height:1.45;animation:rise .45s both}
 #insightsList li.ok{border-left-color:var(--ok)}#insightsList li.warn{border-left-color:var(--warn)}#insightsList li.bad{border-left-color:var(--bad)}#insightsList li.info{border-left-color:var(--primary)}
 #insightsList .ic{font-size:1.05rem}
+/* ===== Decisiones + EFECTOS DE ATENCIÓN ===== */
 #decisionsList{list-style:none;padding:14px 16px;display:flex;flex-direction:column;gap:10px;max-height:360px;overflow:auto}
-#decisionsList li{display:flex;gap:10px;padding:10px 12px;border:1px solid #1b2430;border-radius:10px;background:#0d1218;font-size:.83rem;animation:rise .45s both;transition:.2s}
-#decisionsList li:hover{border-color:color-mix(in srgb,var(--primary) 45%,var(--line));translate:2px 0}
-#decisionsList li.alta{border-left:3px solid var(--bad)}#decisionsList li.media{border-left:3px solid var(--warn)}#decisionsList li.baja{border-left:3px solid var(--ok)}
+#decisionsList li{display:flex;gap:10px;padding:10px 12px;border:1px solid #1b2430;border-radius:10px;background:#0d1218;font-size:.83rem;animation:rise .45s both;transition:.2s;position:relative;overflow:hidden}
+#decisionsList li::after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.08) 50%,transparent 60%);transform:translateX(-130%);transition:transform .7s ease;pointer-events:none}
+#decisionsList li:hover::after{transform:translateX(130%)}
+#decisionsList li:hover{border-color:color-mix(in srgb,var(--primary) 45%,var(--line));translate:2px 0;transform:scale(1.012)}
+#decisionsList li.alta{border-left:3px solid var(--bad);animation:rise .45s both,alertCard 2.2s ease-in-out infinite}
+#decisionsList li.media{border-left:3px solid var(--warn)}
+#decisionsList li.baja{border-left:3px solid var(--ok)}
+@keyframes alertCard{0%,100%{border-color:color-mix(in srgb,var(--bad) 40%,var(--line));box-shadow:none}50%{border-color:var(--bad);box-shadow:0 0 16px color-mix(in srgb,var(--bad) 30%,transparent)}}
+#decisionsList li.alta .ic{animation:pulse .9s ease-in-out infinite;filter:drop-shadow(0 0 8px color-mix(in srgb,var(--bad) 70%,transparent))}
+#decisionsList li.media .ic{filter:drop-shadow(0 0 6px color-mix(in srgb,var(--warn) 60%,transparent))}
+#decisionsList li.baja .ic{filter:drop-shadow(0 0 6px color-mix(in srgb,var(--ok) 50%,transparent))}
 #decisionsList .ic{font-size:1.05rem}
-.prio{font-family:'Orbitron';font-size:.58rem;letter-spacing:1px;padding:2px 7px;border-radius:5px;margin-right:6px}
-.prio.alta{background:color-mix(in srgb,var(--bad) 20%,transparent);color:#ffb4b0;border:1px solid color-mix(in srgb,var(--bad) 55%,transparent)}
-.prio.media{background:color-mix(in srgb,var(--warn) 18%,transparent);color:#ffe0b0;border:1px solid color-mix(in srgb,var(--warn) 50%,transparent)}
-.prio.baja{background:color-mix(in srgb,var(--ok) 15%,transparent);color:#b9f3c9;border:1px solid color-mix(in srgb,var(--ok) 50%,transparent)}
+@keyframes pulse{50%{transform:scale(1.18) rotate(-4deg)}}
+.prio{font-family:'Orbitron';font-size:.58rem;letter-spacing:1px;padding:2px 7px;border-radius:5px;margin-right:6px;position:relative;overflow:hidden;transition:.2s;display:inline-block}
+.prio::after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.4) 50%,transparent 70%);transform:translateX(-130%);animation:chipShine 3s infinite;pointer-events:none}
+@keyframes chipShine{0%{transform:translateX(-130%)}55%,100%{transform:translateX(130%)}}
+.prio.alta{background:color-mix(in srgb,var(--bad) 20%,transparent);color:#ffb4b0;border:1px solid color-mix(in srgb,var(--bad) 55%,transparent);animation:chipAlta 1.4s ease-in-out infinite}
+@keyframes chipAlta{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--bad) 55%,transparent)}50%{box-shadow:0 0 12px 2px color-mix(in srgb,var(--bad) 50%,transparent)}}
+.prio.media{background:color-mix(in srgb,var(--warn) 18%,transparent);color:#ffe0b0;border:1px solid color-mix(in srgb,var(--warn) 50%,transparent);animation:chipMedia 2.2s ease-in-out infinite}
+@keyframes chipMedia{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--warn) 45%,transparent)}50%{box-shadow:0 0 10px 1px color-mix(in srgb,var(--warn) 40%,transparent)}}
+.prio.baja{background:color-mix(in srgb,var(--ok) 15%,transparent);color:#b9f3c9;border:1px solid color-mix(in srgb,var(--ok) 50%,transparent);animation:chipBaja 3s ease-in-out infinite}
+@keyframes chipBaja{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--ok) 35%,transparent)}50%{box-shadow:0 0 8px 1px color-mix(in srgb,var(--ok) 30%,transparent)}}
+#decisionsList li:hover .prio{transform:scale(1.1)}
 .dtag{font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
 .dtext{margin-top:4px;line-height:1.45;color:#c6cfd9}
 .modal{position:fixed;inset:0;background:rgba(3,5,8,.7);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;z-index:100;padding:16px}
@@ -170,6 +211,7 @@ footer{padding:18px;text-align:center;color:var(--muted);font-size:.72rem;letter
  thead th,tbody td{padding:6px 8px}tbody td{max-width:140px}
  #viewBar{width:100%}#viewBar .seg-btn{flex:1}
  .conn-row .inp{min-width:100%}
+ .map-overlay{font-size:.5rem;padding:4px 8px}
 }
 </style>
 </head>
@@ -279,7 +321,10 @@ footer{padding:18px;text-align:center;color:var(--muted);font-size:.72rem;letter
     <div class="geo-grid">
       <div class="card" id="mapCard">
         <div class="card-h"><h3>🗺️ Mapa interactivo · Argentina</h3><span class="spacer"></span><span id="mapInfo" class="src-badge"></span></div>
-        <div id="mapDiv"></div>
+        <div class="map-wrap">
+          <div id="mapDiv"></div>
+          <div class="map-overlay"><i></i>Red nacional · FC Racing Skill</div>
+        </div>
       </div>
       <div class="card" id="heatCard">
         <div class="card-h"><h3>🔥 Mapa de calor</h3><span class="spacer"></span><span id="heatInfo" class="src-badge"></span></div>
@@ -454,7 +499,7 @@ function isoWeek(d){const t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.get
   const firstThu=new Date(Date.UTC(t.getUTCFullYear(),0,4));const fday=(firstThu.getUTCDay()+6)%7;firstThu.setUTCDate(firstThu.getUTCDate()-fday+3);
   return 1+Math.round((t-firstThu)/(7*864e5));}
 
-/* ===== Geocoder embebido: Argentina (prioridad) + mundo ===== */
+/* ===== Geocoder embebido ===== */
 const GEO={
  'argentina':[-34.61,-64.18],'provincia de buenos aires':[-36.7,-60.5],'buenos aires':[-34.60,-58.38],'caba':[-34.60,-58.38],
  'cordoba':[-31.42,-64.18],'rosario':[-32.95,-60.65],'santa fe':[-31.63,-60.70],'mendoza':[-32.89,-68.85],'la plata':[-34.92,-57.95],
@@ -480,7 +525,6 @@ const GEO={
  'ecuador':[-1.83,-78.18],'quito':[-0.18,-78.47],'guayaquil':[-2.17,-79.92],'brasil':[-14.24,-51.93],'sao paulo':[-23.55,-46.63],
  'estados unidos':[37.09,-95.71],'usa':[37.09,-95.71],'nueva york':[40.71,-74.0],'new york':[40.71,-74.0],'miami':[25.76,-80.19],'houston':[29.76,-95.36]
 };
-/* Contorno simplificado de Argentina (continental + Tierra del Fuego) */
 const ARG_MAIN=[[-21.8,-65.0],[-22.0,-62.5],[-23.9,-60.9],[-24.8,-58.4],[-25.6,-57.6],[-27.0,-57.6],[-27.5,-56.5],[-27.4,-55.6],[-26.7,-54.6],[-26.6,-53.8],[-27.2,-53.6],[-28.6,-54.5],[-30.0,-55.2],[-31.0,-56.0],[-32.0,-57.6],[-33.0,-58.1],[-34.5,-58.4],[-35.5,-57.3],[-36.5,-56.8],[-37.5,-57.0],[-38.0,-57.6],[-39.0,-61.5],[-40.5,-62.8],[-41.5,-63.8],[-42.5,-63.6],[-43.5,-65.0],[-44.5,-65.5],[-45.5,-66.5],[-46.5,-67.5],[-47.5,-66.0],[-48.5,-67.0],[-49.5,-67.5],[-50.5,-68.5],[-51.5,-69.0],[-52.5,-68.8],[-54.0,-68.5],[-52.0,-68.6],[-50.0,-69.0],[-48.0,-70.0],[-46.0,-71.0],[-44.0,-71.5],[-42.0,-71.8],[-40.0,-71.9],[-38.0,-71.5],[-36.0,-70.8],[-34.0,-70.0],[-32.0,-69.8],[-30.0,-69.7],[-28.0,-69.0],[-26.0,-68.5],[-24.0,-67.0],[-22.5,-66.0]];
 const ARG_TDF=[[-53.6,-68.5],[-54.5,-65.5],[-55.0,-66.5],[-54.5,-68.5]];
 
@@ -558,7 +602,7 @@ function ingest(data,source){
 function updateStatus(){
   const s=state.source,h=state.updatedAt?state.updatedAt.toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'}):'—';
   const ico=s.type==='sheets'?'📡':s.type==='file'?'📄':'';
-  $('#connStatus').innerHTML=`${state.view==='B'?'🅱':'🅰'} ${ico} <b>${Utils.esc(Utils.trunc(s.label,34))}</b> · ${Utils.fmtInt(state.rows.length)} reg · ${state.columns.length} col · 🕒 ${h}`;
+  $('#connStatus').innerHTML=`${state.view==='B'?'🅱':''} ${ico} <b>${Utils.esc(Utils.trunc(s.label,34))}</b> · ${Utils.fmtInt(state.rows.length)} reg · ${state.columns.length} col · 🕒 ${h}`;
   $('#connStatus').classList.add('ok');
 }
 function updateBBadge(){
@@ -732,15 +776,21 @@ function renderKPIs(rows){
       <span class="sub">${Utils.esc(c.s||'')}</span></div>`).join('');
 }
 
-/* ================= ChartEngine ================= */
+/* ================= ChartEngine (ejes limpios + efectos) ================= */
 function chartDefaults(){
   Chart.defaults.color='#8fa0af';Chart.defaults.borderColor='rgba(143,160,175,.12)';
   Chart.defaults.font.family="'Rajdhani','Segoe UI',sans-serif";Chart.defaults.font.size=12;
   Chart.defaults.plugins.tooltip.backgroundColor='rgba(8,11,15,.94)';
   const primary=(getComputedStyle(document.documentElement).getPropertyValue('--primary')||'#e10600').trim();
   Chart.defaults.plugins.tooltip.borderColor=Utils.hexRgba(primary,.6);Chart.defaults.plugins.tooltip.borderWidth=1;
+  // Ejes limpios: SIN líneas de subdivisión, CON todas las etiquetas/ticks
+  try{Chart.defaults.scale.grid.display=false;Chart.defaults.scale.border.display=false;}catch(e){}
+  Chart.defaults.animation.duration=850;Chart.defaults.animation.easing='easeOutQuart';
   return primary;
 }
+function hoverCursor(e,els){if(e.native)e.native.target.style.cursor=els.length?'pointer':'default';}
+const CLEAN_SCALES={x:{grid:{display:false},border:{display:false},ticks:{display:true}},y:{grid:{display:false},border:{display:false},ticks:{display:true}}};
+const barDelay={duration:850,easing:'easeOutQuart',delay:c=>(c.type==='data'&&c.mode!=='update')?c.dataIndex*45:0};
 function buildChartDefs(){
   const cols=state.columns,defs=[];
   const cat=roleCol('category')||cols.filter(c=>c.type==='text'&&c.cardinal>=2&&c.cardinal<=60).sort((a,b)=>a.cardinal-b.cardinal)[0]||null;
@@ -794,11 +844,19 @@ function renderCharts(){
     const cfg={type:def.type==='area'?'line':def.type,
       data:{labels:D.labels,datasets:[{label:def.title,data:D.values,
         backgroundColor:def.type==='doughnut'?bg:(isLine?Utils.hexRgba(primary,.25):bg),
-        borderColor:brd,borderWidth:isLine?2:1,borderRadius:def.type==='bar'?6:0,fill:def.type==='area',tension:.35,pointRadius:isLine?3:0,pointBackgroundColor:primary}]},
+        borderColor:brd,borderWidth:isLine?2:1,borderRadius:def.type==='bar'?6:0,fill:def.type==='area',tension:.35,
+        pointRadius:isLine?3:0,pointBackgroundColor:primary,
+        hoverBackgroundColor:def.type==='doughnut'?undefined:Utils.hexRgba(primary,1),
+        hoverBorderColor:'#ffffff',hoverBorderWidth:isLine?2:1.5,
+        hoverOffset:def.type==='doughnut'?12:undefined,
+        spacing:def.type==='doughnut'?2:undefined,
+        pointHoverRadius:isLine?6:undefined,pointHoverBackgroundColor:'#ffffff',pointHoverBorderWidth:2}]},
       options:{maintainAspectRatio:false,responsive:true,indexAxis:def.hz?'y':'x',
+        onHover:hoverCursor,
+        animation:def.type==='doughnut'?{animateRotate:true,animateScale:true,duration:900}:barDelay,
         plugins:{legend:{display:def.type==='doughnut',position:'right',labels:{boxWidth:10,font:{size:11}}},
           tooltip:{callbacks:{label:c=>' '+Utils.fmtNum(c.parsed?.y??c.parsed?.x??c.parsed)}}},
-        scales:(def.type!=='doughnut')?{x:{grid:{display:!!def.hz}},y:{grid:{color:'rgba(143,160,175,.08)'}}}:undefined,
+        scales:(def.type!=='doughnut')?CLEAN_SCALES:undefined,
         onClick:(e,els)=>{if(!els.length)return;chartClick(def,D,els[0].index);}}};
     if(def.type==='doughnut')cfg.options.cutout='62%';
     state.charts[def.id]=new Chart($('#cv_'+def.id),cfg);});
@@ -860,19 +918,23 @@ const TimeEngine={gran:'month',period:null,charts:{},
       this.charts.series=new Chart($('#cvTimeSeries'),{type:'bar',
         data:{labels:keys.map(k=>this.label(k,this.gran)),datasets:[{label:saleCol?'Ventas':'Σ',
           data:keys.map(k=>+(m.get(k).v).toFixed(2)),
-          backgroundColor:keys.map(k=>k===this.period?Utils.hexRgba(pri,.95):Utils.hexRgba(pri,.4)),borderRadius:5}]},
-        options:{maintainAspectRatio:false,responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+Utils.fmtNum(c.parsed.y)}}},
-          scales:{y:{grid:{color:'rgba(143,160,175,.08)'}}},
+          backgroundColor:keys.map(k=>k===this.period?Utils.hexRgba(pri,.95):Utils.hexRgba(pri,.4)),borderRadius:5,
+          hoverBackgroundColor:Utils.hexRgba(pri,1),hoverBorderColor:'#ffffff',hoverBorderWidth:1.5}]},
+        options:{maintainAspectRatio:false,responsive:true,onHover:hoverCursor,animation:barDelay,
+          plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+Utils.fmtNum(c.parsed.y)}}},
+          scales:CLEAN_SCALES,
           onClick:(e,els)=>{if(!els.length)return;this.period=keys[els[0].index];this.render();}}});
       if(lab){const g=groupAgg(pr,lab.key,(soldQty||meas)?.key,soldQty||meas?'sum':'count',5);
         this.charts.top=new Chart($('#cvTopPeriod'),{type:'bar',
-          data:{labels:g.map(x=>Utils.trunc(x.label,16)),datasets:[{label:'Top 5',data:g.map(x=>+x.value.toFixed(2)),backgroundColor:Utils.hexRgba(pri,.75),borderRadius:5}]},
-          options:{indexAxis:'y',maintainAspectRatio:false,responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+Utils.fmtNum(c.parsed.x)}}},
-            scales:{x:{grid:{color:'rgba(143,160,175,.08)'}}}}});}
+          data:{labels:g.map(x=>Utils.trunc(x.label,16)),datasets:[{label:'Top 5',data:g.map(x=>+x.value.toFixed(2)),
+            backgroundColor:Utils.hexRgba(pri,.75),borderRadius:5,hoverBackgroundColor:Utils.hexRgba(pri,1),hoverBorderColor:'#ffffff',hoverBorderWidth:1.5}]},
+          options:{indexAxis:'y',maintainAspectRatio:false,responsive:true,onHover:hoverCursor,animation:barDelay,
+            plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+Utils.fmtNum(c.parsed.x)}}},
+            scales:CLEAN_SCALES}});}
     }
   }};
 
-/* ================= GeoEngine: Mapa Argentina + ciudades filtradas ================= */
+/* ================= GeoEngine ================= */
 function destroyMap(){if(state.leafletMap){state.leafletMap.remove();state.leafletMap=null;}}
 function buildGeoPoints(rows){
   const cols=state.columns,meas=pickMeasure();
@@ -897,19 +959,20 @@ function renderMap(pts){
   if(!window.L){$('#mapDiv').innerHTML='<div class="note" style="padding:20px">Leaflet no cargó (sin conexión).</div>';return;}
   destroyMap();
   const primary=(getComputedStyle(document.documentElement).getPropertyValue('--primary')||'#e10600').trim();
-  // Mapa centrado en Argentina (como configuración base)
   const map=L.map('mapDiv',{scrollWheelZoom:false});state.leafletMap=map;
   map.setView([-34.6037,-64.1888],4);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap contributors',maxZoom:19}).addTo(map);
-  // Contorno de Argentina resaltado con el color corporativo
-  L.polygon([ARG_MAIN,ARG_TDF],{color:primary,weight:1.5,dashArray:'5 4',fillColor:primary,fillOpacity:.06,interactive:false}).addTo(map);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap · © CARTO',maxZoom:19,subdomains:'abcd'}).addTo(map);
+  L.control.scale({imperial:false,position:'bottomleft'}).addTo(map);
+  L.polygon([ARG_MAIN,ARG_TDF],{color:primary,weight:2,fillColor:primary,fillOpacity:.08,interactive:false,className:'arg-outline'}).addTo(map);
   const maxW=Math.max(...pts.map(p=>p.w))||1;
-  if(L.heatLayer&&pts.length>=3)L.heatLayer(pts.map(p=>[p.lat,p.lng,.2+.8*(p.w/maxW)]),{radius:28,blur:18,maxZoom:10,gradient:{0.2:'#1d4ed8',0.5:'#f59e0b',0.8:primary}}).addTo(map);
+  if(L.heatLayer&&pts.length>=3)L.heatLayer(pts.map(p=>[p.lat,p.lng,.2+.8*(p.w/maxW)]),{radius:30,blur:20,maxZoom:10,gradient:{0.2:'#33415c',0.5:primary,0.8:'#ffd166'}}).addTo(map);
+  const top3=[...pts].sort((a,b)=>b.w-a.w).slice(0,3);
   pts.forEach(p=>{
-    const mk=L.circleMarker([p.lat,p.lng],{radius:6+9*Math.sqrt(p.w/maxW),color:primary,weight:2,fillColor:primary,fillOpacity:.5})
+    if(top3.includes(p))L.circleMarker([p.lat,p.lng],{radius:10+9*Math.sqrt(p.w/maxW),fill:false,color:primary,weight:2,className:'mk-halo',interactive:false}).addTo(map);
+    L.circleMarker([p.lat,p.lng],{radius:6+9*Math.sqrt(p.w/maxW),color:'#ffffff',weight:1.5,fillColor:primary,fillOpacity:.75,className:'mk-glow'})
       .addTo(map)
-      .bindPopup(`<b>${Utils.esc(p.label)}</b><br>${Utils.fmtNum(p.w)}${p.cnt?` · ${p.cnt} reg`:''}`);
-    mk.bindTooltip(Utils.esc(p.label),{permanent:pts.length<=10,direction:'top',className:'arg-tip',offset:[0,-6]});});
+      .bindPopup(`<b>${Utils.esc(p.label)}</b><br>${Utils.fmtNum(p.w)}${p.cnt?` · ${p.cnt} reg`:''}`)
+      .bindTooltip(Utils.esc(p.label),{permanent:pts.length<=10,direction:'top',className:'arg-tip',offset:[0,-6]});});
   if(pts.length)map.fitBounds(L.latLngBounds(pts.map(p=>[p.lat,p.lng])),{padding:[28,28],maxZoom:11});
   setTimeout(()=>map.invalidateSize(),120);
   $('#mapInfo').textContent=pts.length+' ciudades marcadas · 🇦 Argentina';
@@ -997,9 +1060,11 @@ function renderCompare(){
     const mB=new Map(groupAgg(B.rows,catB.key,measB?.key,mode,9999).map(g=>[g.label,g.value]));
     state.cmpCharts.cat=new Chart($('#cvCmpCat'),{type:'bar',
       data:{labels:gA.map(g=>Utils.trunc(g.label,14)),datasets:[
-        {label:'Principal',data:gA.map(g=>+g.value.toFixed(2)),backgroundColor:Utils.hexRgba(pri,.8),borderRadius:5},
-        {label:'Secundario',data:gA.map(g=>+(mB.get(g.label)||0).toFixed(2)),backgroundColor:Utils.hexRgba(acc,.55),borderRadius:5}]},
-      options:{maintainAspectRatio:false,responsive:true,plugins:{legend:{labels:{boxWidth:10}},tooltip:{callbacks:{label:c=>' '+c.dataset.label+': '+Utils.fmtNum(c.parsed.y)}}},scales:{y:{grid:{color:'rgba(143,160,175,.08)'}}}}});
+        {label:'Principal',data:gA.map(g=>+g.value.toFixed(2)),backgroundColor:Utils.hexRgba(pri,.8),borderRadius:5,hoverBackgroundColor:Utils.hexRgba(pri,1),hoverBorderColor:'#fff',hoverBorderWidth:1.5},
+        {label:'Secundario',data:gA.map(g=>+(mB.get(g.label)||0).toFixed(2)),backgroundColor:Utils.hexRgba(acc,.55),borderRadius:5,hoverBackgroundColor:Utils.hexRgba(acc,1),hoverBorderColor:'#fff',hoverBorderWidth:1.5}]},
+      options:{maintainAspectRatio:false,responsive:true,onHover:hoverCursor,animation:barDelay,
+        plugins:{legend:{labels:{boxWidth:10}},tooltip:{callbacks:{label:c=>' '+c.dataset.label+': '+Utils.fmtNum(c.parsed.y)}}},
+        scales:CLEAN_SCALES}});
   }
   if(dateA&&dateB){
     const mode=measA&&measB?'sum':'count';
@@ -1007,9 +1072,11 @@ function renderCompare(){
     const keys=[...new Set([...mA.keys(),...mB.keys()])].sort();
     state.cmpCharts.time=new Chart($('#cvCmpTime'),{type:'line',
       data:{labels:keys.map(k=>bucketLabel(k,'month')),datasets:[
-        {label:'Principal',data:keys.map(k=>mode==='sum'?(mA.get(k)?.v||0):(mA.get(k)?.c||0)),borderColor:pri,backgroundColor:Utils.hexRgba(pri,.2),fill:true,tension:.35},
-        {label:'Secundario',data:keys.map(k=>mode==='sum'?(mB.get(k)?.v||0):(mB.get(k)?.c||0)),borderColor:acc,backgroundColor:Utils.hexRgba(acc,.15),fill:true,tension:.35}]},
-      options:{maintainAspectRatio:false,responsive:true,plugins:{legend:{labels:{boxWidth:10}},tooltip:{callbacks:{label:c=>' '+c.dataset.label+': '+Utils.fmtNum(c.parsed.y)}}},scales:{y:{grid:{color:'rgba(143,160,175,.08)'}}}}});
+        {label:'Principal',data:keys.map(k=>mode==='sum'?(mA.get(k)?.v||0):(mA.get(k)?.c||0)),borderColor:pri,backgroundColor:Utils.hexRgba(pri,.2),fill:true,tension:.35,pointHoverRadius:6,pointHoverBackgroundColor:'#fff',pointHoverBorderWidth:2},
+        {label:'Secundario',data:keys.map(k=>mode==='sum'?(mB.get(k)?.v||0):(mB.get(k)?.c||0)),borderColor:acc,backgroundColor:Utils.hexRgba(acc,.15),fill:true,tension:.35,pointHoverRadius:6,pointHoverBackgroundColor:'#fff',pointHoverBorderWidth:2}]},
+      options:{maintainAspectRatio:false,responsive:true,onHover:hoverCursor,animation:{duration:900,easing:'easeOutQuart'},
+        plugins:{legend:{labels:{boxWidth:10}},tooltip:{callbacks:{label:c=>' '+c.dataset.label+': '+Utils.fmtNum(c.parsed.y)}}},
+        scales:CLEAN_SCALES}});
   }
   if(catA&&catB&&measA&&measB){
     const gA=groupAgg(A.rows,catA.key,measA.key,'sum',6);
@@ -1323,6 +1390,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 </script>
 </body>
 </html>
+
 
 
 
