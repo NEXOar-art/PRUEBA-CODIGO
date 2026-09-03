@@ -12,6 +12,8 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
 <style>
 :root{--primary:#e10600;--accent:#9aa7b4;--bg:#07090c;--card:#10141b;--card2:#0c1016;--line:#212a34;--text:#e8ecf1;--muted:#8fa0af;--ok:#22c55e;--warn:#f59e0b;--bad:#ef4444;--glow:0 0 22px rgba(225,6,0,.25)}
 *{margin:0;padding:0;box-sizing:border-box}
@@ -78,7 +80,6 @@ main{padding:18px 22px 60px;max-width:1560px;margin:auto;display:flex;flex-direc
 .ch-card .ch-body canvas{transition:filter .3s}
 .ch-card:hover .ch-body canvas{filter:drop-shadow(0 0 14px color-mix(in srgb,var(--primary) 22%,transparent))}
 .ch-card:hover h3{color:#fff;text-shadow:0 0 12px color-mix(in srgb,var(--primary) 60%,transparent)}
-/* Mapa HUD */
 #geoSection[hidden]{display:none}
 .geo-grid{display:grid;grid-template-columns:7fr 5fr;gap:14px}
 .map-wrap{position:relative}
@@ -155,7 +156,6 @@ tbody tr.sel{background:color-mix(in srgb,var(--primary) 16%,transparent)}
 #insightsList li{display:flex;gap:10px;padding:10px 12px;border:1px solid #1b2430;border-left:3px solid var(--muted);border-radius:10px;background:#0d1218;font-size:.84rem;line-height:1.45;animation:rise .45s both}
 #insightsList li.ok{border-left-color:var(--ok)}#insightsList li.warn{border-left-color:var(--warn)}#insightsList li.bad{border-left-color:var(--bad)}#insightsList li.info{border-left-color:var(--primary)}
 #insightsList .ic{font-size:1.05rem}
-/* ===== Decisiones + EFECTOS DE ATENCIÓN ===== */
 #decisionsList{list-style:none;padding:14px 16px;display:flex;flex-direction:column;gap:10px;max-height:360px;overflow:auto}
 #decisionsList li{display:flex;gap:10px;padding:10px 12px;border:1px solid #1b2430;border-radius:10px;background:#0d1218;font-size:.83rem;animation:rise .45s both;transition:.2s;position:relative;overflow:hidden}
 #decisionsList li::after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.08) 50%,transparent 60%);transform:translateX(-130%);transition:transform .7s ease;pointer-events:none}
@@ -240,6 +240,7 @@ footer{padding:18px;text-align:center;color:var(--muted);font-size:.72rem;letter
   </div>
   <div class="hdr-right">
     <button class="btn" id="btnTheme"><span>🎨 Personalizar</span></button>
+    <button class="btn primary" id="btnPDF"><span>📄 Reporte PDF</span></button>
     <button class="btn" id="btnExport"><span>⬇ Exportar CSV</span></button>
   </div>
 </header>
@@ -271,7 +272,7 @@ footer{padding:18px;text-align:center;color:var(--muted);font-size:.72rem;letter
         <span id="badgeB" class="src-badge" hidden></span>
         <button class="btn" id="btnRemoveB" hidden><span>✖ Quitar B</span></button>
       </div>
-      <div class="note">🗄️ Carga tu dataset <b>Principal</b> y uno <b>Secundario</b>: cada uno se analiza por separado con la barra de vistas y el botón <b>🆚 Comparativo</b> los enfrenta en un reporte profesional. 🗺️ El mapa marca las ciudades de <b>Argentina</b> y reacciona a todos los filtros. 🔒 Procesamiento 100% local.</div>
+      <div class="note">🗄️ Carga tu dataset <b>Principal</b> y uno <b>Secundario</b>: cada uno se analiza por separado con la barra de vistas y el botón <b>🆚 Comparativo</b> los enfrenta en un reporte profesional. 🗺️ El mapa marca las ciudades de <b>Argentina</b> y reacciona a todos los filtros. 📄 El <b>Reporte PDF</b> captura la vista filtrada actual (o el dashboard total) en 2 páginas. 🔒 Procesamiento 100% local.</div>
     </div>
   </section>
 
@@ -401,7 +402,7 @@ footer{padding:18px;text-align:center;color:var(--muted);font-size:.72rem;letter
 <script>
 'use strict';
 const $=s=>document.querySelector(s);
-const state={rows:[],columns:[],filters:{},search:'',sort:{key:null,dir:1},page:1,pageSize:10,selected:new Set(),charts:{},chartTypes:{},cmpCharts:{},source:{type:'demo',label:'Demo'},lastSheetsUrl:null,updatedAt:null,slot:'A',view:'A',showCompare:false,A:null,B:null,leafletMap:null};
+const state={rows:[],columns:[],filters:{},search:'',sort:{key:null,dir:1},page:1,pageSize:10,selected:new Set(),charts:{},chartTypes:{},chartTitles:{},cmpCharts:{},source:{type:'demo',label:'Demo'},lastSheetsUrl:null,updatedAt:null,slot:'A',view:'A',showCompare:false,A:null,B:null,leafletMap:null,lastKpis:[],lastInsights:[],lastDecisions:[]};
 
 /* ================= Utils ================= */
 const Utils={
@@ -769,6 +770,7 @@ function renderKPIs(rows){
   if(pctCol&&pctCol.stats.count)push(76,Utils.trunc(pctCol.name,13)+' prom.',Utils.fmtNum(pctCol.stats.mean)+'%','rango '+Utils.fmtNum(pctCol.stats.min)+'–'+Utils.fmtNum(pctCol.stats.max));
   if(date&&date.stats.min)push(70,'Período',Utils.fmtDate(date.stats.min)+' → '+Utils.fmtDate(date.stats.max),'rango temporal');
   C.sort((a,b)=>b.sc-a.sc);
+  state.lastKpis=C;
   $('#kpiGrid').innerHTML=C.slice(0,12).map((c,idx)=>`
     <div class="card kpi" style="animation-delay:${idx*55}ms">
       <span class="lbl">${Utils.esc(c.l)}</span>
@@ -776,14 +778,13 @@ function renderKPIs(rows){
       <span class="sub">${Utils.esc(c.s||'')}</span></div>`).join('');
 }
 
-/* ================= ChartEngine (ejes limpios + efectos) ================= */
+/* ================= ChartEngine ================= */
 function chartDefaults(){
   Chart.defaults.color='#8fa0af';Chart.defaults.borderColor='rgba(143,160,175,.12)';
   Chart.defaults.font.family="'Rajdhani','Segoe UI',sans-serif";Chart.defaults.font.size=12;
   Chart.defaults.plugins.tooltip.backgroundColor='rgba(8,11,15,.94)';
   const primary=(getComputedStyle(document.documentElement).getPropertyValue('--primary')||'#e10600').trim();
   Chart.defaults.plugins.tooltip.borderColor=Utils.hexRgba(primary,.6);Chart.defaults.plugins.tooltip.borderWidth=1;
-  // Ejes limpios: SIN líneas de subdivisión, CON todas las etiquetas/ticks
   try{Chart.defaults.scale.grid.display=false;Chart.defaults.scale.border.display=false;}catch(e){}
   Chart.defaults.animation.duration=850;Chart.defaults.animation.easing='easeOutQuart';
   return primary;
@@ -823,7 +824,7 @@ function chartData(def,rows){
 }
 function renderCharts(){
   const grid=$('#chartsGrid');grid.innerHTML='';
-  Object.values(state.charts).forEach(c=>c.destroy());state.charts={};
+  Object.values(state.charts).forEach(c=>c.destroy());state.charts={};state.chartTitles={};
   if(!window.Chart){grid.innerHTML='<div class="card ch-card" style="grid-column:span 12"><div class="card-h"><h3>⚠️ Chart.js no cargó — verifica tu conexión (KPIs y tabla siguen operativos)</h3></div></div>';return;}
   const primary=chartDefaults();
   const defs=buildChartDefs();
@@ -859,7 +860,8 @@ function renderCharts(){
         scales:(def.type!=='doughnut')?CLEAN_SCALES:undefined,
         onClick:(e,els)=>{if(!els.length)return;chartClick(def,D,els[0].index);}}};
     if(def.type==='doughnut')cfg.options.cutout='62%';
-    state.charts[def.id]=new Chart($('#cv_'+def.id),cfg);});
+    state.charts[def.id]=new Chart($('#cv_'+def.id),cfg);
+    state.chartTitles[def.id]=def.title;});
 }
 function chartClick(def,D,i){
   if(def.hist){const b=D.bins[i];if(!b)return;const k=def.fk;
@@ -1175,10 +1177,11 @@ const TableEngine={
 /* ================= InsightsEngine ================= */
 function renderInsights(rows){
   const out=[];const n=rows.length;
-  if(!n){$('#insightsList').innerHTML='<li class="warn"><span class="ic">🚫</span><div>No hay registros con los filtros actuales. Ajusta o limpia los filtros.</div></li>';return;}
+  if(!n){out.push({t:'warn',i:'🚫',x:'No hay registros con los filtros actuales. Ajusta o limpia los filtros.'});}
   const cat=roleCol('category'),lab=roleCol('label')||roleCol('product')||roleCol('code'),
         meas=pickMeasure(),date=roleCol('date'),stock=roleCol('stock'),price=roleCol('price'),
         statusCol=findStatusCol(state.columns),saleCol=findSaleCol(state.columns);
+  if(n){
   out.push({t:'info',i:'🧾',x:`La vista actual contiene <b>${Utils.fmtInt(n)}</b> registros${cat?` en <b>${Utils.fmtInt(distinctIn(rows,cat.key))}</b> ${Utils.esc(cat.name.toLowerCase())}`:''}.`});
   if(statusCol&&saleCol){const comp=rows.filter(r=>isCompleted(r[statusCol.key]));
     out.push({t:'ok',i:'💵',x:`Facturación (Completados): <b>${Utils.fmtCur(sumIn(comp,saleCol.key),saleCol.sym)}</b> en ${Utils.fmtInt(comp.length)} pedidos.`});}
@@ -1219,6 +1222,8 @@ function renderInsights(rows){
       if(dn&&dn.d<0)out.push({t:'warn',i:'🆚',x:`Vs dataset ${tag}: <b>${Utils.esc(dn.label)}</b> cayó <b>${Math.round(dn.d)}%</b>.`});}}
   const miss=state.columns.filter(c=>c.type!=='image').map(c=>({c,m:rows.filter(r=>r[c.key]==null||r[c.key]==='').length})).filter(x=>x.m/n>.1);
   if(miss.length)out.push({t:'warn',i:'🧹',x:`Calidad de datos: ${miss.map(m=>`${Utils.esc(m.c.name)} (${Math.round(m.m/n*100)}% vacíos)`).join(', ')}.`});
+  }
+  state.lastInsights=out;
   $('#insightsList').innerHTML=out.slice(0,10).map((o,i)=>`<li class="${o.t}" style="animation-delay:${i*70}ms"><span class="ic">${o.i}</span><div>${o.x}</div></li>`).join('');
 }
 
@@ -1269,6 +1274,7 @@ function renderDecisions(rows){
   const miss=state.columns.filter(c=>c.type!=='image').map(c=>({c,m:rows.filter(r=>r[c.key]==null||r[c.key]==='').length})).filter(x=>n&&x.m/n>.15);
   if(miss.length)add('baja','Datos','🧹',`Completar ${miss.map(m=>Utils.esc(m.c.name)).join(', ')} para afinar el reporte.`);
   const order={alta:0,media:1,baja:2};D.sort((x,y)=>order[x.p]-order[y.p]);
+  state.lastDecisions=D;
   $('#decisionsList').innerHTML=D.length?D.slice(0,10).map((o,i)=>`
     <li class="${o.p}" style="animation-delay:${i*60}ms"><span class="ic">${o.ic}</span>
       <div><span class="prio ${o.p}">${o.p.toUpperCase()}</span><span class="dtag">${Utils.esc(o.tag)}</span>
@@ -1280,6 +1286,133 @@ function refresh(){
   try{const full=getFiltered();
     renderKPIs(full);renderCharts();TimeEngine.render();renderGeo();TableEngine.render(full);renderInsights(full);renderDecisions(full);FilterEngine.renderChips();
   }catch(e){console.error(e);Utils.toast('⚠️ Error procesando: '+Utils.esc(e.message),'err');}
+}
+
+/* ================= NUEVO: PDFEngine (reporte ejecutivo 2 páginas) ================= */
+function collectChartImages(max){
+  const out=[];
+  for(const id of Object.keys(state.charts)){if(out.length>=max)break;
+    out.push({title:state.chartTitles[id]||id,ch:state.charts[id]});}
+  if(out.length<max&&TimeEngine.charts.series)out.push({title:'Ventas por '+TimeEngine.gran,ch:TimeEngine.charts.series});
+  if(out.length<max&&TimeEngine.charts.top)out.push({title:'Top 5 del período',ch:TimeEngine.charts.top});
+  return out.map(o=>{const src=o.ch.canvas;const cv=document.createElement('canvas');
+    cv.width=src.width;cv.height=src.height;
+    const cx=cv.getContext('2d');cx.fillStyle='#0c1016';cx.fillRect(0,0,cv.width,cv.height);cx.drawImage(src,0,0);
+    return{title:o.title,data:cv.toDataURL('image/png'),ratio:src.height/src.width};});
+}
+function generatePDF(){
+  if(!window.jspdf){Utils.toast('❌ jsPDF no cargó (revisa tu conexión a internet).','err');return;}
+  Utils.loading(true);
+  setTimeout(()=>{try{
+    const {jsPDF}=window.jspdf;const doc=new jsPDF({unit:'mm',format:'a4'});
+    const W=210,H=297,full=getFiltered();
+    const now=new Date();
+    const dias=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+    const fecha=now.toLocaleDateString('es-AR',{day:'2-digit',month:'long',year:'numeric'});
+    const dia=dias[now.getDay()];
+    const hora=now.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'});
+    const nF=Object.keys(state.filters).length+(state.search?1:0);
+    const alcance=nF?`Vista filtrada · ${nF} filtro/s activo/s`:'Dashboard total · sin filtros';
+    const bg=()=>{doc.setFillColor(10,13,18);doc.rect(0,0,W,H,'F');};
+    const footer=p=>{doc.setFillColor(225,6,0);doc.rect(0,H-8,W,1,'F');
+      doc.setTextColor(143,160,175);doc.setFontSize(6.5);doc.setFont('helvetica','normal');
+      doc.text('FC RACING SKILL · Dashboard Intelligent Analytics',10,H-3.5);
+      doc.text('Reporte confidencial · generado localmente en el navegador',W/2,H-3.5,{align:'center'});
+      doc.text(`Página ${p} de 2`,W-10,H-3.5,{align:'right'});};
+    const strip=s=>String(s).replace(/<[^>]+>/g,'');
+    /* ========== PÁGINA 1 ========== */
+    bg();
+    doc.setFillColor(225,6,0);doc.rect(0,0,W,24,'F');
+    doc.setFillColor(12,16,22);doc.rect(0,24,W,1.2,'F');
+    doc.setFillColor(255,255,255);doc.circle(14,12,7.5,'F');
+    doc.setTextColor(225,6,0);doc.setFont('helvetica','bold');doc.setFontSize(12);doc.text('FC',14,14,{align:'center'});
+    doc.setTextColor(255,255,255);doc.setFontSize(16);doc.text('FC RACING SKILL',26,11);
+    doc.setFont('helvetica','normal');doc.setFontSize(7.5);
+    doc.text('DASHBOARD INTELLIGENT ANALYTICS · PREMIUM RACING DIVISION',26,17);
+    doc.setFont('helvetica','bold');doc.setFontSize(11);doc.text('REPORTE EJECUTIVO',W-10,10.5,{align:'right'});
+    doc.setFont('helvetica','normal');doc.setFontSize(7.5);
+    doc.text(`${dia} ${fecha} · ${hora} hs`,W-10,16.5,{align:'right'});
+    let y=30;const bw=(W-20-9)/4;
+    const meta=[['FUENTE',Utils.trunc(state.source.label,26)],['REGISTROS',Utils.fmtInt(full.length)],['ALCANCE',Utils.trunc(alcance,26)],['DÍA / HORA',`${dia} · ${hora} hs`]];
+    meta.forEach((m,i)=>{const x=10+i*(bw+3);
+      doc.setFillColor(16,20,27);doc.setDrawColor(42,53,66);doc.roundedRect(x,y,bw,13,1.5,1.5,'FD');
+      doc.setFillColor(225,6,0);doc.rect(x,y,1.2,13,'F');
+      doc.setTextColor(143,160,175);doc.setFontSize(5.8);doc.setFont('helvetica','normal');doc.text(m[0],x+3.5,y+4.5);
+      doc.setTextColor(255,255,255);doc.setFontSize(8);doc.setFont('helvetica','bold');doc.text(m[1],x+3.5,y+10);});
+    y+=18;
+    doc.setTextColor(225,6,0);doc.setFontSize(9);doc.setFont('helvetica','bold');doc.text('INDICADORES CLAVE (KPIs)',10,y);
+    doc.setDrawColor(225,6,0);doc.setLineWidth(.5);doc.line(10,y+1.5,62,y+1.5);
+    y+=5;
+    const kpis=(state.lastKpis||[]).slice(0,8);
+    kpis.forEach((k,i)=>{const col=i%4,row=Math.floor(i/4);const x=10+col*(bw+3);const yy=y+row*17;
+      doc.setFillColor(16,20,27);doc.setDrawColor(42,53,66);doc.setLineWidth(.2);doc.roundedRect(x,yy,bw,15,1.5,1.5,'FD');
+      doc.setFillColor(225,6,0);doc.rect(x,yy,1.2,15,'F');
+      doc.setTextColor(143,160,175);doc.setFontSize(5.6);doc.setFont('helvetica','normal');doc.text(String(k.l).toUpperCase().slice(0,30),x+3.5,yy+4.5);
+      doc.setTextColor(255,255,255);doc.setFontSize(9.5);doc.setFont('helvetica','bold');doc.text(String(k.v).slice(0,20),x+3.5,yy+10);
+      doc.setTextColor(143,160,175);doc.setFontSize(5.4);doc.setFont('helvetica','normal');doc.text(String(k.s||'').slice(0,32),x+3.5,yy+13.5);});
+    y+=Math.ceil(kpis.length/4)*17+4;
+    doc.setTextColor(225,6,0);doc.setFontSize(9);doc.setFont('helvetica','bold');doc.text('VISUALIZACIONES (vista actual)',10,y);
+    doc.line(10,y+1.5,72,y+1.5);y+=5;
+    const imgs=collectChartImages(4);
+    imgs.forEach((im,i)=>{const col=i%2,row=Math.floor(i/2);const w=93.5;const h=Math.min(56,w*im.ratio);
+      const x=10+col*96.5;const yy=y+row*62;
+      doc.setTextColor(207,214,222);doc.setFontSize(6.3);doc.setFont('helvetica','bold');doc.text(im.title.toUpperCase().slice(0,62),x,yy+2);
+      doc.addImage(im.data,'PNG',x,yy+3.5,w,h);});
+    footer(1);
+    /* ========== PÁGINA 2 ========== */
+    doc.addPage();bg();
+    doc.setFillColor(225,6,0);doc.rect(0,0,W,12,'F');
+    doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(10);
+    doc.text('FC RACING SKILL · ANÁLISIS Y DECISIONES',10,7.8);
+    doc.setFont('helvetica','normal');doc.setFontSize(7);
+    doc.text(`${dia} ${fecha} · ${hora} hs`,W-10,7.8,{align:'right'});
+    let y2=19;
+    doc.setTextColor(225,6,0);doc.setFontSize(9);doc.setFont('helvetica','bold');doc.text('CONCLUSIONES AUTOMÁTICAS',10,y2);
+    doc.line(10,y2+1.5,64,y2+1.5);y2+=5.5;
+    (state.lastInsights||[]).slice(0,5).forEach(o=>{
+      const tone=o.t==='ok'?[34,197,94]:o.t==='warn'?[245,158,11]:o.t==='bad'?[239,68,68]:[225,6,0];
+      doc.setFillColor(tone[0],tone[1],tone[2]);doc.rect(10,y2-1.6,1.8,1.8,'F');
+      doc.setTextColor(230,236,241);doc.setFontSize(7.2);doc.setFont('helvetica','normal');
+      const lines=doc.splitTextToSize(strip(o.x),W-26);
+      doc.text(lines,14.5,y2);
+      y2+=lines.length*3.3+2.6;});
+    y2+=3;
+    doc.setTextColor(225,6,0);doc.setFontSize(9);doc.setFont('helvetica','bold');doc.text('DETALLES PARA DECIDIR',10,y2);
+    doc.line(10,y2+1.5,54,y2+1.5);y2+=6;
+    (state.lastDecisions||[]).slice(0,5).forEach(o=>{
+      const col=o.p==='alta'?[239,68,68]:o.p==='media'?[245,158,11]:[34,197,94];
+      doc.setFillColor(col[0],col[1],col[2]);doc.roundedRect(10,y2-3,12,4.6,1,1,'F');
+      doc.setTextColor(255,255,255);doc.setFontSize(5.8);doc.setFont('helvetica','bold');doc.text(o.p.toUpperCase(),16,y2,{align:'center'});
+      doc.setTextColor(143,160,175);doc.text(o.tag.toUpperCase(),24.5,y2);
+      const lines=doc.splitTextToSize(strip(o.x),W-26);
+      doc.setTextColor(230,236,241);doc.setFontSize(7.2);doc.setFont('helvetica','normal');
+      doc.text(lines,14.5,y2+3.6);
+      y2+=lines.length*3.3+5;});
+    y2+=2;
+    doc.setTextColor(225,6,0);doc.setFontSize(9);doc.setFont('helvetica','bold');doc.text('DETALLE DE REGISTROS (primeros 8 de la vista)',10,y2);
+    doc.line(10,y2+1.5,86,y2+1.5);
+    const cols=TableEngine.visCols().slice(0,6);
+    const rows8=full.slice(0,8);
+    if(doc.autoTable&&rows8.length){
+      doc.autoTable({startY:y2+4,margin:{left:10,right:10},
+        head:[cols.map(c=>Utils.trunc(c.name,14).toUpperCase())],
+        body:rows8.map(r=>cols.map(c=>{const v=r[c.key];
+          if(c.key==='__egreso')return v?Utils.fmtDate(v):'En stock';
+          if(c.key==='__diasStock')return v!=null?v+' d':'—';
+          if(c.type==='date')return v?Utils.fmtDate(v):'—';
+          if(c.type==='currency')return v!=null?Utils.fmtNum(v):'—';
+          if(c.type==='number'||c.type==='percent')return v!=null?Utils.fmtNum(v)+(c.type==='percent'?'%':''):'—';
+          return Utils.trunc(String(v??'—'),20);})),
+        styles:{font:'helvetica',fontSize:6.2,textColor:[214,222,230],fillColor:[16,20,27],lineColor:[33,42,52],lineWidth:.2,cellPadding:1.6},
+        headStyles:{fillColor:[225,6,0],textColor:[255,255,255],fontSize:6.2,fontStyle:'bold'},
+        alternateRowStyles:{fillColor:[12,16,22]},
+        theme:'grid'});
+    }
+    footer(2);
+    doc.save(`FC_RACING_SKILL_reporte_${now.toISOString().slice(0,10)}.pdf`);
+    Utils.toast('📄 Reporte PDF ejecutivo generado (2 páginas).','ok');
+  }catch(e){console.error(e);Utils.toast('❌ Error al generar el PDF: '+Utils.esc(e.message),'err');}
+  finally{Utils.loading(false);}},60);
 }
 
 /* ================= Tilt ================= */
@@ -1332,6 +1465,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   $('#btnRemoveB').onclick=()=>{state.B=null;state.showCompare=false;$('#btnCompare').classList.remove('primary');updateBBadge();
     if(state.view==='B'){state.view='A';syncViewButtons();activateDS(state.A,false);}
     renderCompare();refresh();Utils.toast('🅱 Dataset Secundario retirado del reporte.');};
+  $('#btnPDF').onclick=generatePDF;
   $('#btnSheets').onclick=()=>connectSheets($('#sheetsUrl').value.trim());
   $('#sheetsUrl').addEventListener('keydown',e=>{if(e.key==='Enter')connectSheets(e.target.value.trim());});
   $('#btnCSV').onclick=()=>$('#fileCSV').click();
